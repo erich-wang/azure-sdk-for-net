@@ -5,10 +5,6 @@ jobs:
     pool:
       vmImage: windows-2019
     steps:
-      - task: DotNetCoreInstaller@2
-        displayName: "Use .NET Core sdk $(DotNetCoreSDKVersion)"
-        inputs:
-          version: "$(DotNetCoreSDKVersion)"
       - task: MSBuild@1
         inputs:
           solution: eng/mgmt.proj
@@ -37,16 +33,6 @@ jobs:
     pool:
       vmImage: "$(OSVmImage)"
     steps:
-      - task: DotNetCoreInstaller@2
-        displayName: "Use .NET Core runtime $(DotNetCoreRuntimeVersion)"
-        inputs:
-          packageType: runtime
-          version: "$(DotNetCoreRuntimeVersion)"
-      - task: DotNetCoreInstaller@2
-        displayName: "Use .NET Core sdk $(DotNetCoreSDKVersion)"
-        inputs:
-          packageType: sdk
-          version: "$(DotNetCoreSDKVersion)"
       - task: MSBuild@1
         inputs:
           solution: eng/mgmt.proj
