@@ -9,12 +9,11 @@ jobs:
         displayName: "Use .NET Core sdk $(DotNetCoreSDKVersion)"
         inputs:
           version: "$(DotNetCoreSDKVersion)"
-      - script: "msbuild eng/mgmt.proj /t:CreateNugetPackage /p:PackageOutputPath=$(Build.ArtifactStagingDirectory) /p:Scope=${{parameters.Scope}}"
+      - task: MSBuild@1
+        inputs:
+          solution: eng/mgmt.proj
+          msbuildArguments: /t:CreateNugetPackage /p:PackageOutputPath=$(Build.ArtifactStagingDirectory) /p:Scope=${{parameters.Scope}}
         displayName: "Build and Package"
-        env:
-          DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-          DOTNET_CLI_TELEMETRY_OPTOUT: 1
-          DOTNET_MULTILEVEL_LOOKUP: 0
       - task: PublishPipelineArtifact@0
         condition: succeededOrFailed()
         inputs:
@@ -48,12 +47,11 @@ jobs:
         inputs:
           packageType: sdk
           version: "$(DotNetCoreSDKVersion)"
-      - script: "msbuild eng/mgmt.proj /t:RunTests /p:Scope=${{parameters.Scope}}"
+      - task: MSBuild@1
+        inputs:
+          solution: eng/mgmt.proj
+          msbuildArguments: /t:RunTests /p:PackageOutputPath=$(Build.ArtifactStagingDirectory) /p:Scope=${{parameters.Scope}}
         displayName: "Build & Test"
-        env:
-          DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-          DOTNET_CLI_TELEMETRY_OPTOUT: 1
-          DOTNET_MULTILEVEL_LOOKUP: 0
       - task: PublishTestResults@2
         condition: succeededOrFailed()
         inputs:
