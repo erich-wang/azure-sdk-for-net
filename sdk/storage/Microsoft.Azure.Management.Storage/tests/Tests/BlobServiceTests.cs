@@ -719,7 +719,7 @@ namespace Storage.Tests
                     Assert.False(properties1.DeleteRetentionPolicy.Enabled);
                     Assert.Null(properties1.DeleteRetentionPolicy.Days);
                     Assert.Null(properties1.DefaultServiceVersion);
-                    Assert.Equal(0, properties1.Cors.CorsRulesProperty.Count);
+                    Assert.Equal(0, properties1.Cors.CorsRules.Count);
                     Assert.Equal(parameters.Sku.Name, properties1.Sku.Name);
                     //Assert.Null(properties1.AutomaticSnapshotPolicyEnabled);
                     BlobServiceProperties properties2 = properties1;
@@ -774,8 +774,8 @@ namespace Storage.Tests
                     properties2.DeleteRetentionPolicy.Days = 300;
                     properties2.DefaultServiceVersion = "2017-04-17";
                     properties2.Cors = new CorsRules();
-                    properties2.Cors.CorsRulesProperty = new List<CorsRule>();
-                    properties2.Cors.CorsRulesProperty.Add(new CorsRule()
+                    properties2.Cors.CorsRules = new List<CorsRule>();
+                    properties2.Cors.CorsRules.Add(new CorsRule()
                     {
                         AllowedHeaders = new string[] { "x-ms-meta-abc", "x-ms-meta-data*", "x-ms-meta-target*" },
                         AllowedMethods = new string[] { "GET", "HEAD", "POST", "OPTIONS", "MERGE", "PUT" },
@@ -783,7 +783,7 @@ namespace Storage.Tests
                         ExposedHeaders = new string[] { "x-ms-meta-*" },
                         MaxAgeInSeconds = 100
                     });
-                    properties2.Cors.CorsRulesProperty.Add(new CorsRule()
+                    properties2.Cors.CorsRules.Add(new CorsRule()
                     {
                         AllowedHeaders = new string[] { "*" },
                         AllowedMethods = new string[] { "GET" },
@@ -791,7 +791,7 @@ namespace Storage.Tests
                         ExposedHeaders = new string[] { "*" },
                         MaxAgeInSeconds = 2
                     });
-                    properties2.Cors.CorsRulesProperty.Add(new CorsRule()
+                    properties2.Cors.CorsRules.Add(new CorsRule()
                     {
                         AllowedHeaders = new string[] { "x-ms-meta-12345675754564*" },
                         AllowedMethods = new string[] { "GET", "PUT", "CONNECT" },
@@ -806,11 +806,11 @@ namespace Storage.Tests
                     Assert.Equal("2017-04-17", properties3.DefaultServiceVersion);
 
                     //Validate CORS Rules
-                    Assert.Equal(properties2.Cors.CorsRulesProperty.Count, properties3.Cors.CorsRulesProperty.Count);
-                    for (int i = 0; i < properties2.Cors.CorsRulesProperty.Count; i++)
+                    Assert.Equal(properties2.Cors.CorsRules.Count, properties3.Cors.CorsRules.Count);
+                    for (int i = 0; i < properties2.Cors.CorsRules.Count; i++)
                     {
-                        CorsRule putRule = properties2.Cors.CorsRulesProperty[i];
-                        CorsRule getRule = properties3.Cors.CorsRulesProperty[i];
+                        CorsRule putRule = properties2.Cors.CorsRules[i];
+                        CorsRule getRule = properties3.Cors.CorsRules[i];
 
                         Assert.Equal(putRule.AllowedHeaders, getRule.AllowedHeaders);
                         Assert.Equal(putRule.AllowedMethods, getRule.AllowedMethods);
@@ -825,11 +825,11 @@ namespace Storage.Tests
                     Assert.Equal("2017-04-17", properties4.DefaultServiceVersion);
 
                     //Validate CORS Rules
-                    Assert.Equal(properties2.Cors.CorsRulesProperty.Count, properties4.Cors.CorsRulesProperty.Count);
-                    for (int i = 0; i < properties2.Cors.CorsRulesProperty.Count; i++)
+                    Assert.Equal(properties2.Cors.CorsRules.Count, properties4.Cors.CorsRules.Count);
+                    for (int i = 0; i < properties2.Cors.CorsRules.Count; i++)
                     {
-                        CorsRule putRule = properties2.Cors.CorsRulesProperty[i];
-                        CorsRule getRule = properties4.Cors.CorsRulesProperty[i];
+                        CorsRule putRule = properties2.Cors.CorsRules[i];
+                        CorsRule getRule = properties4.Cors.CorsRules[i];
 
                         Assert.Equal(putRule.AllowedHeaders, getRule.AllowedHeaders);
                         Assert.Equal(putRule.AllowedMethods, getRule.AllowedMethods);

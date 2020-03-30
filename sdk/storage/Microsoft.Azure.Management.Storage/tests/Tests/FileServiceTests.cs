@@ -177,11 +177,11 @@ namespace Storage.Tests
                 try
                 {
                     FileServiceProperties properties1 = storageMgmtClient.FileServices.GetServiceProperties(rgName, accountName);
-                    Assert.Equal(0, properties1.Cors.CorsRulesProperty.Count);
+                    Assert.Equal(0, properties1.Cors.CorsRules.Count);
 
                     CorsRules cors = new CorsRules();
-                    cors.CorsRulesProperty = new List<CorsRule>();
-                    cors.CorsRulesProperty.Add(new CorsRule()
+                    cors.CorsRules = new List<CorsRule>();
+                    cors.CorsRules.Add(new CorsRule()
                     {
                         AllowedHeaders = new string[] { "x-ms-meta-abc", "x-ms-meta-data*", "x-ms-meta-target*" },
                         AllowedMethods = new string[] { "GET", "HEAD", "POST", "OPTIONS", "MERGE", "PUT" },
@@ -189,7 +189,7 @@ namespace Storage.Tests
                         ExposedHeaders = new string[] { "x-ms-meta-*" },
                         MaxAgeInSeconds = 100
                     });
-                    cors.CorsRulesProperty.Add(new CorsRule()
+                    cors.CorsRules.Add(new CorsRule()
                     {
                         AllowedHeaders = new string[] { "*" },
                         AllowedMethods = new string[] { "GET" },
@@ -197,7 +197,7 @@ namespace Storage.Tests
                         ExposedHeaders = new string[] { "*" },
                         MaxAgeInSeconds = 2
                     });
-                    cors.CorsRulesProperty.Add(new CorsRule()
+                    cors.CorsRules.Add(new CorsRule()
                     {
                         AllowedHeaders = new string[] { "x-ms-meta-12345675754564*" },
                         AllowedMethods = new string[] { "GET", "PUT", "CONNECT" },
@@ -209,11 +209,11 @@ namespace Storage.Tests
                     FileServiceProperties properties3 = storageMgmtClient.FileServices.SetServiceProperties(rgName, accountName, cors);
 
                     //Validate CORS Rules
-                    Assert.Equal(cors.CorsRulesProperty.Count, properties3.Cors.CorsRulesProperty.Count);
-                    for (int i = 0; i < cors.CorsRulesProperty.Count; i++)
+                    Assert.Equal(cors.CorsRules.Count, properties3.Cors.CorsRules.Count);
+                    for (int i = 0; i < cors.CorsRules.Count; i++)
                     {
-                        CorsRule putRule = cors.CorsRulesProperty[i];
-                        CorsRule getRule = properties3.Cors.CorsRulesProperty[i];
+                        CorsRule putRule = cors.CorsRules[i];
+                        CorsRule getRule = properties3.Cors.CorsRules[i];
 
                         Assert.Equal(putRule.AllowedHeaders, getRule.AllowedHeaders);
                         Assert.Equal(putRule.AllowedMethods, getRule.AllowedMethods);
@@ -225,11 +225,11 @@ namespace Storage.Tests
                     FileServiceProperties properties4 = storageMgmtClient.FileServices.GetServiceProperties(rgName, accountName);
 
                     //Validate CORS Rules
-                    Assert.Equal(cors.CorsRulesProperty.Count, properties4.Cors.CorsRulesProperty.Count);
-                    for (int i = 0; i < cors.CorsRulesProperty.Count; i++)
+                    Assert.Equal(cors.CorsRules.Count, properties4.Cors.CorsRules.Count);
+                    for (int i = 0; i < cors.CorsRules.Count; i++)
                     {
-                        CorsRule putRule = cors.CorsRulesProperty[i];
-                        CorsRule getRule = properties4.Cors.CorsRulesProperty[i];
+                        CorsRule putRule = cors.CorsRules[i];
+                        CorsRule getRule = properties4.Cors.CorsRules[i];
 
                         Assert.Equal(putRule.AllowedHeaders, getRule.AllowedHeaders);
                         Assert.Equal(putRule.AllowedMethods, getRule.AllowedMethods);

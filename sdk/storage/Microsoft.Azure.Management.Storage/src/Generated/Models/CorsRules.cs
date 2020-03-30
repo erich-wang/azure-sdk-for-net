@@ -36,7 +36,7 @@ namespace Microsoft.Azure.Management.Storage.Models
         /// include up to five CorsRule elements in the request. </param>
         public CorsRules(IList<CorsRule> corsRulesProperty = default(IList<CorsRule>))
         {
-            CorsRulesProperty = corsRulesProperty;
+            CorsRules = corsRulesProperty;
             CustomInit();
         }
 
@@ -50,7 +50,7 @@ namespace Microsoft.Azure.Management.Storage.Models
         /// CorsRule elements in the request.
         /// </summary>
         [JsonProperty(PropertyName = "corsRules")]
-        public IList<CorsRule> CorsRulesProperty { get; set; }
+        public IList<CorsRule> CorsRules { get; set; }
 
     }
 }
