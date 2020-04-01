@@ -1,15 +1,13 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Description>This is a template project to demonstrate how to create a package that uses code generation as well as use for testing our build and release pipelines</Description>
     <AssemblyTitle>Azure SDK Template</AssemblyTitle>
-    <Version>0.1.0</Version>
+    <Version>1.0.2-preview.11</Version>
     <PackageTags>Azure Template</PackageTags>
     <TargetFrameworks>$(RequiredTargetFrameworks)</TargetFrameworks>
     <EnableApiCompat>false</EnableApiCompat>
     <!-- These supressions should be removed in a production library -->
     <NoWarn>$(NoWarn);CA1812</NoWarn>
-    <!--<RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
-    <LangVersion>latest</LangVersion>-->
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,6 +26,8 @@
     <Compile Include="$(AzureCoreSharedSources)OperationHelpers.cs" Link="Shared\%(RecursiveDir)\%(Filename)%(Extension)" />
   </ItemGroup>
 
-  <Import Project="$(MSBuildThisFileDirectory)..\..\..\core\Azure.Core\src\Azure.Core.props" />
+    <PropertyGroup> <AutorestInput>C:\AME\azure-rest-api-specs\specification\storage\resource-manager\readme.md</AutorestInput> </PropertyGroup> 
+ <Import Project="$(MSBuildThisFileDirectory)..\..\..\core\Azure.Core\src\Azure.Core.props" />
 
 </Project>
+

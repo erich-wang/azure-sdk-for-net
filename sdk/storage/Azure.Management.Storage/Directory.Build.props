@@ -7,7 +7,6 @@
       $(NoWarn);
       AZC0001;
       CS1591;
-	  SA1633;
     </NoWarn>
   </PropertyGroup>
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory).., Directory.Build.props))\Directory.Build.props" />

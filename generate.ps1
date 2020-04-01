@@ -1,18 +1,37 @@
-function PrepareGen ([string] $originalFolder) {
+
+$nameMap = @{
+  "kusto" = "azure-kusto";
+  "recoveryservices-backup" = "recoveryservices-backup";
+  "recoveryservices-siterecovery" = "recoveryservices-siterecovery";
+  "securitycenter" = "security";
+  "sqlmanagement" = "sql";
+  "storsimple" = "storSimple1200Series";
+  "websites" = "web";
+}
+
+function Prepare-Gen ([string] $originalFolder) {
   
   $serviceName = $originalFolder.Split("\")[-2]
  
   #check swagger spec
+  if($nameMap.Contains($serviceName))
+  {
+    $serviceName = $nameMap[$serviceName]
+  }
   $configFile = [System.IO.Path]::Combine($RestSpecPath, $serviceName, "resource-manager\readme.md")
   if(-not (Test-Path $configFile))
   {
-    Write-Error($configFile)
+    $MissSpecList.Add($serviceName)
+    # Write-Error($configFile)
     return
+  }else {
+    $SpecList.Add($serviceName)
   }
 
   #Copy template and rename
   $newFolder = $originalFolder -replace "Microsoft.Azure.Management", "Azure.Management"
   $folderName = $newFolder.Split("\")[-1]
+  rmdir $newFolder -Force -Recurse
   mkdir $newFolder
   Copy-Item .\sdk\template\Azure.Template\* $newFolder -Recurse -Force
   Get-ChildItem $newFolder -Filter "Azure.Template.*" -Recurse | ForEach-Object { Move-Item $_.FullName ($_.FullName -replace "Azure.Template", $folderName) }
@@ -25,8 +44,10 @@ function PrepareGen ([string] $originalFolder) {
   #build and test
 }
 
-$dir = (Get-ChildItem .\sdk -Directory -Depth 2 -Filter "*Microsoft.Azure.Management*")[0].FullName
-
 $RestSpecPath = "C:\AME\azure-rest-api-specs\specification"
+$SpecList = [System.Collections.Generic.List[string]]@()
+$MissSpecList = [System.Collections.Generic.List[string]]@()
 
-PrepareGen($dir)
+(Get-ChildItem .\sdk -Directory -Depth 2 -Filter "*Microsoft.Azure.Management*") | ForEach-Object -Process { Prepare-Gen($_.FullName) }
+
+# PrepareGen($dir)
