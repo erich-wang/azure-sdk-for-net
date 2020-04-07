@@ -1,8 +1,8 @@
 
 $nameMap = @{
   "kusto" = "azure-kusto";
-  "recoveryservices-backup" = "recoveryservices-backup";
-  "recoveryservices-siterecovery" = "recoveryservices-siterecovery";
+  "recoveryservices-backup" = "recoveryservicesbackup";
+  "recoveryservices-siterecovery" = "recoveryservicessiterecovery";
   "securitycenter" = "security";
   "sqlmanagement" = "sql";
   "storsimple" = "storSimple1200Series";
