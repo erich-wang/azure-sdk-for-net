@@ -6,6 +6,5 @@ Run `dotnet msbuild /t:GenerateCode` to generate code.
 > see https://aka.ms/autorest
 
 ``` yaml
-input-file:
-    -  $(this-folder)/swagger/TestSwagger.json
+payload-flattening-threshold: 2
 ```
