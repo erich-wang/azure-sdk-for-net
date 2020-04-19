@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using Azure.Core;
 
+[assembly: AzureResourceProviderNamespace("Microsoft.KeyVault")]
+
 namespace Azure.Management.KeyVault
 {
     public class KeyVaultsManagementClientOption: ClientOptions

@@ -33,13 +33,29 @@ namespace Azure.Management.KeyVault.Tests
         [Test]
         public async Task CreateKeyVaults()
         {
-            var vaultProperties = new VaultProperties(new Guid("72f988bf-86f1-41af-91ab-2d7cd011db47"), new Sku(SkuName.Standard));
+            var tenantId = new Guid("72f988bf-86f1-41af-91ab-2d7cd011db47");
+            var resGroup = "eriwan_key";
+            var vaultName = "eriwanvault6";
+            //Need to change to object id of your account
+            var userObjectId = "1cf5bc65-5ac8-4dd9-bd98-ed372e7e69be";
+            var vaultProperties = new VaultProperties(tenantId, new Sku(SkuName.Standard));
+            var accessPolicy = new AccessPolicyEntry(tenantId, userObjectId,
+                new Permissions
+                {
+                    Keys = new KeyPermissions[] { KeyPermissions.Create, KeyPermissions.Delete, KeyPermissions.List },
+                    Secrets = new SecretPermissions[] { SecretPermissions.Set, SecretPermissions.Delete, SecretPermissions.List },
+                    Certificates = new CertificatePermissions[] { CertificatePermissions.Create, CertificatePermissions.Delete, CertificatePermissions.List },
+                });
+            vaultProperties.AccessPolicies = new[] { accessPolicy };
+            vaultProperties.EnableSoftDelete = false;
             var properties = new Models.VaultCreateOrUpdateParameters("eastus", vaultProperties);
-            var vault = await Client.StartCreateOrUpdateAsync("eriwan_key", "eriwanvault", properties);
+            var vault = await Client.StartCreateOrUpdateAsync(resGroup, vaultName, properties);
 
-            var returnedVault = await Client.GetAsync("eriwan_key", "eriwanvault");
+            var returnedVault = await Client.GetAsync(resGroup, vaultName);
 
-            Assert.AreEqual(vault.Id, returnedVault.Value.Id);
+            Assert.IsFalse(returnedVault.Value.Properties.EnableSoftDelete);
+
+            await Client.DeleteAsync(resGroup, vaultName);
         }
     }
 }
