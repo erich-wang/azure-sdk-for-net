@@ -7,6 +7,7 @@ $nameMap = @{
   "sqlmanagement" = "sql";
   "storsimple" = "storSimple1200Series";
   "websites" = "web";
+  "cosmosdb" = "cosmos-db";
 }
 
 function Prepare-Gen ([string] $originalFolder) {
