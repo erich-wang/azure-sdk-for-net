@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Azure.Identity", "..\..\ide
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Azure.Graph.Rbac", "..\..\testcommon\Azure.Graph.Rbac\src\Azure.Graph.Rbac.csproj", "{8C6B7F8F-DC87-4D61-8731-0FCF3304E2DA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Azure.Management.Resource", "src\Azure.Management.Resource.csproj", "{F793E45B-E579-49F9-8D1E-3F912811F22E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Azure.Management.Network", "src\Azure.Management.Network.csproj", "{F793E45B-E579-49F9-8D1E-3F912811F22E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Azure.Management.Resource.Tests", "tests\Azure.Management.Resource.Tests.csproj", "{DFD3B1BF-2934-4724-92A2-B29B513C28F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Azure.Management.Network.Tests", "tests\Azure.Management.Network.Tests.csproj", "{DFD3B1BF-2934-4724-92A2-B29B513C28F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
