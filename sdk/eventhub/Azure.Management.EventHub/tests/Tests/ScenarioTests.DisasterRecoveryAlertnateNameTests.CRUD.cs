@@ -36,12 +36,11 @@ using NUnit.Framework;
                 new EHNamespace()
                 {
                     Location = location,
-                    //Sku = new Sku
-                    //{
-                    //    Name = SkuName.Standard,
-                    //    Tier = SkuTier.Standard,
-                    //    Capacity = 1
-                    //},
+                    Sku = new Sku(SkuName.Standard)
+                    {
+                        Tier = SkuTier.Standard,
+                        Capacity = 1
+                    },
                     Tags = new Dictionary<string, string>()
                         {
                             {"tag1", "value1"},
@@ -60,13 +59,12 @@ using NUnit.Framework;
                new EHNamespace()
                {
                    Location = location2,
-                    //Sku = new Sku
-                    //{
-                    //    Name = SkuName.Standard,
-                    //    Tier = SkuTier.Standard,
-                    //    Capacity = 1
-                    //},
-                    Tags = new Dictionary<string, string>()
+                   Sku = new Sku(SkuName.Standard)
+                   {
+                       Tier = SkuTier.Standard,
+                       Capacity = 1
+                   },
+                   Tags = new Dictionary<string, string>()
                        {
                             {"tag1", "value1"},
                             {"tag2", "value2"}

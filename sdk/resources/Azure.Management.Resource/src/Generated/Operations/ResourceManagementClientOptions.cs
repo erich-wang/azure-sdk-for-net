@@ -5,6 +5,7 @@
 
 #nullable disable
 
+using System;
 using Azure.Core;
 
 namespace Azure.Management.Resource
@@ -12,5 +13,23 @@ namespace Azure.Management.Resource
     /// <summary> Client options for Resource. </summary>
     public class ResourceManagementClientOptions : ClientOptions
     {
+        private const ServiceVersion LatestVersion = ServiceVersion.V2019_10_01;
+        /// <summary> The version of the service to use. </summary>
+        public enum ServiceVersion
+        {
+            /// <summary> Service version "2019-09-01". </summary>
+            V2019_10_01 = 1,
+
+        }
+        internal string Version { get; }
+        /// <summary> Initializes new instance of KeyVaultManagementClientOptions. </summary>
+        public ResourceManagementClientOptions(ServiceVersion version = LatestVersion)
+        {
+            Version = version switch
+            {
+                ServiceVersion.V2019_10_01 => "2019-10-01",
+                _ => throw new NotSupportedException()
+            };
+        }
     }
 }

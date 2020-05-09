@@ -33,8 +33,16 @@ using NUnit.Framework;
             var createNamespaceResponse = await NamespacesClient.StartCreateOrUpdateAsync(resourceGroup, namespaceName,
                 new EHNamespace()
                 {
-                    Location = location.Result
-                    //Sku = new Sku("as")
+                    Location = location.Result,
+                    Sku = new Sku(SkuName.Standard)
+                    {
+                        Tier = SkuTier.Standard
+                    },
+                    Tags = new Dictionary<string, string>()
+                    {
+                        {"tag1", "value1"},
+                        {"tag2", "value2"}
+                    }
                 }
                 );
             var np = (await createNamespaceResponse.WaitForCompletionAsync()).Value;
@@ -59,9 +67,9 @@ using NUnit.Framework;
             // Create ConsumerGroup.
             var consumergroupName = "thisisthenamewithmorethan53charschecktoverifqwert";
             string UserMetadata = "Newly Created";
-            var createConsumergroupResponse = ConsumerGroupsClient.CreateOrUpdateAsync(resourceGroup, namespaceName, eventhubName, consumergroupName, new ConsumerGroup { UserMetadata = UserMetadata });
+            var createConsumergroupResponse =await ConsumerGroupsClient.CreateOrUpdateAsync(resourceGroup, namespaceName, eventhubName, consumergroupName, new ConsumerGroup { UserMetadata = UserMetadata });
             Assert.NotNull(createConsumergroupResponse);
-            Assert.AreEqual(createConsumergroupResponse.Result.Value.Name, consumergroupName);
+            Assert.AreEqual(createConsumergroupResponse.Value.Name, consumergroupName);
 
             // Get Created ConsumerGroup
             var getConsumergroupGetResponse = ConsumerGroupsClient.GetAsync(resourceGroup, namespaceName, eventhubName, consumergroupName);
@@ -85,17 +93,17 @@ using NUnit.Framework;
             //Assert.True(getSubscriptionsListAllResponse.All(ns => ns.Id.Contains(resourceGroup)));
 
             //Update the Created consumergroup
-            createConsumergroupResponse.Result.Value.UserMetadata = "Updated the user meta data";
-            var updateconsumergroupResponse = ConsumerGroupsClient.CreateOrUpdateAsync(resourceGroup, namespaceName, eventhubName, consumergroupName, createConsumergroupResponse.Result);
+            createConsumergroupResponse.Value.UserMetadata = "Updated the user meta data";
+            var updateconsumergroupResponse =await ConsumerGroupsClient.CreateOrUpdateAsync(resourceGroup, namespaceName, eventhubName, consumergroupName, createConsumergroupResponse);
             Assert.NotNull(updateconsumergroupResponse);
-            Assert.AreEqual(updateconsumergroupResponse.Result.Value.Name, createConsumergroupResponse.Result.Value.Name);
-            Assert.AreEqual("Updated the user meta data", updateconsumergroupResponse.Result.Value.UserMetadata);
+            Assert.AreEqual(updateconsumergroupResponse.Value.Name, createConsumergroupResponse.Value.Name);
+            Assert.AreEqual("Updated the user meta data", updateconsumergroupResponse.Value.UserMetadata);
 
             // Get Created ConsumerGroup
-            var getConsumergroupResponse = ConsumerGroupsClient.GetAsync(resourceGroup, namespaceName, eventhubName, consumergroupName);
+            var getConsumergroupResponse =await ConsumerGroupsClient.GetAsync(resourceGroup, namespaceName, eventhubName, consumergroupName);
             Assert.NotNull(getConsumergroupResponse);
-            Assert.AreEqual(getConsumergroupResponse.Result.Value.Name, consumergroupName);
-            Assert.AreEqual(getConsumergroupResponse.Result.Value.UserMetadata, updateconsumergroupResponse.Result.Value.UserMetadata);
+            Assert.AreEqual(getConsumergroupResponse.Value.Name, consumergroupName);
+            Assert.AreEqual(getConsumergroupResponse.Value.UserMetadata, updateconsumergroupResponse.Value.UserMetadata);
 
             // Delete Created ConsumerGroup and check for the NotFound exception
             await ConsumerGroupsClient.DeleteAsync(resourceGroup, namespaceName, eventhubName, consumergroupName);

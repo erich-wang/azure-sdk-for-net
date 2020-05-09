@@ -4,7 +4,8 @@ namespace Azure.Management.EventHub.Tests
 {
     using System;
 using System.Collections.Generic;
-using System.Threading;
+    using System.Diagnostics.Tracing;
+    using System.Threading;
 using System.Threading.Tasks;
 using Azure.Core.Testing;
 using Azure.Identity;
@@ -32,8 +33,16 @@ using NUnit.Framework;
             var createNamespaceResponse = await NamespacesClient.StartCreateOrUpdateAsync(resourceGroup, namespaceName,
                 new EHNamespace()
                 {
-                    Location = location.Result
-                    //Sku = new Sku("as")
+                    Location = location.Result,
+                    Sku= new Sku(SkuName.Standard)
+                    {
+                        Tier = SkuTier.Standard,
+                    },
+                    Tags = new Dictionary<string, string>()
+                    {
+                        {"tag1", "value1"},
+                        {"tag2", "value2"}
+                    }
                 }
                 );
             var np = (await createNamespaceResponse.WaitForCompletionAsync()).Value;

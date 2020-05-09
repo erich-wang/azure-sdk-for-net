@@ -32,8 +32,16 @@ using NUnit.Framework;
             var createNamespaceResponse = await NamespacesClient.StartCreateOrUpdateAsync(resourceGroup, namespaceName,
                 new EHNamespace()
                 {
-                    Location = location.Result
-                    //Sku = new Sku("as")
+                    Location = location.Result,
+                    Sku = new Sku(SkuName.Standard)
+                    {
+                        Tier = SkuTier.Standard
+                    },
+                    Tags = new Dictionary<string, string>()
+                        {
+                            {"tag1", "value1"},
+                            {"tag2", "value2"}
+                        }
                 }
                 );
             var np = (await createNamespaceResponse.WaitForCompletionAsync()).Value;
@@ -44,16 +52,13 @@ using NUnit.Framework;
             // Create Eventhub
             var eventHubName = Recording.GenerateAssetName(Helper.EventHubPrefix);
 
-            //Assert.NotNull(createEventHubResponse);
-            //Assert.Equals(createEventHubResponse.Value.Name, eventHubName);
-            //Assert.True(createEventHubResponse.Value.CaptureDescription.SkipEmptyArchives);
             for (int ehCount = 0; ehCount < 10; ehCount++)
             {
                 var eventhubNameLoop = eventHubName + "_" + ehCount.ToString();
-                var createEventHubResponseForLoop = EventHubsClient.CreateOrUpdateAsync(resourceGroup, namespaceName, eventhubNameLoop, new Eventhub());
+                var createEventHubResponseForLoop =await EventHubsClient.CreateOrUpdateAsync(resourceGroup, namespaceName, eventhubNameLoop, new Eventhub());
 
                 Assert.NotNull(createEventHubResponseForLoop);
-                Assert.AreEqual(createEventHubResponseForLoop.Result.Value.Name, eventhubNameLoop);
+                Assert.AreEqual(createEventHubResponseForLoop.Value.Name, eventhubNameLoop);
             }
 
             //get EventHubs in the same namespace

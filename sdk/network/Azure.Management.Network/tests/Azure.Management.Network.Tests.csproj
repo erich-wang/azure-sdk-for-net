@@ -31,4 +31,8 @@
     <Compile Include="..\..\..\core\Azure.Core\src\Shared\ArrayBufferWriter.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Tests\" />
+  </ItemGroup>
+
 </Project>

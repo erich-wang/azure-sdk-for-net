@@ -31,12 +31,15 @@ using NUnit.Framework;
                 new EHNamespace()
                 {
                     Location = location.Result,
-                    //Sku = new Sku("as")
+                    Sku = new Sku(SkuName.Standard)
+                    {
+                       Tier= SkuTier.Standard
+                    },
                     Tags = new Dictionary<string, string>()
-                        {
-                            {"tag1", "value1"},
-                            {"tag2", "value2"}
-                        }
+                    {
+                        {"tag1", "value1"},
+                        {"tag2", "value2"}
+                    }
                 }
                 );
             var np = (await createNamespaceResponse.WaitForCompletionAsync()).Value;
