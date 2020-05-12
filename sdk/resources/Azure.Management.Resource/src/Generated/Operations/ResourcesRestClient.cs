@@ -726,7 +726,7 @@ namespace Azure.Management.Resource
             uri.AppendPath(resourceType, false);
             uri.AppendPath("/", false);
             uri.AppendPath(resourceName, true);
-            uri.AppendQuery("api-version", "2019-10-01", true);
+            uri.AppendQuery("api-version", "2015-01-01", true);
             request.Uri = uri;
             request.Headers.Add("Content-Type", "application/json");
             using var content = new Utf8JsonRequestContent();

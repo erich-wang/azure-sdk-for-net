@@ -10,6 +10,8 @@ using Azure.Management.Resource.Models;
 using Azure.Management.Resource;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
+using Microsoft.Rest;
+using static Azure.Management.Resource.ResourceManagementClientOptions;
 
 namespace Azure.Management.Resource.Tests
 {
@@ -27,14 +29,12 @@ namespace Azure.Management.Resource.Tests
         public string applicationId { get; set; }
         public string location { get; set; }
         public string subscriptionId { get; set; }
-
         public ResourceGroupsClient ResourceGroupsClient { get; set; }
         public ProvidersClient ResourceProvidersClient { get; set; }
         public DeploymentsClient DeploymentsClient { get; set; }
         public DeploymentScriptsClient DeploymentScriptsClient { get; set; }
         public TagsClient TagsClient{ get; set; }
-
-
+        public ResourcesClient ResourcesClient { get; set; }
 
         protected ResourceOperationsTestsBase(bool isAsync, ResourceManagementClientOptions.ServiceVersion serviceVersion)
             : base(isAsync)
@@ -60,6 +60,7 @@ namespace Azure.Management.Resource.Tests
             DeploymentsClient = GetDeploymentClient();
             DeploymentScriptsClient = GetDeploymentScriptsClient();
             TagsClient = GetTagsClient();
+            ResourcesClient = GetresourceClient();
         }
 
         internal ResourceGroupsClient GetResourceGroupsClient(TestRecording recording = null)
@@ -103,6 +104,15 @@ namespace Azure.Management.Resource.Tests
             recording = recording ?? Recording;
 
             return InstrumentClient(new TagsClient(this.subscriptionId,
+                TestEnvironment.Credential,
+                recording.InstrumentClientOptions(new ResourceManagementClientOptions())));
+        }
+
+        internal ResourcesClient GetresourceClient(TestRecording recording = null)
+        {
+            recording = recording ?? Recording;
+
+            return InstrumentClient(new ResourcesClient(this.subscriptionId,
                 TestEnvironment.Credential,
                 recording.InstrumentClientOptions(new ResourceManagementClientOptions())));
         }

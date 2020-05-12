@@ -15,9 +15,9 @@ using System.Threading;
 
 namespace ResourceGroups.Tests
 {
-    public class LiveTagTests : ResourceOperationsTestsBase
+    public class LiveTagsTests : ResourceOperationsTestsBase
     {
-        public LiveTagTests(bool isAsync, ResourceManagementClientOptions.ServiceVersion serviceVersion)
+        public LiveTagsTests(bool isAsync, ResourceManagementClientOptions.ServiceVersion serviceVersion)
             : base(isAsync, serviceVersion)
         {
         }
@@ -41,7 +41,7 @@ namespace ResourceGroups.Tests
             var listResult =await TagsClient.ListAsync().ToEnumerableAsync();
             Assert.True(listResult.Count() > 0);
 
-            TagsClient.Delete(tagName);
+            await TagsClient.DeleteAsync(tagName);
         }
 
         [Test]
@@ -131,7 +131,7 @@ namespace ResourceGroups.Tests
                 }
             }
             );
-            await TagsClient.CreateOrUpdateAtScopeAsync(resourceScope, tagsResource.Properties));
+            await TagsClient.CreateOrUpdateAtScopeAsync(resourceScope, tagsResource.Properties);
             //var createorupdateAtSopeResponse= await TagsClient.CreateOrUpdateAtScopeAsync(resourceScope, tagsResource.Properties)).Value;
             Thread.Sleep(3000);
 
@@ -144,37 +144,46 @@ namespace ResourceGroups.Tests
             };
 
             { // test for Merge operation
-                var tagPatchRequest = new TagsPatchResource() 
-                {
-                    Operation = "Merge",
-                    Properties = putTags
-                };
-                var patchResponse =await TagsClient.UpdateAtScopeAsync(resourceScope, tagPatchRequest.Properties);
+                var tagPatchRequest = TagsPatchResourceOperation.Merge;
+                //{
+                //    Operation = "Merge",
+                //    Properties = putTags
+                //};
+                var patchResponse =(await TagsClient.UpdateAtScopeAsync(resourceScope, tagPatchRequest, putTags)).Value;
 
-                var expectedResponse = new TagsResource(new Tags(
-                    new Dictionary<string, string> {
+                var expectedResponse = new TagsResource(new Tags()
+                {
+                    TagsValue = new Dictionary<string, string> {
                     { "tagKey1", "tagValue3" },
                     { "tagKey2", "tagValue2" },
                     { "tagKey3", "tagValue3" }
                     }
-                ));
-                patchResponse.Properties.TagsProperty.Should().HaveCount(expectedResponse.Properties.TagsProperty.Count);
-                this.CompareTagsResource(expectedResponse, patchResponse).Should().BeTrue();
+                }
+                );
+                //patchResponse.Properties.Should().HaveCount(expectedResponse.Properties.TagsProperty.Count);
+                Assert.AreEqual(patchResponse.Properties.TagsValue.Count(), expectedResponse.Properties.TagsValue.Count());
+                //this.CompareTagsResource(expectedResponse, patchResponse).Should().BeTrue();
+                Assert.IsTrue(this.CompareTagsResource(expectedResponse, patchResponse));
             }
 
-            { // test for Replace operation                  
-                var tagPatchRequest = new TagsPatchResource("Replace", putTags);
-                var patchResponse = client.Tags.UpdateAtScope(resourceScope, tagPatchRequest);
+            { // test for Replace operation
+                var tagPatchRequest = TagsPatchResourceOperation.Replace;
+                var patchResponse = await TagsClient.UpdateAtScopeAsync(resourceScope, tagPatchRequest);
 
                 var expectedResponse = new TagsResource(putTags);
-                patchResponse.Properties.TagsProperty.Should().HaveCount(expectedResponse.Properties.TagsProperty.Count);
-                this.CompareTagsResource(expectedResponse, patchResponse).Should().BeTrue();
+                //patchResponse.Value.Properties.TagsValue.Should().HaveCount(expectedResponse.Properties.TagsProperty.Count);
+                Assert.AreEqual(patchResponse.Value.Properties.TagsValue.Count(), expectedResponse.Properties.TagsValue.Count());
+                Assert.IsTrue(this.CompareTagsResource(expectedResponse, patchResponse));
+                //this.CompareTagsResource(expectedResponse, patchResponse).Should().BeTrue();
             }
 
-            { // test for Delete operation                  
-                var tagPatchRequest = new TagsPatchResource("Delete", putTags);
-                var patchResponse = client.Tags.UpdateAtScope(resourceScope, tagPatchRequest);
-                patchResponse.Properties.TagsProperty.Should().BeEmpty();
+            { // test for Delete operation
+
+                //var tagPatchRequest = new TagsPatchResource("Delete", putTags);
+                //var patchResponse = client.Tags.UpdateAtScope(resourceScope, tagPatchRequest);
+                var tagPatchRequest = TagsPatchResourceOperation.Delete;
+                var patchResponse = await TagsClient.UpdateAtScopeAsync(resourceScope, tagPatchRequest);
+                Assert.IsNull(patchResponse.Value.Properties.TagsValue);
             }
         }
 
@@ -182,135 +191,114 @@ namespace ResourceGroups.Tests
         /// Patch request for Tags Operation within tracked resources test, including Replace|Merge|Delete operations
         /// </summary>
         [Test]
-        public async Task UpdateTagsWithTrackedResourcesTest()
+        public void UpdateTagsWithTrackedResourcesTest()
         {
-            using (MockContext context = MockContext.Start(this.GetType()))
-            {
-                // test tags for tracked resources
-                string resourceScope = "/subscriptions/afe8f803-7190-48e3-b41a-bc454e8aad1a/resourcegroups/TagsApiSDK/providers/Microsoft.Compute/virtualMachines/TagTestVM";
-                this.UpdateTagsTest(resourceScope, context);
-            }
+            // test tags for tracked resources
+            string resourceScope = "/subscriptions/afe8f803-7190-48e3-b41a-bc454e8aad1a/resourcegroups/TagsApiSDK/providers/Microsoft.Compute/virtualMachines/TagTestVM";
+            UpdateTagsTest(resourceScope);
         }
 
         /// <summary>
         /// Patch request for Tags Operation within subscription test, including Replace|Merge|Delete operations
         /// </summary>
         [Test]
-        public async Task UpdateTagsWithSubscriptionTest()
+        public void UpdateTagsWithSubscriptionTest()
         {
-            using (MockContext context = MockContext.Start(this.GetType()))
-            {
-                // test tags for subscription
-                string subscriptionScope = "/subscriptions/afe8f803-7190-48e3-b41a-bc454e8aad1a";
-                this.UpdateTagsTest(subscriptionScope, context);
-            }
+            // test tags for subscription
+            string subscriptionScope = "/subscriptions/afe8f803-7190-48e3-b41a-bc454e8aad1a";
+            UpdateTagsTest(subscriptionScope);
         }
 
         /// <summary>
         /// Utility method to test Get request for Tags Operation within tracked resources and proxy resources
         /// </summary>
-        private void GetTagsTest(string resourceScope, MockContext context)
+        private async void GetTagsTest(string resourceScope)
         {
-            var handler = new RecordedDelegatingHandler() { StatusCodeToReturn = HttpStatusCode.OK };
-
-            var client = GetResourceManagementClient(context, handler);
-
             // using Tags.CreateOrUpdateAtScope to create two tags initially
-            var tagsResource = new TagsResource(new Tags(
-                new Dictionary<string, string> {
+            var tagsResource = new TagsResource(new Tags()
+            {
+                TagsValue = new Dictionary<string, string> {
                     { "tagKey1", "tagValue1" },
                     { "tagKey2", "tagValue2" }
                 }
-            ));
-            client.Tags.CreateOrUpdateAtScope(resourceScope, tagsResource);
+            });
+            await TagsClient.CreateOrUpdateAtScopeAsync(resourceScope, tagsResource.Properties);
             Thread.Sleep(3000);
 
             // get request should return created TagsResource
-            var getResponse = client.Tags.GetAtScope(resourceScope);
-            getResponse.Properties.TagsProperty.Should().HaveCount(tagsResource.Properties.TagsProperty.Count);
-            this.CompareTagsResource(tagsResource, getResponse).Should().BeTrue();
+            var getResponse = await TagsClient.GetAtScopeAsync(resourceScope);
+            Assert.AreEqual(getResponse.Value.Properties.TagsValue.Count(), tagsResource.Properties.TagsValue.Count());
+            Assert.IsTrue(this.CompareTagsResource(tagsResource, getResponse));
+            //getResponse.Properties.TagsProperty.Should().HaveCount(tagsResource.Properties.TagsProperty.Count);
+            //this.CompareTagsResource(tagsResource, getResponse).Should().BeTrue();
         }
 
         /// <summary>
         /// Get request for Tags Operation within tracked resources test
         /// </summary>
         [Test]
-        public async Task GetTagsWithTrackedResourcesTest()
+        public void GetTagsWithTrackedResourcesTest()
         {
-            using (MockContext context = MockContext.Start(this.GetType()))
-            {
-                // test tags for tracked resources
-                string resourceScope = "/subscriptions/afe8f803-7190-48e3-b41a-bc454e8aad1a/resourcegroups/TagsApiSDK/providers/Microsoft.Compute/virtualMachines/TagTestVM";
-                this.GetTagsTest(resourceScope, context);
-            }
+             // test tags for tracked resources
+             string resourceScope = "/subscriptions/afe8f803-7190-48e3-b41a-bc454e8aad1a/resourcegroups/TagsApiSDK/providers/Microsoft.Compute/virtualMachines/TagTestVM";
+             GetTagsTest(resourceScope);
         }
 
         /// <summary>
         /// Get request for Tags Operation within subscription test
         /// </summary>
         [Test]
-        public async Task GetTagsWithSubscriptionTest()
+        public void GetTagsWithSubscriptionTest()
         {
-            using (MockContext context = MockContext.Start(this.GetType()))
-            {
-                // test tags for subscription
-                string subscriptionScope = "/subscriptions/afe8f803-7190-48e3-b41a-bc454e8aad1a";
-                this.GetTagsTest(subscriptionScope, context);
-            }
+            // test tags for subscription
+            string subscriptionScope = "/subscriptions/afe8f803-7190-48e3-b41a-bc454e8aad1a";
+            GetTagsTest(subscriptionScope);
         }
 
         /// <summary>
         /// Utility method to test Delete request for Tags Operation within tracked resources and proxy resources
         /// </summary>
-        private TagsResource DeleteTagsTest(string resourceScope, MockContext context)
+        private async Task<TagsResource> DeleteTagsTest(string resourceScope)
         {
-            var handler = new RecordedDelegatingHandler() { StatusCodeToReturn = HttpStatusCode.OK };
-            var client = GetResourceManagementClient(context, handler);
-
             // using Tags.CreateOrUpdateAtScope to create two tags initially
-            var tagsResource = new TagsResource(new Tags(
-                new Dictionary<string, string> {
+            var tagsResource = new TagsResource(new Tags()
+            {
+                TagsValue = new Dictionary<string, string> {
                     { "tagKey1", "tagValue1" },
                     { "tagKey2", "tagValue2" }
                 }
-            ));
-            client.Tags.CreateOrUpdateAtScope(resourceScope, tagsResource);
+            });
+            await TagsClient.CreateOrUpdateAtScopeAsync(resourceScope, tagsResource.Properties);
             Thread.Sleep(3000);
 
             // try to delete existing tags
-            client.Tags.DeleteAtScope(resourceScope);
+            await TagsClient.DeleteAtScopeAsync(resourceScope);
             Thread.Sleep(3000);
-
             // after deletion, Get request should get 0 tags back
-            return client.Tags.GetAtScope(resourceScope);
+            return await TagsClient.GetAtScopeAsync(resourceScope);
         }
 
         /// <summary>
         /// Get request for Tags Operation within tracked resources test
         /// </summary>
         [Test]
-        public async Task DeleteTagsWithTrackedResourcesTest()
+        public void DeleteTagsWithTrackedResourcesTest()
         {
-            using (MockContext context = MockContext.Start(this.GetType()))
-            {
-                // test tags for tracked resources
-                string resourceScope = "/subscriptions/afe8f803-7190-48e3-b41a-bc454e8aad1a/resourcegroups/TagsApiSDK/providers/Microsoft.Compute/virtualMachines/TagTestVM";
-                this.DeleteTagsTest(resourceScope, context).Properties.TagsProperty.Should().BeEmpty();
-            }
+            // test tags for tracked resources
+            string resourceScope = "//subscriptions/afe8f803-7190-48e3-b41a-bc454e8aad1a/resourcegroups/TagsApiSDK/providers/Microsoft.Compute/virtualMachines/TagTestVM";
+            Assert.IsNull(DeleteTagsTest(resourceScope).Result.Properties.TagsValue);
         }
 
         /// <summary>
         /// Get request for Tags Operation within subscription test
         /// </summary>
         [Test]
-        public async Task DeleteTagsWithSubscriptionTest()
+        public void DeleteTagsWithSubscriptionTest()
         {
-            using (MockContext context = MockContext.Start(this.GetType()))
-            {
-                // test tags for subscription
-                string subscriptionScope = "/subscriptions/afe8f803-7190-48e3-b41a-bc454e8aad1a";
-                this.DeleteTagsTest(subscriptionScope, context).Properties.TagsProperty.Should().BeNull();
-            }
+            // test tags for subscription
+            string subscriptionScope = "//subscriptions/afe8f803-7190-48e3-b41a-bc454e8aad1a";
+            Assert.IsNull(DeleteTagsTest(subscriptionScope).Result.Properties.TagsValue);
+            //this.DeleteTagsTest(subscriptionScope).Properties.TagsProperty.Should().BeNull();
         }
 
         /// <summary>
@@ -321,17 +309,17 @@ namespace ResourceGroups.Tests
         /// <returns> boolean to show whether two objects are the same</returns>
         private bool CompareTagsResource(TagsResource tag1, TagsResource tag2)
         {
-            if ((tag1 == null && tag2 == null) || (tag1.Properties.TagsProperty.Count == 0 && tag2.Properties.TagsProperty.Count == 0))
+            if ((tag1 == null && tag2 == null) || (tag1.Properties.TagsValue.Count == 0 && tag2.Properties.TagsValue.Count == 0))
             {
                 return true;
             }
-            if ((tag1 == null || tag2 == null) || (tag1.Properties.TagsProperty.Count == 0 || tag2.Properties.TagsProperty.Count == 0))
+            if ((tag1 == null || tag2 == null) || (tag1.Properties.TagsValue.Count == 0 || tag2.Properties.TagsValue.Count == 0))
             {
                 return false;
             }
-            foreach (var pair in tag1.Properties.TagsProperty)
+            foreach (var pair in tag1.Properties.TagsValue)
             {
-                if (!tag2.Properties.TagsProperty.ContainsKey(pair.Key) || tag2.Properties.TagsProperty[pair.Key] != pair.Value)
+                if (!tag2.Properties.TagsValue.ContainsKey(pair.Key) || tag2.Properties.TagsValue[pair.Key] != pair.Value)
                 {
                     return false;
                 }
