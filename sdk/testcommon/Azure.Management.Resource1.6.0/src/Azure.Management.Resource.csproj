@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>This is a template project to demonstrate how to create a package that uses code generation as well as use for testing our build and release pipelines</Description>
+    <AssemblyTitle>Azure SDK Template</AssemblyTitle>
+    <Version>0.0.1-preview.1</Version>
+    <PackageTags>Azure Template</PackageTags>
+    <TargetFrameworks>$(RequiredTargetFrameworks)</TargetFrameworks>
+    <EnableApiCompat>false</EnableApiCompat>
+    <!-- These supressions should be removed in a production library -->
+    <NoWarn>$(NoWarn);CA1812;SA1633;AZC0012;CS1591;CA1308;AZC0008</NoWarn>
+  </PropertyGroup>
+
+</Project>
+
