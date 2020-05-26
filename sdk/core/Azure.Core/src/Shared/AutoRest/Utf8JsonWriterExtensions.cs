@@ -99,6 +99,38 @@ namespace Azure.Core
                     writer.WriteEndArray();
                     break;
 
+                //case JsonElement jsonElement:
+                //    switch (jsonElement.ValueKind)
+                //    {
+                //        case JsonValueKind.False:
+                //            writer.WriteBooleanValue(false);
+                //            break;
+                //        case JsonValueKind.True:
+                //            writer.WriteBooleanValue(true);
+                //            break;
+                //        case JsonValueKind.Array:
+                //            writer.WriteStartArray();
+                //            foreach (var item in jsonElement.EnumerateArray())
+                //            {
+                //                writer.WriteObjectValue(item);
+                //            }
+                //            writer.WriteEndArray();
+                //            break;
+                //        case JsonValueKind.String:
+                //            writer.WriteStringValue(jsonElement.GetString());
+                //            break;
+                //        case JsonValueKind.Object:
+                //            writer.WriteStartObject();
+                //            foreach (var item in jsonElement.EnumerateObject())
+                //            {
+                //                writer.WritePropertyName(item.Name);
+                //                writer.WriteObjectValue(item.Value);
+                //            }
+                //            writer.WriteEndObject();
+                //            break;
+                //    }
+                //    break;
+
                 default:
                     throw new NotSupportedException("Not supported type " + value.GetType());
             }
