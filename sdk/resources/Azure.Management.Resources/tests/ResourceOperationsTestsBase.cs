@@ -4,7 +4,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
+using Azure.Core;
+using Azure.Core.Pipeline;
 using Azure.Core.TestFramework;
 using Azure.Management.Resource;
 using Azure.Management.Resource.Tests;
@@ -79,9 +83,53 @@ namespace Azure.Management.Resources.Tests
         {
             recording = recording ?? Recording;
 
+            var options = new ResourcesManagementClientOptions();
+            CleanupPolicy = new ResCleanupPolicy();
+            options.AddPolicy(CleanupPolicy, HttpPipelinePosition.PerCall);
+
             return InstrumentClient(new ResourcesManagementClient(this.subscriptionId,
                 TestEnvironment.Credential,
-                recording.InstrumentClientOptions(new ResourcesManagementClientOptions())));
+                recording.InstrumentClientOptions(options)));
+        }
+
+        private ResCleanupPolicy CleanupPolicy { get; set; }
+
+        [TearDown]
+        public async Task Cleanup()
+        {
+            if (Recording.Mode == RecordedTestMode.Record || Recording.Mode == RecordedTestMode.Live)
+            {
+                foreach (var resGroup in CleanupPolicy.ResourceGroupsCreated)
+                {
+                    var resourceGroupClient = new ResourcesManagementClient(TestEnvironment.SubscriptionId, TestEnvironment.Credential).GetResourceGroupsClient();
+                    var operation = await resourceGroupClient.StartDeleteAsync(resGroup);
+                    //need to wait for completion?
+                    await operation.WaitForCompletionAsync();
+                }
+            }
+        }
+
+        public class ResCleanupPolicy : HttpPipelineSynchronousPolicy
+        {
+            private readonly IList<string> _resourceGroupCreated = new List<string>();
+            private Regex _resourceGroupPattern = new Regex(@"/subscriptions/[^/]+/resourcegroups/([^?/]+)\?api-version");
+            public IList<string> ResourceGroupsCreated
+            {
+                get { return _resourceGroupCreated; }
+            }
+
+
+            public override void OnSendingRequest(HttpMessage message)
+            {
+                if (message.Request.Method == RequestMethod.Put)
+                {
+                    var match = _resourceGroupPattern.Match(message.Request.Uri.ToString());
+                    if (match.Success)
+                    {
+                        _resourceGroupCreated.Add(match.Groups[1].Value);
+                    }
+                }
+            }
         }
     }
 }
