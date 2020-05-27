@@ -1,5 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
+    <ProjectReference Include="..\..\..\core\Azure.Core\src\Azure.Core.csproj" />
+    <ProjectReference Include="..\..\..\network\Azure.Management.Network\src\Azure.Management.Network.csproj" />
     <ProjectReference Include="..\src\Azure.Management.Compute.csproj" />
   </ItemGroup>
 </Project>
