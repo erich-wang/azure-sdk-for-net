@@ -27,7 +27,6 @@ namespace Azure.Management.Compute.Tests
             var networkClient = new NetworkManagementClient(subscriptionId, new DefaultAzureCredential());
 
             var availabilitySetsClient = computeClient.GetAvailabilitySetsClient();
-            var publicIPClient = networkClient.GetPublicIPAddressesClient();
             var virtualNetworksClient = networkClient.GetVirtualNetworksClient();
             var networkInterfaceClient = networkClient.GetNetworkInterfacesClient();
             var virtualMachinesClient = computeClient.GetVirtualMachinesClient();
@@ -43,15 +42,6 @@ namespace Azure.Management.Compute.Tests
 
             // Create IP Address
             // TODO verify why lack of (location) ctor.
-            var ipAddress = new PublicIPAddress()
-            {
-                PublicIPAddressVersion = Network.Models.IPVersion.IPv4,
-                PublicIPAllocationMethod = IPAllocationMethod.Dynamic,
-                Location = location,
-            };
-
-            var publicIpOperation = await publicIPClient.StartCreateOrUpdateAsync(resourceGroup, vmName + "_ip", ipAddress);
-            ipAddress = await publicIpOperation.WaitForCompletionAsync();
 
             // Create VNet
             var vnet = new VirtualNetwork()
@@ -84,7 +74,6 @@ namespace Azure.Management.Compute.Tests
                         Primary = true,
                         Subnet = new Subnet() { Id = vnet.Subnets.First().Id },
                         PrivateIPAllocationMethod = IPAllocationMethod.Dynamic,
-                        PublicIPAddress = new PublicIPAddress() { Id = ipAddress.Id }
                     }
                 }
             };
@@ -99,7 +88,7 @@ namespace Azure.Management.Compute.Tests
                 OsProfile = new OSProfile
                 {
                     ComputerName = "testVM",
-                    AdminUsername = "azureUser",
+                    AdminUsername = "username",
                     AdminPassword = "(YourPassword)",
                     LinuxConfiguration = new LinuxConfiguration { DisablePasswordAuthentication = false, ProvisionVMAgent = true }
                 },
