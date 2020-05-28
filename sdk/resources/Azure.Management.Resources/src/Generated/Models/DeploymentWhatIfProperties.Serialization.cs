@@ -20,21 +20,15 @@ namespace Azure.Management.Resources.Models
                 writer.WritePropertyName("whatIfSettings");
                 writer.WriteObjectValue(WhatIfSettings);
             }
-            if (Template != null)
-            {
-                writer.WritePropertyName("template");
-                writer.WriteObjectValue(Template);
-            }
+            writer.WritePropertyName("template");
+            TemplateJson.WriteTo(writer);
             if (TemplateLink != null)
             {
                 writer.WritePropertyName("templateLink");
                 writer.WriteObjectValue(TemplateLink);
             }
-            if (Parameters != null)
-            {
-                writer.WritePropertyName("parameters");
-                writer.WriteObjectValue(Parameters);
-            }
+            writer.WritePropertyName("parameters");
+            ParametersJson.WriteTo(writer);
             if (ParametersLink != null)
             {
                 writer.WritePropertyName("parametersLink");
