@@ -8,7 +8,7 @@
 namespace Azure.Management.Compute.Models
 {
     /// <summary> An error response from the Compute service. </summary>
-    internal partial class CloudError
+    public partial class CloudError
     {
         /// <summary> Initializes a new instance of CloudError. </summary>
         internal CloudError()

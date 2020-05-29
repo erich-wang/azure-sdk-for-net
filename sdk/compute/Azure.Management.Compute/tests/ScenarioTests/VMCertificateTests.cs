@@ -1,0 +1,108 @@
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Linq;
+using Azure.Management.Resources;
+using Azure.Management.Resources.Models;
+using System.IO;
+using NUnit.Framework;
+using System.Threading.Tasks;
+using Azure.Core.TestFramework;
+using System.Reflection;
+using System.Threading;
+using Azure.Management.Compute.Tests;
+using Azure.Management.Compute;
+using Azure.Management.Compute.Models;
+using System.Text.Json;
+using System.Net;
+
+namespace Azure.Management.Compute.Tests
+{
+    public class VMCertificateTests:VMTestBase
+    {
+
+        public VMCertificateTests(bool isAsync)
+           : base(isAsync)
+        {
+        }
+        [SetUp]
+        public void ClearChallengeCacheforRecord()
+        {
+            if (Mode == RecordedTestMode.Record || Mode == RecordedTestMode.Playback)
+            {
+                InitializeBase();
+            }
+            //ComputeManagementClient computeClient;
+            //ResourceManagementClient resourcesClient;
+        }
+        /// <summary>
+        /// Covers following Operations:
+        /// Create RG
+        /// Create Storage Account
+        /// Create Network Resources
+        /// Create VM with certificate
+        /// GET VM Model View
+        /// Delete VM
+        /// Delete RG
+        /// </summary>
+        [Test]
+        //[Test(Skip = "TODO: Wait for KMS Client")]
+        public async Task TestVMCertificatesOperations()
+        {
+            EnsureClientsInitialized();
+
+            ImageReference imageRef =await GetPlatformVMImage(useWindowsImage: true);
+            // Create resource group
+            var rgName = Recording.GenerateAssetName(TestPrefix);
+            string storageAccountName = Recording.GenerateAssetName(TestPrefix);
+            string asName = Recording.GenerateAssetName("as");
+            VirtualMachine inputVM;
+
+            Action<VirtualMachine> AddCertificateInfo = SetCertificateInfo;
+
+            try
+            {
+                // Create Storage Account, so that both the VMs can share it
+                var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
+
+                var returnTwoVM = await CreateVM(rgName, asName, storageAccountOutput, imageRef, AddCertificateInfo);
+                VirtualMachine vm1 = returnTwoVM.Item1;
+                inputVM = returnTwoVM.Item2;
+                await VirtualMachinesClient.StartDeleteAsync(rgName, inputVM.Name);
+            }
+            finally
+            {
+                await ResourceGroupsClient.StartDeleteAsync(rgName);
+            }
+        }
+
+        private void SetCertificateInfo(VirtualMachine vm)
+        {
+            SubResource vault = GetDefaultSourceVault();
+
+            VaultCertificate vmCert = GetDefaultVaultCert();
+
+            var secretGroup = new VaultSecretGroup() { SourceVault = vault, VaultCertificates = new List<VaultCertificate>() { vmCert } };
+
+            vm.OsProfile.Secrets = new List<VaultSecretGroup>() { secretGroup };
+        }
+
+        //TODO: Create Source Vault Dynamically
+        public SubResource GetDefaultSourceVault()
+        {
+            return new SubResource()
+            {
+                Id = @"/subscriptions/05cacd0c-6f9b-492e-b673-d8be41a7644f/resourceGroups/RgTest1/providers/Microsoft.KeyVault/vaults/TestVault123"
+            };
+        }
+
+        // TODO: Create VaultCertificate Dynamically
+        public VaultCertificate GetDefaultVaultCert()
+        {
+            return new VaultCertificate() { CertificateUrl = @"https://testvault123.vault.azure.net/secrets/Test1/514ceb769c984379a7e0230bdd703272", CertificateStore = "MY" };
+        }
+    }
+}

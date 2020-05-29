@@ -1,5 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <ItemGroup>
+    <Compile Remove="ScenarioTests\VMScaleSetMarketplaceTests.cs" />
+    <Compile Remove="ScenarioTests\VMScaleSetNetworkProfileTests.cs" />
+    <Compile Remove="ScenarioTests\VMScaleSetOperationalTests.cs" />
+    <Compile Remove="ScenarioTests\VMScaleSetPriorityTests.cs" />
+    <Compile Remove="ScenarioTests\VMScaleSetRollingUpgradeTests.cs" />
+    <Compile Remove="ScenarioTests\VMScaleSetScenarioTests.cs" />
+    <Compile Remove="ScenarioTests\VMScaleSetServiceFabricScenarioTests.cs" />
+    <Compile Remove="ScenarioTests\VMScaleSetUpdateTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(AzureCoreTestFramework)" />
+    <ProjectReference Include="..\..\..\testcommon\Azure.Graph.Rbac\src\Azure.Graph.Rbac.csproj" />
+    <ProjectReference Include="..\..\..\testcommon\Azure.Management.Network.2020_04\src\Azure.Management.Network.csproj" />
+    <ProjectReference Include="..\..\..\testcommon\Azure.Management.Resources.2017_05\src\Azure.Management.Resources.csproj" />
+    <ProjectReference Include="..\..\..\testcommon\Azure.Management.Storage.2019_06\src\Azure.Management.Storage.csproj" />
     <ProjectReference Include="..\src\Azure.Management.Compute.csproj" />
   </ItemGroup>
+
 </Project>

@@ -76,7 +76,7 @@ namespace Azure.Management.Compute
         /// <param name="galleryImageVersionName"> The name of the gallery Image Version to be created. Needs to follow semantic version name pattern: The allowed characters are digit and period. Digits must be within the range of a 32-bit integer. Format: &lt;MajorVersion&gt;.&lt;MinorVersion&gt;.&lt;Patch&gt;. </param>
         /// <param name="galleryImageVersion"> Parameters supplied to the create or update gallery Image Version operation. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async Task<Response> CreateOrUpdateAsync(string resourceGroupName, string galleryName, string galleryImageName, string galleryImageVersionName, GalleryImageVersion galleryImageVersion, CancellationToken cancellationToken = default)
+        public async ValueTask<Response> CreateOrUpdateAsync(string resourceGroupName, string galleryName, string galleryImageName, string galleryImageVersionName, GalleryImageVersion galleryImageVersion, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -103,9 +103,8 @@ namespace Azure.Management.Compute
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
-                case 200:
                 case 201:
-                case 202:
+                case 200:
                     return message.Response;
                 default:
                     throw await _clientDiagnostics.CreateRequestFailedExceptionAsync(message.Response).ConfigureAwait(false);
@@ -146,9 +145,8 @@ namespace Azure.Management.Compute
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
-                case 200:
                 case 201:
-                case 202:
+                case 200:
                     return message.Response;
                 default:
                     throw _clientDiagnostics.CreateRequestFailedException(message.Response);
@@ -188,7 +186,7 @@ namespace Azure.Management.Compute
         /// <param name="galleryImageVersionName"> The name of the gallery Image Version to be updated. Needs to follow semantic version name pattern: The allowed characters are digit and period. Digits must be within the range of a 32-bit integer. Format: &lt;MajorVersion&gt;.&lt;MinorVersion&gt;.&lt;Patch&gt;. </param>
         /// <param name="galleryImageVersion"> Parameters supplied to the update gallery Image Version operation. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async Task<Response> UpdateAsync(string resourceGroupName, string galleryName, string galleryImageName, string galleryImageVersionName, GalleryImageVersionUpdate galleryImageVersion, CancellationToken cancellationToken = default)
+        public async ValueTask<Response> UpdateAsync(string resourceGroupName, string galleryName, string galleryImageName, string galleryImageVersionName, GalleryImageVersionUpdate galleryImageVersion, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -292,7 +290,7 @@ namespace Azure.Management.Compute
         /// <param name="galleryImageName"> The name of the gallery Image Definition in which the Image Version resides. </param>
         /// <param name="galleryImageVersionName"> The name of the gallery Image Version to be retrieved. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async Task<Response<GalleryImageVersion>> GetAsync(string resourceGroupName, string galleryName, string galleryImageName, string galleryImageVersionName, CancellationToken cancellationToken = default)
+        public async ValueTask<Response<GalleryImageVersion>> GetAsync(string resourceGroupName, string galleryName, string galleryImageName, string galleryImageVersionName, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -410,7 +408,7 @@ namespace Azure.Management.Compute
         /// <param name="galleryImageName"> The name of the gallery Image Definition in which the Image Version resides. </param>
         /// <param name="galleryImageVersionName"> The name of the gallery Image Version to be deleted. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async Task<Response> DeleteAsync(string resourceGroupName, string galleryName, string galleryImageName, string galleryImageVersionName, CancellationToken cancellationToken = default)
+        public async ValueTask<Response> DeleteAsync(string resourceGroupName, string galleryName, string galleryImageName, string galleryImageVersionName, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -433,9 +431,8 @@ namespace Azure.Management.Compute
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
-                case 200:
                 case 202:
-                case 204:
+                case 200:
                     return message.Response;
                 default:
                     throw await _clientDiagnostics.CreateRequestFailedExceptionAsync(message.Response).ConfigureAwait(false);
@@ -471,9 +468,8 @@ namespace Azure.Management.Compute
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
-                case 200:
                 case 202:
-                case 204:
+                case 200:
                     return message.Response;
                 default:
                     throw _clientDiagnostics.CreateRequestFailedException(message.Response);
@@ -506,7 +502,7 @@ namespace Azure.Management.Compute
         /// <param name="galleryName"> The name of the Shared Image Gallery in which the Image Definition resides. </param>
         /// <param name="galleryImageName"> The name of the Shared Image Gallery Image Definition from which the Image Versions are to be listed. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async Task<Response<GalleryImageVersionList>> ListByGalleryImageAsync(string resourceGroupName, string galleryName, string galleryImageName, CancellationToken cancellationToken = default)
+        public async ValueTask<Response<GalleryImageVersionList>> ListByGalleryImageAsync(string resourceGroupName, string galleryName, string galleryImageName, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -605,7 +601,7 @@ namespace Azure.Management.Compute
         /// <param name="galleryName"> The name of the Shared Image Gallery in which the Image Definition resides. </param>
         /// <param name="galleryImageName"> The name of the Shared Image Gallery Image Definition from which the Image Versions are to be listed. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async Task<Response<GalleryImageVersionList>> ListByGalleryImageNextPageAsync(string nextLink, string resourceGroupName, string galleryName, string galleryImageName, CancellationToken cancellationToken = default)
+        public async ValueTask<Response<GalleryImageVersionList>> ListByGalleryImageNextPageAsync(string nextLink, string resourceGroupName, string galleryName, string galleryImageName, CancellationToken cancellationToken = default)
         {
             if (nextLink == null)
             {

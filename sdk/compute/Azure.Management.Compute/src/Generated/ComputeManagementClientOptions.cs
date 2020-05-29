@@ -5,6 +5,7 @@
 
 #nullable disable
 
+using System;
 using Azure.Core;
 
 namespace Azure.Management.Compute
@@ -12,5 +13,22 @@ namespace Azure.Management.Compute
     /// <summary> Client options for Compute. </summary>
     public class ComputeManagementClientOptions : ClientOptions
     {
+        private const ServiceVersion LatestVersion = ServiceVersion.V2017_05_10;
+        /// <summary> The version of the service to use. </summary>
+        public enum ServiceVersion
+        {
+            /// <summary> Service version "2019-11-01-preview". </summary>
+            V2017_05_10 = 1,
+        }
+        internal string Version { get; }
+        /// <summary> Initializes new instance of AppConfigurationManagementClientOptions. </summary>
+        public ComputeManagementClientOptions(ServiceVersion version = LatestVersion)
+        {
+            Version = version switch
+            {
+                ServiceVersion.V2017_05_10 => "2017-05-10",
+                _ => throw new NotSupportedException()
+            };
+        }
     }
 }
