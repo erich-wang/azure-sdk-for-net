@@ -214,7 +214,6 @@ namespace Azure.Management.Storage.Tests
                     Assert.AreEqual(putRule.ExposedHeaders, getRule.ExposedHeaders);
                     Assert.AreEqual(putRule.MaxAgeInSeconds, getRule.MaxAgeInSeconds);
                 }
-
             }
             finally
             {
@@ -225,7 +224,6 @@ namespace Azure.Management.Storage.Tests
                 await _DeleteResourceGroupAsync(rgName);
             }
         }
-
 
         private async Task<string> _CreateResourceGroupAsync()
         {

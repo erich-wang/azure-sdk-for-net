@@ -657,12 +657,7 @@ namespace Azure.Management.Storage.Tests
                 Assert.AreEqual(SkuName.StandardLRS, accountProerties.Value.Sku.Name);
 
                 // Update storage tags
-                parameters.Tags = new Dictionary<string, string>
-            {
-                {"key3","value3"},
-                {"key4","value4"},
-                {"key5","value6"}
-            };
+                parameters.Tags = new Dictionary<string, string> { { "key3", "value3" }, { "key4", "value4" }, { "key5", "value6" } };
                 account = await _CreateStorageAccountAsync(rgname, accountName, parameters);
                 Assert.AreEqual(account.Tags.Count, parameters.Tags.Count);
 

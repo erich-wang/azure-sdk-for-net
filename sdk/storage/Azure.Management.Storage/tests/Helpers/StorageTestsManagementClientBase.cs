@@ -21,7 +21,6 @@ namespace Azure.Management.Storage.Tests.Helpers
         public Dictionary<string, string> tags { get; internal set; }
         public Guid tenantIdGuid { get; internal set; }
 
-
         public ResourcesManagementClient ResourceManagementClient { get; set; }
         public ResourcesClient ResourcesClient { get; set; }
         public ResourceGroupsClient ResourceGroupsClient { get; set; }
@@ -39,7 +38,6 @@ namespace Azure.Management.Storage.Tests.Helpers
         public BlobServicesClient BlobServicesClient { get; set; }
         public BlobContainersClient BlobContainersClient { get; set; }
         public ObjectReplicationPoliciesClient ObjectReplicationPoliciesClient { get; set; }
-
 
         protected StorageTestsManagementClientBase(bool isAsync) : base(isAsync)
         {

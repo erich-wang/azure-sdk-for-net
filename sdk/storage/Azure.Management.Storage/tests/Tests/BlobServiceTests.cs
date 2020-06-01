@@ -821,7 +821,6 @@ namespace Azure.Management.Storage.Tests
                     Assert.AreEqual(putRule.ExposedHeaders, getRule.ExposedHeaders);
                     Assert.AreEqual(putRule.MaxAgeInSeconds, getRule.MaxAgeInSeconds);
                 }
-
             }
             finally
             {
