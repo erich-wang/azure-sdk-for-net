@@ -2,5 +2,9 @@
   <ItemGroup>
     <ProjectReference Include="$(AzureCoreTestFramework)" />
     <ProjectReference Include="..\src\Azure.Management.EventHub.csproj" />
+    <ProjectReference Include="..\..\..\testcommon\Azure.Management.Resources.2017_05\src\Azure.Management.Resources.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Tests\" />
   </ItemGroup>
 </Project>
