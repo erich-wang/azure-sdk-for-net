@@ -33,13 +33,13 @@ namespace Azure.Management.Storage.Tests
         public async Task BlobContainersCreateDeleteTest()
         {
             // Create resource group
-            string rgName = await _CreateResourceGroupAsync();
+            string rgName = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
             {
                 // Create storage account
-                StorageAccount account = await _CreateStorageAccountAsync(rgName, accountName);
+                StorageAccount account = await CreateStorageAccountAsync(rgName, accountName);
                 StorageManagementTestUtilities.VerifyAccountProperties(account, true);
 
                 // implement case
@@ -66,10 +66,10 @@ namespace Azure.Management.Storage.Tests
             finally
             {
                 //Detele storage account
-                await _DeleteStorageAccountAsync(rgName, accountName);
+                await DeleteStorageAccountAsync(rgName, accountName);
 
                 //Delete resource group
-                await _DeleteResourceGroupAsync(rgName);
+                await DeleteResourceGroupAsync(rgName);
             }
         }
 
@@ -79,13 +79,13 @@ namespace Azure.Management.Storage.Tests
         public async Task BlobContainersUpdateTest()
         {
             // Create resource group
-            string rgName = await _CreateResourceGroupAsync();
+            string rgName = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
             {
                 // Create storage account
-                StorageAccount account = await _CreateStorageAccountAsync(rgName, accountName);
+                StorageAccount account = await CreateStorageAccountAsync(rgName, accountName);
                 StorageManagementTestUtilities.VerifyAccountProperties(account, true);
 
                 // implement case
@@ -122,10 +122,10 @@ namespace Azure.Management.Storage.Tests
             finally
             {
                 //Detele storage account
-                await _DeleteStorageAccountAsync(rgName, accountName);
+                await DeleteStorageAccountAsync(rgName, accountName);
 
                 //Delete resource group
-                await _DeleteResourceGroupAsync(rgName);
+                await DeleteResourceGroupAsync(rgName);
             }
         }
 
@@ -134,13 +134,13 @@ namespace Azure.Management.Storage.Tests
         public async Task BlobContainersEncryptionScopeTest()
         {
             // Create resource group
-            string rgName = await _CreateResourceGroupAsync();
+            string rgName = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
             {
                 // Create storage account
-                StorageAccount account = await _CreateStorageAccountAsync(rgName, accountName);
+                StorageAccount account = await CreateStorageAccountAsync(rgName, accountName);
                 StorageManagementTestUtilities.VerifyAccountProperties(account, true);
 
 
@@ -176,10 +176,10 @@ namespace Azure.Management.Storage.Tests
             finally
             {
                 //Detele storage account
-                await _DeleteStorageAccountAsync(rgName, accountName);
+                await DeleteStorageAccountAsync(rgName, accountName);
 
                 //Delete resource group
-                await _DeleteResourceGroupAsync(rgName);
+                await DeleteResourceGroupAsync(rgName);
             }
         }
 
@@ -188,14 +188,14 @@ namespace Azure.Management.Storage.Tests
         public async Task BlobContainersListTest()
         {
             // Create resource group
-            string rgName = await _CreateResourceGroupAsync();
+            string rgName = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
             {
                 // Create storage account
-                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(Kind: Kind.StorageV2);
-                StorageAccount account = await _CreateStorageAccountAsync(rgName, accountName, parameters);
+                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(kind: Kind.StorageV2);
+                StorageAccount account = await CreateStorageAccountAsync(rgName, accountName, parameters);
                 StorageManagementTestUtilities.VerifyAccountProperties(account, false);
 
                 // implement case
@@ -255,10 +255,10 @@ namespace Azure.Management.Storage.Tests
             finally
             {
                 //Detele storage account
-                await _DeleteStorageAccountAsync(rgName, accountName);
+                await DeleteStorageAccountAsync(rgName, accountName);
 
                 //Delete resource group
-                await _DeleteResourceGroupAsync(rgName);
+                await DeleteResourceGroupAsync(rgName);
             }
         }
 
@@ -266,14 +266,14 @@ namespace Azure.Management.Storage.Tests
         public async Task BlobContainersGetTest()
         {
             // Create resource group
-            string rgName = await _CreateResourceGroupAsync();
+            string rgName = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
             {
                 // Create storage account
-                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(Kind: Kind.StorageV2);
-                StorageAccount account = await _CreateStorageAccountAsync(rgName, accountName, parameters);
+                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(kind: Kind.StorageV2);
+                StorageAccount account = await CreateStorageAccountAsync(rgName, accountName, parameters);
                 StorageManagementTestUtilities.VerifyAccountProperties(account, false);
 
                 // implement case
@@ -332,10 +332,10 @@ namespace Azure.Management.Storage.Tests
             finally
             {
                 //Detele storage account
-                await _DeleteStorageAccountAsync(rgName, accountName);
+                await DeleteStorageAccountAsync(rgName, accountName);
 
                 //Delete resource group
-                await _DeleteResourceGroupAsync(rgName);
+                await DeleteResourceGroupAsync(rgName);
             }
         }
 
@@ -344,14 +344,14 @@ namespace Azure.Management.Storage.Tests
         public async Task BlobContainersSetLegalHoldTest()
         {
             // Create resource group
-            string rgName = await _CreateResourceGroupAsync();
+            string rgName = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
             {
                 // Create storage account
-                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(Kind: Kind.StorageV2);
-                StorageAccount account = await _CreateStorageAccountAsync(rgName, accountName, parameters);
+                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(kind: Kind.StorageV2);
+                StorageAccount account = await CreateStorageAccountAsync(rgName, accountName, parameters);
                 StorageManagementTestUtilities.VerifyAccountProperties(account, false);
 
                 // implement case
@@ -372,10 +372,10 @@ namespace Azure.Management.Storage.Tests
             finally
             {
                 //Detele storage account
-                await _DeleteStorageAccountAsync(rgName, accountName);
+                await DeleteStorageAccountAsync(rgName, accountName);
 
                 //Delete resource group
-                await _DeleteResourceGroupAsync(rgName);
+                await DeleteResourceGroupAsync(rgName);
             }
         }
 
@@ -435,14 +435,14 @@ namespace Azure.Management.Storage.Tests
         public async Task BlobContainersCreateDeleteImmutabilityPolicyTest()
         {
             // Create resource group
-            string rgName = await _CreateResourceGroupAsync();
+            string rgName = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
             {
                 // Create storage account
-                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(Kind: Kind.StorageV2);
-                StorageAccount account = await _CreateStorageAccountAsync(rgName, accountName, parameters);
+                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(kind: Kind.StorageV2);
+                StorageAccount account = await CreateStorageAccountAsync(rgName, accountName, parameters);
                 StorageManagementTestUtilities.VerifyAccountProperties(account, false);
 
                 // implement case
@@ -469,10 +469,10 @@ namespace Azure.Management.Storage.Tests
             finally
             {
                 //Detele storage account
-                await _DeleteStorageAccountAsync(rgName, accountName);
+                await DeleteStorageAccountAsync(rgName, accountName);
 
                 //Delete resource group
-                await _DeleteResourceGroupAsync(rgName);
+                await DeleteResourceGroupAsync(rgName);
             }
         }
 
@@ -481,14 +481,14 @@ namespace Azure.Management.Storage.Tests
         public async Task BlobContainersUpdateImmutabilityPolicyTest()
         {
             // Create resource group
-            string rgName = await _CreateResourceGroupAsync();
+            string rgName = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
             {
                 // Create storage account
-                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(Kind: Kind.StorageV2);
-                StorageAccount account = await _CreateStorageAccountAsync(rgName, accountName, parameters);
+                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(kind: Kind.StorageV2);
+                StorageAccount account = await CreateStorageAccountAsync(rgName, accountName, parameters);
                 StorageManagementTestUtilities.VerifyAccountProperties(account, false);
 
                 // implement case
@@ -523,10 +523,10 @@ namespace Azure.Management.Storage.Tests
             finally
             {
                 //Detele storage account
-                await _DeleteStorageAccountAsync(rgName, accountName);
+                await DeleteStorageAccountAsync(rgName, accountName);
 
                 //Delete resource group
-                await _DeleteResourceGroupAsync(rgName);
+                await DeleteResourceGroupAsync(rgName);
             }
         }
 
@@ -535,14 +535,14 @@ namespace Azure.Management.Storage.Tests
         public async Task ImmutabilityPolicyTest_AllowProtectedAppendWrites()
         {
             // Create resource group
-            string rgName = await _CreateResourceGroupAsync();
+            string rgName = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
             {
                 // Create storage account
-                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(Kind: Kind.StorageV2);
-                StorageAccount account = await _CreateStorageAccountAsync(rgName, accountName, parameters);
+                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(kind: Kind.StorageV2);
+                StorageAccount account = await CreateStorageAccountAsync(rgName, accountName, parameters);
                 StorageManagementTestUtilities.VerifyAccountProperties(account, false);
 
                 // implement case
@@ -581,10 +581,10 @@ namespace Azure.Management.Storage.Tests
             finally
             {
                 //Detele storage account
-                await _DeleteStorageAccountAsync(rgName, accountName);
+                await DeleteStorageAccountAsync(rgName, accountName);
 
                 //Delete resource group
-                await _DeleteResourceGroupAsync(rgName);
+                await DeleteResourceGroupAsync(rgName);
             }
         }
 
@@ -594,14 +594,14 @@ namespace Azure.Management.Storage.Tests
         public async Task BlobContainersLockImmutabilityPolicyTest()
         {
             // Create resource group
-            string rgName = await _CreateResourceGroupAsync();
+            string rgName = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
             {
                 // Create storage account
-                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(Kind: Kind.StorageV2);
-                StorageAccount account = await _CreateStorageAccountAsync(rgName, accountName, parameters);
+                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(kind: Kind.StorageV2);
+                StorageAccount account = await CreateStorageAccountAsync(rgName, accountName, parameters);
                 StorageManagementTestUtilities.VerifyAccountProperties(account, false);
 
                 // implement case
@@ -630,10 +630,10 @@ namespace Azure.Management.Storage.Tests
             finally
             {
                 //Detele storage account
-                await _DeleteStorageAccountAsync(rgName, accountName);
+                await DeleteStorageAccountAsync(rgName, accountName);
 
                 //Delete resource group
-                await _DeleteResourceGroupAsync(rgName);
+                await DeleteResourceGroupAsync(rgName);
             }
         }
 
@@ -642,14 +642,14 @@ namespace Azure.Management.Storage.Tests
         public async Task BlobContainersExtendImmutabilityPolicyTest()
         {
             // Create resource group
-            string rgName = await _CreateResourceGroupAsync();
+            string rgName = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
             {
                 // Create storage account
-                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(Kind: Kind.StorageV2);
-                StorageAccount account = await _CreateStorageAccountAsync(rgName, accountName, parameters);
+                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(kind: Kind.StorageV2);
+                StorageAccount account = await CreateStorageAccountAsync(rgName, accountName, parameters);
                 StorageManagementTestUtilities.VerifyAccountProperties(account, false);
 
                 // implement case
@@ -686,10 +686,10 @@ namespace Azure.Management.Storage.Tests
             finally
             {
                 //Detele storage account
-                await _DeleteStorageAccountAsync(rgName, accountName);
+                await DeleteStorageAccountAsync(rgName, accountName);
 
                 //Delete resource group
-                await _DeleteResourceGroupAsync(rgName);
+                await DeleteResourceGroupAsync(rgName);
             }
         }
 
@@ -698,13 +698,13 @@ namespace Azure.Management.Storage.Tests
         public async Task BlobServiceTest()
         {
             // Create resource group
-            string rgName = await _CreateResourceGroupAsync();
+            string rgName = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
             {
                 // Create storage account
-                StorageAccount account = await _CreateStorageAccountAsync(rgName, accountName);
+                StorageAccount account = await CreateStorageAccountAsync(rgName, accountName);
                 StorageManagementTestUtilities.VerifyAccountProperties(account, true);
 
                 // implement case
@@ -730,10 +730,10 @@ namespace Azure.Management.Storage.Tests
             finally
             {
                 //Detele storage account
-                await _DeleteStorageAccountAsync(rgName, accountName);
+                await DeleteStorageAccountAsync(rgName, accountName);
 
                 //Delete resource group
-                await _DeleteResourceGroupAsync(rgName);
+                await DeleteResourceGroupAsync(rgName);
             }
         }
 
@@ -742,13 +742,13 @@ namespace Azure.Management.Storage.Tests
         public async Task BlobServiceCorsTest()
         {
             // Create resource group
-            string rgName = await _CreateResourceGroupAsync();
+            string rgName = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
             {
                 // Create storage account
-                StorageAccount account = await _CreateStorageAccountAsync(rgName, accountName);
+                StorageAccount account = await CreateStorageAccountAsync(rgName, accountName);
                 StorageManagementTestUtilities.VerifyAccountProperties(account, true);
 
                 // implement case
@@ -825,10 +825,10 @@ namespace Azure.Management.Storage.Tests
             finally
             {
                 //Detele storage account
-                await _DeleteStorageAccountAsync(rgName, accountName);
+                await DeleteStorageAccountAsync(rgName, accountName);
 
                 //Delete resource group
-                await _DeleteResourceGroupAsync(rgName);
+                await DeleteResourceGroupAsync(rgName);
             }
         }
 
@@ -837,13 +837,13 @@ namespace Azure.Management.Storage.Tests
         public async Task ListBlobServiceTest()
         {
             // Create resource group
-            string rgName = await _CreateResourceGroupAsync();
+            string rgName = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
             {
                 // Create storage account
-                StorageAccount account = await _CreateStorageAccountAsync(rgName, accountName);
+                StorageAccount account = await CreateStorageAccountAsync(rgName, accountName);
                 StorageManagementTestUtilities.VerifyAccountProperties(account, true);
 
                 // implement case
@@ -855,10 +855,10 @@ namespace Azure.Management.Storage.Tests
             finally
             {
                 //Detele storage account
-                await _DeleteStorageAccountAsync(rgName, accountName);
+                await DeleteStorageAccountAsync(rgName, accountName);
 
                 //Delete resource group
-                await _DeleteResourceGroupAsync(rgName);
+                await DeleteResourceGroupAsync(rgName);
             }
         }
 
@@ -868,15 +868,15 @@ namespace Azure.Management.Storage.Tests
         public async Task PITRTest()
         {
             // Create resource group
-            string rgName = await _CreateResourceGroupAsync();
+            string rgName = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
             {
                 // Create storage account
                 Sku Sku = new Sku(SkuName.StandardLRS);
-                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(Sku: Sku, Kind: Kind.StorageV2);
-                StorageAccount account = await _CreateStorageAccountAsync(rgName, accountName, parameters);
+                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(sku: Sku, kind: Kind.StorageV2);
+                StorageAccount account = await CreateStorageAccountAsync(rgName, accountName, parameters);
                 Assert.AreEqual(SkuName.StandardLRS, account.Sku.Name);
 
                 account = await AccountsClient.GetPropertiesAsync(rgName, accountName, StorageAccountExpand.BlobRestoreStatus);
@@ -928,10 +928,10 @@ namespace Azure.Management.Storage.Tests
             finally
             {
                 //Detele storage account
-                await _DeleteStorageAccountAsync(rgName, accountName);
+                await DeleteStorageAccountAsync(rgName, accountName);
 
                 //Delete resource group
-                await _DeleteResourceGroupAsync(rgName);
+                await DeleteResourceGroupAsync(rgName);
             }
         }
 
@@ -940,7 +940,7 @@ namespace Azure.Management.Storage.Tests
         public async Task ORSTest()
         {
             // Create resource group
-            string rgName = await _CreateResourceGroupAsync();
+            string rgName = await CreateResourceGroupAsync();
             string sourceAccountName = Recording.GenerateAssetName("sto");
             string destAccountName = Recording.GenerateAssetName("sto");
 
@@ -948,9 +948,9 @@ namespace Azure.Management.Storage.Tests
             {
                 // Create storage account
                 Sku Sku = new Sku(SkuName.StandardLRS);
-                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(Sku: Sku, Kind: Kind.StorageV2);
-                StorageAccount sourceAccount = await _CreateStorageAccountAsync(rgName, sourceAccountName, parameters);
-                StorageAccount destAccount = await _CreateStorageAccountAsync(rgName, destAccountName, parameters);
+                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(sku: Sku, kind: Kind.StorageV2);
+                StorageAccount sourceAccount = await CreateStorageAccountAsync(rgName, sourceAccountName, parameters);
+                StorageAccount destAccount = await CreateStorageAccountAsync(rgName, destAccountName, parameters);
                 Assert.AreEqual(SkuName.StandardLRS, sourceAccount.Sku.Name);
                 Assert.AreEqual(SkuName.StandardLRS, destAccount.Sku.Name);
 
@@ -1035,11 +1035,11 @@ namespace Azure.Management.Storage.Tests
             finally
             {
                 //Detele storage account
-                await _DeleteStorageAccountAsync(rgName, sourceAccountName);
-                await _DeleteStorageAccountAsync(rgName, destAccountName);
+                await DeleteStorageAccountAsync(rgName, sourceAccountName);
+                await DeleteStorageAccountAsync(rgName, destAccountName);
 
                 //Delete resource group
-                await _DeleteResourceGroupAsync(rgName);
+                await DeleteResourceGroupAsync(rgName);
             }
         }
 
@@ -1112,27 +1112,27 @@ namespace Azure.Management.Storage.Tests
             }
         }
 
-        private async Task<string> _CreateResourceGroupAsync()
+        private async Task<string> CreateResourceGroupAsync()
         {
             return await StorageManagementTestUtilities.CreateResourceGroup(ResourceGroupsClient, Recording);
         }
 
-        private async Task<StorageAccount> _CreateStorageAccountAsync(string ResourceGroupName, string AccountName, StorageAccountCreateParameters Parameters = null)
+        private async Task<StorageAccount> CreateStorageAccountAsync(string resourceGroupName, string accountName, StorageAccountCreateParameters parameters = null)
         {
-            StorageAccountCreateParameters saParameters = Parameters ?? StorageManagementTestUtilities.GetDefaultStorageAccountParameters();
-            Operation<StorageAccount> accountsResponse = await AccountsClient.StartCreateAsync(ResourceGroupName, AccountName, saParameters);
+            StorageAccountCreateParameters saParameters = parameters ?? StorageManagementTestUtilities.GetDefaultStorageAccountParameters();
+            Operation<StorageAccount> accountsResponse = await AccountsClient.StartCreateAsync(resourceGroupName, accountName, saParameters);
             StorageAccount account = (await accountsResponse.WaitForCompletionAsync()).Value;
             return account;
         }
 
-        private async Task<Response> _DeleteStorageAccountAsync(string ResourceGroupName, string AccountName)
+        private async Task<Response> DeleteStorageAccountAsync(string resourceGroupName, string accountName)
         {
-            return await AccountsClient.DeleteAsync(ResourceGroupName, AccountName);
+            return await AccountsClient.DeleteAsync(resourceGroupName, accountName);
         }
 
-        private async Task _DeleteResourceGroupAsync(string ResourceGroupName)
+        private async Task DeleteResourceGroupAsync(string resourceGroupName)
         {
-            await ResourceGroupsClient.StartDeleteAsync(ResourceGroupName);
+            await ResourceGroupsClient.StartDeleteAsync(resourceGroupName);
         }
     }
 }

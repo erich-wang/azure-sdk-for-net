@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Azure.Core.TestFramework;
 using Azure.Management.Resources;
@@ -17,15 +16,6 @@ namespace Azure.Management.Storage.Tests.Helpers
     public static class StorageManagementTestUtilities
     {
         public static bool IsTestTenant = false;
-        private static HttpClientHandler Handler = null;
-
-        // These should be filled in only if test tenant is true
-#if DNX451
-        private static string certName = null;
-        private static string certPassword = null;
-#endif
-        private const string testSubscription = null;
-        //private static Uri testUri = null;
 
         // These are used to create default accounts
         public static string DefaultLocation = IsTestTenant ? null : "eastus2(stage)";
@@ -39,26 +29,11 @@ namespace Azure.Management.Storage.Tests.Helpers
             {"key2","value2"}
         };
 
-        private static HttpClientHandler GetHandler()
+        public static StorageAccountCreateParameters GetDefaultStorageAccountParameters(Sku sku = null, Kind? kind = null, string location = null)
         {
-#if DNX451
-            if (Handler == null)
-            {
-                //talk to yugangw-msft, if the code doesn't work under dnx451 (same with net451)
-                X509Certificate2 cert = new X509Certificate2(certName, certPassword);
-                Handler = new System.Net.Http.WebRequestHandler();
-                ((WebRequestHandler)Handler).ClientCertificates.Add(cert);
-                ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => { return true; };
-            }
-#endif
-            return Handler;
-        }
-
-        public static StorageAccountCreateParameters GetDefaultStorageAccountParameters(Sku Sku = null, Kind? Kind = null, string Location = null)
-        {
-            Sku skuParameters = Sku ?? DefaultSkuNameStandardGRS;
-            Kind kindParameters = Kind ?? DefaultKindStorage;
-            string locationParameters = Location ?? DefaultLocation;
+            Sku skuParameters = sku ?? DefaultSkuNameStandardGRS;
+            Kind kindParameters = kind ?? DefaultKindStorage;
+            string locationParameters = location ?? DefaultLocation;
 
             StorageAccountCreateParameters account = new StorageAccountCreateParameters(skuParameters, kindParameters, locationParameters)
             {
@@ -67,21 +42,21 @@ namespace Azure.Management.Storage.Tests.Helpers
             return account;
         }
 
-        public static async Task<string> CreateResourceGroup(ResourceGroupsClient ResourceGroupsClient, TestRecording Recording)
+        public static async Task<string> CreateResourceGroup(ResourceGroupsClient resourceGroupsClient, TestRecording recording)
         {
-            string name = Recording.GenerateAssetName("res");
+            string name = recording.GenerateAssetName("res");
             if (!IsTestTenant)
             {
-                await ResourceGroupsClient.CreateOrUpdateAsync(name, new ResourceGroup(DefaultRGLocation));
+                await resourceGroupsClient.CreateOrUpdateAsync(name, new ResourceGroup(DefaultRGLocation));
             }
             return name;
         }
 
-        public static async Task<string> CreateStorageAccount(StorageAccountsClient StorageAccountsClient, string rgname, TestRecording Recording)
+        public static async Task<string> CreateStorageAccount(StorageAccountsClient storageAccountsClient, string rgname, TestRecording recording)
         {
-            string accountName = Recording.GenerateAssetName("sto");
+            string accountName = recording.GenerateAssetName("sto");
             StorageAccountCreateParameters parameters = GetDefaultStorageAccountParameters();
-            Operation<StorageAccount> account = await StorageAccountsClient.StartCreateAsync(rgname, accountName, parameters);
+            Operation<StorageAccount> account = await storageAccountsClient.StartCreateAsync(rgname, accountName, parameters);
             await account.WaitForCompletionAsync();
             return accountName;
         }

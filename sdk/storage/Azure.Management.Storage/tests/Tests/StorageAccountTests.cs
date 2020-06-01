@@ -33,7 +33,7 @@ namespace Azure.Management.Storage.Tests
         [Test]
         public async Task StorageAccountCreateTest()
         {
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
             string accountName1 = Recording.GenerateAssetName("sto");
 
@@ -56,11 +56,11 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
-                    await _DeleteStorageAccountAsync(rgname, accountName1);
+                    await DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName1);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -69,7 +69,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountCreateWithEncryptionTest()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
@@ -114,10 +114,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -126,14 +126,14 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountCreateWithAccessTierTest()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
             string accountName1 = Recording.GenerateAssetName("sto");
 
             try
             {
                 //Create storage account
-                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(Kind: Kind.BlobStorage);
+                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(kind: Kind.BlobStorage);
                 parameters.AccessTier = AccessTier.Hot;
                 StorageAccount account = await _CreateStorageAccountAsync(rgname, accountName, parameters);
                 StorageManagementTestUtilities.VerifyAccountProperties(account, false);
@@ -141,7 +141,7 @@ namespace Azure.Management.Storage.Tests
                 Assert.AreEqual(Kind.BlobStorage, account.Kind);
 
                 //Create storage account with cool
-                parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(Kind: Kind.BlobStorage);
+                parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(kind: Kind.BlobStorage);
                 parameters.AccessTier = AccessTier.Cool;
                 account = await _CreateStorageAccountAsync(rgname, accountName1, parameters);
                 StorageManagementTestUtilities.VerifyAccountProperties(account, false);
@@ -153,11 +153,11 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
-                    await _DeleteStorageAccountAsync(rgname, accountName1);
+                    await DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName1);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -166,7 +166,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountBeginCreateTest()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
@@ -179,10 +179,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -191,28 +191,28 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountDeleteTest()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
 
             try
             {
                 //Delete an account which does not exist
-                await _DeleteStorageAccountAsync(rgname, "missingaccount");
+                await DeleteStorageAccountAsync(rgname, "missingaccount");
 
                 //Create storage account
                 string accountName = await StorageManagementTestUtilities.CreateStorageAccount(AccountsClient, rgname, Recording);
 
                 //Delete an account
-                await _DeleteStorageAccountAsync(rgname, accountName);
+                await DeleteStorageAccountAsync(rgname, accountName);
 
                 //Delete an account which was just deleted
-                await _DeleteStorageAccountAsync(rgname, accountName);
+                await DeleteStorageAccountAsync(rgname, accountName);
             }
             finally
             {
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -221,7 +221,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountGetStandardTest()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
             string accountName1 = Recording.GenerateAssetName("sto");
             string accountName2 = Recording.GenerateAssetName("sto");
@@ -230,27 +230,27 @@ namespace Azure.Management.Storage.Tests
             try
             {
                 // Create and get a LRS storage account
-                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(Sku: new Sku(SkuName.StandardLRS));
+                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(sku: new Sku(SkuName.StandardLRS));
                 await _CreateStorageAccountAsync(rgname, accountName, parameters);
-                StorageAccount account = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName);
+                StorageAccount account = await WaitToGetAccountSuccessfullyAsync(rgname, accountName);
                 StorageManagementTestUtilities.VerifyAccountProperties(account, false);
 
                 // Create and get a GRS storage account
-                parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(Sku: new Sku(SkuName.StandardGRS));
+                parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(sku: new Sku(SkuName.StandardGRS));
                 await _CreateStorageAccountAsync(rgname, accountName1, parameters);
-                account = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName1);
+                account = await WaitToGetAccountSuccessfullyAsync(rgname, accountName1);
                 StorageManagementTestUtilities.VerifyAccountProperties(account, true);
 
                 // Create and get a RAGRS storage account
-                parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(Sku: new Sku(SkuName.StandardRagrs));
+                parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(sku: new Sku(SkuName.StandardRagrs));
                 await _CreateStorageAccountAsync(rgname, accountName2, parameters);
-                account = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName2);
+                account = await WaitToGetAccountSuccessfullyAsync(rgname, accountName2);
                 StorageManagementTestUtilities.VerifyAccountProperties(account, false);
 
                 // Create and get a ZRS storage account
-                parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(Sku: new Sku(SkuName.StandardZRS));
+                parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(sku: new Sku(SkuName.StandardZRS));
                 await _CreateStorageAccountAsync(rgname, accountName3, parameters);
-                account = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName3);
+                account = await WaitToGetAccountSuccessfullyAsync(rgname, accountName3);
                 StorageManagementTestUtilities.VerifyAccountProperties(account, false);
             }
             finally
@@ -258,13 +258,13 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
-                    await _DeleteStorageAccountAsync(rgname, accountName1);
-                    await _DeleteStorageAccountAsync(rgname, accountName2);
-                    await _DeleteStorageAccountAsync(rgname, accountName3);
+                    await DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName1);
+                    await DeleteStorageAccountAsync(rgname, accountName2);
+                    await DeleteStorageAccountAsync(rgname, accountName3);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -273,7 +273,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountGetBlobTest()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
             string accountName1 = Recording.GenerateAssetName("sto");
             string accountName2 = Recording.GenerateAssetName("sto");
@@ -281,24 +281,24 @@ namespace Azure.Management.Storage.Tests
             try
             {
                 // Create and get a blob LRS storage account
-                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(Sku: new Sku(SkuName.StandardLRS), Kind: Kind.BlobStorage);
+                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(sku: new Sku(SkuName.StandardLRS), kind: Kind.BlobStorage);
                 parameters.AccessTier = AccessTier.Hot;
                 await _CreateStorageAccountAsync(rgname, accountName, parameters);
-                StorageAccount account = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName);
+                StorageAccount account = await WaitToGetAccountSuccessfullyAsync(rgname, accountName);
                 StorageManagementTestUtilities.VerifyAccountProperties(account, false);
 
                 // Create and get a blob GRS storage account
-                parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(Sku: new Sku(SkuName.StandardGRS), Kind: Kind.BlobStorage);
+                parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(sku: new Sku(SkuName.StandardGRS), kind: Kind.BlobStorage);
                 parameters.AccessTier = AccessTier.Hot;
                 await _CreateStorageAccountAsync(rgname, accountName1, parameters);
-                account = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName1);
+                account = await WaitToGetAccountSuccessfullyAsync(rgname, accountName1);
                 StorageManagementTestUtilities.VerifyAccountProperties(account, false);
 
                 // Create and get a blob RAGRS storage account
-                parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(Sku: new Sku(SkuName.StandardRagrs), Kind: Kind.BlobStorage);
+                parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(sku: new Sku(SkuName.StandardRagrs), kind: Kind.BlobStorage);
                 parameters.AccessTier = AccessTier.Hot;
                 await _CreateStorageAccountAsync(rgname, accountName2, parameters);
-                account = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName2);
+                account = await WaitToGetAccountSuccessfullyAsync(rgname, accountName2);
                 StorageManagementTestUtilities.VerifyAccountProperties(account, false);
             }
             finally
@@ -306,12 +306,12 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
-                    await _DeleteStorageAccountAsync(rgname, accountName1);
-                    await _DeleteStorageAccountAsync(rgname, accountName2);
+                    await DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName1);
+                    await DeleteStorageAccountAsync(rgname, accountName2);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -320,16 +320,16 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountGetPremiumTest()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
             {
                 // Create and get a Premium LRS storage account
-                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(Sku: new Sku(SkuName.StandardLRS), Kind: Kind.BlobStorage);
+                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(sku: new Sku(SkuName.StandardLRS), kind: Kind.BlobStorage);
                 parameters.AccessTier = AccessTier.Hot;
                 await _CreateStorageAccountAsync(rgname, accountName, parameters);
-                StorageAccount account = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName);
+                StorageAccount account = await WaitToGetAccountSuccessfullyAsync(rgname, accountName);
                 StorageManagementTestUtilities.VerifyAccountProperties(account, false);
             }
             finally
@@ -337,10 +337,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -349,7 +349,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountListByResourceGroupTest()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
 
             try
             {
@@ -375,7 +375,7 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -384,7 +384,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountListWithEncryptionTest()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
@@ -434,10 +434,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -446,11 +446,11 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountListBySubscriptionTest()
         {
             // Create resource group and storage account
-            string rgname1 = await _CreateResourceGroupAsync();
+            string rgname1 = await CreateResourceGroupAsync();
             string accountName1 = await StorageManagementTestUtilities.CreateStorageAccount(AccountsClient, rgname1, Recording);
 
             // Create different resource group and storage account
-            string rgname2 = await _CreateResourceGroupAsync();
+            string rgname2 = await CreateResourceGroupAsync();
             string accountName2 = await StorageManagementTestUtilities.CreateStorageAccount(AccountsClient, rgname2, Recording);
 
             try
@@ -471,12 +471,12 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname1, accountName1);
-                    await _DeleteStorageAccountAsync(rgname2, accountName2);
+                    await DeleteStorageAccountAsync(rgname1, accountName1);
+                    await DeleteStorageAccountAsync(rgname2, accountName2);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname1);
-                    await _DeleteResourceGroupAsync(rgname2);
+                    await DeleteResourceGroupAsync(rgname1);
+                    await DeleteResourceGroupAsync(rgname2);
                 }
             }
         }
@@ -485,7 +485,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountListKeysTest()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
 
             // Create storage account
             string accountName = await StorageManagementTestUtilities.CreateStorageAccount(AccountsClient, rgname, Recording);
@@ -515,10 +515,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -527,7 +527,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountRegenerateKeyTest()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
 
             // Create storage account
             string accountName = await StorageManagementTestUtilities.CreateStorageAccount(AccountsClient, rgname, Recording);
@@ -556,10 +556,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -568,7 +568,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountRevokeUserDelegationKeysTest()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
 
             // Create storage account
             string accountName = await StorageManagementTestUtilities.CreateStorageAccount(AccountsClient, rgname, Recording);
@@ -583,10 +583,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -595,7 +595,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountCheckNameTest()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
@@ -628,10 +628,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -640,7 +640,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountUpdateWithCreateTest()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
 
             // Create storage account
             string accountName = await StorageManagementTestUtilities.CreateStorageAccount(AccountsClient, rgname, Recording);
@@ -648,12 +648,12 @@ namespace Azure.Management.Storage.Tests
             try
             {
                 // Update storage account type
-                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(Sku: new Sku(SkuName.StandardLRS));
+                StorageAccountCreateParameters parameters = StorageManagementTestUtilities.GetDefaultStorageAccountParameters(sku: new Sku(SkuName.StandardLRS));
                 StorageAccount account = await _CreateStorageAccountAsync(rgname, accountName, parameters);
                 Assert.AreEqual(SkuName.StandardLRS, account.Sku.Name);
 
                 // Validate
-                Response<StorageAccount> accountProerties = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName);
+                Response<StorageAccount> accountProerties = await WaitToGetAccountSuccessfullyAsync(rgname, accountName);
                 Assert.AreEqual(SkuName.StandardLRS, accountProerties.Value.Sku.Name);
 
                 // Update storage tags
@@ -662,7 +662,7 @@ namespace Azure.Management.Storage.Tests
                 Assert.AreEqual(account.Tags.Count, parameters.Tags.Count);
 
                 // Validate
-                accountProerties = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName);
+                accountProerties = await WaitToGetAccountSuccessfullyAsync(rgname, accountName);
                 Assert.AreEqual(accountProerties.Value.Tags.Count, parameters.Tags.Count);
 
                 // Update storage encryption
@@ -674,7 +674,7 @@ namespace Azure.Management.Storage.Tests
                 Assert.NotNull(account.Encryption);
 
                 // Validate
-                accountProerties = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName);
+                accountProerties = await WaitToGetAccountSuccessfullyAsync(rgname, accountName);
                 Assert.NotNull(accountProerties.Value.Encryption);
                 Assert.NotNull(accountProerties.Value.Encryption.Services.Blob);
                 Assert.True(accountProerties.Value.Encryption.Services.Blob.Enabled);
@@ -719,10 +719,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -731,7 +731,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountUpdateTest()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
 
             // Create storage account
             string accountName = await StorageManagementTestUtilities.CreateStorageAccount(AccountsClient, rgname, Recording);
@@ -743,20 +743,20 @@ namespace Azure.Management.Storage.Tests
                 {
                     Sku = new Sku(SkuName.StandardLRS),
                 };
-                StorageAccount account = await _UpdateStorageAccountAsync(rgname, accountName, parameters);
+                StorageAccount account = await UpdateStorageAccountAsync(rgname, accountName, parameters);
                 Assert.AreEqual(SkuName.StandardLRS, account.Sku.Name);
 
                 // Validate
-                Response<StorageAccount> accountProerties = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName);
+                Response<StorageAccount> accountProerties = await WaitToGetAccountSuccessfullyAsync(rgname, accountName);
                 Assert.AreEqual(SkuName.StandardLRS, accountProerties.Value.Sku.Name);
 
                 // Update storage tags
                 parameters.Tags = new Dictionary<string, string> { { "key3", "value3" }, { "key4", "value4" }, { "key5", "value6" } };
-                account = await _UpdateStorageAccountAsync(rgname, accountName, parameters);
+                account = await UpdateStorageAccountAsync(rgname, accountName, parameters);
                 Assert.AreEqual(account.Tags.Count, parameters.Tags.Count);
 
                 // Validate
-                accountProerties = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName);
+                accountProerties = await WaitToGetAccountSuccessfullyAsync(rgname, accountName);
                 Assert.AreEqual(accountProerties.Value.Tags.Count, parameters.Tags.Count);
 
                 // Update storage encryption
@@ -764,11 +764,11 @@ namespace Azure.Management.Storage.Tests
                 {
                     Services = new EncryptionServices { Blob = new EncryptionService { Enabled = true }, File = new EncryptionService { Enabled = true } }
                 };
-                account = await _UpdateStorageAccountAsync(rgname, accountName, parameters);
+                account = await UpdateStorageAccountAsync(rgname, accountName, parameters);
                 Assert.NotNull(account.Encryption);
 
                 // Validate
-                accountProerties = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName);
+                accountProerties = await WaitToGetAccountSuccessfullyAsync(rgname, accountName);
                 Assert.NotNull(accountProerties.Value.Encryption);
                 Assert.NotNull(accountProerties.Value.Encryption.Services.Blob);
                 Assert.True(accountProerties.Value.Encryption.Services.Blob.Enabled);
@@ -805,7 +805,7 @@ namespace Azure.Management.Storage.Tests
 
                 try
                 {
-                    await _UpdateStorageAccountAsync(rgname, accountName, parameters);
+                    await UpdateStorageAccountAsync(rgname, accountName, parameters);
                     Assert.True(false, "This request should fail with the below code.");
                 }
                 catch (RequestFailedException ex)
@@ -819,10 +819,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -831,7 +831,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountUpdateMultipleTest()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
 
             // Create storage account
             string accountName = await StorageManagementTestUtilities.CreateStorageAccount(AccountsClient, rgname, Recording);
@@ -844,12 +844,12 @@ namespace Azure.Management.Storage.Tests
                     Sku = new Sku(SkuName.StandardLRS),
                     Tags = new Dictionary<string, string> { { "key3", "value3" }, { "key4", "value4" }, { "key5", "value6" } }
                 };
-                StorageAccount account = await _UpdateStorageAccountAsync(rgname, accountName, parameters);
+                StorageAccount account = await UpdateStorageAccountAsync(rgname, accountName, parameters);
                 Assert.AreEqual(SkuName.StandardLRS, account.Sku.Name);
                 Assert.AreEqual(account.Tags.Count, parameters.Tags.Count);
 
                 // Validate
-                Response<StorageAccount> accountProerties = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName);
+                Response<StorageAccount> accountProerties = await WaitToGetAccountSuccessfullyAsync(rgname, accountName);
                 Assert.AreEqual(SkuName.StandardLRS, accountProerties.Value.Sku.Name);
                 Assert.AreEqual(accountProerties.Value.Tags.Count, parameters.Tags.Count);
             }
@@ -858,10 +858,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -901,7 +901,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountListAccountSASTest()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
@@ -932,10 +932,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -944,7 +944,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountListAccountSASWithDefaultProperties()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
@@ -969,10 +969,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -981,7 +981,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountListAccountSASWithMissingProperties()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
@@ -1008,10 +1008,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
             throw new Exception("AccountSasToken shouldn't be returned without SharedAccessExpiryTime");
@@ -1021,7 +1021,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountListServiceSASTest()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
@@ -1055,10 +1055,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -1067,7 +1067,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountListServiceSASWithDefaultProperties()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
@@ -1097,10 +1097,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -1109,7 +1109,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountListServiceSASWithMissingProperties()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
@@ -1140,10 +1140,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
             throw new Exception("AccountSasToken shouldn't be returned without SharedAccessExpiryTime");
@@ -1153,7 +1153,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountUpdateEncryptionTest()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
 
             // Create storage account
             string accountName = await StorageManagementTestUtilities.CreateStorageAccount(AccountsClient, rgname, Recording);
@@ -1165,11 +1165,11 @@ namespace Azure.Management.Storage.Tests
                 {
                     Sku = new Sku(SkuName.StandardLRS)
                 };
-                StorageAccount account = await _UpdateStorageAccountAsync(rgname, accountName, parameters);
+                StorageAccount account = await UpdateStorageAccountAsync(rgname, accountName, parameters);
                 Assert.AreEqual(SkuName.StandardLRS, account.Sku.Name);
 
                 // Validate
-                account = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName);
+                account = await WaitToGetAccountSuccessfullyAsync(rgname, accountName);
                 Assert.AreEqual(SkuName.StandardLRS, account.Sku.Name);
 
                 // Update storage tags
@@ -1182,11 +1182,11 @@ namespace Azure.Management.Storage.Tests
                         {"key5","value6"}
                     }
                 };
-                account = await _UpdateStorageAccountAsync(rgname, accountName, parameters);
+                account = await UpdateStorageAccountAsync(rgname, accountName, parameters);
                 Assert.AreEqual(account.Tags.Count, parameters.Tags.Count);
 
                 // Validate
-                account = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName);
+                account = await WaitToGetAccountSuccessfullyAsync(rgname, accountName);
                 Assert.AreEqual(account.Tags.Count, parameters.Tags.Count);
 
                 // 1. Update storage encryption
@@ -1197,11 +1197,11 @@ namespace Azure.Management.Storage.Tests
                         Services = new EncryptionServices { Blob = new EncryptionService { Enabled = true }, File = new EncryptionService { Enabled = true } }
                     }
                 };
-                account = await _UpdateStorageAccountAsync(rgname, accountName, parameters);
+                account = await UpdateStorageAccountAsync(rgname, accountName, parameters);
                 Assert.NotNull(account.Encryption);
 
                 // Validate
-                account = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName);
+                account = await WaitToGetAccountSuccessfullyAsync(rgname, accountName);
 
                 Assert.NotNull(account.Encryption);
                 Assert.NotNull(account.Encryption.Services.Blob);
@@ -1220,11 +1220,11 @@ namespace Azure.Management.Storage.Tests
                         Services = new EncryptionServices { Blob = new EncryptionService { Enabled = true }, File = new EncryptionService { Enabled = true } }
                     }
                 };
-                account = await _UpdateStorageAccountAsync(rgname, accountName, parameters);
+                account = await UpdateStorageAccountAsync(rgname, accountName, parameters);
                 Assert.NotNull(account.Encryption);
 
                 // Validate
-                account = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName);
+                account = await WaitToGetAccountSuccessfullyAsync(rgname, accountName);
 
                 Assert.NotNull(account.Encryption);
                 Assert.NotNull(account.Encryption.Services.Blob);
@@ -1243,11 +1243,11 @@ namespace Azure.Management.Storage.Tests
                         Services = new EncryptionServices { Blob = new EncryptionService { Enabled = true } }
                     }
                 };
-                account = await _UpdateStorageAccountAsync(rgname, accountName, parameters);
+                account = await UpdateStorageAccountAsync(rgname, accountName, parameters);
                 Assert.NotNull(account.Encryption);
 
                 // Validate
-                account = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName);
+                account = await WaitToGetAccountSuccessfullyAsync(rgname, accountName);
 
                 Assert.NotNull(account.Encryption);
                 Assert.NotNull(account.Encryption.Services.Blob);
@@ -1263,10 +1263,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -1275,7 +1275,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountUpdateWithHttpsOnlyTest()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
@@ -1292,7 +1292,7 @@ namespace Azure.Management.Storage.Tests
                 {
                     EnableHttpsTrafficOnly = true
                 };
-                account = await _UpdateStorageAccountAsync(rgname, accountName, parameter);
+                account = await UpdateStorageAccountAsync(rgname, accountName, parameter);
                 StorageManagementTestUtilities.VerifyAccountProperties(account, false);
                 Assert.True(account.EnableHttpsTrafficOnly);
 
@@ -1301,7 +1301,7 @@ namespace Azure.Management.Storage.Tests
                 {
                     EnableHttpsTrafficOnly = false
                 };
-                account = await _UpdateStorageAccountAsync(rgname, accountName, parameter);
+                account = await UpdateStorageAccountAsync(rgname, accountName, parameter);
                 StorageManagementTestUtilities.VerifyAccountProperties(account, false);
                 Assert.False(account.EnableHttpsTrafficOnly);
             }
@@ -1310,10 +1310,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -1322,7 +1322,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountCreateWithHttpsOnlyTest()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
             string accountName1 = Recording.GenerateAssetName("sto");
 
@@ -1346,11 +1346,11 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
-                    await _DeleteStorageAccountAsync(rgname, accountName1);
+                    await DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName1);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -1531,7 +1531,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountVnetACLTest()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
@@ -1545,7 +1545,7 @@ namespace Azure.Management.Storage.Tests
                 };
                 await _CreateStorageAccountAsync(rgname, accountName, parameters);
 
-                StorageAccount account = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName);
+                StorageAccount account = await WaitToGetAccountSuccessfullyAsync(rgname, accountName);
 
                 // Verify the vnet rule properties.
                 Assert.NotNull(account.NetworkRuleSet);
@@ -1569,8 +1569,8 @@ namespace Azure.Management.Storage.Tests
                         },
                     }
                 };
-                await _UpdateStorageAccountAsync(rgname, accountName, updateParameters);
-                account = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName);
+                await UpdateStorageAccountAsync(rgname, accountName, updateParameters);
+                account = await WaitToGetAccountSuccessfullyAsync(rgname, accountName);
 
                 Assert.NotNull(account.NetworkRuleSet);
                 Assert.AreEqual(@"Logging, Metrics", account.NetworkRuleSet.Bypass.ToString());
@@ -1588,8 +1588,8 @@ namespace Azure.Management.Storage.Tests
                 {
                     NetworkRuleSet = new NetworkRuleSet(DefaultAction.Allow)
                 };
-                await _UpdateStorageAccountAsync(rgname, accountName, updateParameters);
-                account = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName);
+                await UpdateStorageAccountAsync(rgname, accountName, updateParameters);
+                account = await WaitToGetAccountSuccessfullyAsync(rgname, accountName);
 
                 Assert.NotNull(account.NetworkRuleSet);
                 Assert.AreEqual(@"Logging, Metrics", account.NetworkRuleSet.Bypass.ToString());
@@ -1600,10 +1600,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -1630,7 +1630,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountCreateWithStorageV2()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
@@ -1648,10 +1648,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -1660,7 +1660,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountUpdateKindStorageV2()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
 
             // Create storage account
             string accountName = await StorageManagementTestUtilities.CreateStorageAccount(AccountsClient, rgname, Recording);
@@ -1673,13 +1673,13 @@ namespace Azure.Management.Storage.Tests
                     Kind = Kind.StorageV2,
                     EnableHttpsTrafficOnly = true
                 };
-                StorageAccount account = await _UpdateStorageAccountAsync(rgname, accountName, parameters);
+                StorageAccount account = await UpdateStorageAccountAsync(rgname, accountName, parameters);
                 Assert.AreEqual(Kind.StorageV2, account.Kind);
                 Assert.True(account.EnableHttpsTrafficOnly);
                 Assert.NotNull(account.PrimaryEndpoints.Web);
 
                 // Validate
-                account = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName);
+                account = await WaitToGetAccountSuccessfullyAsync(rgname, accountName);
                 Assert.AreEqual(Kind.StorageV2, account.Kind);
                 Assert.True(account.EnableHttpsTrafficOnly);
                 Assert.NotNull(account.PrimaryEndpoints.Web);
@@ -1689,10 +1689,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -1701,7 +1701,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountSetGetDeleteManagementPolicy()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
@@ -1805,10 +1805,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -1870,7 +1870,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountCreateGetdfs()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
@@ -1884,7 +1884,7 @@ namespace Azure.Management.Storage.Tests
                 Assert.NotNull(account.PrimaryEndpoints.Dfs);
 
                 // Validate
-                account = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName);
+                account = await WaitToGetAccountSuccessfullyAsync(rgname, accountName);
                 Assert.True(account.IsHnsEnabled = true);
                 Assert.NotNull(account.PrimaryEndpoints.Dfs);
             }
@@ -1893,10 +1893,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -1905,7 +1905,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountCreateWithFileStorage()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
@@ -1923,10 +1923,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -1935,7 +1935,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountCreateWithBlockBlobStorage()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
@@ -1953,10 +1953,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -1966,7 +1966,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountCreateSetGetFileAadIntegration()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
@@ -1981,7 +1981,7 @@ namespace Azure.Management.Storage.Tests
                 Assert.AreEqual(DirectoryServiceOptions.Aadds, account.AzureFilesIdentityBasedAuthentication.DirectoryServiceOptions);
 
                 // Validate
-                account = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName);
+                account = await WaitToGetAccountSuccessfullyAsync(rgname, accountName);
                 Assert.AreEqual(DirectoryServiceOptions.Aadds, account.AzureFilesIdentityBasedAuthentication.DirectoryServiceOptions);
 
                 // Update storage account
@@ -1990,11 +1990,11 @@ namespace Azure.Management.Storage.Tests
                     AzureFilesIdentityBasedAuthentication = new AzureFilesIdentityBasedAuthentication(DirectoryServiceOptions.None),
                     EnableHttpsTrafficOnly = true
                 };
-                account = await _UpdateStorageAccountAsync(rgname, accountName, updateParameters);
+                account = await UpdateStorageAccountAsync(rgname, accountName, updateParameters);
                 Assert.AreEqual(DirectoryServiceOptions.None, account.AzureFilesIdentityBasedAuthentication.DirectoryServiceOptions);
 
                 // Validate
-                account = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName);
+                account = await WaitToGetAccountSuccessfullyAsync(rgname, accountName);
                 Assert.AreEqual(DirectoryServiceOptions.None, account.AzureFilesIdentityBasedAuthentication.DirectoryServiceOptions);
             }
             finally
@@ -2002,10 +2002,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -2014,7 +2014,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountFailOver()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
@@ -2046,7 +2046,7 @@ namespace Azure.Management.Storage.Tests
                 Operation<Response> failoverWait = await AccountsClient.StartFailoverAsync(rgname, accountName);
                 await failoverWait.WaitForCompletionAsync();
                 // Validate
-                account = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName);
+                account = await WaitToGetAccountSuccessfullyAsync(rgname, accountName);
                 Assert.AreEqual(SkuName.StandardLRS, account.Sku.Name);
                 Assert.AreEqual(location, account.PrimaryLocation);
             }
@@ -2055,10 +2055,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -2067,7 +2067,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountGetLastSyncTime()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
@@ -2078,7 +2078,7 @@ namespace Azure.Management.Storage.Tests
                 StorageAccount account = await _CreateStorageAccountAsync(rgname, accountName, parameters);
                 Assert.AreEqual(SkuName.StandardRagrs, account.Sku.Name);
                 Assert.Null(account.GeoReplicationStats);
-                account = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName);
+                account = await WaitToGetAccountSuccessfullyAsync(rgname, accountName);
                 Assert.Null(account.GeoReplicationStats);
                 account = await AccountsClient.GetPropertiesAsync(rgname, accountName, StorageAccountExpand.GeoReplicationStats);
                 Assert.NotNull(account.GeoReplicationStats);
@@ -2091,10 +2091,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -2103,7 +2103,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountLargeFileSharesStateTest()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
@@ -2119,7 +2119,7 @@ namespace Azure.Management.Storage.Tests
                 Assert.AreEqual(LargeFileSharesState.Enabled, account.LargeFileSharesState);
 
                 // Validate
-                account = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName);
+                account = await WaitToGetAccountSuccessfullyAsync(rgname, accountName);
                 Assert.AreEqual(SkuName.StandardLRS, account.Sku.Name);
                 Assert.AreEqual(LargeFileSharesState.Enabled, account.LargeFileSharesState);
             }
@@ -2128,10 +2128,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -2140,7 +2140,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountPrivateEndpointTest()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
@@ -2154,7 +2154,7 @@ namespace Azure.Management.Storage.Tests
                 StorageAccount account = await _CreateStorageAccountAsync(rgname, accountName, parameters);
                 Assert.AreEqual(SkuName.StandardLRS, account.Sku.Name);
 
-                account = await _WaitToGetAccountSuccessfullyAsync(rgname, accountName);
+                account = await WaitToGetAccountSuccessfullyAsync(rgname, accountName);
                 IList<PrivateEndpointConnection> pes = account.PrivateEndpointConnections;
                 foreach (PrivateEndpointConnection pe in pes)
                 {
@@ -2204,10 +2204,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -2216,7 +2216,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountPrivateLinkTest()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
@@ -2240,10 +2240,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -2252,7 +2252,7 @@ namespace Azure.Management.Storage.Tests
         public async Task StorageAccountCreateWithTableQueueEcryptionKeyTypeTest()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
@@ -2300,10 +2300,10 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
@@ -2312,7 +2312,7 @@ namespace Azure.Management.Storage.Tests
         public async Task EcryptionScopeTest()
         {
             //Create resource group
-            string rgname = await _CreateResourceGroupAsync();
+            string rgname = await CreateResourceGroupAsync();
             string accountName = Recording.GenerateAssetName("sto");
 
             try
@@ -2359,45 +2359,45 @@ namespace Azure.Management.Storage.Tests
                 if (Mode == RecordedTestMode.Record)
                 {
                     //Detele storage account
-                    await _DeleteStorageAccountAsync(rgname, accountName);
+                    await DeleteStorageAccountAsync(rgname, accountName);
 
                     //Delete resource group
-                    await _DeleteResourceGroupAsync(rgname);
+                    await DeleteResourceGroupAsync(rgname);
                 }
             }
         }
 
-        private async Task<string> _CreateResourceGroupAsync()
+        private async Task<string> CreateResourceGroupAsync()
         {
             return await StorageManagementTestUtilities.CreateResourceGroup(ResourceGroupsClient, Recording);
         }
 
-        private async Task<StorageAccount> _CreateStorageAccountAsync(string ResourceGroupName, string AccountName, StorageAccountCreateParameters Parameters = null)
+        private async Task<StorageAccount> _CreateStorageAccountAsync(string resourceGroupName, string accountName, StorageAccountCreateParameters parameters = null)
         {
-            StorageAccountCreateParameters saParameters = Parameters ?? StorageManagementTestUtilities.GetDefaultStorageAccountParameters();
-            Operation<StorageAccount> accountsResponse = await AccountsClient.StartCreateAsync(ResourceGroupName, AccountName, saParameters);
+            StorageAccountCreateParameters saParameters = parameters ?? StorageManagementTestUtilities.GetDefaultStorageAccountParameters();
+            Operation<StorageAccount> accountsResponse = await AccountsClient.StartCreateAsync(resourceGroupName, accountName, saParameters);
             StorageAccount account = (await accountsResponse.WaitForCompletionAsync()).Value;
             return account;
         }
 
-        private async Task<Response<StorageAccount>> _WaitToGetAccountSuccessfullyAsync(string ResourceGroupName, string AccountName)
+        private async Task<Response<StorageAccount>> WaitToGetAccountSuccessfullyAsync(string resourceGroupName, string accountName)
         {
-            return await AccountsClient.GetPropertiesAsync(ResourceGroupName, AccountName);
+            return await AccountsClient.GetPropertiesAsync(resourceGroupName, accountName);
         }
 
-        private async Task<Response<StorageAccount>> _UpdateStorageAccountAsync(string ResourceGroupName, string AccountName, StorageAccountUpdateParameters Parameters)
+        private async Task<Response<StorageAccount>> UpdateStorageAccountAsync(string resourceGroupName, string accountName, StorageAccountUpdateParameters parameters)
         {
-            return await AccountsClient.UpdateAsync(ResourceGroupName, AccountName, Parameters);
+            return await AccountsClient.UpdateAsync(resourceGroupName, accountName, parameters);
         }
 
-        private async Task<Response> _DeleteStorageAccountAsync(string ResourceGroupName, string AccountName)
+        private async Task<Response> DeleteStorageAccountAsync(string resourceGroupName, string accountName)
         {
-            return await AccountsClient.DeleteAsync(ResourceGroupName, AccountName);
+            return await AccountsClient.DeleteAsync(resourceGroupName, accountName);
         }
 
-        private async Task _DeleteResourceGroupAsync(string ResourceGroupName)
+        private async Task DeleteResourceGroupAsync(string resourceGroupName)
         {
-            await ResourceGroupsClient.StartDeleteAsync(ResourceGroupName);
+            await ResourceGroupsClient.StartDeleteAsync(resourceGroupName);
         }
     }
 }

@@ -1,25 +1,16 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System;
 using System.Collections.Generic;
 using Azure.Core.TestFramework;
 using Azure.Management.Resources;
-using NUnit.Framework;
 
 namespace Azure.Management.Storage.Tests.Helpers
 {
-    [ClientTestFixture]
-    [NonParallelizable]
     public abstract class StorageTestsManagementClientBase : RecordedTestBase<StorageAccountManagementTestEnvironment>
     {
         public bool IsTestTenant = false;
-
-        private const string ObjectIdKey = "ObjectId";
-        public string objectId { get; set; }
-
-        public Dictionary<string, string> tags { get; internal set; }
-        public Guid tenantIdGuid { get; internal set; }
+        public Dictionary<string, string> Tags { get; internal set; }
 
         public ResourcesManagementClient ResourceManagementClient { get; set; }
         public ResourcesClient ResourcesClient { get; set; }
@@ -62,16 +53,6 @@ namespace Azure.Management.Storage.Tests.Helpers
             BlobServicesClient = StorageManagementClient.GetBlobServicesClient();
             BlobContainersClient = StorageManagementClient.GetBlobContainersClient();
             ObjectReplicationPoliciesClient = StorageManagementClient.GetObjectReplicationPoliciesClient();
-
-            if (Mode == RecordedTestMode.Playback)
-            {
-                this.objectId = Recording.GetVariable(ObjectIdKey, string.Empty);
-            }
-            else if (Mode == RecordedTestMode.Record)
-            {
-            }
-
-            tenantIdGuid = new Guid(TestEnvironment.TenantId);
         }
 
         private StorageManagementClient GetStorageManagementClient()
