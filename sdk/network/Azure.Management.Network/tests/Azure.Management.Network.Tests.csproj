@@ -1,5 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
+    <ProjectReference Include="..\..\..\compute\Azure.Management.Compute\src\Azure.Management.Compute.csproj" />
+    <ProjectReference Include="..\..\..\core\Azure.Core\src\Azure.Core.csproj" />
+    <ProjectReference Include="..\..\..\resources\Azure.Management.Resources\src\Azure.Management.Resources.csproj" />
+    <ProjectReference Include="..\..\..\storage\Azure.Management.Storage\src\Azure.Management.Storage.csproj" />
     <ProjectReference Include="..\src\Azure.Management.Network.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="TestData\DeploymentTemplate.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\DeploymentTemplateAsync.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\FirewallPolicyRuleGroupSampleResource.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\FirewallPolicyRuleGroupSampleResourceAsync.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\VmssDeploymentTemplate.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\VmssDeploymentTemplateAsync.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>
