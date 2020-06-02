@@ -68,6 +68,7 @@ namespace Azure.Management.Network.Tests.Tests
                 Compute.VirtualMachineExtensionsCreateOrUpdateOperation createOrUpdateOperation = await ComputeManagementClient.GetVirtualMachineExtensionsClient().StartCreateOrUpdateAsync(resourceGroupName, getVm.Value.Name, "NetworkWatcherAgent", parameters);
                 await createOrUpdateOperation.WaitForCompletionAsync();
 
+                //TODO:There is no need to perform a separate create NetworkWatchers operation
                 //Create network Watcher
                 //string networkWatcherName = Recording.GenerateAssetName("azsmnet");
                 //NetworkWatcher properties = new NetworkWatcher { Location = location };
@@ -145,6 +146,7 @@ namespace Azure.Management.Network.Tests.Tests
                 Compute.VirtualMachineExtensionsCreateOrUpdateOperation createOrUpdateOperation = await ComputeManagementClient.GetVirtualMachineExtensionsClient().StartCreateOrUpdateAsync(resourceGroupName, getVm.Value.Name, "NetworkWatcherAgent", parameters);
                 await createOrUpdateOperation.WaitForCompletionAsync();
 
+                //TODO:There is no need to perform a separate create NetworkWatchers operation
                 //Create network Watcher
                 //string networkWatcherName = Recording.GenerateAssetName("azsmnet");
                 //NetworkWatcher properties = new NetworkWatcher { Location = location };

@@ -27,7 +27,6 @@ namespace Azure.Management.Network.Tests.Helpers
                 case FeaturesInfo.Type.Default:
                     supportedLocations = FeaturesInfo.defaultLocations;
                     break;
-
                 case FeaturesInfo.Type.All:
                     supportedLocations = FeaturesInfo.allFeaturesSupportedLocations;
                     break;

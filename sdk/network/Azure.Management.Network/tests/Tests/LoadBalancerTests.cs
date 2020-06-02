@@ -77,7 +77,7 @@ namespace Azure.Management.Network.Tests.Tests
                     {
                         new BackendAddressPool()
                         {
-                            Name = backEndAddressPoolName,
+                            Name = backEndAddressPoolName
                         }
                     },
                     LoadBalancingRules = new List<LoadBalancingRule>()
@@ -357,7 +357,7 @@ namespace Azure.Management.Network.Tests.Tests
                     {
                         new BackendAddressPool()
                         {
-                            Name = backEndAddressPoolName,
+                            Name = backEndAddressPoolName
                         }
                     },
                     LoadBalancingRules = new List<LoadBalancingRule>()
@@ -536,7 +536,7 @@ namespace Azure.Management.Network.Tests.Tests
                     {
                         new BackendAddressPool()
                         {
-                            Name = backEndAddressPoolName,
+                            Name = backEndAddressPoolName
                         }
                     },
                     LoadBalancingRules = new List<LoadBalancingRule>()
@@ -716,7 +716,7 @@ namespace Azure.Management.Network.Tests.Tests
                     {
                         new BackendAddressPool()
                         {
-                            Name = backEndAddressPoolName,
+                            Name = backEndAddressPoolName
                         }
                     },
                     LoadBalancingRules = new List<LoadBalancingRule>()
@@ -755,7 +755,6 @@ namespace Azure.Management.Network.Tests.Tests
                             RequestPath = "healthcheck.aspx",
                             IntervalInSeconds = 10,
                             NumberOfProbes = 2
-
                         }
                     },
                     InboundNatRules = new List<InboundNatRule>()
@@ -771,7 +770,7 @@ namespace Azure.Management.Network.Tests.Tests
                             Protocol = TransportProtocol.Tcp,
                             FrontendPort = 3389,
                             BackendPort = 3389,
-                            EnableFloatingIP = false,
+                            EnableFloatingIP = false
                         },
                         new InboundNatRule()
                         {
@@ -784,7 +783,7 @@ namespace Azure.Management.Network.Tests.Tests
                             Protocol = TransportProtocol.Tcp,
                             FrontendPort = 3390,
                             BackendPort = 3389,
-                            EnableFloatingIP = false,
+                            EnableFloatingIP = false
                         }
                     }
                 };
@@ -945,7 +944,7 @@ namespace Azure.Management.Network.Tests.Tests
                     {
                         new BackendAddressPool()
                         {
-                            Name = backEndAddressPoolName,
+                            Name = backEndAddressPoolName
                         }
                     },
                     LoadBalancingRules = new List<LoadBalancingRule>()
@@ -1064,9 +1063,7 @@ namespace Azure.Management.Network.Tests.Tests
                 string nic3name = Recording.GenerateAssetName("azsmnet");
 
                 NetworkInterface nic1 = await TestHelper.CreateNetworkInterface(nic1name, resourceGroupName, null, vnet.Subnets[0].Id, location, "ipconfig", NetworkManagementClient);
-
                 NetworkInterface nic2 = await TestHelper.CreateNetworkInterface(nic2name, resourceGroupName, null, vnet.Subnets[0].Id, location, "ipconfig", NetworkManagementClient);
-
                 NetworkInterface nic3 = await TestHelper.CreateNetworkInterface(nic3name, resourceGroupName, null, vnet.Subnets[0].Id, location, "ipconfig", NetworkManagementClient);
 
                 // Create the LoadBalancer
@@ -1097,7 +1094,7 @@ namespace Azure.Management.Network.Tests.Tests
                     {
                         new BackendAddressPool()
                         {
-                            Name = backEndAddressPoolName,
+                            Name = backEndAddressPoolName
                         }
                     },
                     LoadBalancingRules = new List<LoadBalancingRule>()
@@ -1283,14 +1280,13 @@ namespace Azure.Management.Network.Tests.Tests
                                 Id = TestHelper.GetChildLbResourceId(TestEnvironment.SubscriptionId,
                                 resourceGroupName, lbName, "frontendIPConfigurations", frontendIpConfigName)
                             },
-                            Protocol = TransportProtocol.Tcp,
+                            Protocol = TransportProtocol.Tcp
                         }
                     }
                 };
 
                 // Create the loadBalancer
                 await NetworkManagementClient.GetLoadBalancersClient().StartCreateOrUpdateAsync(resourceGroupName, lbName, loadBalancer);
-
                 Response<LoadBalancer> getLoadBalancer = await NetworkManagementClient.GetLoadBalancersClient().GetAsync(resourceGroupName, lbName);
 
                 // Verify the GET LoadBalancer
@@ -1307,7 +1303,6 @@ namespace Azure.Management.Network.Tests.Tests
                 Assert.AreEqual(105, getLoadBalancer.Value.InboundNatPools[0].FrontendPortRangeEnd);
                 Assert.AreEqual(TransportProtocol.Tcp, getLoadBalancer.Value.InboundNatPools[0].Protocol);
                 Assert.AreEqual(TestHelper.GetChildLbResourceId(TestEnvironment.SubscriptionId, resourceGroupName, lbName, "frontendIPConfigurations", frontendIpConfigName), getLoadBalancer.Value.InboundNatPools[0].FrontendIPConfiguration.Id);
-
                 Assert.AreEqual(getLoadBalancer.Value.InboundNatPools[0].Id, getLoadBalancer.Value.FrontendIPConfigurations[0].InboundNatPools[0].Id);
 
                 // Add a new nat pool
@@ -1318,10 +1313,9 @@ namespace Azure.Management.Network.Tests.Tests
                     FrontendPortRangeStart = 107,
                     FrontendPortRangeEnd = 110,
                     FrontendIPConfiguration = new SubResource() { Id = TestHelper.GetChildLbResourceId(TestEnvironment.SubscriptionId, resourceGroupName, lbName, "frontendIPConfigurations", frontendIpConfigName) },
-                    Protocol = TransportProtocol.Tcp,
+                    Protocol = TransportProtocol.Tcp
                 };
                 getLoadBalancer.Value.InboundNatPools.Add(natpool2);
-
                 await NetworkManagementClient.GetLoadBalancersClient().StartCreateOrUpdateAsync(resourceGroupName, lbName, getLoadBalancer);
 
                 // Verify the nat pool

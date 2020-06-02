@@ -123,10 +123,10 @@ namespace Azure.Management.Network.Tests.Tests
                         {
                             Name = loadBalancingRuleName,
                             FrontendIPConfiguration = new SubResource()
-                                {
-                                    Id = TestHelper.GetChildLbResourceId(TestEnvironment.SubscriptionId,
-                                    resourceGroupName, lbName, "FrontendIPConfigurations", frontendIpConfigName)
-                                },
+                            {
+                                Id = TestHelper.GetChildLbResourceId(TestEnvironment.SubscriptionId,
+                                resourceGroupName, lbName, "FrontendIPConfigurations", frontendIpConfigName)
+                            },
                             Protocol = TransportProtocol.Tcp,
                             FrontendPort = 80,
                             BackendPort = 80,
@@ -162,10 +162,10 @@ namespace Azure.Management.Network.Tests.Tests
                         {
                             Name = inboundNatRule1Name,
                             FrontendIPConfiguration = new SubResource()
-                                {
-                                    Id = TestHelper.GetChildLbResourceId(TestEnvironment.SubscriptionId,
-                                    resourceGroupName, lbName, "FrontendIPConfigurations", frontendIpConfigName)
-                                },
+                            {
+                                Id = TestHelper.GetChildLbResourceId(TestEnvironment.SubscriptionId,
+                                resourceGroupName, lbName, "FrontendIPConfigurations", frontendIpConfigName)
+                            },
                             Protocol = TransportProtocol.Tcp,
                             FrontendPort = 3389,
                             BackendPort = 3389,

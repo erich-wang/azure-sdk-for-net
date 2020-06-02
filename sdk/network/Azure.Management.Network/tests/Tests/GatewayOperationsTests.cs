@@ -936,7 +936,6 @@ namespace Azure.Management.Network.Tests.Tests
                 PublicIPAddress nic1publicIp = await TestHelper.CreateDefaultPublicIpAddress(publicIpName, resourceGroupName, domainNameLabel, location, NetworkManagementClient);
                 Console.WriteLine("PublicIPAddress(Gateway Ip) :{0}", nic1publicIp.Id);
 
-
                 // B.Prerequisite:-Create Virtual Network using Put VirtualNetwork API
                 string vnetName = Recording.GenerateAssetName("azsmnet");
                 string subnetName = "GatewaySubnet";
@@ -1381,7 +1380,6 @@ namespace Azure.Management.Network.Tests.Tests
                 PublicIPAddress nic1publicIp = await TestHelper.CreateDefaultPublicIpAddress(publicIpName, resourceGroupName,
                     domainNameLabel, location, NetworkManagementClient);
                 Console.WriteLine("PublicIPAddress(Gateway Ip) :{0}", nic1publicIp.Id);
-
 
                 // B.Prerequisite:-Create Virtual Network using Put VirtualNetwork API
                 string vnetName = Recording.GenerateAssetName("azsmnet");
