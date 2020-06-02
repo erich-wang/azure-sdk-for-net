@@ -2,29 +2,20 @@
 // Licensed under the MIT License.
 namespace Azure.Management.EventHub.Tests
 {
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Azure.Core.TestFramework;
-using Azure.Identity;
-using Azure.Management.EventHub.Models;
-using NUnit.Framework;
-
-
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using Azure.Core.TestFramework;
+    using Azure.Management.EventHub.Models;
+    using NUnit.Framework;
     public partial class ScenarioTests: EventHubManagementClientBase
     {
-
         [Test]
         public async Task NamespaceKafkaCreateGetUpdateDelete()
         {
             var location = "West US";
-            var resourceGroup = TryGetResourceGroup(ResourceGroupsClient, location);
-            if (string.IsNullOrWhiteSpace(resourceGroup))
-            {
-                resourceGroup = Recording.GenerateAssetName(Helper.ResourceGroupPrefix);
-                await Helper.TryRegisterResourceGroupAsync(ResourceGroupsClient, location, resourceGroup);
-            }
+            var resourceGroup = Recording.GenerateAssetName(Helper.ResourceGroupPrefix);
+            await Helper.TryRegisterResourceGroupAsync(ResourceGroupsClient, location, resourceGroup);
             var namespaceName = Recording.GenerateAssetName(Helper.NamespacePrefix);
             var createNamespaceResponse = await NamespacesClient.StartCreateOrUpdateAsync(resourceGroup, namespaceName,
                 new EHNamespace()
@@ -40,22 +31,19 @@ using NUnit.Framework;
                     KafkaEnabled = true
                 }
                 );
-            var np = (await createNamespaceResponse.WaitForCompletionAsync()).Value;
+            var np = (await WaitForCompletionAsync(createNamespaceResponse)).Value;
             Assert.NotNull(createNamespaceResponse);
             Assert.AreEqual(np.Name, namespaceName);
             Assert.True(np.KafkaEnabled, "KafkaEnabled is false");
-            isDelay(5);
-
+            IsDelay(5);
             //get the created namespace
             var getNamespaceResponse = await NamespacesClient.GetAsync(resourceGroup, namespaceName);
             if (string.Compare(getNamespaceResponse.Value.ProvisioningState, "Succeeded", true) != 0)
-                isDelay(5);
-
+                IsDelay(5);
             getNamespaceResponse = await NamespacesClient.GetAsync(resourceGroup, namespaceName);
             Assert.NotNull(getNamespaceResponse);
             Assert.AreEqual("Succeeded", getNamespaceResponse.Value.ProvisioningState,StringComparer.CurrentCultureIgnoreCase.ToString());
             Assert.AreEqual(location, getNamespaceResponse.Value.Location);
-
             // Get all namespaces created within a resourceGroup
             var getAllNamespacesResponse = NamespacesClient.ListByResourceGroupAsync(resourceGroup);
             Assert.NotNull(getAllNamespacesResponse);
@@ -81,7 +69,6 @@ using NUnit.Framework;
             }
             Assert.True(isContainnamespaceName);
             Assert.True(isContainresourceGroup);
-
             // Get all namespaces created within the subscription irrespective of the resourceGroup
             getAllNamespacesResponse =NamespacesClient.ListAsync();
             Assert.NotNull(getAllNamespacesResponse);
@@ -105,14 +92,12 @@ using NUnit.Framework;
                             {"tag4", "value4"}
                         }
             };
-
             // Will uncomment the assertions once the service is deployed
             var updateNamespaceResponse =await NamespacesClient.UpdateAsync(resourceGroup, namespaceName, updateNamespaceParameter);
             Assert.NotNull(updateNamespaceResponse);
             Assert.True(updateNamespaceResponse.Value.ProvisioningState.Equals("Active", StringComparison.CurrentCultureIgnoreCase) ||
             updateNamespaceResponse.Value.ProvisioningState.Equals("Updating", StringComparison.CurrentCultureIgnoreCase));
             Assert.AreEqual(namespaceName, updateNamespaceResponse.Value.Name);
-
             // Get the updated namespace and also verify the Tags.
             getNamespaceResponse = await NamespacesClient.GetAsync(resourceGroup, namespaceName);
             Assert.NotNull(getNamespaceResponse);
@@ -142,13 +127,11 @@ using NUnit.Framework;
                 //Assert.Contains(getNamespaceResponse.Value.Tags, t => t.Key.Equals(tag.Key));
                 //Assert.Contains(getNamespaceResponse.Value.Tags, t => t.Value.Equals(tag.Value));
             }
-
             Assert.True(isContainKey);
             Assert.True(isContainValue);
-            isDelay(5);
+            IsDelay(5);
             // Delete namespace
-            await (await NamespacesClient.StartDeleteAsync(resourceGroup, namespaceName)).WaitForCompletionAsync();
-
+            await WaitForCompletionAsync(await NamespacesClient.StartDeleteAsync(resourceGroup, namespaceName));
         }
     }
 }
