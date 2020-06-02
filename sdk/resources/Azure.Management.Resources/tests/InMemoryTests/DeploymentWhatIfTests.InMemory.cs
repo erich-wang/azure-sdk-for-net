@@ -1,11 +1,12 @@
-﻿using System;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Azure.Core;
@@ -14,7 +15,6 @@ using Azure.Core.TestFramework;
 using Azure.Management.Resources;
 using Azure.Management.Resources.Models;
 using Azure.Management.Resources.Tests;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 
 namespace ResourceGroups.Tests
@@ -97,17 +97,17 @@ namespace ResourceGroups.Tests
             await request.Content.WriteToAsync(stream, default);
             stream.Position = 0;
             var resquestContent = new StreamReader(stream).ReadToEnd();
-            var resultJson = JObject.Parse(resquestContent);
-            Assert.AreEqual("westus", resultJson["location"].Value<string>());
-            Assert.AreEqual("Complete", resultJson["properties"]["mode"].Value<string>());
-            Assert.AreEqual("https://example.com", resultJson["properties"]["templateLink"]["uri"].Value<string>());
-            Assert.AreEqual("1.0.0.0", resultJson["properties"]["templateLink"]["contentVersion"].Value<string>());
-            Assert.AreEqual("https://example.com/parameters", resultJson["properties"]["parametersLink"]["uri"].Value<string>());
-            Assert.AreEqual("1.0.0.0", resultJson["properties"]["parametersLink"]["contentVersion"].Value<string>());
-            Assert.AreEqual(JObject.Parse("{ '$schema': 'fake' }"), resultJson["properties"]["template"]);
-            Assert.AreEqual("foo", resultJson["properties"]["parameters"]["param1"].Value<string>());
-            Assert.AreEqual(123, resultJson["properties"]["parameters"]["param2"]["param2_1"].Value<int>());
-            Assert.AreEqual("bar", resultJson["properties"]["parameters"]["param2"]["param2_2"].Value<string>());
+            var resultJson = JsonDocument.Parse(resquestContent).RootElement;
+            Assert.AreEqual("westus", resultJson.GetProperty("location").GetString());
+            Assert.AreEqual("Complete", resultJson.GetProperty("properties").GetProperty("mode").GetString());
+            Assert.AreEqual("https://example.com", resultJson.GetProperty("properties").GetProperty("templateLink").GetProperty("uri").GetString());
+            Assert.AreEqual("1.0.0.0", resultJson.GetProperty("properties").GetProperty("templateLink").GetProperty("contentVersion").GetString());
+            Assert.AreEqual("https://example.com/parameters", resultJson.GetProperty("properties").GetProperty("parametersLink").GetProperty("uri").GetString());
+            Assert.AreEqual("1.0.0.0", resultJson.GetProperty("properties").GetProperty("parametersLink").GetProperty("contentVersion").GetString());
+            Assert.AreEqual(JsonDocument.Parse("{\"$schema\":\"fake\"}").RootElement.ToString(), resultJson.GetProperty("properties").GetProperty("template").ToString());
+            Assert.AreEqual("foo", resultJson.GetProperty("properties").GetProperty("parameters").GetProperty("param1").GetString());
+            Assert.AreEqual(123, resultJson.GetProperty("properties").GetProperty("parameters").GetProperty("param2").GetProperty("param2_1").GetInt32());
+            Assert.AreEqual("bar", resultJson.GetProperty("properties").GetProperty("parameters").GetProperty("param2").GetProperty("param2_2").GetString());
         }
 
         [Test]
@@ -161,10 +161,10 @@ namespace ResourceGroups.Tests
             await request.Content.WriteToAsync(stream, default);
             stream.Position = 0;
             var resquestContent = new StreamReader(stream).ReadToEnd();
-            var resultJson = JObject.Parse(resquestContent);
-            Assert.AreEqual("Incremental", resultJson["properties"]["mode"].Value<string>());
-            Assert.AreEqual("1.0.0.0", resultJson["properties"]["template"]["contentVersion"].Value<string>());
-            Assert.AreEqual("lsfjlasf9urw", resultJson["properties"]["parameters"]["storageAccountName"]["value"].Value<string>());
+            var resultJson = JsonDocument.Parse(resquestContent).RootElement;
+            Assert.AreEqual("Incremental", resultJson.GetProperty("properties").GetProperty("mode").GetString());
+            Assert.AreEqual("1.0.0.0", resultJson.GetProperty("properties").GetProperty("template").GetProperty("contentVersion").GetString());
+            Assert.AreEqual("lsfjlasf9urw", resultJson.GetProperty("properties").GetProperty("parameters").GetProperty("storageAccountName").GetProperty("value").GetString());
         }
 
         [Test]
@@ -172,7 +172,7 @@ namespace ResourceGroups.Tests
         {
             // Arrange.
             var deploymentWhatIf = new DeploymentWhatIf(new DeploymentWhatIfProperties(DeploymentMode.Incremental));
-            var content = JObject.Parse(@"{
+            var content = @"{
                     'status': 'Succeeded',
                     'properties': {
                         'changes': [
@@ -206,7 +206,7 @@ namespace ResourceGroups.Tests
                             }
                         ]
                     }
-                }").ToString();
+                }".Replace("'", "\"");
 
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
             mockResponse.SetContent(content);
@@ -215,7 +215,7 @@ namespace ResourceGroups.Tests
 
             // Act.
             var raw = await client.GetDeploymentsClient().StartWhatIfAsync("test-rg", "test-deploy", deploymentWhatIf);
-            var result = (await raw.WaitForCompletionAsync()).Value;
+            var result = (await WaitForCompletionAsync(raw)).Value;
 
             // Assert.
             Assert.AreEqual("Succeeded", result.Status);
@@ -226,10 +226,10 @@ namespace ResourceGroups.Tests
             Assert.AreEqual(ChangeType.Modify, change.ChangeType);
 
             Assert.NotNull(change.Before);
-            Assert.AreEqual("myExistingIdentity", JToken.FromObject(change.Before)["name"].Value<string>());
+            Assert.AreEqual("myExistingIdentity", JsonDocument.Parse(JsonSerializer.Serialize(change.Before)).RootElement.GetProperty("name").GetString());
 
             Assert.NotNull(change.After);
-            Assert.AreEqual("myExistingIdentity", JToken.FromObject(change.After)["name"].Value<string>());
+            Assert.AreEqual("myExistingIdentity", JsonDocument.Parse(JsonSerializer.Serialize(change.After)).RootElement.GetProperty("name").GetString());
 
             Assert.NotNull(change.Delta);
             Assert.AreEqual(1, change.Delta.Count);
@@ -274,7 +274,7 @@ namespace ResourceGroups.Tests
                     {
                         ContentVersion = "1.0.0.0"
                     },
-                    Template = JObject.Parse("{ '$schema': 'fake' }"),
+                    Template = JsonDocument.Parse("{\"$schema\":\"fake\"}").RootElement.GetObject(),
                     Parameters = new Dictionary<string, object>
                     {
                         ["param1"] = "foo",
@@ -301,72 +301,85 @@ namespace ResourceGroups.Tests
             await request.Content.WriteToAsync(stream, default);
             stream.Position = 0;
             var resquestContent = new StreamReader(stream).ReadToEnd();
-            var resultJson = JObject.Parse(resquestContent);
-            Assert.AreEqual("westus", resultJson["location"].Value<string>());
-            Assert.AreEqual("Complete", resultJson["properties"]["mode"].Value<string>());
-            Assert.AreEqual("https://example.com", resultJson["properties"]["templateLink"]["uri"].Value<string>());
-            Assert.AreEqual("1.0.0.0", resultJson["properties"]["templateLink"]["contentVersion"].Value<string>());
-            Assert.AreEqual("https://example.com/parameters", resultJson["properties"]["parametersLink"]["uri"].Value<string>());
-            Assert.AreEqual("1.0.0.0", resultJson["properties"]["parametersLink"]["contentVersion"].Value<string>());
-            Assert.AreEqual(JObject.Parse("{ '$schema': 'fake' }"), resultJson["properties"]["template"]);
-            Assert.AreEqual("foo", resultJson["properties"]["parameters"]["param1"].Value<string>());
-            Assert.AreEqual(123, resultJson["properties"]["parameters"]["param2"]["param2_1"].Value<int>());
-            Assert.AreEqual("bar", resultJson["properties"]["parameters"]["param2"]["param2_2"].Value<string>());
+            var resultJson = JsonDocument.Parse(resquestContent).RootElement;
+            Assert.AreEqual("westus", resultJson.GetProperty("location").GetString());
+            Assert.AreEqual("Complete", resultJson.GetProperty("properties").GetProperty("mode").GetString());
+            Assert.AreEqual("https://example.com", resultJson.GetProperty("properties").GetProperty("templateLink").GetProperty("uri").GetString());
+            Assert.AreEqual("1.0.0.0", resultJson.GetProperty("properties").GetProperty("templateLink").GetProperty("contentVersion").GetString());
+            Assert.AreEqual("https://example.com/parameters", resultJson.GetProperty("properties").GetProperty("parametersLink").GetProperty("uri").GetString());
+            Assert.AreEqual("1.0.0.0", resultJson.GetProperty("properties").GetProperty("parametersLink").GetProperty("contentVersion").GetString());
+            Assert.AreEqual(JsonDocument.Parse("{\"$schema\":\"fake\"}").RootElement.ToString(), resultJson.GetProperty("properties").GetProperty("template").ToString());
+            Assert.AreEqual("foo", resultJson.GetProperty("properties").GetProperty("parameters").GetProperty("param1").GetString());
+            Assert.AreEqual(123, resultJson.GetProperty("properties").GetProperty("parameters").GetProperty("param2").GetProperty("param2_1").GetInt32());
+            Assert.AreEqual("bar", resultJson.GetProperty("properties").GetProperty("parameters").GetProperty("param2").GetProperty("param2_2").GetString());
         }
 
         [Test]
         public async Task WhatIfAtSubscriptionScope_SendingRequestWithStrings_SerializesPayload()
         {
             // Arrange.
-            var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            string templateContent = "{" +
-                "\"$schema\": \"http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#\"," +
+            string[] DivideCases = {
+                "{" +
+                "\"$schema\": \"http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#\"," +
                 "\"contentVersion\": \"1.0.0.0\"," +
                 "\"parameters\": {" +
                     "\"roleDefName\": {" +
-                        "\"type\": \"string\"" +
-                    "}" +
-                "}," +
-                "\"resources\": [" +
-                "]," +
-                "\"outputs\": {}" +
-            "}";
-            string parameterContent = "{" +
+                        "\"value\": \"myCustomRole\"" +
+            "}}}",
+                "{" +
                 "\"roleDefName\": {" +
                     "\"value\": \"myCustomRole\"" +
-                "}" +
-            "}";
-            JsonElement jsonTemplate = JsonSerializer.Deserialize<JsonElement>(templateContent);
-            JsonElement jsonParameter = JsonSerializer.Deserialize<JsonElement>(parameterContent);
-            object template = jsonTemplate.GetObject();
-            object parameter = jsonParameter.GetObject();
-
-            var deploymentWhatIf = new DeploymentWhatIf(
-                new DeploymentWhatIfProperties(DeploymentMode.Incremental)
-                {
-                    Template = template,
-                    Parameters = parameter
-                })
-            {
-                Location = "westus"
+                "}}"
             };
+            foreach (string item in DivideCases)
+            {
+                string templateContent = "{" +
+                    "\"$schema\": \"http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#\"," +
+                    "\"contentVersion\": \"1.0.0.0\"," +
+                    "\"parameters\": {" +
+                        "\"roleDefName\": {" +
+                            "\"type\": \"string\"" +
+                        "}" +
+                    "}," +
+                    "\"resources\": [" +
+                    "]," +
+                    "\"outputs\": {}" +
+                "}";
+                var mockResponse = new MockResponse((int)HttpStatusCode.OK);
+                JsonElement jsonTemplate = JsonSerializer.Deserialize<JsonElement>(templateContent);
+                JsonElement jsonParameter = JsonSerializer.Deserialize<JsonElement>(item);
+                if (!jsonParameter.TryGetProperty("parameters", out JsonElement parameter))
+                {
+                    parameter = jsonParameter;
+                }
 
-            var mockTransport = new MockTransport(mockResponse);
-            var client = GetResourceManagementClient(mockTransport);
+                var deploymentWhatIf = new DeploymentWhatIf(
+                    new DeploymentWhatIfProperties(DeploymentMode.Incremental)
+                    {
+                        Template = jsonTemplate.GetObject(),
+                        Parameters = parameter.GetObject()
+                    })
+                {
+                    Location = "westus"
+                };
 
-            // Act.
-            await client.GetDeploymentsClient().StartWhatIfAtSubscriptionScopeAsync("test-subscription-deploy", deploymentWhatIf);
+                var mockTransport = new MockTransport(mockResponse);
+                var client = GetResourceManagementClient(mockTransport);
 
-            // Assert.
-            var request = mockTransport.Requests[0];
-            Stream stream = new MemoryStream();
-            await request.Content.WriteToAsync(stream, default);
-            stream.Position = 0;
-            var resquestContent = new StreamReader(stream).ReadToEnd();
-            var resultJson = JObject.Parse(resquestContent);
-            Assert.AreEqual("Incremental", resultJson["properties"]["mode"].Value<string>());
-            Assert.AreEqual("1.0.0.0", resultJson["properties"]["template"]["contentVersion"].Value<string>());
-            Assert.AreEqual("myCustomRole", resultJson["properties"]["parameters"]["roleDefName"]["value"].Value<string>());
+                // Act.
+                await client.GetDeploymentsClient().StartWhatIfAtSubscriptionScopeAsync("test-subscription-deploy", deploymentWhatIf);
+
+                // Assert.
+                var request = mockTransport.Requests[0];
+                Stream stream = new MemoryStream();
+                await request.Content.WriteToAsync(stream, default);
+                stream.Position = 0;
+                var resquestContent = new StreamReader(stream).ReadToEnd();
+                var resultJson = JsonDocument.Parse(resquestContent).RootElement;
+                Assert.AreEqual("Incremental", resultJson.GetProperty("properties").GetProperty("mode").GetString());
+                Assert.AreEqual("1.0.0.0", resultJson.GetProperty("properties").GetProperty("template").GetProperty("contentVersion").GetString());
+                Assert.AreEqual("myCustomRole", resultJson.GetProperty("properties").GetProperty("parameters").GetProperty("roleDefName").GetProperty("value").GetString());
+            }
         }
 
         [Test]
@@ -375,7 +388,7 @@ namespace ResourceGroups.Tests
             // Arrange.
             var deploymentWhatIf = new DeploymentWhatIf(new DeploymentWhatIfProperties(DeploymentMode.Incremental));
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{
+            var content = @"{
                     'status': 'Succeeded',
                     'properties': {
                         'changes': [
@@ -387,12 +400,12 @@ namespace ResourceGroups.Tests
                                     'id': '/subscriptions/00000000-0000-0000-0000-000000000001/resourceGroups/myResourceGroup',
                                     'type': 'Microsoft.Resources/resourceGroups',
                                     'name': 'myResourceGroup',
-                                    'location': 'eastus',
+                                    'location': 'eastus'
                                 }
                             }
                         ]
                     }
-                }").ToString();
+                }".Replace("'", "\"");
             mockResponse.SetContent(content);
 
             var mockTransport = new MockTransport(mockResponse);
@@ -400,7 +413,7 @@ namespace ResourceGroups.Tests
 
             // Act.
             var raw = await client.GetDeploymentsClient().StartWhatIfAtSubscriptionScopeAsync("test-subscription-deploy", deploymentWhatIf);
-            var result = (await raw.WaitForCompletionAsync()).Value;
+            var result = (await WaitForCompletionAsync(raw)).Value;
 
 
             // Assert.
@@ -415,7 +428,7 @@ namespace ResourceGroups.Tests
             Assert.Null(change.Delta);
 
             Assert.NotNull(change.After);
-            Assert.AreEqual("myResourceGroup", JToken.FromObject(change.After)["name"].Value<string>());
+            Assert.AreEqual("myResourceGroup", JsonDocument.Parse(JsonSerializer.Serialize(change.After)).RootElement.GetProperty("name").GetString());
         }
     }
 }

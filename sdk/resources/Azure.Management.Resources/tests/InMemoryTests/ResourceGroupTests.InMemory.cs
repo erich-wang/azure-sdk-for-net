@@ -1,10 +1,14 @@
-﻿using System;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Azure.Core;
 using Azure.Core.Pipeline;
@@ -12,7 +16,6 @@ using Azure.Core.TestFramework;
 using Azure.Management.Resources;
 using Azure.Management.Resources.Models;
 using Azure.Management.Resources.Tests;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 
 namespace ResourceGroups.Tests
@@ -37,7 +40,7 @@ namespace ResourceGroups.Tests
         public async Task ResourceGroupCreateOrUpdateValidateMessage()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{
+            var content = @"{
                     'id': '/subscriptions/abc123/resourcegroups/csmrgr5mfggio',
                     'name': 'foo',
                     'location': 'WestEurope',
@@ -48,7 +51,7 @@ namespace ResourceGroups.Tests
                     'properties': {
                         'provisioningState': 'Succeeded'
                       }
-                }").ToString();
+                }".Replace("'", "\"");
             mockResponse.SetContent(content);
 
             var mockTransport = new MockTransport(mockResponse);
@@ -64,7 +67,7 @@ namespace ResourceGroups.Tests
             await request.Content.WriteToAsync(stream, default);
             stream.Position = 0;
             var resquestContent = new StreamReader(stream).ReadToEnd();
-            var json = JObject.Parse(resquestContent);
+            var json = JsonDocument.Parse(resquestContent).RootElement;
 
             // Validate headers
             Assert.IsTrue(request.Headers.Contains(new HttpHeader("Content-Type", "application/json")));
@@ -72,9 +75,9 @@ namespace ResourceGroups.Tests
             Assert.IsTrue(request.Headers.Contains("Authorization"));
 
             // Validate payload
-            Assert.AreEqual("WestEurope", json["location"].Value<string>());
-            Assert.AreEqual("finance", json["tags"]["department"].Value<string>());
-            Assert.AreEqual("tagvalue", json["tags"]["tagname"].Value<string>());
+            Assert.AreEqual("WestEurope", json.GetProperty("location").GetString());
+            Assert.AreEqual("finance", json.GetProperty("tags").GetProperty("department").GetString());
+            Assert.AreEqual("tagvalue", json.GetProperty("tags").GetProperty("tagname").GetString());
 
             // Validate response
             Assert.AreEqual("/subscriptions/abc123/resourcegroups/csmrgr5mfggio", result.Id);
@@ -89,7 +92,7 @@ namespace ResourceGroups.Tests
         public async Task ResourceGroupCreateOrUpdateThrowsExceptions()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.NoContent);
-            var content = JObject.Parse("{}").ToString();
+            var content = JsonDocument.Parse("{}").RootElement.ToString();
             mockResponse.SetContent(content);
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
@@ -117,7 +120,7 @@ namespace ResourceGroups.Tests
         public async Task ResourceGroupExistsReturnsTrue()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.NoContent);
-            var content = JObject.Parse("{}").ToString();
+            var content = JsonDocument.Parse("{}").RootElement.ToString();
             mockResponse.SetContent(content);
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
@@ -170,7 +173,7 @@ namespace ResourceGroups.Tests
         public async Task ResourceGroupPatchValidateMessage()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{
+            var content = @"{
                     'subscriptionId': '123456',
                     'name': 'foo',
                     'location': 'WestEurope',
@@ -178,7 +181,7 @@ namespace ResourceGroups.Tests
                     'properties': {
                         'provisioningState': 'Succeeded'
                     }
-                }").ToString();
+                }".Replace("'", "\"");
             mockResponse.SetContent(content);
 
             var mockTransport = new MockTransport(mockResponse);
@@ -194,7 +197,7 @@ namespace ResourceGroups.Tests
             await request.Content.WriteToAsync(stream, default);
             stream.Position = 0;
             var resquestContent = new StreamReader(stream).ReadToEnd();
-            var json = JObject.Parse(resquestContent);
+            var json = JsonDocument.Parse(resquestContent).RootElement;
 
             // Validate headers
             Assert.IsTrue(request.Headers.Contains(new HttpHeader("Content-Type", "application/json")));
@@ -202,7 +205,7 @@ namespace ResourceGroups.Tests
             Assert.IsTrue(request.Headers.Contains("Authorization"));
 
             // Validate payload
-            Assert.AreEqual("foo", json["name"].Value<string>());
+            Assert.AreEqual("foo", json.GetProperty("name").GetString());
 
             // Validate response
             Assert.AreEqual("/subscriptions/abc123/resourcegroups/csmrgr5mfggio", result.Id);
@@ -215,14 +218,14 @@ namespace ResourceGroups.Tests
         public async Task ResourceGroupGetValidateMessage()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{
+            var content = @"{
                     'id': '/subscriptions/abc123/resourcegroups/csmrgr5mfggio',
                     'name': 'foo',
                     'location': 'WestEurope',
                     'properties': {
                         'provisioningState': 'Succeeded'
                      }
-                }").ToString();
+                }".Replace("'", "\"");
             var header = new HttpHeader("x-ms-request-id", "1");
             mockResponse.AddHeader(header);
             mockResponse.SetContent(content);
@@ -249,14 +252,14 @@ namespace ResourceGroups.Tests
         public async Task ResourceGroupNameAcceptsAllAllowableCharacters()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{
+            var content = @"{
                     'id': '/subscriptions/abc123/resourcegroups/csmrgr5mfggio',
                     'name': 'foo',
                     'location': 'WestEurope',
                     'properties': {
                         'provisioningState': 'Succeeded'
                      }
-                }").ToString();
+                }".Replace("'", "\"");
             var header = new HttpHeader("x-ms-request-id", "1");
             mockResponse.AddHeader(header);
             mockResponse.SetContent(content);
@@ -271,7 +274,7 @@ namespace ResourceGroups.Tests
         public async Task ResourceGroupListAllValidateMessage()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{ 
+            var content = @"{ 
                 'value': [{ 
                     'id': '/subscriptions/abc123/resourcegroups/csmrgr5mfggio',
                     'name': 'myresourcegroup1',
@@ -288,7 +291,7 @@ namespace ResourceGroups.Tests
                         'provisioningState': 'Succeeded'
                       }
                     } 
-                ]}").ToString();
+                ]}".Replace("'", "\"");
             var header = new HttpHeader("x-ms-request-id", "1");
             mockResponse.AddHeader(header);
             mockResponse.SetContent(content);
@@ -314,7 +317,7 @@ namespace ResourceGroups.Tests
         public async Task ResourceGroupListAllWorksForEmptyLists()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse((@"{'value': []}")).ToString();
+            var content = JsonDocument.Parse(("{\"value\": []}")).RootElement.ToString();
             var header = new HttpHeader("x-ms-request-id", "1");
             mockResponse.AddHeader(header);
             mockResponse.SetContent(content);
@@ -337,7 +340,7 @@ namespace ResourceGroups.Tests
         public async Task ResourceGroupListValidateMessage()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{ 
+            var content = @"{ 
                 'value': [{ 
                     'name': 'myresourcegroup1',
                     'location': 'westus', 
@@ -348,7 +351,7 @@ namespace ResourceGroups.Tests
                     'location': 'eastus', 
                     'locked': 'false' 
                     } 
-                ]}").ToString();
+                ]}".Replace("'", "\"");
             var header = new HttpHeader("x-ms-request-id", "1");
             mockResponse.AddHeader(header);
             mockResponse.SetContent(content);
@@ -373,10 +376,8 @@ namespace ResourceGroups.Tests
         public async Task ResourceGroupDeleteValidateMessage()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.Accepted);
-            //var content = JObject.Parse("{}").ToString();
             var header = new HttpHeader("Location", "http://foo");
             mockResponse.AddHeader(header);
-            //mockResponse.SetContent(content);
 
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
@@ -388,7 +389,7 @@ namespace ResourceGroups.Tests
         public async Task ResourceGroupDeleteThrowsExceptions()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.NoContent);
-            var content = JObject.Parse("{}").ToString();
+            var content = JsonDocument.Parse("{}").RootElement.ToString();
             mockResponse.SetContent(content);
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
@@ -396,7 +397,7 @@ namespace ResourceGroups.Tests
             try
             {
                 var raw = await client.GetResourceGroupsClient().StartDeleteAsync(null);
-                await raw.WaitForCompletionAsync();
+                await WaitForCompletionAsync(raw);
             }
             catch (Exception ex)
             {
@@ -406,7 +407,7 @@ namespace ResourceGroups.Tests
             //try
             //{
             //    var raw = await client.GetResourceGroupsClient().StartDeleteAsync("~`123");
-            //    await raw.WaitForCompletionAsync();
+            //    await WaitForCompletionAsync(raw);
             //}
             //catch (Exception ex)
             //{

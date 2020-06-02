@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Azure.Core.TestFramework;
 using Azure.Management.Resources;
-using Azure.Management.Resources.Models;
 using Azure.Management.Resources.Tests;
 using NUnit.Framework;
 

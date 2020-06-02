@@ -1,7 +1,9 @@
-﻿using System;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure.Core.TestFramework;
@@ -70,7 +72,7 @@ namespace DeploymentScripts.Tests
             };
 
             var rawCreateDeploymentScriptResult = await DeploymentScriptsClient.StartCreateAsync(ResourceGroupName, deploymentScriptName, deploymentScript);
-            var createDeploymentScriptResult = (await rawCreateDeploymentScriptResult.WaitForCompletionAsync()).Value as AzurePowerShellScript;
+            var createDeploymentScriptResult = (await WaitForCompletionAsync(rawCreateDeploymentScriptResult)).Value as AzurePowerShellScript;
 
             Assert.NotNull(createDeploymentScriptResult);
             Assert.AreEqual(ScriptProvisioningState.Succeeded, createDeploymentScriptResult.ProvisioningState);
@@ -160,7 +162,7 @@ namespace DeploymentScripts.Tests
             };
 
             var rawcreateDeploymentScriptResult = await DeploymentScriptsClient.StartCreateAsync(ResourceGroupName, deploymentScriptName, deploymentScript);
-            var createDeploymentScriptResult = (await rawcreateDeploymentScriptResult.WaitForCompletionAsync()).Value as AzurePowerShellScript;
+            var createDeploymentScriptResult = (await WaitForCompletionAsync(rawcreateDeploymentScriptResult)).Value as AzurePowerShellScript;
 
             Assert.NotNull(createDeploymentScriptResult);
             Assert.AreEqual(ScriptProvisioningState.Succeeded, createDeploymentScriptResult.ProvisioningState);

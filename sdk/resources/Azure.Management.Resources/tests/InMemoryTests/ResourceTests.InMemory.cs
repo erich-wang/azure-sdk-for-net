@@ -1,10 +1,13 @@
-﻿using System;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Azure.Core;
 using Azure.Core.Pipeline;
@@ -12,7 +15,6 @@ using Azure.Core.TestFramework;
 using Azure.Management.Resources;
 using Azure.Management.Resources.Models;
 using Azure.Management.Resources.Tests;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 
 namespace ResourceGroups.Tests
@@ -37,7 +39,7 @@ namespace ResourceGroups.Tests
         public async Task ResourceGetValidateMessage()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{
+            var content = @"{
                   'id': '/subscriptions/12345/resourceGroups/foo/providers/Microsoft.Web/Sites/site1',
                   'name': 'site1',
                   'location': 'South Central US',
@@ -54,7 +56,7 @@ namespace ResourceGroups.Tests
                         'family': 'F',
                         'capacity': 0
                     }
-                }").ToString();
+                }".Replace("'", "\"");
             var header = new HttpHeader("x-ms-request-id", "1");
             mockResponse.AddHeader(header);
             mockResponse.SetContent(content);
@@ -73,8 +75,8 @@ namespace ResourceGroups.Tests
             Assert.AreEqual("South Central US", result.Location);
             Assert.AreEqual("site1", result.Name);
             Assert.AreEqual("/subscriptions/12345/resourceGroups/foo/providers/Microsoft.Web/Sites/site1", result.Id);
-            Assert.AreEqual("Dedicated", JObject.FromObject(result.Properties)["computeMode"].Value<string>());
-            Assert.AreEqual("Succeeded", JObject.FromObject(result.Properties)["provisioningState"].Value<string>());
+            Assert.AreEqual("Dedicated", JsonDocument.Parse(JsonSerializer.Serialize(result.Properties)).RootElement.GetProperty("computeMode").GetString());
+            Assert.AreEqual("Succeeded", JsonDocument.Parse(JsonSerializer.Serialize(result.Properties)).RootElement.GetProperty("provisioningState").GetString());
             Assert.AreEqual("F1", result.Sku.Name);
             Assert.AreEqual("Free", result.Sku.Tier);
             Assert.AreEqual("F1", result.Sku.Size);
@@ -86,7 +88,7 @@ namespace ResourceGroups.Tests
         public async Task ResourceGetByIdValidateMessage()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{
+            var content = @"{
                   'id': '/subscriptions/12345/resourceGroups/foo/providers/Microsoft.Web/Sites/site1',
                   'name': 'site1',
                   'location': 'South Central US',
@@ -103,8 +105,7 @@ namespace ResourceGroups.Tests
                         'family': 'F',
                         'capacity': 0
                     }
-                }").ToString();
-
+                }".Replace("'", "\"");
             var header = new HttpHeader("x-ms-request-id", "1");
             mockResponse.AddHeader(header);
             mockResponse.SetContent(content);
@@ -123,8 +124,8 @@ namespace ResourceGroups.Tests
             Assert.AreEqual("South Central US", result.Location);
             Assert.AreEqual("site1", result.Name);
             Assert.AreEqual("/subscriptions/12345/resourceGroups/foo/providers/Microsoft.Web/Sites/site1", result.Id);
-            Assert.AreEqual("Dedicated", JObject.FromObject(result.Properties)["computeMode"].Value<string>());
-            Assert.AreEqual("Succeeded", JObject.FromObject(result.Properties)["provisioningState"].Value<string>());
+            Assert.AreEqual("Dedicated", JsonDocument.Parse(JsonSerializer.Serialize(result.Properties)).RootElement.GetProperty("computeMode").GetString());
+            Assert.AreEqual("Succeeded", JsonDocument.Parse(JsonSerializer.Serialize(result.Properties)).RootElement.GetProperty("provisioningState").GetString());
             Assert.AreEqual("F1", result.Sku.Name);
             Assert.AreEqual("Free", result.Sku.Tier);
             Assert.AreEqual("F1", result.Sku.Size);
@@ -136,7 +137,7 @@ namespace ResourceGroups.Tests
         public async Task ResourceGetWorksWithoutProvisioningState()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{
+            var content = @"{
                   'id': '/subscriptions/12345/resourceGroups/foo/providers/Microsoft.Web/Sites/site1',
                   'name': 'site1',
                   'location': 'South Central US',
@@ -145,7 +146,7 @@ namespace ResourceGroups.Tests
 	                    'siteMode': 'Standard',
                         'computeMode':'Dedicated'
                     }
-                }").ToString();
+                }".Replace("'", "\"");
 
             var header = new HttpHeader("x-ms-request-id", "1");
             mockResponse.AddHeader(header);
@@ -175,15 +176,16 @@ namespace ResourceGroups.Tests
             Assert.AreEqual("South Central US", result.Location);
             Assert.AreEqual("site1", result.Name);
             Assert.AreEqual("/subscriptions/12345/resourceGroups/foo/providers/Microsoft.Web/Sites/site1", result.Id);
-            Assert.AreEqual("Dedicated", JObject.FromObject(result.Properties)["computeMode"].Value<string>());
-            Assert.Null(JObject.FromObject(result.Properties)["provisionState"]);
+            Assert.AreEqual("Dedicated", JsonDocument.Parse(JsonSerializer.Serialize(result.Properties)).RootElement.GetProperty("computeMode").GetString());
+            JsonElement exsit = new JsonElement();
+            Assert.IsFalse(JsonDocument.Parse(JsonSerializer.Serialize(result.Properties)).RootElement.TryGetProperty("provisionState", out exsit));
         }
 
         [Test]
         public async Task ResourceListValidateMessage()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{ 'value' : [
+            var content = @"{ 'value' : [
                     {
                       'id': '/subscriptions/12345/resourceGroups/foo/providers/Microsoft.Web/Sites/site1',
                       'name': 'site1',
@@ -208,7 +210,7 @@ namespace ResourceGroups.Tests
 	                      'siteMode': 'Standard',
                           'computeMode':'Dedicated'
                        }
-                    }]}").ToString();
+                    }]}".Replace("'", "\"");
             var header = new HttpHeader("x-ms-request-id", "1");
             mockResponse.AddHeader(header);
             mockResponse.SetContent(content);
@@ -229,15 +231,15 @@ namespace ResourceGroups.Tests
             Assert.AreEqual("site1", result.First().Name);
             Assert.AreEqual("/subscriptions/12345/resourceGroups/foo/providers/Microsoft.Web/Sites/site1", result.First().Id);
             Assert.AreEqual("/subscriptions/12345/resourceGroups/foo/providers/Microsoft.Web/Sites/site1", result.First().Id);
-            Assert.AreEqual("Dedicated", JObject.FromObject(result.First().Properties)["computeMode"].Value<string>());
-            Assert.AreEqual("Succeeded", JObject.FromObject(result.First().Properties)["provisioningState"].Value<string>());
+            Assert.AreEqual("Dedicated", JsonDocument.Parse(JsonSerializer.Serialize(result.First().Properties)).RootElement.GetProperty("computeMode").GetString());
+            Assert.AreEqual("Succeeded", JsonDocument.Parse(JsonSerializer.Serialize(result.First().Properties)).RootElement.GetProperty("provisioningState").GetString());
         }
 
         [Test]
         public async Task ResourceListForResourceGroupValidateMessage()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{ 'value' : [
+            var content = @"{ 'value' : [
                     {
                       'id': '/subscriptions/12345/resourceGroups/foo/providers/Microsoft.Web/Sites/site1',
                       'name': 'site1',
@@ -249,7 +251,7 @@ namespace ResourceGroups.Tests
                       'name': 'site1',
                       'resourceGroup': 'foo',
                       'location': 'South Central US'
-                    }]}").ToString();
+                    }]}".Replace("'", "\"");
             var header = new HttpHeader("x-ms-request-id", "1");
             mockResponse.AddHeader(header);
             mockResponse.SetContent(content);
@@ -278,7 +280,7 @@ namespace ResourceGroups.Tests
         public async Task ResourceGetThrowsExceptions()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.NoContent);
-            var content = JObject.Parse("{}").ToString();
+            var content = JsonDocument.Parse("{}").RootElement.ToString();
             mockResponse.SetContent(content);
 
             var mockTransport = new MockTransport(mockResponse);
@@ -298,7 +300,7 @@ namespace ResourceGroups.Tests
         public async Task ResourceCreateOrUpdateValidateMessage()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{
+            var content = @"{
                     'location': 'South Central US',
                     'tags' : {
                         'department':'finance',
@@ -310,8 +312,7 @@ namespace ResourceGroups.Tests
                         'computeMode':'Dedicated',
                         'provisioningState':'Succeeded'
                     }
-                }").ToString();
-
+                }".Replace("'", "\"");
             var header = new HttpHeader("x-ms-request-id", "1");
             mockResponse.AddHeader(header);
             mockResponse.SetContent(content);
@@ -337,7 +338,7 @@ namespace ResourceGroups.Tests
                     }"
                 }
             );
-            var result = (await raw.WaitForCompletionAsync()).Value;
+            var result = (await WaitForCompletionAsync(raw)).Value;
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -349,15 +350,15 @@ namespace ResourceGroups.Tests
             await request.Content.WriteToAsync(stream, default);
             stream.Position = 0;
             var resquestContent = new StreamReader(stream).ReadToEnd();
-            var json = JObject.Parse(resquestContent);
-            Assert.AreEqual("South Central US", json["location"].Value<string>());
-            Assert.AreEqual("finance", json["tags"]["department"].Value<string>());
-            Assert.AreEqual("tagvalue", json["tags"]["tagname"].Value<string>());
+            var json = JsonDocument.Parse(resquestContent).RootElement;
+            Assert.AreEqual("South Central US", json.GetProperty("location").GetString());
+            Assert.AreEqual("finance", json.GetProperty("tags").GetProperty("department").GetString());
+            Assert.AreEqual("tagvalue", json.GetProperty("tags").GetProperty("tagname").GetString());
 
             // Validate result
             Assert.AreEqual("South Central US", result.Location);
-            Assert.AreEqual("Succeeded", JObject.FromObject(result.Properties)["provisioningState"].Value<string>());
-            Assert.AreEqual("Dedicated", JObject.FromObject(result.Properties)["computeMode"].Value<string>());
+            Assert.AreEqual("Succeeded", JsonDocument.Parse(JsonSerializer.Serialize(result.Properties)).RootElement.GetProperty("provisioningState").GetString());
+            Assert.AreEqual("Dedicated", JsonDocument.Parse(JsonSerializer.Serialize(result.Properties)).RootElement.GetProperty("computeMode").GetString());
             Assert.AreEqual("finance", result.Tags["department"]);
             Assert.AreEqual("tagvalue", result.Tags["tagname"]);
         }
@@ -366,7 +367,7 @@ namespace ResourceGroups.Tests
         public async Task ResourceCreateOrUpdateWithIdentityValidateMessage()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{
+            var content = @"{
                     'location': 'South Central US',
                     'tags' : {
                         'department':'finance',
@@ -382,7 +383,7 @@ namespace ResourceGroups.Tests
                         'type': 'SystemAssigned',
                         'principalId': 'foo'
                     }
-                }").ToString();
+                }".Replace("'", "\"");
             var header = new HttpHeader("x-ms-request-id", "1");
             mockResponse.AddHeader(header);
             mockResponse.SetContent(content);
@@ -409,7 +410,7 @@ namespace ResourceGroups.Tests
                     Identity = new Identity { Type = ResourceIdentityType.SystemAssigned }
                 }
             );
-            var result = (await raw.WaitForCompletionAsync()).Value;
+            var result = (await WaitForCompletionAsync(raw)).Value;
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -421,17 +422,17 @@ namespace ResourceGroups.Tests
             await request.Content.WriteToAsync(stream, default);
             stream.Position = 0;
             var resquestContent = new StreamReader(stream).ReadToEnd();
-            var json = JObject.Parse(resquestContent);
-            Assert.AreEqual("South Central US", json["location"].Value<string>());
-            Assert.AreEqual("finance", json["tags"]["department"].Value<string>());
-            Assert.AreEqual("tagvalue", json["tags"]["tagname"].Value<string>());
+            var json = JsonDocument.Parse(resquestContent).RootElement;
+            Assert.AreEqual("South Central US", json.GetProperty("location").GetString());
+            Assert.AreEqual("finance", json.GetProperty("tags").GetProperty("department").GetString());
+            Assert.AreEqual("tagvalue", json.GetProperty("tags").GetProperty("tagname").GetString());
 
             // Validate result
             Assert.AreEqual("South Central US", result.Location);
-            Assert.AreEqual("Succeeded", JObject.FromObject(result.Properties)["provisioningState"].Value<string>());
+            Assert.AreEqual("Succeeded", JsonDocument.Parse(JsonSerializer.Serialize(result.Properties)).RootElement.GetProperty("provisioningState").GetString());
             Assert.AreEqual("finance", result.Tags["department"]);
             Assert.AreEqual("tagvalue", result.Tags["tagname"]);
-            Assert.AreEqual("Dedicated", JObject.FromObject(result.Properties)["computeMode"].Value<string>());
+            Assert.AreEqual("Dedicated", JsonDocument.Parse(JsonSerializer.Serialize(result.Properties)).RootElement.GetProperty("computeMode").GetString());
             Assert.AreEqual("SystemAssigned", result.Identity.Type.ToString());
             Assert.AreEqual("foo", result.Identity.PrincipalId);
         }
@@ -440,7 +441,7 @@ namespace ResourceGroups.Tests
         public async Task ResourceCreateForWebsiteValidatePayload()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse("{'location':'South Central US','tags':null,'properties':{'name':'csmr14v5efk0','state':'Running','hostNames':['csmr14v5efk0.antares-int.windows-int.net'],'webSpace':'csmrgqinwpwky-SouthCentralUSwebspace','selfLink':'https://antpreview1.api.admin-antares-int.windows-int.net:454/20130801/websystems/websites/web/subscriptions/abc123/webspaces/csmrgqinwpwky-SouthCentralUSwebspace/sites/csmr14v5efk0','repositorySiteName':'csmr14v5efk0','owner':null,'usageState':0,'enabled':true,'adminEnabled':true,'enabledHostNames':['csmr14v5efk0.antares-int.windows-int.net','csmr14v5efk0.scm.antares-int.windows-int.net'],'siteProperties':{'metadata':null,'properties':[],'appSettings':null},'availabilityState':0,'sslCertificates':[],'csrs':[],'cers':null,'siteMode':'Standard','hostNameSslStates':[{'name':'csmr14v5efk0.antares-int.windows-int.net','sslState':0,'ipBasedSslResult':null,'virtualIP':null,'thumbprint':null,'toUpdate':null,'toUpdateIpBasedSsl':null,'ipBasedSslState':0},{'name':'csmr14v5efk0.scm.antares-int.windows-int.net','sslState':0,'ipBasedSslResult':null,'virtualIP':null,'thumbprint':null,'toUpdate':null,'toUpdateIpBasedSsl':null,'ipBasedSslState':0}],'computeMode':1,'serverFarm':'DefaultServerFarm1','lastModifiedTimeUtc':'2014-02-21T00:49:30.477','storageRecoveryDefaultState':'Running','contentAvailabilityState':0,'runtimeAvailabilityState':0,'siteConfig':null,'deploymentId':'csmr14v5efk0','trafficManagerHostNames':[]}}").ToString();
+            var content = "{'location':'South Central US','tags':null,'properties':{'name':'csmr14v5efk0','state':'Running','hostNames':['csmr14v5efk0.antares-int.windows-int.net'],'webSpace':'csmrgqinwpwky-SouthCentralUSwebspace','selfLink':'https://antpreview1.api.admin-antares-int.windows-int.net:454/20130801/websystems/websites/web/subscriptions/abc123/webspaces/csmrgqinwpwky-SouthCentralUSwebspace/sites/csmr14v5efk0','repositorySiteName':'csmr14v5efk0','owner':null,'usageState':0,'enabled':true,'adminEnabled':true,'enabledHostNames':['csmr14v5efk0.antares-int.windows-int.net','csmr14v5efk0.scm.antares-int.windows-int.net'],'siteProperties':{'metadata':null,'properties':[],'appSettings':null},'availabilityState':0,'sslCertificates':[],'csrs':[],'cers':null,'siteMode':'Standard','hostNameSslStates':[{'name':'csmr14v5efk0.antares-int.windows-int.net','sslState':0,'ipBasedSslResult':null,'virtualIP':null,'thumbprint':null,'toUpdate':null,'toUpdateIpBasedSsl':null,'ipBasedSslState':0},{'name':'csmr14v5efk0.scm.antares-int.windows-int.net','sslState':0,'ipBasedSslResult':null,'virtualIP':null,'thumbprint':null,'toUpdate':null,'toUpdateIpBasedSsl':null,'ipBasedSslState':0}],'computeMode':1,'serverFarm':'DefaultServerFarm1','lastModifiedTimeUtc':'2014-02-21T00:49:30.477','storageRecoveryDefaultState':'Running','contentAvailabilityState':0,'runtimeAvailabilityState':0,'siteConfig':null,'deploymentId':'csmr14v5efk0','trafficManagerHostNames':[]}}".Replace("'", "\"");
             var header = new HttpHeader("x-ms-request-id", "1");
             mockResponse.AddHeader(header);
             mockResponse.SetContent(content);
@@ -465,7 +466,7 @@ namespace ResourceGroups.Tests
                         }"
                 }
                 );
-            var result = (await raw.WaitForCompletionAsync()).Value;
+            var result = (await WaitForCompletionAsync(raw)).Value;
 
             // Validate result
             Assert.AreEqual("South Central US", result.Location);
@@ -475,7 +476,7 @@ namespace ResourceGroups.Tests
         public async Task ResourceCreateByIdForWebsiteValidatePayload()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse("{'location':'South Central US','tags':null,'properties':{'name':'mySite','state':'Running','hostNames':['csmr14v5efk0.antares-int.windows-int.net'],'webSpace':'csmrgqinwpwky-SouthCentralUSwebspace','selfLink':'https://antpreview1.api.admin-antares-int.windows-int.net:454/20130801/websystems/websites/web/subscriptions/abc123/webspaces/csmrgqinwpwky-SouthCentralUSwebspace/sites/csmr14v5efk0','repositorySiteName':'csmr14v5efk0','owner':null,'usageState':0,'enabled':true,'adminEnabled':true,'enabledHostNames':['csmr14v5efk0.antares-int.windows-int.net','csmr14v5efk0.scm.antares-int.windows-int.net'],'siteProperties':{'metadata':null,'properties':[],'appSettings':null},'availabilityState':0,'sslCertificates':[],'csrs':[],'cers':null,'siteMode':'Standard','hostNameSslStates':[{'name':'csmr14v5efk0.antares-int.windows-int.net','sslState':0,'ipBasedSslResult':null,'virtualIP':null,'thumbprint':null,'toUpdate':null,'toUpdateIpBasedSsl':null,'ipBasedSslState':0},{'name':'csmr14v5efk0.scm.antares-int.windows-int.net','sslState':0,'ipBasedSslResult':null,'virtualIP':null,'thumbprint':null,'toUpdate':null,'toUpdateIpBasedSsl':null,'ipBasedSslState':0}],'computeMode':1,'serverFarm':'DefaultServerFarm1','lastModifiedTimeUtc':'2014-02-21T00:49:30.477','storageRecoveryDefaultState':'Running','contentAvailabilityState':0,'runtimeAvailabilityState':0,'siteConfig':null,'deploymentId':'csmr14v5efk0','trafficManagerHostNames':[]}}").ToString();
+            var content = "{'location':'South Central US','tags':null,'properties':{'name':'mySite','state':'Running','hostNames':['csmr14v5efk0.antares-int.windows-int.net'],'webSpace':'csmrgqinwpwky-SouthCentralUSwebspace','selfLink':'https://antpreview1.api.admin-antares-int.windows-int.net:454/20130801/websystems/websites/web/subscriptions/abc123/webspaces/csmrgqinwpwky-SouthCentralUSwebspace/sites/csmr14v5efk0','repositorySiteName':'csmr14v5efk0','owner':null,'usageState':0,'enabled':true,'adminEnabled':true,'enabledHostNames':['csmr14v5efk0.antares-int.windows-int.net','csmr14v5efk0.scm.antares-int.windows-int.net'],'siteProperties':{'metadata':null,'properties':[],'appSettings':null},'availabilityState':0,'sslCertificates':[],'csrs':[],'cers':null,'siteMode':'Standard','hostNameSslStates':[{'name':'csmr14v5efk0.antares-int.windows-int.net','sslState':0,'ipBasedSslResult':null,'virtualIP':null,'thumbprint':null,'toUpdate':null,'toUpdateIpBasedSsl':null,'ipBasedSslState':0},{'name':'csmr14v5efk0.scm.antares-int.windows-int.net','sslState':0,'ipBasedSslResult':null,'virtualIP':null,'thumbprint':null,'toUpdate':null,'toUpdateIpBasedSsl':null,'ipBasedSslState':0}],'computeMode':1,'serverFarm':'DefaultServerFarm1','lastModifiedTimeUtc':'2014-02-21T00:49:30.477','storageRecoveryDefaultState':'Running','contentAvailabilityState':0,'runtimeAvailabilityState':0,'siteConfig':null,'deploymentId':'csmr14v5efk0','trafficManagerHostNames':[]}}".Replace("'", "\"");
             var header = new HttpHeader("x-ms-request-id", "1");
             mockResponse.AddHeader(header);
             mockResponse.SetContent(content);
@@ -496,7 +497,7 @@ namespace ResourceGroups.Tests
                         }"
                 }
                 );
-            var result = (await raw.WaitForCompletionAsync()).Value;
+            var result = (await WaitForCompletionAsync(raw)).Value;
 
             // Validate result
             Assert.AreEqual("South Central US", result.Location);
@@ -506,7 +507,7 @@ namespace ResourceGroups.Tests
         public async Task ResourceGetCreateOrUpdateDeleteAndExistsThrowExceptionWithoutApiVersion()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse("{}").ToString();
+            var content = JsonDocument.Parse("{}").RootElement.ToString();
             mockResponse.SetContent(content);
 
             var mockTransport = new MockTransport(mockResponse);
@@ -593,7 +594,7 @@ namespace ResourceGroups.Tests
         public async Task ResourceExistsValidateNoContentMessage()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.NoContent);
-            var content = JObject.Parse("{}").ToString();
+            var content = JsonDocument.Parse("{}").RootElement.ToString();
             var header = new HttpHeader("x-ms-request-id", "1");
             mockResponse.AddHeader(header);
             mockResponse.SetContent(content);
@@ -681,7 +682,7 @@ namespace ResourceGroups.Tests
         public async Task ResourceDeleteValidateMessage()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse("{}").ToString();
+            var content = JsonDocument.Parse("{}").RootElement.ToString();
             var header = new HttpHeader("x-ms-request-id", "1");
             mockResponse.AddHeader(header);
             mockResponse.SetContent(content);
@@ -710,7 +711,7 @@ namespace ResourceGroups.Tests
         public async Task ResourceDeleteByIdValidateMessage()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse("{}").ToString();
+            var content = JsonDocument.Parse("{}").RootElement.ToString();
 
             var header = new HttpHeader("x-ms-request-id", "1");
             mockResponse.AddHeader(header);
@@ -731,7 +732,7 @@ namespace ResourceGroups.Tests
         public async Task ResourceDeleteSupportNoContentReturnCode()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.NoContent);
-            var content = JObject.Parse("{}").ToString();
+            var content = JsonDocument.Parse("{}").RootElement.ToString();
             var header = new HttpHeader("x-ms-request-id", "1");
             mockResponse.AddHeader(header);
             mockResponse.SetContent(content);

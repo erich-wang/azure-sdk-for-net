@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Azure.Core;
 using Azure.Core.Pipeline;
 using Azure.Core.TestFramework;
 using Azure.Management.Resources;
 using Azure.Management.Resources.Tests;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 
 namespace ResourceGroups.Tests
@@ -35,7 +35,7 @@ namespace ResourceGroups.Tests
         public async Task ListSubscriptionLocations()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{
+            var content = @"{
 	                'value': [{
 		                'id': '/subscriptions/9167af2d-c13e-4d34-9a57-8f37dba6ff31/locations/eastasia',
 		                'name': 'eastasia',
@@ -54,7 +54,7 @@ namespace ResourceGroups.Tests
     		                'latitude': '1.283'
                         }
 	                }]
-                }").ToString();
+                }".Replace("'", "\"");
             var header = new HttpHeader("x-ms-request-id", "1");
             mockResponse.AddHeader(header);
             mockResponse.SetContent(content);
@@ -84,7 +84,7 @@ namespace ResourceGroups.Tests
         public async Task ListSubscriptions()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{
+            var content = @"{
 	                'value': [{
 		                'id': '/subscriptions/38b598fc-e57a-423f-b2e7-dc0ddb631f1f',
 		                'subscriptionId': '38b598fc-e57a-423f-b2e7-dc0ddb631f1f',
@@ -115,7 +115,7 @@ namespace ResourceGroups.Tests
 			                'quotaId': 'Internal_2014-09-01'
 		                }
 	                }]
-                }").ToString();
+                }".Replace("'", "\"");
             var header = new HttpHeader("x-ms-request-id", "1");
             mockResponse.AddHeader(header);
             mockResponse.SetContent(content);
@@ -145,7 +145,7 @@ namespace ResourceGroups.Tests
         public async Task GetSubscription()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{
+            var content = @"{
 	                'id': '/subscriptions/38b598fc-e57a-423f-b2e7-dc0ddb631f1f',
 	                'subscriptionId': '38b598fc-e57a-423f-b2e7-dc0ddb631f1f',
 	                'displayName': 'Visual Studio Ultimate with MSDN',
@@ -157,8 +157,7 @@ namespace ResourceGroups.Tests
 		                'locationPlacementId': 'Public_2014-09-01',
 		                'quotaId': 'MSDN_2014-09-01'
                     }
-	                ,
-                }").ToString();
+                }".Replace("'", "\"");
             var header = new HttpHeader("x-ms-request-id", "1");
             mockResponse.AddHeader(header);
             mockResponse.SetContent(content);

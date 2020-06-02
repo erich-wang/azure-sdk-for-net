@@ -1,18 +1,17 @@
-﻿using System;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Text.RegularExpressions;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Azure.Core.TestFramework;
 using Azure.Management.Resources;
 using Azure.Management.Resources.Models;
 using Azure.Management.Resources.Tests;
-using System.Text.Json;
 using NUnit.Framework;
-using Newtonsoft.Json.Linq;
 
 namespace Policy.Tests
 {
@@ -377,7 +376,7 @@ namespace Policy.Tests
             // clean up everything
             await PolicyAssignmentsClient.DeleteAsync("/" + assignmentScope, assignment.Name);
             await PolicyDefinitionsClient.DeleteAsync(policyDefinition.Name);
-            await (await ResourceGroupsClient.StartDeleteAsync(resourceGroupName)).WaitForCompletionAsync();
+            await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(resourceGroupName));
         }
 
         [Test]
@@ -421,7 +420,7 @@ namespace Policy.Tests
             // clean up everything
             await PolicyAssignmentsClient.DeleteAsync(assignmentScope, assignment.Name);
             await PolicyDefinitionsClient.DeleteAsync(policyDefinition.Name);
-            await (await ResourceGroupsClient.StartDeleteAsync(resourceGroupName)).WaitForCompletionAsync();
+            await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(resourceGroupName));
         }
 
         //[Test]
@@ -1062,7 +1061,7 @@ namespace Policy.Tests
                     },
                     Properties = JsonSerializer.Deserialize<Dictionary<string, object>>("{}")
                 });
-            return (await result.WaitForCompletionAsync()).Value;
+            return (await WaitForCompletionAsync(result)).Value;
         }
 
         //private ManagementGroup CreateManagementGroup(ManagementGroupsAPIClient client, string name, string displayName)
@@ -1430,12 +1429,12 @@ namespace Policy.Tests
         {
             if (metaDataObject != null)
             {
-                var metaData = JObject.FromObject(metaDataObject);
-                var createdBy = metaData["createdBy"];
+                var metaData = JsonDocument.Parse(JsonSerializer.Serialize(metaDataObject)).RootElement;
+                var createdBy = metaData.GetProperty("createdBy");
                 Assert.NotNull(createdBy);
-                var createdOn = metaData["createdOn"];
+                var createdOn = metaData.GetProperty("createdOn");
                 Assert.NotNull(createdOn);
-                var updatedBy = metaData["updatedBy"];
+                var updatedBy = metaData.GetProperty("updatedBy");
                 Assert.NotNull(updatedBy);
             }
         }
@@ -1447,45 +1446,18 @@ namespace Policy.Tests
                 AssertMetadataValid(actualObject);
             }
 
-            var expected = JObject.FromObject(expectedObject);
-            if (expected != null)
+            var expected = JsonDocument.Parse(JsonSerializer.Serialize(expectedObject)).RootElement;
+            if (!expected.Equals(null))
             {
-                var actual = JObject.FromObject(actualObject);
-                foreach (JProperty property in expected.Properties())
+                var actual = JsonDocument.Parse(JsonSerializer.Serialize(actualObject)).RootElement;
+                foreach (var property in expected.EnumerateObject())
                 {
-                    Assert.Contains(property.Value, actual.PropertyValues().ToList());
+                    JsonElement value = new JsonElement();
+                    Assert.NotNull(actual.TryGetProperty(property.Name, out value));
+                    Assert.NotNull(value);
                 }
             }
         }
-
-        //private async Task AssertThrowsCloudException(Action testCode, string responseContains = null)
-        //{
-        //    var result = await this.CatchAndReturn<Exception>(testCode);
-        //    if (!string.IsNullOrEmpty(responseContains))
-        //    {
-        //        Assert.Contains(responseContains, result.Message.ToList());
-        //    }
-        //}
-
-        // validate the given action throws the given exception then return the exception
-        //private async Task<T> CatchAndReturn<T>(Action testCode) where T : Exception
-        //{
-        //    try
-        //    {
-        //        testCode();
-        //    }
-        //    catch (T ex)
-        //    {
-        //        return ex;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Assert.IsInstanceOf<T>(ex);
-        //    }
-
-        //    Assert.True(false, "Exception should have been thrown");
-        //    return null;
-        //}
 
         // get subscription scope of the given client
         private string SubscriptionScope() => $"//subscriptions/{TestEnvironment.SubscriptionId}";

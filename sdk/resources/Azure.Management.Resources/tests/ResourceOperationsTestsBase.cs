@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using System;
+using System.Threading.Tasks;
 using Azure.Core.TestFramework;
-using Azure.Management.Resource;
 using Azure.Management.Resource.Tests;
-using NUnit.Framework;
 
 namespace Azure.Management.Resources.Tests
 {
-    [NonParallelizable]
     public abstract class ResourceOperationsTestsBase : RecordedTestBase<ResourceManagementTestEnvironment>
     {
-        private const string ObjectIdKey = "ObjectId";
-
-        public string objectId { get; set; }
-        public string Location { get; set; }
-
+        public static TimeSpan ZeroPollingInterval { get; } = TimeSpan.FromSeconds(0);
         public ResourcesManagementClient ResourcesManagementClient { get; set; }
         public ResourceGroupsClient ResourceGroupsClient { get; set; }
         public DeploymentsClient DeploymentsClient { get; set; }
@@ -30,7 +25,6 @@ namespace Azure.Management.Resources.Tests
         public PolicyAssignmentsClient PolicyAssignmentsClient { get; set; }
         public PolicyDefinitionsClient PolicyDefinitionsClient { get; set; }
         public PolicySetDefinitionsClient PolicySetDefinitionsClient { get; set; }
-
 
         protected ResourceOperationsTestsBase(bool isAsync)
             : base(isAsync)
@@ -63,5 +57,17 @@ namespace Azure.Management.Resources.Tests
                 TestEnvironment.Credential,
                 recording.InstrumentClientOptions(new ResourcesManagementClientOptions())));
         }
+        protected ValueTask<Response<T>> WaitForCompletionAsync<T>(Operation<T> operation)
+        {
+            if (Mode == RecordedTestMode.Playback)
+            {
+                return operation.WaitForCompletionAsync(ZeroPollingInterval, default);
+            }
+            else
+            {
+                return operation.WaitForCompletionAsync();
+            }
+        }
+
     }
 }

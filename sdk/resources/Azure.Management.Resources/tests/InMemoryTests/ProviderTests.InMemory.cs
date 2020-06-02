@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Azure.Core;
 using Azure.Core.Pipeline;
 using Azure.Core.TestFramework;
 using Azure.Management.Resources;
 using Azure.Management.Resources.Tests;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 
 namespace ResourceGroups.Tests
@@ -35,7 +36,7 @@ namespace ResourceGroups.Tests
         public async Task ProviderGetValidateMessage()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{
+            var content = @"{
                    'namespace': 'Microsoft.Websites',
                    'registrationState': 'Registered',
                    'resourceTypes': [
@@ -75,7 +76,7 @@ namespace ResourceGroups.Tests
                          'West US'
                        ]
                    }]
-                }").ToString();
+                }".Replace("'", "\"");
             mockResponse.SetContent(content);
             var header = new HttpHeader("x-ms-request-id", "1");
             mockResponse.AddHeader(header);
@@ -125,7 +126,7 @@ namespace ResourceGroups.Tests
         public async Task ProviderListValidateMessage()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{ 'value' : [
+            var content = @"{ 'value' : [
                     {
                    'namespace': 'Microsoft.Websites',
                    'registrationState': 'Registered',
@@ -143,7 +144,7 @@ namespace ResourceGroups.Tests
                        ]
                      }
                    ]   
-                }]}").ToString();
+                }]}".Replace("'", "\"");
             var header = new HttpHeader("x-ms-request-id", "1");
             mockResponse.AddHeader(header);
             mockResponse.SetContent(content);
@@ -172,7 +173,7 @@ namespace ResourceGroups.Tests
         public async Task ProviderRegisterValidate()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse("{}").ToString();
+            var content = JsonDocument.Parse("{}").RootElement.ToString();
             mockResponse.SetContent(content);
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
@@ -206,7 +207,7 @@ namespace ResourceGroups.Tests
         public async Task ProviderUnregisterValidate()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse("{}").ToString();
+            var content = JsonDocument.Parse("{}").RootElement.ToString();
             mockResponse.SetContent(content);
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);

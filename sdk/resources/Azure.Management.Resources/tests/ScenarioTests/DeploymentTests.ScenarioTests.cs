@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-
 using Azure.Core;
 using Azure.Core.TestFramework;
 using Azure.Management.Resources;
@@ -75,7 +75,7 @@ namespace ResourceGroups.Tests
             string deploymentName = Recording.GenerateAssetName("csmd");
             await ResourceGroupsClient.CreateOrUpdateAsync(groupName, new ResourceGroup(LiveDeploymentTests.LocationWestEurope));
             var rawResult = await DeploymentsClient.StartCreateOrUpdateAsync(groupName, deploymentName, parameters);
-            await rawResult.WaitForCompletionAsync();
+            await WaitForCompletionAsync(rawResult);
 
             var deployment = (await DeploymentsClient.GetAsync(groupName, deploymentName)).Value;
             Assert.AreEqual("Succeeded", deployment.Properties.ProvisioningState);
@@ -125,8 +125,8 @@ namespace ResourceGroups.Tests
             string groupName = Recording.GenerateAssetName("csmrg");
             string deploymentName = Recording.GenerateAssetName("csmd");
             await ResourceGroupsClient.CreateOrUpdateAsync(groupName, new ResourceGroup(LiveDeploymentTests.LocationWestEurope));
-            var rawresult = await DeploymentsClient.StartCreateOrUpdateAsync(groupName, deploymentName, parameters);
-            var deploymentCreateResult = (await rawresult.WaitForCompletionAsync()).Value;
+            var rawResult = await DeploymentsClient.StartCreateOrUpdateAsync(groupName, deploymentName, parameters);
+            var deploymentCreateResult = (await WaitForCompletionAsync(rawResult)).Value;
 
             Assert.NotNull(deploymentCreateResult.Id);
             Assert.AreEqual(deploymentName, deploymentCreateResult.Name);
@@ -194,8 +194,8 @@ namespace ResourceGroups.Tests
             await ResourceGroupsClient.CreateOrUpdateAsync(groupName, new ResourceGroup(LiveDeploymentTests.LocationWestEurope));
 
             //Action
-            var rawvalidationResult = await DeploymentsClient.StartValidateAsync(groupName, deploymentName, parameters);
-            var validationResult = (await rawvalidationResult.WaitForCompletionAsync()).Value;
+            var rawValidationResult = await DeploymentsClient.StartValidateAsync(groupName, deploymentName, parameters);
+            var validationResult = (await WaitForCompletionAsync(rawValidationResult)).Value;
 
             //Assert
             Assert.Null(validationResult.Error);
@@ -267,8 +267,8 @@ namespace ResourceGroups.Tests
             await ResourceGroupsClient.CreateOrUpdateAsync(groupName, new ResourceGroup(LiveDeploymentTests.LocationWestEurope));
             try
             {
-                var rawresult = await DeploymentsClient.StartValidateAsync(groupName, deploymentName, parameters);
-                var result = (await rawresult.WaitForCompletionAsync()).Value;
+                var rawResult = await DeploymentsClient.StartValidateAsync(groupName, deploymentName, parameters);
+                var result = (await WaitForCompletionAsync(rawResult)).Value;
                 Assert.NotNull(result);
             }
             catch (Exception ex)
@@ -364,7 +364,7 @@ namespace ResourceGroups.Tests
 
             //Validate
             var rawValidationResult = await DeploymentsClient.StartValidateAtSubscriptionScopeAsync(deploymentName, parameters);
-            var validationResult = (await rawValidationResult.WaitForCompletionAsync()).Value;
+            var validationResult = (await WaitForCompletionAsync(rawValidationResult)).Value;
 
             //Assert
             Assert.Null(validationResult.Error);
@@ -373,7 +373,7 @@ namespace ResourceGroups.Tests
 
             //Put deployment
             var rawDeploymentResult = await DeploymentsClient.StartCreateOrUpdateAtSubscriptionScopeAsync(deploymentName, parameters);
-            await rawDeploymentResult.WaitForCompletionAsync();
+            await WaitForCompletionAsync(rawDeploymentResult);
 
             var deployment = (await DeploymentsClient.GetAtSubscriptionScopeAsync(deploymentName)).Value;
             Assert.AreEqual("Succeeded", deployment.Properties.ProvisioningState);
@@ -412,7 +412,7 @@ namespace ResourceGroups.Tests
 
             //Validate
             var rawValidationResult = await DeploymentsClient.StartValidateAtManagementGroupScopeAsync(groupId, deploymentName, parameters);
-            var validationResult = (await rawValidationResult.WaitForCompletionAsync()).Value;
+            var validationResult = (await WaitForCompletionAsync(rawValidationResult)).Value;
 
             //Assert
             Assert.Null(validationResult.Error);
@@ -421,7 +421,7 @@ namespace ResourceGroups.Tests
 
             //Put deployment
             var deploymentResult = await DeploymentsClient.StartCreateOrUpdateAtManagementGroupScopeAsync(groupId, deploymentName, parameters);
-            await deploymentResult.WaitForCompletionAsync();
+            await WaitForCompletionAsync(deploymentResult);
 
             var deployment = (await DeploymentsClient.GetAtManagementGroupScopeAsync(groupId, deploymentName)).Value;
             Assert.AreEqual("Succeeded", deployment.Properties.ProvisioningState);
@@ -459,7 +459,7 @@ namespace ResourceGroups.Tests
 
             //Validate
             var rawValidationResult = await DeploymentsClient.StartValidateAtTenantScopeAsync(deploymentName, parameters);
-            var validationResult = (await rawValidationResult.WaitForCompletionAsync()).Value;
+            var validationResult = (await WaitForCompletionAsync(rawValidationResult)).Value;
 
             //Assert
             Assert.Null(validationResult.Error);
@@ -468,7 +468,7 @@ namespace ResourceGroups.Tests
 
             //Put deployment
             var deploymentResult = await DeploymentsClient.StartCreateOrUpdateAtTenantScopeAsync(deploymentName, parameters);
-            await deploymentResult.WaitForCompletionAsync();
+            await WaitForCompletionAsync(deploymentResult);
 
             var deployment = (await DeploymentsClient.GetAtTenantScopeAsync(deploymentName)).Value;
             Assert.AreEqual("Succeeded", deployment.Properties.ProvisioningState);
@@ -509,7 +509,7 @@ namespace ResourceGroups.Tests
 
             //Validate
             var rawValidationResult = await DeploymentsClient.StartValidateAtScopeAsync(scope: "", deploymentName: deploymentName, parameters: parameters);
-            var validationResult = (await rawValidationResult.WaitForCompletionAsync()).Value;
+            var validationResult = (await WaitForCompletionAsync(rawValidationResult)).Value;
 
             //Assert
             Assert.Null(validationResult.Error);
@@ -518,7 +518,7 @@ namespace ResourceGroups.Tests
 
             //Put deployment
             var deploymentResult = await DeploymentsClient.StartCreateOrUpdateAtScopeAsync(scope: "", deploymentName: deploymentName, parameters: parameters);
-            await deploymentResult.WaitForCompletionAsync();
+            await WaitForCompletionAsync(deploymentResult);
 
             var deployment = (await DeploymentsClient.GetAtScopeAsync(scope: "", deploymentName: deploymentName)).Value;
             Assert.AreEqual("Succeeded", deployment.Properties.ProvisioningState);
@@ -564,7 +564,7 @@ File.ReadAllText(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembl
 
             //Validate
             var rawValidationResult = await DeploymentsClient.StartValidateAtScopeAsync(scope: managementGroupScope, deploymentName: deploymentName, parameters: parameters);
-            var validationResult = (await rawValidationResult.WaitForCompletionAsync()).Value;
+            var validationResult = (await WaitForCompletionAsync(rawValidationResult)).Value;
 
             //Assert
             Assert.Null(validationResult.Error);
@@ -573,7 +573,7 @@ File.ReadAllText(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembl
 
             //Put deployment
             var deploymentResult = await DeploymentsClient.StartCreateOrUpdateAtScopeAsync(scope: managementGroupScope, deploymentName: deploymentName, parameters: parameters);
-            await deploymentResult.WaitForCompletionAsync();
+            await WaitForCompletionAsync(deploymentResult);
 
             var deployment = (await DeploymentsClient.GetAtScopeAsync(scope: managementGroupScope, deploymentName: deploymentName)).Value;
             Assert.AreEqual("Succeeded", deployment.Properties.ProvisioningState);
@@ -619,7 +619,7 @@ File.ReadAllText(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembl
 
             //Validate
             var rawValidationResult = await DeploymentsClient.StartValidateAtScopeAsync(scope: subscriptionScope, deploymentName: deploymentName, parameters: parameters);
-            var validationResult = (await rawValidationResult.WaitForCompletionAsync()).Value;
+            var validationResult = (await WaitForCompletionAsync(rawValidationResult)).Value;
 
             //Assert
             Assert.Null(validationResult.Error);
@@ -628,7 +628,7 @@ File.ReadAllText(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembl
 
             //Put deployment
             var deploymentResult = await DeploymentsClient.StartCreateOrUpdateAtScopeAsync(scope: subscriptionScope, deploymentName: deploymentName, parameters: parameters);
-            await deploymentResult.WaitForCompletionAsync();
+            await WaitForCompletionAsync(deploymentResult);
 
             var deployment = (await DeploymentsClient.GetAtScopeAsync(scope: subscriptionScope, deploymentName: deploymentName)).Value;
             Assert.AreEqual("Succeeded", deployment.Properties.ProvisioningState);
@@ -673,7 +673,7 @@ File.ReadAllText(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembl
 
             //Validate
             var rawValidationResult = await DeploymentsClient.StartValidateAtScopeAsync(scope: resourceGroupScope, deploymentName: deploymentName, parameters: parameters);
-            var validationResult = (await rawValidationResult.WaitForCompletionAsync()).Value;
+            var validationResult = (await WaitForCompletionAsync(rawValidationResult)).Value;
 
             //Assert
             Assert.Null(validationResult.Error);
@@ -682,7 +682,7 @@ File.ReadAllText(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembl
 
             //Put deployment
             var deploymentResult = await DeploymentsClient.StartCreateOrUpdateAtScopeAsync(scope: resourceGroupScope, deploymentName: deploymentName, parameters: parameters);
-            await deploymentResult.WaitForCompletionAsync();
+            await WaitForCompletionAsync(deploymentResult);
 
             var deployment = (await DeploymentsClient.GetAtScopeAsync(scope: resourceGroupScope, deploymentName: deploymentName)).Value;
             Assert.AreEqual("Succeeded", deployment.Properties.ProvisioningState);

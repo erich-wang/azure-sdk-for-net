@@ -1,10 +1,12 @@
-﻿using System;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Azure;
@@ -14,12 +16,11 @@ using Azure.Core.TestFramework;
 using Azure.Management.Resources;
 using Azure.Management.Resources.Models;
 using Azure.Management.Resources.Tests;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 
 namespace ResourceGroups.Tests
 {
-    public class InMemoryDeploymentTests : ClientTestBase
+    public class InMemoryDeploymentTests : ResourceOperationsTestsBase
     {
         public InMemoryDeploymentTests(bool isAsync) : base(isAsync)
         {
@@ -31,7 +32,7 @@ namespace ResourceGroups.Tests
             options.Transport = transport;
 
             return InstrumentClient(new ResourcesManagementClient(
-                "ddd5f1d5-499c-45ee-a5ff-024d36ade650",
+                TestEnvironment.SubscriptionId,
                 new TestCredential(), options));
         }
 
@@ -39,44 +40,44 @@ namespace ResourceGroups.Tests
         public async Task DeploymentTestsCreateValidateMessage()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.Created);
-            var content = JObject.Parse(@"{
-                    'id': 'foo',
-                    'name':'myrealease-3.14',
-                    'properties':{
-                        'provisioningState':'Succeeded',    
-                        'timestamp':'2014-01-05T12:30:43.00Z',
-                        'mode':'Incremental',
-                        'template': { 'api-version' : '123' },
-		                'templateLink': {
-                           'uri': 'http://wa/template.json',
-                           'contentVersion': '1.0.0.0',
-                           'contentHash': {
-                              'algorithm': 'sha256',
-                              'value': 'yyz7xhhshfasf',
-                           }
-                        },
-                        'parametersLink': { /* use either one of parameters or parametersLink */
-                           'uri': 'http://wa/parameters.json',
-                           'contentVersion': '1.0.0.0',
-                           'contentHash': {
-                              'algorithm': 'sha256',
-                              'value': 'yyz7xhhshfasf',
-                           }
-                        },
-                        'parameters': {
-                            'key' : {
-                                'type':'string',           
-                                'value':'user'
-                            }
-		                },
-                        'outputs': {
-                            'key' : {
-                                'type':'string',           
-                                'value':'user'
-                            }
-                        }        
-                    }
-                }").ToString();
+            var content = "{" +
+                    "\"id\": \"foo\"," +
+                    "\"name\":\"myrealease-3.14\"," +
+                    "\"properties\":{" +
+                        "\"provisioningState\":\"Succeeded\"," +
+                        "\"timestamp\":\"2014-01-05T12:30:43.00Z\"," +
+                        "\"mode\":\"Incremental\"," +
+                        "\"template\": { \"api-version\" : \"123\" }," +
+                        "\"templateLink\": {" +
+                           "\"uri\": \"http://wa/template.json\"," +
+                           "\"contentVersion\": \"1.0.0.0\"," +
+                           "\"contentHash\": {" +
+                              "\"algorithm\": \"sha256\"," +
+                              "\"value\": \"yyz7xhhshfasf\"" +
+                           "}" +
+                        "}," +
+                        "\"parametersLink\": { " +
+                           "\"uri\": \"http://wa/parameters.json\"," +
+                           "\"contentVersion\": \"1.0.0.0\"," +
+                           "\"contentHash\": {" +
+                              "\"algorithm\": \"sha256\"," +
+                              "\"value\": \"yyz7xhhshfasf\"" +
+                           "}" +
+                        "}," +
+                        "\"parameters\": {" +
+                            "\"key\" : {" +
+                                "\"type\":\"string\"," +
+                                "\"value\":\"user\"" +
+                            "}" +
+                        "}," +
+                        "\"outputs\": {" +
+                            "\"key\" : {" +
+                                "\"type\":\"string\"," +
+                                "\"value\":\"user\"" +
+                            "}" +
+                        "}" +
+                    "}" +
+                "}";
             mockResponse.SetContent(content);
 
             var dictionary = new Dictionary<string, object> {
@@ -91,7 +92,7 @@ namespace ResourceGroups.Tests
             (
                 new DeploymentProperties(DeploymentMode.Incremental)
                 {
-                    Template = new Dictionary<string, object>{ { "api-version", "123" } },
+                    Template = new Dictionary<string, object> { { "api-version", "123" } },
                     TemplateLink = new TemplateLink("http://abc/def/template.json")
                     {
                         ContentVersion = "1.0.0.0"
@@ -109,7 +110,7 @@ namespace ResourceGroups.Tests
 
             DeploymentsCreateOrUpdateOperation raw = await client.GetDeploymentsClient().StartCreateOrUpdateAsync("foo", "myrealease-3.14", parameters);
 
-            DeploymentExtended result = (await raw.WaitForCompletionAsync()).Value;
+            DeploymentExtended result = (await WaitForCompletionAsync(raw)).Value;
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -122,17 +123,17 @@ namespace ResourceGroups.Tests
             await request.Content.WriteToAsync(stream, default);
             stream.Position = 0;
             var resquestContent = new StreamReader(stream).ReadToEnd();
-            var json = JObject.Parse(resquestContent);
+            var json = JsonDocument.Parse(resquestContent).RootElement;
 
-            Assert.AreEqual("Incremental", json["properties"]["mode"].Value<string>());
-            Assert.AreEqual("http://abc/def/template.json", json["properties"]["templateLink"]["uri"].Value<string>());
-            Assert.AreEqual("1.0.0.0", json["properties"]["templateLink"]["contentVersion"].Value<string>());
-            Assert.AreEqual("1.0.0.0", json["properties"]["parametersLink"]["contentVersion"].Value<string>());
-            Assert.AreEqual("value1", json["properties"]["parameters"]["param1"].Value<string>());
-            Assert.True(json["properties"]["parameters"]["param2"].Value<bool>());
-            Assert.AreEqual(123, json["properties"]["parameters"]["param3"]["param3_1"].Value<int>());
-            Assert.AreEqual("value3_2", json["properties"]["parameters"]["param3"]["param3_2"].Value<string>());
-            Assert.AreEqual(123, json["properties"]["template"]["api-version"].Value<int>());
+            Assert.AreEqual("Incremental", json.GetProperty("properties").GetProperty("mode").GetString());
+            Assert.AreEqual("http://abc/def/template.json", json.GetProperty("properties").GetProperty("templateLink").GetProperty("uri").GetString());
+            Assert.AreEqual("1.0.0.0", json.GetProperty("properties").GetProperty("templateLink").GetProperty("contentVersion").GetString());
+            Assert.AreEqual("1.0.0.0", json.GetProperty("properties").GetProperty("parametersLink").GetProperty("contentVersion").GetString());
+            Assert.AreEqual("value1", json.GetProperty("properties").GetProperty("parameters").GetProperty("param1").GetString());
+            Assert.True(json.GetProperty("properties").GetProperty("parameters").GetProperty("param2").GetBoolean());
+            Assert.AreEqual(123, json.GetProperty("properties").GetProperty("parameters").GetProperty("param3").GetProperty("param3_1").GetInt32());
+            Assert.AreEqual("value3_2", json.GetProperty("properties").GetProperty("parameters").GetProperty("param3").GetProperty("param3_2").GetString());
+            Assert.AreEqual("123", json.GetProperty("properties").GetProperty("template").GetProperty("api-version").GetString());
 
             // Validate result
             Assert.AreEqual("foo", result.Id);
@@ -149,93 +150,108 @@ namespace ResourceGroups.Tests
         [Test]
         public async Task DeploymentTestsTemplateAsJsonString()
         {
-            var mockResponse = new MockResponse((int)HttpStatusCode.Created);
-            var responseBody = JObject.Parse(@"{
-                'id': 'foo',
-                'name': 'test-release-3',
-                'properties': {
+            List<string> dividedCases = new List<string> {
+            (@"{
+                '$schema': 'http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#',
+                'contentVersion': '1.0.0.0',
+                'parameters': {
+                    'storageAccountName': {
+		                'value': 'tianotest04'
+	                }
+                }
+            }").Replace("'", "\""),
+            (@"{
+                'storageAccountName': {
+		            'value': 'tianotest04'
+	            }
+            }").Replace("'", "\"")
+            };
+            foreach (var parameterString in dividedCases)
+            {
+                var mockResponse = new MockResponse((int)HttpStatusCode.Created);
+                var responseBody = (@"{
+                    'id': 'foo',
+                    'name': 'test-release-3',
+                    'properties': {
+                        'parameters': {
+                            'storageAccountName': {
+				                'type': 'String',
+				                'value': 'tianotest04'
+			                }
+		                },
+		                'mode': 'Incremental',
+		                'provisioningState': 'Succeeded',
+		                'timestamp': '2016-07-12T17:36:39.2398177Z',
+		                'duration': 'PT0.5966357S',
+		                'correlationId': 'c0d728d5-5b97-41b9-b79a-abcd9eb5fe4a'
+	                }
+                }").Replace("'", "\"");
+                mockResponse.SetContent(responseBody);
+
+                var templateString = (@"{
+                    '$schema': 'http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#',
+                    'contentVersion': '1.0.0.0',
                     'parameters': {
                         'storageAccountName': {
-                            'type': 'String',
-                            'value': 'tianotest04'
-                         }
-                     },
-                    'mode': 'Incremental',
-                    'provisioningState': 'Succeeded',
-                    'timestamp': '2016-07-12T17:36:39.2398177Z',
-                    'duration': 'PT0.5966357S',
-                    'correlationId': 'c0d728d5-5b97-41b9-b79a-abcd9eb5fe4a'
-                }
-            }").ToString();
-            mockResponse.SetContent(responseBody);
+		                    'type': 'string'
+	                    }
+                    },
+                    'resources': [
+                    ],
+                    'outputs': {  }
+                }").Replace("'", "\"");
 
-            var templateString = "{" +
-                "\"$schema\": \"http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#\"," +
-                "\"contentVersion\": \"1.0.0.0\"," +
-                "\"parameters\": {" +
-                    "\"storageAccountName\": {" +
-                        "\"type\": \"string\"" +
-                    "}" +
-                "}," +
-                "\"resources\": [" +
-                "]," +
-                "\"outputs\": {  }" +
-            "}";
-
-            var parameterString = "{" +
-                "\"storageAccountName\": {" +
-              "\"value\": \"tianotest04\"" +
-             "}" +
-            "}";
-            JsonElement jsonTemplate = JsonSerializer.Deserialize<JsonElement>(templateString);
-            JsonElement jsonParameter = JsonSerializer.Deserialize<JsonElement>(parameterString);
-            object template = jsonTemplate.GetObject();
-            object parameter = jsonParameter.GetObject();
-
-            var mockTransport = new MockTransport(mockResponse);
-            var client = GetResourceManagementClient(mockTransport);
-
-            var parameters = new Deployment
-            (
-                new DeploymentProperties(DeploymentMode.Incremental)
+                JsonElement jsonTemplate = JsonSerializer.Deserialize<JsonElement>(templateString);
+                JsonElement jsonParameter = JsonSerializer.Deserialize<JsonElement>(parameterString);
+                if (!jsonParameter.TryGetProperty("parameters", out JsonElement parameter))
                 {
-                    Template = template,
-                    Parameters = parameter
+                    parameter = jsonParameter;
                 }
-             );
+                var mockTransport = new MockTransport(mockResponse);
+                var client = GetResourceManagementClient(mockTransport);
 
-            var raw = await client.GetDeploymentsClient().StartCreateOrUpdateAsync("foo", "myrealease-3.14", parameters);
-            var result = (await raw.WaitForCompletionAsync()).Value;
+                var parameters = new Deployment
+                (
+                    new DeploymentProperties(DeploymentMode.Incremental)
+                    {
+                        Template = jsonTemplate.GetObject(),
+                        Parameters = parameter.GetObject()
+                    }
+                 );
 
-            // Validate headers
-            var request = mockTransport.Requests[0];
-            Assert.IsTrue(request.Headers.Contains(new HttpHeader("Content-Type", "application/json")));
-            Assert.AreEqual(HttpMethod.Put.Method, request.Method.Method);
-            Assert.IsTrue(request.Headers.Contains("Authorization"));
+                var raw = await client.GetDeploymentsClient().StartCreateOrUpdateAsync("foo", "myrealease-3.14", parameters);
+                var result = (await WaitForCompletionAsync(raw)).Value;
 
-            // Validate payload
-            Stream stream = new MemoryStream();
-            await request.Content.WriteToAsync(stream, default);
-            stream.Position = 0;
-            var resquestContent = new StreamReader(stream).ReadToEnd();
-            var json = JObject.Parse(resquestContent);
-            Assert.AreEqual("Incremental", json["properties"]["mode"].Value<string>());
-            Assert.AreEqual("tianotest04", json["properties"]["parameters"]["storageAccountName"]["value"].Value<string>());
-            Assert.AreEqual("1.0.0.0", json["properties"]["template"]["contentVersion"].Value<string>());
+                // Validate headers
+                var request = mockTransport.Requests[0];
+                Assert.IsTrue(request.Headers.Contains(new HttpHeader("Content-Type", "application/json")));
+                Assert.AreEqual(HttpMethod.Put.Method, request.Method.Method);
+                Assert.IsTrue(request.Headers.Contains("Authorization"));
 
-            // Validate result
-            Assert.AreEqual("foo", result.Id);
-            Assert.AreEqual("test-release-3", result.Name);
-            Assert.AreEqual("Succeeded", result.Properties.ProvisioningState);
-            Assert.AreEqual(DeploymentMode.Incremental, result.Properties.Mode);
-            Assert.IsTrue(JsonSerializer.Serialize(result.Properties.Parameters).Contains("\"value\":\"tianotest04\""));
+                // Validate payload
+                Stream stream = new MemoryStream();
+                await request.Content.WriteToAsync(stream, default);
+                stream.Position = 0;
+                var resquestContent = new StreamReader(stream).ReadToEnd();
+                var json = JsonDocument.Parse(resquestContent).RootElement;
+                Assert.AreEqual("Incremental", json.GetProperty("properties").GetProperty("mode").GetString());
+                Assert.AreEqual("tianotest04", json.GetProperty("properties").GetProperty("parameters").GetProperty("storageAccountName").GetProperty("value").GetString());
+                Assert.AreEqual("1.0.0.0", json.GetProperty("properties").GetProperty("template").GetProperty("contentVersion").GetString());
+
+                // Validate result
+                Assert.AreEqual("foo", result.Id);
+                Assert.AreEqual("test-release-3", result.Name);
+                Assert.AreEqual("Succeeded", result.Properties.ProvisioningState);
+                Assert.AreEqual(DeploymentMode.Incremental, result.Properties.Mode);
+                Assert.IsTrue(JsonSerializer.Serialize(result.Properties.Parameters).Contains("\"value\":\"tianotest04\""));
+            }
         }
 
         [Test]
         public async Task ListDeploymentOperationsReturnsMultipleObjects()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{
+            var content = (@"{
                     'value': [
                           {
                         'subscriptionId':'mysubid',
@@ -246,17 +262,17 @@ namespace ResourceGroups.Tests
                             'targetResource':{
                                 'id': '/subscriptions/123abc/resourcegroups/foo/providers/ResourceProviderTestHost/TestResourceType/resource1',
                                 'resourceName':'mySite1',
-                                'resourceType': 'Microsoft.Web',
+                                'resourceType': 'Microsoft.Web'
                             },
-                            'provisioningState':'Succeeded',
+                            'provisioningState':'Succeeded',                 
                             'timestamp': '2014-02-25T23:08:21.8183932Z',
                             'correlationId': 'afb170c6-fe57-4b38-a43b-900fe09be4ca',
                             'statusCode': 'InternalServerError',
-                            'statusMessage': 'InternalServerError',
+                            'statusMessage': 'InternalServerError'       
                           }
                        }
                     ]}
-            ").ToString();
+            ").Replace("'","\"");
             mockResponse.SetContent(content);
 
             var mockTransport = new MockTransport(mockResponse);
@@ -283,8 +299,7 @@ namespace ResourceGroups.Tests
         public async Task ListDeploymentOperationsReturnsEmptyArray()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{
-                    'value': []}").ToString();
+            var content = JsonDocument.Parse("{\"value\": []}").RootElement.ToString();
             mockResponse.SetContent(content);
 
             var mockTransport = new MockTransport(mockResponse);
@@ -305,7 +320,7 @@ namespace ResourceGroups.Tests
         public async Task ListDeploymentOperationsWithRealPayloadReadsJsonInStatusMessage()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{
+            var content = @"{
                   'value': [
                     {
                       'id': '/subscriptions/abcd1234/resourcegroups/foo/deployments/testdeploy/operations/334558C2218CAEB0',
@@ -356,8 +371,7 @@ namespace ResourceGroups.Tests
                     },
                     {
                       'id':
-                '/subscriptions/abcd1234/resourcegroups/foo/deployments/testdeploy/operations/6B9A5A38C94E6
-                F14',
+                '/subscriptions/abcd1234/resourcegroups/foo/deployments/testdeploy/operations/6B9A5A38C94E6F14',
                       'subscriptionId': 'abcd1234',
                       'resourceGroup': 'foo',
                       'deploymentName': 'testdeploy',
@@ -370,8 +384,7 @@ namespace ResourceGroups.Tests
                         'statusMessage': null,
                         'targetResource': {
                           'id':
-                '/subscriptions/abcd1234/resourcegroups/foo/providers/Microsoft.Web/serverFarms/ilygreTest4
-                Host',
+                '/subscriptions/abcd1234/resourcegroups/foo/providers/Microsoft.Web/serverFarms/ilygreTest4Host',
                           'subscriptionId': 'abcd1234',
                           'resourceGroup': 'foo',
                           'resourceType': 'Microsoft.Web/serverFarms',
@@ -380,7 +393,7 @@ namespace ResourceGroups.Tests
                       }
                     }
                   ]
-                }").ToString();
+                }".Replace("'", "\"");
             mockResponse.SetContent(content);
 
             var mockTransport = new MockTransport(mockResponse);
@@ -400,7 +413,7 @@ namespace ResourceGroups.Tests
         public async Task GetDeploymentOperationsReturnsValue()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{
+            var content = @"{
                         'subscriptionId':'mysubid',
                         'resourceGroup': 'foo',
                         'deploymentName':'test-release-3',
@@ -409,15 +422,15 @@ namespace ResourceGroups.Tests
                             'targetResource':{
                                 'id':'/subscriptions/123abc/resourcegroups/foo/providers/ResourceProviderTestHost/TestResourceType/resource1',
                                 'resourceName':'mySite1',
-                                'resourceType': 'Microsoft.Web',
+                                'resourceType': 'Microsoft.Web'
                             },
                             'provisioningState':'Succeeded',
                             'timestamp': '2014-02-25T23:08:21.8183932Z',
                             'correlationId': 'afb170c6-fe57-4b38-a43b-900fe09be4ca',
                             'statusCode': 'OK',
-                            'statusMessage': 'OK',    
+                            'statusMessage': 'OK'
                           }
-                       }").ToString();
+                       }".Replace("'", "\"");
             mockResponse.SetContent(content);
 
             var mockTransport = new MockTransport(mockResponse);
@@ -444,12 +457,12 @@ namespace ResourceGroups.Tests
         public async Task DeploymentTestsValidateCheckPayload()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.BadRequest);
-            var content = JObject.Parse(@"{
+            var content = @"{
                       'error': {
                         'code': 'InvalidTemplate',
                         'message': 'Deployment template validation failed.'
                       }
-                    }").ToString();
+                    }".Replace("'", "\"");
             mockResponse.SetContent(content);
 
             var dictionary = new Dictionary<string, object> {
@@ -478,7 +491,7 @@ namespace ResourceGroups.Tests
             try
             {
                 var raw = await client.GetDeploymentsClient().StartValidateAsync("foo", "bar", parameters);
-                var result = (await raw.WaitForCompletionAsync()).Value;
+                var result = (await WaitForCompletionAsync(raw)).Value;
             }
             catch (RequestFailedException)
             {
@@ -487,15 +500,15 @@ namespace ResourceGroups.Tests
                 await requestEX.Content.WriteToAsync(stream, default);
                 stream.Position = 0;
                 var resquestContent = new StreamReader(stream).ReadToEnd();
-                var json = JObject.Parse(resquestContent);
+                var json = JsonDocument.Parse(resquestContent).RootElement;
                 // Validate payload
-                Assert.AreEqual("Incremental", json["properties"]["mode"].Value<string>());
-                Assert.AreEqual("http://abc/def/template.json", json["properties"]["templateLink"]["uri"].Value<string>());
-                Assert.AreEqual("1.0.0.0", json["properties"]["templateLink"]["contentVersion"].Value<string>());
-                Assert.AreEqual("value1", json["properties"]["parameters"]["param1"].Value<string>());
-                Assert.IsTrue(json["properties"]["parameters"]["param2"].Value<bool>());
-                Assert.AreEqual(123, json["properties"]["parameters"]["param3"]["param3_1"].Value<int>());
-                Assert.AreEqual("value3_2", json["properties"]["parameters"]["param3"]["param3_2"].Value<string>());
+                Assert.AreEqual("Incremental", json.GetProperty("properties").GetProperty("mode").GetString());
+                Assert.AreEqual("http://abc/def/template.json", json.GetProperty("properties").GetProperty("templateLink").GetProperty("uri").GetString());
+                Assert.AreEqual("1.0.0.0", json.GetProperty("properties").GetProperty("templateLink").GetProperty("contentVersion").GetString());
+                Assert.AreEqual("value1", json.GetProperty("properties").GetProperty("parameters").GetProperty("param1").GetString());
+                Assert.IsTrue(json.GetProperty("properties").GetProperty("parameters").GetProperty("param2").GetBoolean());
+                Assert.AreEqual(123, json.GetProperty("properties").GetProperty("parameters").GetProperty("param3").GetProperty("param3_1").GetInt32());
+                Assert.AreEqual("value3_2", json.GetProperty("properties").GetProperty("parameters").GetProperty("param3").GetProperty("param3_2").GetString());
             }
 
             // Validate headers
@@ -509,12 +522,12 @@ namespace ResourceGroups.Tests
         public async Task DeploymentTestsValidateSimpleFailure()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.BadRequest);
-            var content = JObject.Parse(@"{
+            var content = @"{
                       'error': {
                         'code': 'InvalidTemplate',
                         'message': 'Deployment template validation failed: The template parameters hostingPlanName, siteMode, computeMode are not valid; they are not present.'
                       }
-                    }").ToString();
+                    }".Replace("'", "\"");
             var header = new HttpHeader("Content-Type", "application/json");
             mockResponse.AddHeader(header);
             mockResponse.SetContent(content);
@@ -534,7 +547,7 @@ namespace ResourceGroups.Tests
             try
             {
                 var raw = await client.GetDeploymentsClient().StartValidateAsync("foo", "bar", parameters);
-                var result = (await raw.WaitForCompletionAsync()).Value;
+                var result = (await WaitForCompletionAsync(raw)).Value;
             }
             catch (RequestFailedException ex)
             {
@@ -548,7 +561,7 @@ namespace ResourceGroups.Tests
         public async Task DeploymentTestsValidateComplexFailure()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.BadRequest);
-            var content = JObject.Parse(@"{
+            var content = @"{
                       'error': {
                         'code': 'InvalidTemplate',
                         'target': '',
@@ -564,7 +577,7 @@ namespace ResourceGroups.Tests
                           } 
                         ]
                       }
-                    }").ToString();
+                    }".Replace("'","\"");
             var header = new HttpHeader("Content-Type", "application/json");
             mockResponse.AddHeader(header);
             mockResponse.SetContent(content);
@@ -584,7 +597,7 @@ namespace ResourceGroups.Tests
             try
             {
                 var raw = await client.GetDeploymentsClient().StartValidateAsync("foo", "bar", parameters);
-                var result = (await raw.WaitForCompletionAsync()).Value;
+                var result = (await WaitForCompletionAsync(raw)).Value;
             }
             catch (RequestFailedException ex)
             {
@@ -600,7 +613,7 @@ namespace ResourceGroups.Tests
         public async Task DeploymentTestsValidateSuccess()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{}").ToString();
+            var content = JsonDocument.Parse(@"{}").RootElement.ToString();
             mockResponse.SetContent(content);
 
             var parameters = new Deployment(new DeploymentProperties(DeploymentMode.Incremental)
@@ -615,7 +628,7 @@ namespace ResourceGroups.Tests
             var client = GetResourceManagementClient(mockTransport);
 
             var raw = await client.GetDeploymentsClient().StartValidateAsync("foo", "bar", parameters);
-            var result = (await raw.WaitForCompletionAsync()).Value;
+            var result = (await WaitForCompletionAsync(raw)).Value;
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -631,7 +644,7 @@ namespace ResourceGroups.Tests
         public async Task DeploymentTestsCancelValidateMessage()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.NoContent);
-            var content = JObject.Parse(@"{}").ToString();
+            var content = JsonDocument.Parse(@"{}").RootElement.ToString();
             mockResponse.SetContent(content);
 
             var mockTransport = new MockTransport(mockResponse);
@@ -671,7 +684,7 @@ namespace ResourceGroups.Tests
         public async Task DeploymentTestsGetValidateMessage()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{
+            var content = @"{
                     'resourceGroup': 'foo',
                     'name':'myrealease-3.14',
                     'properties':{
@@ -684,15 +697,15 @@ namespace ResourceGroups.Tests
                            'contentVersion': '1.0.0.0',
                            'contentHash': {
                               'algorithm': 'sha256',
-                              'value': 'yyz7xhhshfasf',
+                              'value': 'yyz7xhhshfasf'
                            }
                         },
-                        'parametersLink': { /* use either one of parameters or parametersLink */
+                        'parametersLink': {
                            'uri': 'http://wa/parameters.json',
                            'contentVersion': '1.0.0.0',
                            'contentHash': {
                               'algorithm': 'sha256',
-                              'value': 'yyz7xhhshfasf',
+                              'value': 'yyz7xhhshfasf'
                            }
                         },
                         'parameters': {
@@ -711,7 +724,7 @@ namespace ResourceGroups.Tests
                     'tags': {
                         'tagsTestKey': 'tagsTestValue'
                     }
-                }").ToString();
+                }".Replace("'", "\"");
             mockResponse.SetContent(content);
 
             var mockTransport = new MockTransport(mockResponse);
@@ -743,7 +756,7 @@ namespace ResourceGroups.Tests
         public async Task DeploymentTestsListAllValidateMessage()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{ 
+            var content = @"{ 
                     'value' : [
                         {
                         'resourceGroup': 'foo',
@@ -757,15 +770,15 @@ namespace ResourceGroups.Tests
                                'contentVersion': '1.0.0.0',
                                'contentHash': {
                                   'algorithm': 'sha256',
-                                  'value': 'yyz7xhhshfasf',
+                                  'value': 'yyz7xhhshfasf'
                                }
                             },
-                            'parametersLink': { /* use either one of parameters or parametersLink */
+                            'parametersLink': {
                                'uri': 'http://wa/parameters.json',
                                'contentVersion': '1.0.0.0',
                                'contentHash': {
                                   'algorithm': 'sha256',
-                                  'value': 'yyz7xhhshfasf',
+                                  'value': 'yyz7xhhshfasf'
                                }
                             },
                             'parameters': {
@@ -794,15 +807,15 @@ namespace ResourceGroups.Tests
                                'contentVersion': '1.0.0.0',
                                'contentHash': {
                                   'algorithm': 'sha256',
-                                  'value': 'yyz7xhhshfasf',
+                                  'value': 'yyz7xhhshfasf'
                                }
                             },
-                            'parametersLink': { /* use either one of parameters or parametersLink */
+                            'parametersLink': {
                                'uri': 'http://wa/parameters.json',
                                'contentVersion': '1.0.0.0',
                                'contentHash': {
                                   'algorithm': 'sha256',
-                                  'value': 'yyz7xhhshfasf',
+                                  'value': 'yyz7xhhshfasf'
                                }
                             },
                             'parameters': {
@@ -819,7 +832,8 @@ namespace ResourceGroups.Tests
                             }        
                         }
                       }
-                    ]}").ToString();
+                    ]
+                }".Replace("'", "\"");
             mockResponse.SetContent(content);
 
             var mockTransport = new MockTransport(mockResponse);
@@ -847,7 +861,7 @@ namespace ResourceGroups.Tests
         public async Task DeploymentTestsListValidateMessage()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{ 
+            var content = @"{ 
                     'value' : [
                         {
                         'resourceGroup': 'foo',
@@ -861,15 +875,15 @@ namespace ResourceGroups.Tests
                                'contentVersion': '1.0.0.0',
                                'contentHash': {
                                   'algorithm': 'sha256',
-                                  'value': 'yyz7xhhshfasf',
+                                  'value': 'yyz7xhhshfasf'
                                }
                             },
-                            'parametersLink': { /* use either one of parameters or parametersLink */
+                            'parametersLink': {
                                'uri': 'http://wa/parameters.json',
                                'contentVersion': '1.0.0.0',
                                'contentHash': {
                                   'algorithm': 'sha256',
-                                  'value': 'yyz7xhhshfasf',
+                                  'value': 'yyz7xhhshfasf'
                                }
                             },
                             'parameters': {
@@ -898,15 +912,15 @@ namespace ResourceGroups.Tests
                                'contentVersion': '1.0.0.0',
                                'contentHash': {
                                   'algorithm': 'sha256',
-                                  'value': 'yyz7xhhshfasf',
+                                  'value': 'yyz7xhhshfasf'
                                }
                             },
-                            'parametersLink': { /* use either one of parameters or parametersLink */
+                            'parametersLink': {
                                'uri': 'http://wa/parameters.json',
                                'contentVersion': '1.0.0.0',
                                'contentHash': {
                                   'algorithm': 'sha256',
-                                  'value': 'yyz7xhhshfasf',
+                                  'value': 'yyz7xhhshfasf'
                                }
                             },
                             'parameters': {
@@ -924,7 +938,7 @@ namespace ResourceGroups.Tests
                         }
                       }
                     ]
-                }").ToString();
+                }".Replace("'", "\"");
             mockResponse.SetContent(content);
 
             var mockTransport = new MockTransport(mockResponse);
@@ -954,7 +968,7 @@ namespace ResourceGroups.Tests
         public async Task DeploymentTestListDoesNotThrowExceptions()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse("{'value' : []}").ToString();
+            var content = JsonDocument.Parse("{\"value\" : []}").RootElement.ToString();
             mockResponse.SetContent(content);
 
             var mockTransport = new MockTransport(mockResponse);

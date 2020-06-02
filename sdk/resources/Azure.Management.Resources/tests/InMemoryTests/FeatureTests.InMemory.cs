@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using System;
 using System.Net;
 using System.Net.Http;
-using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Azure.Core.Pipeline;
 using Azure.Core.TestFramework;
 using Azure.Management.Resources;
 using Azure.Management.Resources.Tests;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 
 namespace ResourceGroups.Tests
@@ -33,7 +34,7 @@ namespace ResourceGroups.Tests
         public async Task RegisterFeature()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{
+            var content = @"{
                       'name': 'Providers.Test/DONOTDELETEBETA',
 
                       'properties': {
@@ -45,7 +46,7 @@ namespace ResourceGroups.Tests
                       'id': '/subscriptions/fda3b6ba-8803-441c-91fb-6cc798cf6ea0/providers/Microsoft.Features/providers/Providers.Test/features/DONOTDELETEBETA',
 
                       'type': 'Microsoft.Features/providers/features'
-                }").ToString();
+                }".Replace("'", "\"");
             mockResponse.SetContent(content);
 
             var mockTransport = new MockTransport(mockResponse);
@@ -86,22 +87,15 @@ namespace ResourceGroups.Tests
         public async Task GetPreviewedFeatures()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{                    
-                       
+            var content = @"{                    
                     'name': 'Providers.Test/DONOTDELETEBETA',
-
                     'properties': {
-
                     'state': 'NotRegistered'
-
                      },
-
                     'id': '/subscriptions/fda3b6ba-8803-441c-91fb-6cc798cf6ea0/providers/Microsoft.Features/providers/Providers.Test/features/DONOTDELETEBETA',
-
                     'type': 'Microsoft.Features/providers/features'  
-              
               }
-            ").ToString();
+            ".Replace("'", "\"");
 
             mockResponse.SetContent(content);
 
@@ -144,23 +138,19 @@ namespace ResourceGroups.Tests
         public async Task ListPreviewedFeatures()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{
+            string contentString = @"{
                 'value': [
                     {
                     'name': 'Providers.Test/DONOTDELETEBETA',
-
                     'properties': {
-
                     'state': 'NotRegistered'
-
                      },
-
                     'id': '/subscriptions/fda3b6ba-8803-441c-91fb-6cc798cf6ea0/providers/Microsoft.Features/providers/Providers.Test/features/DONOTDELETEBETA',
-
                     'type': 'Microsoft.Features/providers/features'   
                 }
                 ]}
-            ").ToString();
+            ";
+            var content = JsonDocument.Parse(contentString.Replace("'", "\"")).RootElement.ToString();
             mockResponse.SetContent(content);
 
             var mockTransport = new MockTransport(mockResponse);
@@ -202,23 +192,18 @@ namespace ResourceGroups.Tests
         public async Task ListAllPreviewedFeatures()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{                    
+            var content = @"{                    
             'value': [
                     {
                     'name': 'Providers.Test/DONOTDELETEBETA',
-
                     'properties': {
-
                     'state': 'NotRegistered'
-
                      },
-
                     'id': '/subscriptions/fda3b6ba-8803-441c-91fb-6cc798cf6ea0/providers/Microsoft.Features/providers/Providers.Test/features/DONOTDELETEBETA',
-
                     'type': 'Microsoft.Features/providers/features'   
                 }            
                 ]}
-            ").ToString();
+            ".Replace("'", "\"");
             mockResponse.SetContent(content);
 
             var mockTransport = new MockTransport(mockResponse);

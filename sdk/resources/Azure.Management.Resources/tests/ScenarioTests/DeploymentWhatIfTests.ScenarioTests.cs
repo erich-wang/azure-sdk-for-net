@@ -1,17 +1,18 @@
-﻿using System;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using Azure.Management.Resources.Tests;
-using Azure.Management.Resources.Models;
 using System.IO;
-using Azure.Management.Resources;
-using NUnit.Framework;
-using System.Threading.Tasks;
-using Azure.Core.TestFramework;
+using System.Linq;
 using System.Reflection;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Azure.Core;
+using Azure.Core.TestFramework;
+using Azure.Management.Resources;
+using Azure.Management.Resources.Models;
+using Azure.Management.Resources.Tests;
+using NUnit.Framework;
 
 namespace ResourceGroups.Tests
 {
@@ -70,7 +71,7 @@ namespace ResourceGroups.Tests
 
             // Act.
             var rawResult = await DeploymentsClient.StartWhatIfAsync(resourceGroupName, deploymentName, deploymentWhatIf);
-            var result = (await rawResult.WaitForCompletionAsync()).Value;
+            var result = (await WaitForCompletionAsync(rawResult)).Value;
 
             // Assert.
             Assert.AreEqual("Succeeded", result.Status);
@@ -111,7 +112,7 @@ namespace ResourceGroups.Tests
 
             // Act.
             var rawResult = await DeploymentsClient.StartWhatIfAsync(resourceGroupName, deploymentName, deploymentWhatIf);
-            var result = (await rawResult.WaitForCompletionAsync()).Value;
+            var result = (await WaitForCompletionAsync(rawResult)).Value;
 
             // Assert.
             Assert.AreEqual("Succeeded", result.Status);
@@ -161,7 +162,7 @@ namespace ResourceGroups.Tests
 
             // Act.
             var rawResult = await DeploymentsClient.StartWhatIfAsync(resourceGroupName, deploymentName, deploymentWhatIf);
-            var result = (await rawResult.WaitForCompletionAsync()).Value;
+            var result = (await WaitForCompletionAsync(rawResult)).Value;
 
             // Assert.
             Assert.AreEqual("Succeeded", result.Status);
@@ -213,11 +214,11 @@ namespace ResourceGroups.Tests
 
             var resourcegroup = (await ResourceGroupsClient.CreateOrUpdateAsync(resourceGroupName, ResourceGroup)).Value;
             var deploy = await DeploymentsClient.StartCreateOrUpdateAsync(resourceGroupName, NewDeploymentName(), deployment);
-            await deploy.WaitForCompletionAsync();
+            await WaitForCompletionAsync(deploy);
 
             // Act.
             var rawResult = await DeploymentsClient.StartWhatIfAsync(resourceGroupName, NewDeploymentName(), deploymentWhatIf);
-            var result = (await rawResult.WaitForCompletionAsync()).Value;
+            var result = (await WaitForCompletionAsync(rawResult)).Value;
 
             // Assert.
             Assert.AreEqual("Succeeded", result.Status);
@@ -277,11 +278,11 @@ namespace ResourceGroups.Tests
 
             var resourcegroup = (await ResourceGroupsClient.CreateOrUpdateAsync(resourceGroupName, ResourceGroup)).Value;
             var deploy = await DeploymentsClient.StartCreateOrUpdateAsync(resourceGroupName, NewDeploymentName(), deployment);
-            await deploy.WaitForCompletionAsync();
+            await WaitForCompletionAsync(deploy);
 
             // Act.
             var rawResult = await DeploymentsClient.StartWhatIfAsync(resourceGroupName, NewDeploymentName(), deploymentWhatIf);
-            var result = (await rawResult.WaitForCompletionAsync()).Value;
+            var result = (await WaitForCompletionAsync(rawResult)).Value;
 
             // Assert.
             Assert.AreEqual("Succeeded", result.Status);
@@ -313,7 +314,7 @@ namespace ResourceGroups.Tests
             { Location = "westus" };
             // Act.
             var rawResult = await DeploymentsClient.StartWhatIfAtSubscriptionScopeAsync(NewDeploymentName(), deploymentWhatIf);
-            var result = (await rawResult.WaitForCompletionAsync()).Value;
+            var result = (await WaitForCompletionAsync(rawResult)).Value;
 
             // Assert.
             Assert.AreEqual("Succeeded", result.Status);
@@ -341,7 +342,7 @@ namespace ResourceGroups.Tests
 
             // Act.
             var rawResult = await DeploymentsClient.StartWhatIfAtSubscriptionScopeAsync(NewDeploymentName(), deploymentWhatIf);
-            var result = (await rawResult.WaitForCompletionAsync()).Value;
+            var result = (await WaitForCompletionAsync(rawResult)).Value;
 
             // Assert.
             Assert.AreEqual("Succeeded", result.Status);
@@ -390,7 +391,7 @@ namespace ResourceGroups.Tests
 
             // Act.
             var rawResult = await DeploymentsClient.StartWhatIfAtSubscriptionScopeAsync(NewDeploymentName(), deploymentWhatIf);
-            var result = (await rawResult.WaitForCompletionAsync()).Value;
+            var result = (await WaitForCompletionAsync(rawResult)).Value;
 
             // Assert.
             Assert.AreEqual("Succeeded", result.Status);
@@ -459,11 +460,11 @@ namespace ResourceGroups.Tests
 
             var resourcegroup = (await ResourceGroupsClient.CreateOrUpdateAsync("SDK-test", ResourceGroup)).Value;
             var deploy = await DeploymentsClient.StartCreateOrUpdateAtSubscriptionScopeAsync(NewDeploymentName(), deployment);
-            await deploy.WaitForCompletionAsync();
+            await WaitForCompletionAsync(deploy);
 
             // Act.
             var rawResult = await DeploymentsClient.StartWhatIfAtSubscriptionScopeAsync(NewDeploymentName(), deploymentWhatIf);
-            var result = (await rawResult.WaitForCompletionAsync()).Value;
+            var result = (await WaitForCompletionAsync(rawResult)).Value;
 
             // Assert.
             Assert.AreEqual("Succeeded", result.Status);

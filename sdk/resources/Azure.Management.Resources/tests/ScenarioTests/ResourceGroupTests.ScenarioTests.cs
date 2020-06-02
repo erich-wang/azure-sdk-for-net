@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -77,7 +80,7 @@ namespace ResourceGroups.Tests
             var createResult = await ResourceGroupsClient.CreateOrUpdateAsync(resourceGroupName, new ResourceGroup(DefaultLocation));
             var getResult = await ResourceGroupsClient.GetAsync(resourceGroupName);
             var rawDeleteResult = await ResourceGroupsClient.StartDeleteAsync(resourceGroupName);
-            var deleteResult = (await rawDeleteResult.WaitForCompletionAsync()).Value;
+            var deleteResult = (await WaitForCompletionAsync(rawDeleteResult)).Value;
             var listResult = await ResourceGroupsClient.ListAsync(null).ToEnumerableAsync();
 
             Assert.AreEqual(200, deleteResult.Status);

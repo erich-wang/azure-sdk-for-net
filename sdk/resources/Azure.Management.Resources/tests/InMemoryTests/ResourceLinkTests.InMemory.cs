@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using System;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Azure.Core;
 using Azure.Core.Pipeline;
@@ -12,7 +14,6 @@ using Azure.Core.TestFramework;
 using Azure.Management.Resources;
 using Azure.Management.Resources.Models;
 using Azure.Management.Resources.Tests;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 
 namespace ResourceGroups.Tests
@@ -37,7 +38,7 @@ namespace ResourceGroups.Tests
         public async Task ResourceLinkCRUD()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.Created);
-            var content = JObject.Parse(@"{
+            var content = @"{
                     'id': '/subscriptions/abc123/resourcegroups/myGroup/providers/Microsoft.Web/serverFarms/myFarm/providers/Microsoft.Resources/links/myLink',
                     'name': 'myLink',
                     'properties': {
@@ -45,7 +46,7 @@ namespace ResourceGroups.Tests
                         'targetId': '/subscriptions/abc123/resourcegroups/myGroup/providers/Microsoft.Web/serverFarms/myFarm2',
                         'notes': 'myLinkNotes'
                       }
-                }").ToString();
+                }".Replace("'", "\"");
             mockResponse.SetContent(content);
 
             var mockTransport = new MockTransport(mockResponse);
@@ -72,9 +73,9 @@ namespace ResourceGroups.Tests
             await request.Content.WriteToAsync(stream, default);
             stream.Position = 0;
             var resquestContent = new StreamReader(stream).ReadToEnd();
-            var json = JObject.Parse(resquestContent);
-            Assert.AreEqual("/subscriptions/abc123/resourcegroups/myGroup/providers/Microsoft.Web/serverFarms/myFarm2", json["properties"]["targetId"].Value<string>());
-            Assert.AreEqual("myLinkNotes", json["properties"]["notes"].Value<string>());
+            var json = JsonDocument.Parse(resquestContent).RootElement;
+            Assert.AreEqual("/subscriptions/abc123/resourcegroups/myGroup/providers/Microsoft.Web/serverFarms/myFarm2", json.GetProperty("properties").GetProperty("targetId").GetString());
+            Assert.AreEqual("myLinkNotes", json.GetProperty("properties").GetProperty("notes").GetString());
 
             // Validate response
             Assert.AreEqual("/subscriptions/abc123/resourcegroups/myGroup/providers/Microsoft.Web/serverFarms/myFarm/providers/Microsoft.Resources/links/myLink", result.Id);
@@ -86,7 +87,7 @@ namespace ResourceGroups.Tests
             //Get resource link and validate properties
 
             mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            content = JObject.Parse(@"{
+            content = @"{
                     'id': '/subscriptions/abc123/resourcegroups/myGroup/providers/Microsoft.Web/serverFarms/myFarm/providers/Microsoft.Resources/links/myLink',
                     'name': 'myLink',
                     'properties': {
@@ -94,7 +95,7 @@ namespace ResourceGroups.Tests
                         'targetId': '/subscriptions/abc123/resourcegroups/myGroup/providers/Microsoft.Web/serverFarms/myFarm2',
                         'notes': 'myLinkNotes'
                       }
-                }").ToString();
+                }".Replace("'", "\"");
             mockResponse.SetContent(content);
 
             mockTransport = new MockTransport(mockResponse);
@@ -111,7 +112,7 @@ namespace ResourceGroups.Tests
 
             //Delete resource link
             mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            content = JObject.Parse("{}").ToString();
+            content = JsonDocument.Parse("{}").RootElement.ToString();
             var header = new HttpHeader("x-ms-request-id", "1");
             mockResponse.AddHeader(header);
             mockResponse.SetContent(content);
@@ -139,7 +140,7 @@ namespace ResourceGroups.Tests
         public async Task ResourceLinkList()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{
+            var content = @"{
                     'value': [
                         {
                             'id': '/subscriptions/abc123/resourcegroups/myGroup/providers/Microsoft.Web/serverFarms/myFarm/providers/Microsoft.Resources/links/myLink',
@@ -158,7 +159,7 @@ namespace ResourceGroups.Tests
                                 'targetId': '/subscriptions/abc123/resourcegroups/myGroup/providers/Microsoft.Storage/storageAccounts/myAccount2',
                                 'notes': 'myLinkNotes2'
                               }
-                         }]}").ToString();
+                         }]}".Replace("'", "\"");
             mockResponse.SetContent(content);
 
             var mockTransport = new MockTransport(mockResponse);
@@ -181,7 +182,7 @@ namespace ResourceGroups.Tests
             // Filter by targetId
 
             mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            content = JObject.Parse(@"{
+            content = @"{
                     'value': [
                         {
                             'id': '/subscriptions/abc123/resourcegroups/myGroup/providers/Microsoft.Web/serverFarms/myFarm/providers/Microsoft.Resources/links/myLink',
@@ -191,7 +192,7 @@ namespace ResourceGroups.Tests
                                 'targetId': '/subscriptions/abc123/resourcegroups/myGroup/providers/Microsoft.Web/serverFarms/myFarm2',
                                 'notes': 'myLinkNotes'
                               }
-                         }]}").ToString();
+                         }]}".Replace("'", "\"");
             mockResponse.SetContent(content);
 
             mockTransport = new MockTransport(mockResponse);
@@ -211,7 +212,7 @@ namespace ResourceGroups.Tests
         public async Task ResourceLinkListAtSourceScope()
         {
             var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-            var content = JObject.Parse(@"{
+            var content = @"{
                     'value': [
                         {
                             'id': '/subscriptions/abc123/resourcegroups/myGroup/providers/Microsoft.Web/serverFarms/myFarm/providers/Microsoft.Resources/links/myLink',
@@ -221,7 +222,7 @@ namespace ResourceGroups.Tests
                                 'targetId': '/subscriptions/abc123/resourcegroups/myGroup/providers/Microsoft.Web/serverFarms/myFarm2',
                                 'notes': 'myLinkNotes'
                               }
-                         }]}").ToString();
+                         }]}".Replace("'", "\"");
             mockResponse.SetContent(content);
 
             var mockTransport = new MockTransport(mockResponse);

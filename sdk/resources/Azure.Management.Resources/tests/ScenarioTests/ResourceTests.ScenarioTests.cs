@@ -1,16 +1,16 @@
-﻿using System;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
-using Azure.Management.Resources.Tests;
-using Azure.Management.Resources.Models;
-using System.IO;
-using Azure.Management.Resources;
-using NUnit.Framework;
-using System.Threading.Tasks;
-using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using Azure.Core.TestFramework;
+using Azure.Management.Resources;
+using Azure.Management.Resources.Models;
+using Azure.Management.Resources.Tests;
+using NUnit.Framework;
 
 namespace ResourceGroups.Tests
 {
@@ -74,7 +74,7 @@ namespace ResourceGroups.Tests
                                 }
                    }
                );
-            var createOrUpdateResult = (await rawCreateOrUpdateResult.WaitForCompletionAsync()).Value;
+            var createOrUpdateResult = (await WaitForCompletionAsync(rawCreateOrUpdateResult)).Value;
 
             Assert.True(Utilities.LocationsAreEqual(mySqlLocation, createOrUpdateResult.Location),
                 string.Format("Resource location for resource '{0}' does not match expected location '{1}'", createOrUpdateResult.Location, mySqlLocation));
@@ -112,7 +112,7 @@ namespace ResourceGroups.Tests
                 }
             );
 
-            var createOrUpdateResult = (await rawCreateOrUpdateResult.WaitForCompletionAsync()).Value;
+            var createOrUpdateResult = (await WaitForCompletionAsync(rawCreateOrUpdateResult)).Value;
 
             Assert.NotNull(createOrUpdateResult.Id);
             Assert.AreEqual(resourceName, createOrUpdateResult.Name);

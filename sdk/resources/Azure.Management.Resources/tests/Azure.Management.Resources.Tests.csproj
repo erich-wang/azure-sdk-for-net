@@ -3,15 +3,7 @@
     <NoWarn>$(NoWarn);CA1812;SA1633;SA1649</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\src\Azure.Management.Resources.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="SessionRecords\**\*.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Update="ScenarioTests\*.json">
