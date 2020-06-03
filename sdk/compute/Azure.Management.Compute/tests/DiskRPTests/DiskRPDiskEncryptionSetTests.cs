@@ -4,7 +4,6 @@
 using System.Threading.Tasks;
 using NUnit.Framework;
 
-
 namespace Azure.Management.Compute.Tests.DiskRPTests
 {
     public class DiskRPDiskEncryptionSetTests : DiskRPTestsBase

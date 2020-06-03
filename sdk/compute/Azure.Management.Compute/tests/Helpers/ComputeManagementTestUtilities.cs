@@ -9,19 +9,8 @@ namespace Azure.Management.Compute.Tests
         : base(isAsync)
         {
         }
-        public static string DefaultLocations = "SoutheastAsia";
-        //public void WaitSeconds(double seconds)
-        //{
-        //    if (Mode == RecordedTestMode.Playback)
-        //    {
-        //        System.Threading.Thread.Sleep(TimeSpan.FromSeconds(seconds));
-        //    }
-        //}
 
-        //public void WaitMinutes(double minutes)
-        //{
-        //    WaitSeconds(minutes * 60);
-        //}
+        public static string DefaultLocations = "SoutheastAsia";
 
         public string GenerateName(string prefix = null,
             [System.Runtime.CompilerServices.CallerMemberName]

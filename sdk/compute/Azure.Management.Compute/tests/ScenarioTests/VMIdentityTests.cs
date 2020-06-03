@@ -23,8 +23,6 @@ namespace Azure.Management.Compute.Tests
             {
                 InitializeBase();
             }
-            //ComputeManagementClient computeClient;
-            //ResourceManagementClient resourcesClient;
         }
         [Test]
         [Ignore("this should be tested by generate team")]

@@ -25,9 +25,8 @@ namespace Azure.Management.Compute.Tests
             {
                 InitializeBase();
             }
-            //ComputeManagementClient computeClient;
-            //ResourceManagementClient resourcesClient;
         }
+
         [Test]
         [Ignore("this should be tested by generate team")]
         //[Trait("Name", "TestCreateImage_with_DiskEncryptionSet")]
@@ -69,17 +68,13 @@ namespace Azure.Management.Compute.Tests
         private async Task CreateImageTestHelper(string originalTestLocation, string diskEncryptionSetId)
         {
             VirtualMachine inputVM = null;
-
             // Create resource group
             var rgName = Recording.GenerateAssetName(TestPrefix);
-
             var imageName = Recording.GenerateAssetName("imageTest");
-
             // Create a VM, so we can use its OS disk for creating the image
             string storageAccountName = Recording.GenerateAssetName(TestPrefix);
             string asName = Recording.GenerateAssetName("as");
             ImageReference imageRef =await GetPlatformVMImage(useWindowsImage: true);
-
             try
             {
                 // Create Storage Account
@@ -111,21 +106,17 @@ namespace Azure.Management.Compute.Tests
                         };
                         vm.StorageProfile.DataDisks.Add(dd);
                     }
-
                     var testStatus = new InstanceViewStatus
                     {
                         Code = "test",
                         Message = "test"
                     };
-
                     var testStatusList = new List<InstanceViewStatus> { testStatus };
                 };
-
                 // Create the VM, whose OS disk will be used in creating the image
                 var returnTwoVM = await CreateVM(rgName, asName, storageAccountOutput, imageRef, addDataDiskToVM);
                 var createdVM = returnTwoVM.Item1;
                 int expectedDiskLunWithDiskEncryptionSet = createdVM.StorageProfile.DataDisks[0].Lun;
-
                 // Create the Image
                 var imageInput = new Image(m_location)
                 {
@@ -156,43 +147,32 @@ namespace Azure.Management.Compute.Tests
                                 }
                             }
                     },
-
                     HyperVGeneration = HyperVGenerationTypes.V1
                 };
-
-                var image = await (await ImagesClient.StartCreateOrUpdateAsync(rgName, imageName, imageInput)).WaitForCompletionAsync();
+                var image = await WaitForCompletionAsync(await ImagesClient.StartCreateOrUpdateAsync(rgName, imageName, imageInput));
                 var getImage = (await ImagesClient.GetAsync(rgName, imageName)).Value;
-
                 ValidateImage(imageInput, getImage);
-
                 if (diskEncryptionSetId != null)
                 {
                     Assert.True(getImage.StorageProfile.OsDisk.DiskEncryptionSet != null, "OsDisk.DiskEncryptionSet is null");
                     Assert.True(string.Equals(diskEncryptionSetId, getImage.StorageProfile.OsDisk.DiskEncryptionSet.Id, StringComparison.OrdinalIgnoreCase),
                         "getImage.StorageProfile.OsDisk.DiskEncryptionSet is not matching with expected DiskEncryptionSet resource");
-
                     Assert.AreEqual(1, getImage.StorageProfile.DataDisks.Count);
                     Assert.True(getImage.StorageProfile.DataDisks[0].DiskEncryptionSet != null, ".DataDisks.DiskEncryptionSet is null");
                     Assert.True(string.Equals(diskEncryptionSetId, getImage.StorageProfile.DataDisks[0].DiskEncryptionSet.Id, StringComparison.OrdinalIgnoreCase),
                         "DataDisks.DiskEncryptionSet.Id is not matching with expected DiskEncryptionSet resource");
                 }
-
                 ImageUpdate updateParams = new ImageUpdate()
                 {
                     Tags = getImage.Tags
                 };
-
                 string tagKey = "UpdateTag";
                 updateParams.Tags.Add(tagKey, "TagValue");
-                await (await ImagesClient.StartUpdateAsync(rgName, imageName, updateParams)).WaitForCompletionAsync();
-
+                await WaitForCompletionAsync(await ImagesClient.StartUpdateAsync(rgName, imageName, updateParams));
                 getImage = (await ImagesClient.GetAsync(rgName, imageName)).Value;
                 Assert.True(getImage.Tags.ContainsKey(tagKey));
-
                 var listResponse = await (ImagesClient.ListByResourceGroupAsync(rgName)).ToEnumerableAsync();
                 Assert.IsTrue(listResponse.Count()==1);
-                //Assert.Single(listResponse);
-
                 await ImagesClient.StartDeleteAsync(rgName, image.Value.Name);
             }
             finally
@@ -200,17 +180,15 @@ namespace Azure.Management.Compute.Tests
                 Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", originalTestLocation);
                 if (inputVM != null)
                 {
-                    await (await VirtualMachinesClient.StartDeleteAsync(rgName, inputVM.Name)).WaitForCompletionAsync();
+                    await WaitForCompletionAsync(await VirtualMachinesClient.StartDeleteAsync(rgName, inputVM.Name));
                 }
-
-                await (await ResourceGroupsClient.StartDeleteAsync(rgName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
 
         public void ValidateImage(Image imageIn, Image imageOut)
         {
             Assert.True(!string.IsNullOrEmpty(imageOut.ProvisioningState));
-
             if (imageIn.Tags != null)
             {
                 foreach (KeyValuePair<string, string> kvp in imageIn.Tags)
@@ -218,20 +196,16 @@ namespace Azure.Management.Compute.Tests
                     Assert.True(imageOut.Tags[kvp.Key] == kvp.Value);
                 }
             }
-
             Assert.NotNull(imageOut.StorageProfile.OsDisk);
             if (imageIn.StorageProfile.OsDisk != null)
             {
                 Assert.True(imageOut.StorageProfile.OsDisk.BlobUri
                     == imageIn.StorageProfile.OsDisk.BlobUri);
-
                 Assert.True(imageOut.StorageProfile.OsDisk.OsState
                     == imageIn.StorageProfile.OsDisk.OsState);
-
                 Assert.True(imageOut.StorageProfile.OsDisk.OsType
                    == imageIn.StorageProfile.OsDisk.OsType);
             }
-
             if (imageIn.StorageProfile.DataDisks != null &&
                 imageIn.StorageProfile.DataDisks.Any())
             {
@@ -239,13 +213,11 @@ namespace Azure.Management.Compute.Tests
                 {
                     var dataDiskOut = imageOut.StorageProfile.DataDisks.FirstOrDefault(
                             d => int.Equals(dataDisk.Lun, d.Lun));
-
                     Assert.NotNull(dataDiskOut);
                     Assert.NotNull(dataDiskOut.BlobUri);
                     Assert.NotNull(dataDiskOut.DiskSizeGB);
                 }
             }
-
             Assert.AreEqual(imageIn.StorageProfile.ZoneResilient, imageOut.StorageProfile.ZoneResilient);
         }
     }

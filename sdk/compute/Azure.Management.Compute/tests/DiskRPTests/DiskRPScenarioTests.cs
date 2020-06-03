@@ -13,6 +13,7 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
         : base(isAsync)
         {
         }
+
         [Test]
         public async Task Disk_CRUD_EmptyDisk()
         {

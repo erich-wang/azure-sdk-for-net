@@ -83,7 +83,7 @@ namespace Azure.Management.Compute.Tests
                 // Add a new extension to the VMSS (ext3 is provisioned after ext2)
                 VirtualMachineScaleSetExtension vmssExtension = GetTestVMSSVMExtension(name: "3", publisher: "Microsoft.CPlat.Core", type: "NullLinux", version: "4.0");
                 vmssExtension.ProvisionAfterExtensions = new List<string> { vmssExtProfile.Extensions[1].Name };
-                var response = await (await VirtualMachineScaleSetExtensionsClient.StartCreateOrUpdateAsync(rgName, vmssName, vmssExtension.Name, vmssExtension)).WaitForCompletionAsync();
+                var response = await WaitForCompletionAsync(await VirtualMachineScaleSetExtensionsClient.StartCreateOrUpdateAsync(rgName, vmssName, vmssExtension.Name, vmssExtension));
                 ValidateVmssExtension(vmssExtension, response.Value);
 
                 // Perform a Get operation on the extension
@@ -92,7 +92,7 @@ namespace Azure.Management.Compute.Tests
 
                 // Clear the sequencing in ext3
                 vmssExtension.ProvisionAfterExtensions.Clear();
-                var patchVmssExtsResponse = await (await VirtualMachineScaleSetExtensionsClient.StartCreateOrUpdateAsync(rgName, vmssName, vmssExtension.Name, vmssExtension)).WaitForCompletionAsync();
+                var patchVmssExtsResponse = await WaitForCompletionAsync(await VirtualMachineScaleSetExtensionsClient.StartCreateOrUpdateAsync(rgName, vmssName, vmssExtension.Name, vmssExtension));
                 ValidateVmssExtension(vmssExtension, patchVmssExtsResponse.Value);
 
                 // Perform a List operation on vmss extensions
@@ -119,7 +119,7 @@ namespace Azure.Management.Compute.Tests
             {
                 // Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                 // of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                await (await ResourceGroupsClient.StartDeleteAsync(rgName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
 
@@ -158,16 +158,9 @@ namespace Azure.Management.Compute.Tests
 
                 VirtualMachineScaleSet vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
                 inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
-                //VirtualMachineScaleSet vmScaleSet = await CreateVMScaleSet_NoAsyncTracking(
-                //    rgName,
-                //    vmssName,
-                //    storageAccountOutput,
-                //    imageRef);
-
-                // Add an extension to the VMSS
                 VirtualMachineScaleSetExtension vmssExtension = GetTestVMSSVMExtension();
                 vmssExtension.ForceUpdateTag = "RerunExtension";
-                var response = await (await VirtualMachineScaleSetExtensionsClient.StartCreateOrUpdateAsync(rgName, vmssName, vmssExtension.Name, vmssExtension)).WaitForCompletionAsync();
+                var response = await WaitForCompletionAsync(await VirtualMachineScaleSetExtensionsClient.StartCreateOrUpdateAsync(rgName, vmssName, vmssExtension.Name, vmssExtension));
                 ValidateVmssExtension(vmssExtension, response.Value);
 
                 // Perform a Get operation on the extension
@@ -180,7 +173,7 @@ namespace Azure.Management.Compute.Tests
 
                 // Update an extension in the VMSS
                 vmssExtension.Settings = string.Empty;
-                var patchVmssExtsResponse = await (await VirtualMachineScaleSetExtensionsClient.StartCreateOrUpdateAsync(rgName, vmssName, vmssExtension.Name, vmssExtension)).WaitForCompletionAsync();
+                var patchVmssExtsResponse = await WaitForCompletionAsync(await VirtualMachineScaleSetExtensionsClient.StartCreateOrUpdateAsync(rgName, vmssName, vmssExtension.Name, vmssExtension));
                 ValidateVmssExtension(vmssExtension, patchVmssExtsResponse.Value);
 
                 // Perform a List operation on vmss extensions
@@ -189,7 +182,7 @@ namespace Azure.Management.Compute.Tests
                 ValidateVmssExtension(vmssExtension, listVmssExtsResponse.FirstOrDefault(c => c.ForceUpdateTag == "RerunExtension"));
 
                 // Validate the extension delete API
-                await (await VirtualMachineScaleSetExtensionsClient.StartDeleteAsync(rgName, vmssName, vmssExtension.Name)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachineScaleSetExtensionsClient.StartDeleteAsync(rgName, vmssName, vmssExtension.Name));
 
                 passed = true;
             }
@@ -197,7 +190,7 @@ namespace Azure.Management.Compute.Tests
             {
                 // Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                 // of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                await (await ResourceGroupsClient.StartDeleteAsync(rgName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
 
             Assert.True(passed);

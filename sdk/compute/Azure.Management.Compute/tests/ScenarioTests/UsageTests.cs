@@ -25,8 +25,6 @@ namespace Azure.Management.Compute.Tests
             {
                 InitializeBase();
             }
-            //ComputeManagementClient computeClient;
-            //ResourceManagementClient resourcesClient;
         }
         [Test]
         public async Task TestListUsages()
@@ -53,7 +51,7 @@ namespace Azure.Management.Compute.Tests
 
                 ValidateListUsageResponse(luResponse);
 
-                await (await VirtualMachinesClient.StartDeleteAsync(rgName, inputVM.Name)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachinesClient.StartDeleteAsync(rgName, inputVM.Name));
             }
             catch (Exception e)
             {
@@ -61,7 +59,7 @@ namespace Azure.Management.Compute.Tests
             }
             finally
             {
-                await (await ResourceGroupsClient.StartDeleteAsync(rgName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
 

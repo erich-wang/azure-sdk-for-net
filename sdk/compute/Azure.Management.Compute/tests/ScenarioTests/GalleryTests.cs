@@ -29,15 +29,15 @@ namespace Azure.Management.Compute.Tests
             {
                 InitializeBase();
             }
-            //ComputeManagementClient computeClient;
-            //ResourceManagementClient resourcesClient;
         }
+
         protected const string ResourceGroupPrefix = "galleryPsTestRg";
         protected const string GalleryNamePrefix = "galleryPsTestGallery";
         protected const string GalleryImageNamePrefix = "galleryPsTestGalleryImage";
         protected const string GalleryApplicationNamePrefix = "galleryPsTestGalleryApplication";
         private string galleryHomeLocation = "eastus2";
         private string sourceImageId = "";
+
         [Test]
         public async Task Gallery_CRUD_Tests()
         {
@@ -50,7 +50,7 @@ namespace Azure.Management.Compute.Tests
 
             string galleryName = Recording.GenerateAssetName(GalleryNamePrefix);
             Gallery galleryIn = GetTestInputGallery();
-            await (await GalleriesClient.StartCreateOrUpdateAsync(rgName, galleryName, galleryIn)).WaitForCompletionAsync();
+            await WaitForCompletionAsync(await GalleriesClient.StartCreateOrUpdateAsync(rgName, galleryName, galleryIn));
             Trace.TraceInformation(string.Format("Created the gallery: {0} in resource group: {1}", galleryName, rgName));
 
             Gallery galleryOut = await GalleriesClient.GetAsync(rgName, galleryName);
@@ -59,7 +59,7 @@ namespace Azure.Management.Compute.Tests
             ValidateGallery(galleryIn, galleryOut);
 
             galleryIn.Description = "This is an updated description";
-            await (await GalleriesClient.StartCreateOrUpdateAsync(rgName, galleryName, galleryIn)).WaitForCompletionAsync();
+            await WaitForCompletionAsync(await GalleriesClient.StartCreateOrUpdateAsync(rgName, galleryName, galleryIn));
             Trace.TraceInformation("Updated the gallery.");
             galleryOut = await GalleriesClient.GetAsync(rgName, galleryName);
             ValidateGallery(galleryIn, galleryOut);
@@ -69,11 +69,10 @@ namespace Azure.Management.Compute.Tests
             await ResourceGroupsClient.CreateOrUpdateAsync(rgName2, new ResourceGroup(galleryHomeLocation));
             Trace.TraceInformation("Created the resource group: " + rgName2);
             computeManagementTestUtilities.WaitSeconds(10);
-            await (await GalleriesClient.StartCreateOrUpdateAsync(rgName2, galleryName2, galleryIn)).WaitForCompletionAsync();
+            await WaitForCompletionAsync(await GalleriesClient.StartCreateOrUpdateAsync(rgName2, galleryName2, galleryIn));
             Trace.TraceInformation(string.Format("Created the gallery: {0} in resource group: {1}", galleryName2, rgName2));
             List<Gallery> listGalleriesInRgResult = await (GalleriesClient.ListByResourceGroupAsync(rgName)).ToEnumerableAsync();
             Assert.True(listGalleriesInRgResult.Count()==1);
-            //Assert.Single(listGalleriesInRgResult);
             //Assert.Null(listGalleriesInRgResult.NextPageLink);
             List<Gallery> listGalleriesInSubIdResult = await (GalleriesClient.ListAsync()).ToEnumerableAsync();
             // Below, >= instead of == is used because this subscription is shared in the group so other developers
@@ -81,8 +80,8 @@ namespace Azure.Management.Compute.Tests
             Assert.True(listGalleriesInSubIdResult.Count() >= 2);
 
             Trace.TraceInformation("Deleting 2 galleries.");
-            await (await GalleriesClient.StartDeleteAsync(rgName, galleryName)).WaitForCompletionAsync();
-            await (await GalleriesClient.StartDeleteAsync(rgName2, galleryName2)).WaitForCompletionAsync();
+            await WaitForCompletionAsync(await GalleriesClient.StartDeleteAsync(rgName, galleryName));
+            await WaitForCompletionAsync(await GalleriesClient.StartDeleteAsync(rgName2, galleryName2));
             listGalleriesInRgResult = await (GalleriesClient.ListByResourceGroupAsync(rgName)).ToEnumerableAsync();
             Assert.IsEmpty(listGalleriesInRgResult);
             // resource groups cleanup is taken cared by MockContext.Dispose() method.
@@ -98,12 +97,12 @@ namespace Azure.Management.Compute.Tests
             Trace.TraceInformation("Created the resource group: " + rgName);
             string galleryName = Recording.GenerateAssetName(GalleryNamePrefix);
             Gallery gallery = GetTestInputGallery();
-            await (await GalleriesClient.StartCreateOrUpdateAsync(rgName, galleryName, gallery)).WaitForCompletionAsync();
+            await WaitForCompletionAsync(await GalleriesClient.StartCreateOrUpdateAsync(rgName, galleryName, gallery));
             Trace.TraceInformation(string.Format("Created the gallery: {0} in resource group: {1}", galleryName, rgName));
 
             string galleryImageName = Recording.GenerateAssetName(GalleryImageNamePrefix);
             GalleryImage inputGalleryImage = GetTestInputGalleryImage();
-            await (await GalleryImagesClient.StartCreateOrUpdateAsync(rgName, galleryName, galleryImageName, inputGalleryImage)).WaitForCompletionAsync();
+            await WaitForCompletionAsync(await GalleryImagesClient.StartCreateOrUpdateAsync(rgName, galleryName, galleryImageName, inputGalleryImage));
             Trace.TraceInformation(string.Format("Created the gallery image: {0} in gallery: {1}", galleryImageName,
                 galleryName));
 
@@ -112,7 +111,7 @@ namespace Azure.Management.Compute.Tests
             ValidateGalleryImage(inputGalleryImage, galleryImageFromGet);
 
             inputGalleryImage.Description = "Updated description.";
-            await (await GalleryImagesClient.StartCreateOrUpdateAsync(rgName, galleryName, galleryImageName, inputGalleryImage)).WaitForCompletionAsync();
+            await WaitForCompletionAsync(await GalleryImagesClient.StartCreateOrUpdateAsync(rgName, galleryName, galleryImageName, inputGalleryImage));
             Trace.TraceInformation(string.Format("Updated the gallery image: {0} in gallery: {1}", galleryImageName,
                 galleryName));
             galleryImageFromGet = await GalleryImagesClient.GetAsync(rgName, galleryName, galleryImageName);
@@ -124,13 +123,13 @@ namespace Azure.Management.Compute.Tests
             //Assert.Single(listGalleryImagesResult);
             //Assert.Null(listGalleryImagesResult.NextPageLink);
 
-            await (await GalleryImagesClient.StartDeleteAsync(rgName, galleryName, galleryImageName)).WaitForCompletionAsync();
+            await WaitForCompletionAsync(await GalleryImagesClient.StartDeleteAsync(rgName, galleryName, galleryImageName));
             listGalleryImagesResult = await (GalleryImagesClient.ListByGalleryAsync(rgName, galleryName)).ToEnumerableAsync();
             Assert.IsEmpty(listGalleryImagesResult);
             Trace.TraceInformation(string.Format("Deleted the gallery image: {0} in gallery: {1}", galleryImageName,
                 galleryName));
 
-            await (await GalleriesClient.StartDeleteAsync(rgName, galleryName)).WaitForCompletionAsync();
+            await WaitForCompletionAsync(await GalleriesClient.StartDeleteAsync(rgName, galleryName));
         }
 
         [Test]
@@ -152,7 +151,7 @@ namespace Azure.Management.Compute.Tests
 
                 string galleryName = Recording.GenerateAssetName(GalleryNamePrefix);
                 Gallery gallery = GetTestInputGallery();
-                await (await GalleriesClient.StartCreateOrUpdateAsync(rgName, galleryName, gallery)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await GalleriesClient.StartCreateOrUpdateAsync(rgName, galleryName, gallery));
                 Trace.TraceInformation(string.Format("Created the gallery: {0} in resource group: {1}", galleryName,
                     rgName));
                 string galleryImageName = Recording.GenerateAssetName(GalleryImageNamePrefix);
@@ -163,8 +162,8 @@ namespace Azure.Management.Compute.Tests
 
                 string galleryImageVersionName = "1.0.0";
                 GalleryImageVersion inputImageVersion = GetTestInputGalleryImageVersion(sourceImageId);
-                await (await GalleryImageVersionsClient.StartCreateOrUpdateAsync(rgName, galleryName, galleryImageName,
-                    galleryImageVersionName, inputImageVersion)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await GalleryImageVersionsClient.StartCreateOrUpdateAsync(rgName, galleryName, galleryImageName,
+                    galleryImageVersionName, inputImageVersion));
                 Trace.TraceInformation(string.Format("Created the gallery image version: {0} in gallery image: {1}",
                     galleryImageVersionName, galleryImageName));
 
@@ -183,8 +182,8 @@ namespace Azure.Management.Compute.Tests
                 Assert.NotNull(imageVersionFromGet.ReplicationStatus.Summary);
 
                 inputImageVersion.PublishingProfile.EndOfLifeDate = DateTime.Now.AddDays(100).Date;
-                await (await GalleryImageVersionsClient.StartCreateOrUpdateAsync(rgName, galleryName, galleryImageName,
-                    galleryImageVersionName, inputImageVersion)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await GalleryImageVersionsClient.StartCreateOrUpdateAsync(rgName, galleryName, galleryImageName,
+                    galleryImageVersionName, inputImageVersion));
                 Trace.TraceInformation(string.Format("Updated the gallery image version: {0} in gallery image: {1}",
                     galleryImageVersionName, galleryImageName));
                 imageVersionFromGet = await GalleryImageVersionsClient.GetAsync(rgName, galleryName,
@@ -199,7 +198,7 @@ namespace Azure.Management.Compute.Tests
                 //Assert.Single(listGalleryImageVersionsResult);
                 //Assert.Null(listGalleryImageVersionsResult.NextPageLink);
 
-                await (await GalleryImageVersionsClient.StartDeleteAsync(rgName, galleryName, galleryImageName, galleryImageVersionName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await GalleryImageVersionsClient.StartDeleteAsync(rgName, galleryName, galleryImageName, galleryImageVersionName));
                 listGalleryImageVersionsResult = await (GalleryImageVersionsClient.
                     ListByGalleryImageAsync(rgName, galleryName, galleryImageName)).ToEnumerableAsync();
                 //Assert.Null(listGalleryImageVersionsResult.NextPageLink);
@@ -207,13 +206,13 @@ namespace Azure.Management.Compute.Tests
                     galleryImageVersionName, galleryImageName));
 
                 computeManagementTestUtilities.WaitMinutes(5);
-                await (await ImagesClient.StartDeleteAsync(rgName, imageName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ImagesClient.StartDeleteAsync(rgName, imageName));
                 Trace.TraceInformation("Deleted the CRP image.");
-                await (await VirtualMachinesClient.StartDeleteAsync(rgName, vm.Name)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachinesClient.StartDeleteAsync(rgName, vm.Name));
                 Trace.TraceInformation("Deleted the virtual machine.");
-                await (await GalleryImagesClient.StartDeleteAsync(rgName, galleryName, galleryImageName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await GalleryImagesClient.StartDeleteAsync(rgName, galleryName, galleryImageName));
                 Trace.TraceInformation("Deleted the gallery image.");
-                await (await GalleriesClient.StartDeleteAsync(rgName, galleryName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await GalleriesClient.StartDeleteAsync(rgName, galleryName));
                 Trace.TraceInformation("Deleted the gallery.");
             }
             finally
@@ -221,9 +220,9 @@ namespace Azure.Management.Compute.Tests
                 Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", originalTestLocation);
                 if (vm != null)
                 {
-                    await (await VirtualMachinesClient.StartDeleteAsync(rgName, vm.Name)).WaitForCompletionAsync();
+                    await WaitForCompletionAsync(await VirtualMachinesClient.StartDeleteAsync(rgName, vm.Name));
                 }
-                await (await ImagesClient.StartDeleteAsync(rgName, imageName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ImagesClient.StartDeleteAsync(rgName, imageName));
             }
         }
 
@@ -239,12 +238,12 @@ namespace Azure.Management.Compute.Tests
             string galleryName = Recording.GenerateAssetName(GalleryNamePrefix);
             Gallery gallery = GetTestInputGallery();
             gallery.Location = location;
-            await (await GalleriesClient.StartCreateOrUpdateAsync(rgName, galleryName, gallery)).WaitForCompletionAsync();
+            await WaitForCompletionAsync(await GalleriesClient.StartCreateOrUpdateAsync(rgName, galleryName, gallery));
             Trace.TraceInformation(string.Format("Created the gallery: {0} in resource group: {1}", galleryName, rgName));
 
             string galleryApplicationName = Recording.GenerateAssetName(GalleryApplicationNamePrefix);
             GalleryApplication inputGalleryApplication = GetTestInputGalleryApplication();
-            await (await GalleryApplicationsClient.StartCreateOrUpdateAsync(rgName, galleryName, galleryApplicationName, inputGalleryApplication)).WaitForCompletionAsync();
+            await WaitForCompletionAsync(await GalleryApplicationsClient.StartCreateOrUpdateAsync(rgName, galleryName, galleryApplicationName, inputGalleryApplication));
             Trace.TraceInformation(string.Format("Created the gallery application: {0} in gallery: {1}", galleryApplicationName,
                 galleryName));
 
@@ -253,19 +252,19 @@ namespace Azure.Management.Compute.Tests
             ValidateGalleryApplication(inputGalleryApplication, galleryApplicationFromGet);
 
             inputGalleryApplication.Description = "Updated description.";
-            await (await GalleryApplicationsClient.StartCreateOrUpdateAsync(rgName, galleryName, galleryApplicationName, inputGalleryApplication)).WaitForCompletionAsync();
+            await WaitForCompletionAsync(await GalleryApplicationsClient.StartCreateOrUpdateAsync(rgName, galleryName, galleryApplicationName, inputGalleryApplication));
             Trace.TraceInformation(string.Format("Updated the gallery application: {0} in gallery: {1}", galleryApplicationName,
                 galleryName));
             galleryApplicationFromGet = await GalleryApplicationsClient.GetAsync(rgName, galleryName, galleryApplicationName);
             Assert.NotNull(galleryApplicationFromGet);
             ValidateGalleryApplication(inputGalleryApplication, galleryApplicationFromGet);
 
-            await (await GalleryApplicationsClient.StartDeleteAsync(rgName, galleryName, galleryApplicationName)).WaitForCompletionAsync();
+            await WaitForCompletionAsync(await GalleryApplicationsClient.StartDeleteAsync(rgName, galleryName, galleryApplicationName));
 
             Trace.TraceInformation(string.Format("Deleted the gallery application: {0} in gallery: {1}", galleryApplicationName,
                 galleryName));
 
-            await (await GalleriesClient.StartDeleteAsync(rgName, galleryName)).WaitForCompletionAsync();
+            await WaitForCompletionAsync(await GalleriesClient.StartDeleteAsync(rgName, galleryName));
         }
 
         [Test]
@@ -290,18 +289,18 @@ namespace Azure.Management.Compute.Tests
 
                 Gallery gallery = GetTestInputGallery();
                 gallery.Location = location;
-                await (await GalleriesClient.StartCreateOrUpdateAsync(rgName, galleryName, gallery)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await GalleriesClient.StartCreateOrUpdateAsync(rgName, galleryName, gallery));
                 Trace.TraceInformation(string.Format("Created the gallery: {0} in resource group: {1}", galleryName,
                     rgName));
                 GalleryApplication inputGalleryApplication = GetTestInputGalleryApplication();
-                await (await GalleryApplicationsClient.StartCreateOrUpdateAsync(rgName, galleryName, galleryApplicationName, inputGalleryApplication)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await GalleryApplicationsClient.StartCreateOrUpdateAsync(rgName, galleryName, galleryApplicationName, inputGalleryApplication));
                 Trace.TraceInformation(string.Format("Created the gallery application: {0} in gallery: {1}", galleryApplicationName,
                     galleryName));
 
                 string galleryApplicationVersionName = "1.0.0";
                 GalleryApplicationVersion inputApplicationVersion = GetTestInputGalleryApplicationVersion(applicationMediaLink);
-                await (await GalleryApplicationVersionsClient.StartCreateOrUpdateAsync(rgName, galleryName, galleryApplicationName,
-                    galleryApplicationVersionName, inputApplicationVersion)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await GalleryApplicationVersionsClient.StartCreateOrUpdateAsync(rgName, galleryName, galleryApplicationName,
+                    galleryApplicationVersionName, inputApplicationVersion));
                 Trace.TraceInformation(string.Format("Created the gallery application version: {0} in gallery application: {1}",
                     galleryApplicationVersionName, galleryApplicationName));
 
@@ -320,8 +319,8 @@ namespace Azure.Management.Compute.Tests
                 Assert.NotNull(applicationVersionFromGet.ReplicationStatus.Summary);
 
                 inputApplicationVersion.PublishingProfile.EndOfLifeDate = DateTime.Now.AddDays(100).Date;
-                await (await GalleryApplicationVersionsClient.StartCreateOrUpdateAsync(rgName, galleryName, galleryApplicationName,
-                    galleryApplicationVersionName, inputApplicationVersion)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await GalleryApplicationVersionsClient.StartCreateOrUpdateAsync(rgName, galleryName, galleryApplicationName,
+                    galleryApplicationVersionName, inputApplicationVersion));
                 Trace.TraceInformation(string.Format("Updated the gallery application version: {0} in gallery application: {1}",
                     galleryApplicationVersionName, galleryApplicationName));
                 applicationVersionFromGet = await GalleryApplicationVersionsClient.GetAsync(rgName, galleryName,
@@ -329,13 +328,13 @@ namespace Azure.Management.Compute.Tests
                 Assert.NotNull(applicationVersionFromGet);
                 ValidateGalleryApplicationVersion(inputApplicationVersion, applicationVersionFromGet);
 
-                await (await GalleryApplicationVersionsClient.StartDeleteAsync(rgName, galleryName, galleryApplicationName, galleryApplicationVersionName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await GalleryApplicationVersionsClient.StartDeleteAsync(rgName, galleryName, galleryApplicationName, galleryApplicationVersionName));
                 Trace.TraceInformation(string.Format("Deleted the gallery application version: {0} in gallery application: {1}",
                     galleryApplicationVersionName, galleryApplicationName));
 
-                await (await GalleryApplicationsClient.StartDeleteAsync(rgName, galleryName, galleryApplicationName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await GalleryApplicationsClient.StartDeleteAsync(rgName, galleryName, galleryApplicationName));
                 Trace.TraceInformation("Deleted the gallery application.");
-                await (await GalleriesClient.StartDeleteAsync(rgName, galleryName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await GalleriesClient.StartDeleteAsync(rgName, galleryName));
                 Trace.TraceInformation("Deleted the gallery.");
             }
             finally
@@ -491,7 +490,7 @@ namespace Azure.Management.Compute.Tests
                 },
                 HyperVGeneration = HyperVGenerationTypes.V1
             };
-            await (await ImagesClient.StartCreateOrUpdateAsync(rgName, imageName, imageInput)).WaitForCompletionAsync();
+            await WaitForCompletionAsync(await ImagesClient.StartCreateOrUpdateAsync(rgName, imageName, imageInput));
             Image getImage = await ImagesClient.GetAsync(rgName, imageName);
             sourceImageId = getImage.Id;
             return createdVM;

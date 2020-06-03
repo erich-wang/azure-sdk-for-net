@@ -57,8 +57,6 @@ namespace Azure.Management.Compute.Tests
             {
                 InitializeBase();
             }
-            //ComputeManagementClient computeClient;
-            //ResourceManagementClient resourcesClient;
         }
         private void EnableWinRMCustomDataAndUnattendContent(string rgName, string keyVaultName, string winRMCertificateUrl, string autoLogonContent, VirtualMachine inputVM)
         {
@@ -278,14 +276,14 @@ namespace Azure.Management.Compute.Tests
                 var getVMWithInstanceViewResponse = await VirtualMachinesClient.GetAsync(rgName, inputVM.Name);
                 ValidateVMInstanceView(inputVM, getVMWithInstanceViewResponse);
 
-                var lroResponse = await (await VirtualMachinesClient.StartCreateOrUpdateAsync(rgName, vm.Name, vm)).WaitForCompletionAsync();
+                var lroResponse = await WaitForCompletionAsync(await VirtualMachinesClient.StartCreateOrUpdateAsync(rgName, vm.Name, vm));
                 Assert.True(lroResponse.Value.ProvisioningState == "Succeeded");
                 if (vmValidator != null)
                 {
                     vmValidator(vm);
                 }
 
-                await (await VirtualMachinesClient.StartDeleteAsync(rgName, vm.Name)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachinesClient.StartDeleteAsync(rgName, vm.Name));
             }
             finally
             {

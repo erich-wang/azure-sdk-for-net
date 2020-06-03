@@ -35,7 +35,6 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
                 //put disk
                 await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk);
                 Disk diskOut = await DisksClient.GetAsync(rgName, diskName);
-
                 Validate(disk, diskOut, disk.Location);
                 Assert.AreEqual(disk.CreationData.CreateOption, diskOut.CreationData.CreateOption);
                 await DisksClient.StartDeleteAsync(rgName, diskName);
@@ -54,7 +53,6 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
         public async Task DiskFromGalleryImageVersion()
         {
             EnsureClientsInitialized();
-
             var rgName = Recording.GenerateAssetName(TestPrefix);
             var diskName = Recording.GenerateAssetName(DiskNamePrefix);
             Disk disk = GenerateBaseDisk(DiskCreateOption.FromImage.ToString());
@@ -64,16 +62,16 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
             {
                 await ResourceGroupsClient.CreateOrUpdateAsync(rgName, new ResourceGroup(DiskRPLocation));
                 //put disk
-                await (await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk));
                 Disk diskOut = await DisksClient.GetAsync(rgName, diskName);
 
                 Validate(disk, diskOut, disk.Location);
                 Assert.AreEqual(disk.CreationData.CreateOption, diskOut.CreationData.CreateOption);
-                await (await DisksClient.StartDeleteAsync(rgName, diskName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await DisksClient.StartDeleteAsync(rgName, diskName));
             }
             finally
             {
-               await (await ResourceGroupsClient.StartDeleteAsync(rgName)).WaitForCompletionAsync();
+               await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
     }

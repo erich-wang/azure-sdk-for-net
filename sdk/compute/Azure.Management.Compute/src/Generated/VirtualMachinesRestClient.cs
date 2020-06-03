@@ -63,7 +63,7 @@ namespace Azure.Management.Compute
         /// <summary> Gets all the virtual machines under the specified subscription for the specified location. </summary>
         /// <param name="location"> The location for which virtual machines under the subscription are queried. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async ValueTask<Response<VirtualMachineListResult>> ListByLocationAsync(string location, CancellationToken cancellationToken = default)
+        public async Task<Response<VirtualMachineListResult>> ListByLocationAsync(string location, CancellationToken cancellationToken = default)
         {
             if (location == null)
             {
@@ -154,7 +154,7 @@ namespace Azure.Management.Compute
         /// <param name="vmName"> The name of the virtual machine. </param>
         /// <param name="parameters"> Parameters supplied to the Capture Virtual Machine operation. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async ValueTask<Response> CaptureAsync(string resourceGroupName, string vmName, VirtualMachineCaptureParameters parameters, CancellationToken cancellationToken = default)
+        public async Task<Response> CaptureAsync(string resourceGroupName, string vmName, VirtualMachineCaptureParameters parameters, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -173,8 +173,8 @@ namespace Azure.Management.Compute
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
-                case 202:
                 case 200:
+                case 202:
                     return message.Response;
                 default:
                     throw await _clientDiagnostics.CreateRequestFailedExceptionAsync(message.Response).ConfigureAwait(false);
@@ -205,8 +205,8 @@ namespace Azure.Management.Compute
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
-                case 202:
                 case 200:
+                case 202:
                     return message.Response;
                 default:
                     throw _clientDiagnostics.CreateRequestFailedException(message.Response);
@@ -240,7 +240,7 @@ namespace Azure.Management.Compute
         /// <param name="vmName"> The name of the virtual machine. </param>
         /// <param name="parameters"> Parameters supplied to the Create Virtual Machine operation. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async ValueTask<Response> CreateOrUpdateAsync(string resourceGroupName, string vmName, VirtualMachine parameters, CancellationToken cancellationToken = default)
+        public async Task<Response> CreateOrUpdateAsync(string resourceGroupName, string vmName, VirtualMachine parameters, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -259,8 +259,8 @@ namespace Azure.Management.Compute
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
-                case 201:
                 case 200:
+                case 201:
                     return message.Response;
                 default:
                     throw await _clientDiagnostics.CreateRequestFailedExceptionAsync(message.Response).ConfigureAwait(false);
@@ -291,8 +291,8 @@ namespace Azure.Management.Compute
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
-                case 201:
                 case 200:
+                case 201:
                     return message.Response;
                 default:
                     throw _clientDiagnostics.CreateRequestFailedException(message.Response);
@@ -326,7 +326,7 @@ namespace Azure.Management.Compute
         /// <param name="vmName"> The name of the virtual machine. </param>
         /// <param name="parameters"> Parameters supplied to the Update Virtual Machine operation. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async ValueTask<Response> UpdateAsync(string resourceGroupName, string vmName, VirtualMachineUpdate parameters, CancellationToken cancellationToken = default)
+        public async Task<Response> UpdateAsync(string resourceGroupName, string vmName, VirtualMachineUpdate parameters, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -345,8 +345,8 @@ namespace Azure.Management.Compute
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
-                case 201:
                 case 200:
+                case 201:
                     return message.Response;
                 default:
                     throw await _clientDiagnostics.CreateRequestFailedExceptionAsync(message.Response).ConfigureAwait(false);
@@ -377,8 +377,8 @@ namespace Azure.Management.Compute
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
-                case 201:
                 case 200:
+                case 201:
                     return message.Response;
                 default:
                     throw _clientDiagnostics.CreateRequestFailedException(message.Response);
@@ -407,7 +407,7 @@ namespace Azure.Management.Compute
         /// <param name="resourceGroupName"> The name of the resource group. </param>
         /// <param name="vmName"> The name of the virtual machine. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async ValueTask<Response> DeleteAsync(string resourceGroupName, string vmName, CancellationToken cancellationToken = default)
+        public async Task<Response> DeleteAsync(string resourceGroupName, string vmName, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -422,8 +422,8 @@ namespace Azure.Management.Compute
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
-                case 202:
                 case 200:
+                case 202:
                 case 204:
                     return message.Response;
                 default:
@@ -450,8 +450,8 @@ namespace Azure.Management.Compute
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
-                case 202:
                 case 200:
+                case 202:
                 case 204:
                     return message.Response;
                 default:
@@ -482,7 +482,7 @@ namespace Azure.Management.Compute
         /// <param name="resourceGroupName"> The name of the resource group. </param>
         /// <param name="vmName"> The name of the virtual machine. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async ValueTask<Response<VirtualMachine>> GetAsync(string resourceGroupName, string vmName, CancellationToken cancellationToken = default)
+        public async Task<Response<VirtualMachine>> GetAsync(string resourceGroupName, string vmName, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -577,7 +577,7 @@ namespace Azure.Management.Compute
         /// <param name="resourceGroupName"> The name of the resource group. </param>
         /// <param name="vmName"> The name of the virtual machine. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async ValueTask<Response<VirtualMachineInstanceView>> InstanceViewAsync(string resourceGroupName, string vmName, CancellationToken cancellationToken = default)
+        public async Task<Response<VirtualMachineInstanceView>> InstanceViewAsync(string resourceGroupName, string vmName, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -672,7 +672,7 @@ namespace Azure.Management.Compute
         /// <param name="resourceGroupName"> The name of the resource group. </param>
         /// <param name="vmName"> The name of the virtual machine. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async ValueTask<Response> ConvertToManagedDisksAsync(string resourceGroupName, string vmName, CancellationToken cancellationToken = default)
+        public async Task<Response> ConvertToManagedDisksAsync(string resourceGroupName, string vmName, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -687,8 +687,8 @@ namespace Azure.Management.Compute
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
-                case 202:
                 case 200:
+                case 202:
                     return message.Response;
                 default:
                     throw await _clientDiagnostics.CreateRequestFailedExceptionAsync(message.Response).ConfigureAwait(false);
@@ -714,8 +714,8 @@ namespace Azure.Management.Compute
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
-                case 202:
                 case 200:
+                case 202:
                     return message.Response;
                 default:
                     throw _clientDiagnostics.CreateRequestFailedException(message.Response);
@@ -745,7 +745,7 @@ namespace Azure.Management.Compute
         /// <param name="resourceGroupName"> The name of the resource group. </param>
         /// <param name="vmName"> The name of the virtual machine. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async ValueTask<Response> DeallocateAsync(string resourceGroupName, string vmName, CancellationToken cancellationToken = default)
+        public async Task<Response> DeallocateAsync(string resourceGroupName, string vmName, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -760,8 +760,8 @@ namespace Azure.Management.Compute
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
-                case 202:
                 case 200:
+                case 202:
                     return message.Response;
                 default:
                     throw await _clientDiagnostics.CreateRequestFailedExceptionAsync(message.Response).ConfigureAwait(false);
@@ -787,8 +787,8 @@ namespace Azure.Management.Compute
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
-                case 202:
                 case 200:
+                case 202:
                     return message.Response;
                 default:
                     throw _clientDiagnostics.CreateRequestFailedException(message.Response);
@@ -818,7 +818,7 @@ namespace Azure.Management.Compute
         /// <param name="resourceGroupName"> The name of the resource group. </param>
         /// <param name="vmName"> The name of the virtual machine. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async ValueTask<Response> GeneralizeAsync(string resourceGroupName, string vmName, CancellationToken cancellationToken = default)
+        public async Task<Response> GeneralizeAsync(string resourceGroupName, string vmName, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -886,7 +886,7 @@ namespace Azure.Management.Compute
         /// <summary> Lists all of the virtual machines in the specified resource group. Use the nextLink property in the response to get the next page of virtual machines. </summary>
         /// <param name="resourceGroupName"> The name of the resource group. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async ValueTask<Response<VirtualMachineListResult>> ListAsync(string resourceGroupName, CancellationToken cancellationToken = default)
+        public async Task<Response<VirtualMachineListResult>> ListAsync(string resourceGroupName, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -971,7 +971,7 @@ namespace Azure.Management.Compute
         /// <summary> Lists all of the virtual machines in the specified subscription. Use the nextLink property in the response to get the next page of virtual machines. </summary>
         /// <param name="statusOnly"> statusOnly=true enables fetching run time status of all Virtual Machines in the subscription. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async ValueTask<Response<VirtualMachineListResult>> ListAllAsync(string statusOnly = null, CancellationToken cancellationToken = default)
+        public async Task<Response<VirtualMachineListResult>> ListAllAsync(string statusOnly = null, CancellationToken cancellationToken = default)
         {
             using var message = CreateListAllRequest(statusOnly);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
@@ -1047,7 +1047,7 @@ namespace Azure.Management.Compute
         /// <param name="resourceGroupName"> The name of the resource group. </param>
         /// <param name="vmName"> The name of the virtual machine. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async ValueTask<Response<VirtualMachineSizeListResult>> ListAvailableSizesAsync(string resourceGroupName, string vmName, CancellationToken cancellationToken = default)
+        public async Task<Response<VirtualMachineSizeListResult>> ListAvailableSizesAsync(string resourceGroupName, string vmName, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -1147,7 +1147,7 @@ namespace Azure.Management.Compute
         /// <param name="vmName"> The name of the virtual machine. </param>
         /// <param name="skipShutdown"> The parameter to request non-graceful VM shutdown. True value for this flag indicates non-graceful shutdown whereas false indicates otherwise. Default value for this flag is false if not specified. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async ValueTask<Response> PowerOffAsync(string resourceGroupName, string vmName, bool? skipShutdown = null, CancellationToken cancellationToken = default)
+        public async Task<Response> PowerOffAsync(string resourceGroupName, string vmName, bool? skipShutdown = null, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -1162,8 +1162,8 @@ namespace Azure.Management.Compute
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
-                case 202:
                 case 200:
+                case 202:
                     return message.Response;
                 default:
                     throw await _clientDiagnostics.CreateRequestFailedExceptionAsync(message.Response).ConfigureAwait(false);
@@ -1190,8 +1190,8 @@ namespace Azure.Management.Compute
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
-                case 202:
                 case 200:
+                case 202:
                     return message.Response;
                 default:
                     throw _clientDiagnostics.CreateRequestFailedException(message.Response);
@@ -1221,7 +1221,7 @@ namespace Azure.Management.Compute
         /// <param name="resourceGroupName"> The name of the resource group. </param>
         /// <param name="vmName"> The name of the virtual machine. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async ValueTask<Response> ReapplyAsync(string resourceGroupName, string vmName, CancellationToken cancellationToken = default)
+        public async Task<Response> ReapplyAsync(string resourceGroupName, string vmName, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -1236,8 +1236,8 @@ namespace Azure.Management.Compute
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
-                case 202:
                 case 200:
+                case 202:
                     return message.Response;
                 default:
                     throw await _clientDiagnostics.CreateRequestFailedExceptionAsync(message.Response).ConfigureAwait(false);
@@ -1263,8 +1263,8 @@ namespace Azure.Management.Compute
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
-                case 202:
                 case 200:
+                case 202:
                     return message.Response;
                 default:
                     throw _clientDiagnostics.CreateRequestFailedException(message.Response);
@@ -1294,7 +1294,7 @@ namespace Azure.Management.Compute
         /// <param name="resourceGroupName"> The name of the resource group. </param>
         /// <param name="vmName"> The name of the virtual machine. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async ValueTask<Response> RestartAsync(string resourceGroupName, string vmName, CancellationToken cancellationToken = default)
+        public async Task<Response> RestartAsync(string resourceGroupName, string vmName, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -1309,8 +1309,8 @@ namespace Azure.Management.Compute
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
-                case 202:
                 case 200:
+                case 202:
                     return message.Response;
                 default:
                     throw await _clientDiagnostics.CreateRequestFailedExceptionAsync(message.Response).ConfigureAwait(false);
@@ -1336,8 +1336,8 @@ namespace Azure.Management.Compute
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
-                case 202:
                 case 200:
+                case 202:
                     return message.Response;
                 default:
                     throw _clientDiagnostics.CreateRequestFailedException(message.Response);
@@ -1367,7 +1367,7 @@ namespace Azure.Management.Compute
         /// <param name="resourceGroupName"> The name of the resource group. </param>
         /// <param name="vmName"> The name of the virtual machine. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async ValueTask<Response> StartAsync(string resourceGroupName, string vmName, CancellationToken cancellationToken = default)
+        public async Task<Response> StartAsync(string resourceGroupName, string vmName, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -1382,8 +1382,8 @@ namespace Azure.Management.Compute
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
-                case 202:
                 case 200:
+                case 202:
                     return message.Response;
                 default:
                     throw await _clientDiagnostics.CreateRequestFailedExceptionAsync(message.Response).ConfigureAwait(false);
@@ -1409,8 +1409,8 @@ namespace Azure.Management.Compute
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
-                case 202:
                 case 200:
+                case 202:
                     return message.Response;
                 default:
                     throw _clientDiagnostics.CreateRequestFailedException(message.Response);
@@ -1440,7 +1440,7 @@ namespace Azure.Management.Compute
         /// <param name="resourceGroupName"> The name of the resource group. </param>
         /// <param name="vmName"> The name of the virtual machine. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async ValueTask<Response> RedeployAsync(string resourceGroupName, string vmName, CancellationToken cancellationToken = default)
+        public async Task<Response> RedeployAsync(string resourceGroupName, string vmName, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -1455,8 +1455,8 @@ namespace Azure.Management.Compute
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
-                case 202:
                 case 200:
+                case 202:
                     return message.Response;
                 default:
                     throw await _clientDiagnostics.CreateRequestFailedExceptionAsync(message.Response).ConfigureAwait(false);
@@ -1482,8 +1482,8 @@ namespace Azure.Management.Compute
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
-                case 202:
                 case 200:
+                case 202:
                     return message.Response;
                 default:
                     throw _clientDiagnostics.CreateRequestFailedException(message.Response);
@@ -1521,7 +1521,7 @@ namespace Azure.Management.Compute
         /// <param name="vmName"> The name of the virtual machine. </param>
         /// <param name="parameters"> Parameters supplied to the Reimage Virtual Machine operation. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async ValueTask<Response> ReimageAsync(string resourceGroupName, string vmName, VirtualMachineReimageParameters parameters = null, CancellationToken cancellationToken = default)
+        public async Task<Response> ReimageAsync(string resourceGroupName, string vmName, VirtualMachineReimageParameters parameters = null, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -1536,8 +1536,8 @@ namespace Azure.Management.Compute
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
-                case 202:
                 case 200:
+                case 202:
                     return message.Response;
                 default:
                     throw await _clientDiagnostics.CreateRequestFailedExceptionAsync(message.Response).ConfigureAwait(false);
@@ -1564,8 +1564,8 @@ namespace Azure.Management.Compute
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
-                case 202:
                 case 200:
+                case 202:
                     return message.Response;
                 default:
                     throw _clientDiagnostics.CreateRequestFailedException(message.Response);
@@ -1595,7 +1595,7 @@ namespace Azure.Management.Compute
         /// <param name="resourceGroupName"> The name of the resource group. </param>
         /// <param name="vmName"> The name of the virtual machine. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async ValueTask<Response> PerformMaintenanceAsync(string resourceGroupName, string vmName, CancellationToken cancellationToken = default)
+        public async Task<Response> PerformMaintenanceAsync(string resourceGroupName, string vmName, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -1610,8 +1610,8 @@ namespace Azure.Management.Compute
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
-                case 202:
                 case 200:
+                case 202:
                     return message.Response;
                 default:
                     throw await _clientDiagnostics.CreateRequestFailedExceptionAsync(message.Response).ConfigureAwait(false);
@@ -1637,8 +1637,8 @@ namespace Azure.Management.Compute
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
-                case 202:
                 case 200:
+                case 202:
                     return message.Response;
                 default:
                     throw _clientDiagnostics.CreateRequestFailedException(message.Response);
@@ -1668,7 +1668,7 @@ namespace Azure.Management.Compute
         /// <param name="resourceGroupName"> The name of the resource group. </param>
         /// <param name="vmName"> The name of the virtual machine. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async ValueTask<Response> SimulateEvictionAsync(string resourceGroupName, string vmName, CancellationToken cancellationToken = default)
+        public async Task<Response> SimulateEvictionAsync(string resourceGroupName, string vmName, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -1744,7 +1744,7 @@ namespace Azure.Management.Compute
         /// <param name="vmName"> The name of the virtual machine. </param>
         /// <param name="parameters"> Parameters supplied to the Run command operation. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async ValueTask<Response> RunCommandAsync(string resourceGroupName, string vmName, RunCommandInput parameters, CancellationToken cancellationToken = default)
+        public async Task<Response> RunCommandAsync(string resourceGroupName, string vmName, RunCommandInput parameters, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -1763,8 +1763,8 @@ namespace Azure.Management.Compute
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
             switch (message.Response.Status)
             {
-                case 202:
                 case 200:
+                case 202:
                     return message.Response;
                 default:
                     throw await _clientDiagnostics.CreateRequestFailedExceptionAsync(message.Response).ConfigureAwait(false);
@@ -1795,8 +1795,8 @@ namespace Azure.Management.Compute
             _pipeline.Send(message, cancellationToken);
             switch (message.Response.Status)
             {
-                case 202:
                 case 200:
+                case 202:
                     return message.Response;
                 default:
                     throw _clientDiagnostics.CreateRequestFailedException(message.Response);
@@ -1819,7 +1819,7 @@ namespace Azure.Management.Compute
         /// <param name="nextLink"> The URL to the next page of results. </param>
         /// <param name="location"> The location for which virtual machines under the subscription are queried. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async ValueTask<Response<VirtualMachineListResult>> ListByLocationNextPageAsync(string nextLink, string location, CancellationToken cancellationToken = default)
+        public async Task<Response<VirtualMachineListResult>> ListByLocationNextPageAsync(string nextLink, string location, CancellationToken cancellationToken = default)
         {
             if (nextLink == null)
             {
@@ -1907,7 +1907,7 @@ namespace Azure.Management.Compute
         /// <param name="nextLink"> The URL to the next page of results. </param>
         /// <param name="resourceGroupName"> The name of the resource group. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async ValueTask<Response<VirtualMachineListResult>> ListNextPageAsync(string nextLink, string resourceGroupName, CancellationToken cancellationToken = default)
+        public async Task<Response<VirtualMachineListResult>> ListNextPageAsync(string nextLink, string resourceGroupName, CancellationToken cancellationToken = default)
         {
             if (nextLink == null)
             {
@@ -1995,7 +1995,7 @@ namespace Azure.Management.Compute
         /// <param name="nextLink"> The URL to the next page of results. </param>
         /// <param name="statusOnly"> statusOnly=true enables fetching run time status of all Virtual Machines in the subscription. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async ValueTask<Response<VirtualMachineListResult>> ListAllNextPageAsync(string nextLink, string statusOnly = null, CancellationToken cancellationToken = default)
+        public async Task<Response<VirtualMachineListResult>> ListAllNextPageAsync(string nextLink, string statusOnly = null, CancellationToken cancellationToken = default)
         {
             if (nextLink == null)
             {

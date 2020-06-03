@@ -27,17 +27,15 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
             Disk disk = await GenerateDefaultDisk(DiskCreateOption.Empty.ToString(), rgName, 10);
             disk.HyperVGeneration = HyperVGeneration.V1;
             disk.Location = DiskRPLocation;
-
             try
             {
                 await ResourceGroupsClient.CreateOrUpdateAsync(rgName, new ResourceGroup(DiskRPLocation));
                 //put disk
-                await (await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk));
                 Disk diskOut = await DisksClient.GetAsync(rgName, diskName);
-
                 Validate(disk, diskOut, disk.Location);
                 Assert.AreEqual(disk.HyperVGeneration, diskOut.HyperVGeneration);
-                await (await DisksClient.StartDeleteAsync(rgName, diskName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await DisksClient.StartDeleteAsync(rgName, diskName));
             }
             finally
             {
@@ -77,12 +75,10 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
         public async Task DiskHyperVGenerationOmittedTest()
         {
             EnsureClientsInitialized();
-
             var rgName = Recording.GenerateAssetName(TestPrefix);
             var diskName = Recording.GenerateAssetName(DiskNamePrefix);
             Disk disk = await GenerateDefaultDisk(DiskCreateOption.Empty.ToString(), rgName, 10);
             disk.Location = DiskRPLocation;
-
             try
             {
                 await ResourceGroupsClient.CreateOrUpdateAsync(rgName, new ResourceGroup (DiskRPLocation ));

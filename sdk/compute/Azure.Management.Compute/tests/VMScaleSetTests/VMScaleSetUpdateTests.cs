@@ -42,7 +42,7 @@ namespace Azure.Management.Compute.Tests
             {
                 var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
 
-                await (await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist")).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
 
 
                 var getTwoVirtualMachineScaleSet = await CreateVMScaleSet_NoAsyncTracking(rgName, vmssName, storageAccountOutput, imageRef);
@@ -65,13 +65,13 @@ namespace Azure.Management.Compute.Tests
                 getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmScaleSet.Name);
                 ValidateVMScaleSet(inputVMScaleSet, getResponse);
 
-                await (await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmScaleSet.Name)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmScaleSet.Name));
             }
             finally
             {
                 //Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                 //of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                await (await ResourceGroupsClient.StartDeleteAsync(rgName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
 
@@ -100,7 +100,7 @@ namespace Azure.Management.Compute.Tests
             {
                 var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
 
-                await (await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist")).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
 
                 var getTwoVirtualMachineScaleSet = await CreateVMScaleSet_NoAsyncTracking(rgName, vmssName, storageAccountOutput, imageRef);
                 VirtualMachineScaleSet vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
@@ -123,13 +123,13 @@ namespace Azure.Management.Compute.Tests
                 getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmScaleSet.Name);
                 ValidateVMScaleSet(inputVMScaleSet, getResponse);
 
-                await (await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmScaleSet.Name)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmScaleSet.Name));
             }
             finally
             {
                 //Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                 //of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                await (await ResourceGroupsClient.StartDeleteAsync(rgName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
 
@@ -160,7 +160,7 @@ namespace Azure.Management.Compute.Tests
             {
                 var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
 
-                await (await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist")).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
 
                 var getTwoVirtualMachineScaleSet = await CreateVMScaleSet_NoAsyncTracking(rgName, vmssName, storageAccountOutput, imageRef);
                 VirtualMachineScaleSet vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
@@ -207,13 +207,13 @@ namespace Azure.Management.Compute.Tests
                 getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmScaleSet.Name);
                 ValidateVMScaleSet(inputVMScaleSet, getResponse);
 
-                await (await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmScaleSet.Name)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmScaleSet.Name));
             }
             finally
             {
                 //Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                 //of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                await (await ResourceGroupsClient.StartDeleteAsync(rgName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
     }

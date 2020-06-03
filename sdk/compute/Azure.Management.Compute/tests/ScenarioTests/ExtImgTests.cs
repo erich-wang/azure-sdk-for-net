@@ -21,8 +21,6 @@ namespace Azure.Management.Compute.Tests
             {
                 InitializeBase();
             }
-            //ComputeManagementClient computeClient;
-            //ResourceManagementClient resourcesClient;
         }
 
         private class VirtualMachineExtensionImageGetParameters
@@ -34,7 +32,6 @@ namespace Azure.Management.Compute.Tests
         }
 
         private static readonly string existingVersion = "2.4.5";
-
         private static readonly VirtualMachineExtensionImageGetParameters parameters =
             new VirtualMachineExtensionImageGetParameters();
 
@@ -84,7 +81,6 @@ namespace Azure.Management.Compute.Tests
         {
             string existingVersionPrefix = existingVersion.Substring(0, existingVersion.LastIndexOf('.'));
 
-            // Filter: startswith - Positive Test
             parameters.FilterExpression = null;
             var extImages = await VirtualMachineExtensionImagesClient.ListVersionsAsync(
                 parameters.Location,
@@ -93,9 +89,7 @@ namespace Azure.Management.Compute.Tests
             Assert.True(extImages.Value.Count > 0);
 
             string ver = extImages.Value.First().Name;
-            //var query = new Microsoft.Rest.Azure.OData.ODataQuery<Azure.Management.Compute.Models.VirtualMachineExtensionImage>();
             string query = "startswith(name,'" + ver + "')";
-            //parameters.FilterExpression = "$filter=startswith(name,'" + ver + "')";
             var vmextimg = await VirtualMachineExtensionImagesClient.ListVersionsAsync(
                 parameters.Location,
                 parameters.PublisherName,
@@ -104,9 +98,7 @@ namespace Azure.Management.Compute.Tests
             Assert.True(vmextimg.Value.Count > 0);
             Assert.True(vmextimg.Value.Count(vmi => vmi.Name != existingVersionPrefix) != 0);
 
-            // Filter: startswith - Negative Test
             query = "startswith(name,'" + existingVersionPrefix + "')";
-            //query.SetFilter(f => f.Name.StartsWith(existingVersionPrefix));
             parameters.FilterExpression = string.Format("$filter=startswith(name,'{0}')", existingVersionPrefix);
             vmextimg = await VirtualMachineExtensionImagesClient.ListVersionsAsync(
                 parameters.Location,
@@ -116,9 +108,6 @@ namespace Azure.Management.Compute.Tests
             Assert.True(vmextimg.Value.Count > 0);
             Assert.True(vmextimg.Value.Count(vmi => vmi.Name == existingVersionPrefix) == 0);
 
-            // Filter: top - Positive Test
-            //query.Filter = null;
-            //query.Top = 1;
             parameters.FilterExpression = "$top=1";
             vmextimg = await VirtualMachineExtensionImagesClient.ListVersionsAsync(
                 parameters.Location,
@@ -129,9 +118,6 @@ namespace Azure.Management.Compute.Tests
             Assert.True(vmextimg.Value.Count == 1);
             Assert.True(vmextimg.Value.Count(vmi => vmi.Name == existingVersion) != 0);
 
-            // Filter: top - Negative Test
-            //query.Replace("Top eq 1", "Top eq 0");
-            //query.Top = 0;
             parameters.FilterExpression = "$top=0";
             vmextimg = await VirtualMachineExtensionImagesClient.ListVersionsAsync(
                 parameters.Location,

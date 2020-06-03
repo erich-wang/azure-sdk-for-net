@@ -17,6 +17,7 @@ namespace Azure.Management.Compute.Tests
            : base(isAsync)
         {
         }
+
         [SetUp]
         public void ClearChallengeCacheforRecord()
         {
@@ -24,8 +25,6 @@ namespace Azure.Management.Compute.Tests
             {
                 InitializeBase();
             }
-            //ComputeManagementClient computeClient;
-            //ResourceManagementClient resourcesClient;
         }
 
         [Test]

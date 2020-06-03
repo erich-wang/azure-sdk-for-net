@@ -24,8 +24,6 @@ namespace Azure.Management.Compute.Tests
             {
                 InitializeBase();
             }
-            //ComputeManagementClient computeClient;
-            //ResourceManagementClient resourcesClient;
         }
         public const string vmmPublisherName = "datastax";
         public const string vmmOfferName = "datastax-enterprise-non-production-use-only";

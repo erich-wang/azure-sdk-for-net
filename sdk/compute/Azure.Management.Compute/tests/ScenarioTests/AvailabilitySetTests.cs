@@ -47,8 +47,6 @@ namespace Azure.Management.Compute.Tests
             {
                 InitializeBase();
             }
-            //ComputeManagementClient computeClient;
-            //ResourceManagementClient resourcesClient;
         }
 
         [Test]
@@ -99,7 +97,7 @@ namespace Azure.Management.Compute.Tests
         private async void VerifyInvalidFDUDValuesFail()
         {
             var inputAvailabilitySetName = Recording.GenerateAssetName("invalidfdud");
-            var inputAvailabilitySet = new AvailabilitySet(location)
+            var inputAvailabilitySet = new AvailabilitySet(TestEnvironment.Location)
             {
                 Tags = new Dictionary<string, string>()
                     {
@@ -178,7 +176,7 @@ namespace Azure.Management.Compute.Tests
         private async void VerifyDefaultValuesSucceed()
         {
             var inputAvailabilitySetName = Recording.GenerateAssetName("asdefaultvalues");
-            var inputAvailabilitySet = new AvailabilitySet(location)
+            var inputAvailabilitySet = new AvailabilitySet(TestEnvironment.Location)
             {
                 Tags = new Dictionary<string, string>()
                     {
@@ -225,7 +223,7 @@ namespace Azure.Management.Compute.Tests
             };
 
             string inputAvailabilitySetName = Recording.GenerateAssetName("asnondefault");
-            var inputAvailabilitySet = new AvailabilitySet(location)
+            var inputAvailabilitySet = new AvailabilitySet(TestEnvironment.Location)
             {
                 Tags = new Dictionary<string, string>()
                     {
@@ -249,7 +247,7 @@ namespace Azure.Management.Compute.Tests
             string expectedAvailabilitySetId = Helpers.GetAvailabilitySetRef(subId, resourceGroupName, inputAvailabilitySetName);
 
             Assert.True(outputAvailabilitySet.Name == inputAvailabilitySetName);
-            Assert.True(outputAvailabilitySet.Location.ToLower() == this.location.ToLower()
+            Assert.True(outputAvailabilitySet.Location.ToLower() == this.TestEnvironment.Location.ToLower()
                      || outputAvailabilitySet.Location.ToLower() == inputAvailabilitySet.Location.ToLower());
 
             ValidateAvailabilitySet(inputAvailabilitySet, outputAvailabilitySet, inputAvailabilitySetName, expectedAvailabilitySetId, expectedFD, expectedUD);
@@ -284,7 +282,6 @@ namespace Azure.Management.Compute.Tests
                 string key = tag.Key;
                 Assert.True(inputAvailabilitySet.Tags[key] == outputAvailabilitySet.Tags[key]);
             }
-
             // TODO: Dev work corresponding to setting status is not yet checked in.
             //Assert.NotNull(outputAvailabilitySet.Properties.Id);
             //Assert.True(expectedAvailabilitySetIds.ToLowerInvariant() == outputAvailabilitySet.Properties.Id.ToLowerInvariant());
@@ -300,7 +297,7 @@ namespace Azure.Management.Compute.Tests
 
             try
             {
-                AvailabilitySet inputAvailabilitySet1 = new AvailabilitySet(location)
+                AvailabilitySet inputAvailabilitySet1 = new AvailabilitySet(TestEnvironment.Location)
                 {
                     Tags = new Dictionary<string, string>()
                     {
@@ -315,12 +312,12 @@ namespace Azure.Management.Compute.Tests
 
                 resourceGroup2 = await ResourceGroupsClient.CreateOrUpdateAsync(
                     resourceGroup2Name,
-                    new ResourceGroup(location)
+                    new ResourceGroup(TestEnvironment.Location)
                     {
                         Tags = new Dictionary<string, string>() { { resourceGroup2Name, DateTime.UtcNow.ToString("u") } }
                     });
 
-                AvailabilitySet inputAvailabilitySet2 = new AvailabilitySet(location)
+                AvailabilitySet inputAvailabilitySet2 = new AvailabilitySet(TestEnvironment.Location)
                 {
                     Tags = new Dictionary<string, string>()
                     {
@@ -379,19 +376,17 @@ namespace Azure.Management.Compute.Tests
             }
         }
 
-
         private async void Initialize()
         {
-            subId = SubscriptionId;
-            location = m_location;
-
+            subId = TestEnvironment.SubscriptionId;
+            //.Location = m_location;
 
             baseResourceGroupName = Recording.GenerateAssetName(TestPrefix);
             resourceGroup1Name = baseResourceGroupName + "_1";
 
             resourceGroup1 = await ResourceGroupsClient.CreateOrUpdateAsync(
                 resourceGroup1Name,
-                new ResourceGroup(location)
+                new ResourceGroup(TestEnvironment.Location)
                 {
                     Tags = new Dictionary<string, string>() { { resourceGroup1Name, DateTime.UtcNow.ToString("u") } }
                 });

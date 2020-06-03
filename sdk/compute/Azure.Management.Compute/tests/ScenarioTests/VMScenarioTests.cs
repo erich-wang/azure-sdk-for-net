@@ -25,8 +25,6 @@ namespace Azure.Management.Compute.Tests
             {
                 InitializeBase();
             }
-            //ComputeManagementClient computeClient;
-            //ResourceManagementClient resourcesClient;
         }
 
         [Test]
@@ -284,7 +282,7 @@ namespace Azure.Management.Compute.Tests
 
                     string updateKey = "UpdateTag";
                     updateParams.Tags.Add(updateKey, "UpdateTagValue");
-                    VirtualMachine updateResponse = await (await VirtualMachinesClient.StartUpdateAsync(rgName, inputVM.Name, updateParams)).WaitForCompletionAsync();
+                    VirtualMachine updateResponse = await WaitForCompletionAsync(await VirtualMachinesClient.StartUpdateAsync(rgName, inputVM.Name, updateParams));
 
                     Assert.True(updateResponse.Tags.ContainsKey(updateKey));
                 }

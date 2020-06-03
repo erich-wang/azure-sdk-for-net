@@ -339,7 +339,7 @@ namespace Azure.Management.Compute.Tests
 
         private async Task<Disk> CreateDataDisk(string diskName)
         {
-            var disk = new Disk(null, null, null, location, null, null, null, null, null, null, null, null, null, 10, null, null, null, null, null, null, null, null, null, null, null, null);
+            var disk = new Disk(null, null, null, TestEnvironment.Location, null, null, null, null, null, null, null, null, null, 10, null, null, null, null, null, null, null, null, null, null, null, null);
             disk.Sku = new DiskSku(StorageAccountTypes.StandardLRS.ToString(), null);
             disk.CreationData = new CreationData(DiskCreateOption.Empty);
             return (await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk)).Value;

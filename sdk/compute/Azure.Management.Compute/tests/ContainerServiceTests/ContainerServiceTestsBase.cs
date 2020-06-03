@@ -7,8 +7,6 @@ using System.Threading.Tasks;
 using Azure.Management.Compute.Models;
 using Azure.Management.Resources;
 using Azure.Management.Resources.Models;
-//using Azure.Management.Storage;
-//using Azure.Management.Storage.Models;
 using NUnit.Framework;
 
 namespace Azure.Management.Compute.Tests
@@ -23,10 +21,8 @@ namespace Azure.Management.Compute.Tests
         protected const string ContainerServiceNamePrefix = "cs";
         protected const string AgentPoolProfileDnsPrefix = "apdp";
         protected const string MasterProfileDnsPrefix = "mdp";
-
         protected const string MesosOrchestratorType = "Mesos";
         protected const string DefaultAgentPoolProfileName = "agentpool1";
-
         protected string DefaultVmSize = VirtualMachineSizeTypes.StandardA2.ToString();
         protected const string DefaultLinuxAdminUsername = "azureuser";
         protected const string ContainerServiceType = "Microsoft.ContainerService/ContainerServices";
@@ -123,15 +119,13 @@ namespace Azure.Management.Compute.Tests
             var resourceGroup = await ResourceGroupsClient.CreateOrUpdateAsync(
                 rgName,
                 new ResourceGroup(m_location));
-
             var inputContainerService = CreateDefaultContainerServiceInput(rgName, masterDnsPrefix, agentPoolDnsPrefix);
             if (containerServiceCustomizer != null)
             {
                 containerServiceCustomizer(inputContainerService);
             }
-
             var createOrUpdateResponse =await ContainerServicesClient.StartCreateOrUpdateAsync(rgName, csName, inputContainerService);
-            await createOrUpdateResponse.WaitForCompletionAsync();
+            await WaitForCompletionAsync(createOrUpdateResponse);
             Assert.AreEqual(csName, createOrUpdateResponse.Value.Name);
             Assert.AreEqual(inputContainerService.Location.ToLower().Replace(" ", ""), createOrUpdateResponse.Value.Location.ToLower());
             ;

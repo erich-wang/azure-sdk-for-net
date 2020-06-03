@@ -19,6 +19,7 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
         : base(isAsync)
         {
         }
+
         [SetUp]
         public void ClearChallengeCacheforRecord()
         {
@@ -26,8 +27,6 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
             {
                 InitializeBase();
             }
-            //ComputeManagementClient computeClient;
-            //ResourceManagementClient resourcesClient;
         }
         protected const string DiskNamePrefix = "diskrp";
         private string DiskRPLocation = ComputeManagementTestUtilities.DefaultLocations.ToLower();
@@ -59,7 +58,7 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
                 // TEST
                 // **********
                 // Put
-                Disk diskOut = await ((await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk))).WaitForCompletionAsync();
+                Disk diskOut = await WaitForCompletionAsync((await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk)));
                 Validate(disk, diskOut, DiskRPLocation);
 
                 // Get
@@ -67,7 +66,7 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
                 Validate(disk, diskOut, DiskRPLocation);
                 //string resourceGroupName, string diskName, AccessLevel access, int durationInSeconds, CancellationToken cancellationToken = default
                 // Get disk access
-                AccessUri accessUri = await (await DisksClient.StartGrantAccessAsync(rgName, diskName,new GrantAccessData(AccessDataDefault.Access, AccessDataDefault.DurationInSeconds))).WaitForCompletionAsync();
+                AccessUri accessUri = await WaitForCompletionAsync(await DisksClient.StartGrantAccessAsync(rgName, diskName,new GrantAccessData(AccessDataDefault.Access, AccessDataDefault.DurationInSeconds)));
                 Assert.NotNull(accessUri.AccessSAS);
 
                 // Get
@@ -81,7 +80,7 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
                     const string tagKey = "tageKey";
                     var updatedisk = new DiskUpdate();
                     updatedisk.Tags = new Dictionary<string, string>() { { tagKey, "tagvalue" } };
-                    diskOut = await (await DisksClient.StartUpdateAsync(rgName, diskName, updatedisk)).WaitForCompletionAsync();
+                    diskOut = await WaitForCompletionAsync(await DisksClient.StartUpdateAsync(rgName, diskName, updatedisk));
                     Validate(disk, diskOut, DiskRPLocation);
                 }
 
@@ -90,10 +89,10 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
                 Validate(disk, diskOut, DiskRPLocation);
 
                 // End disk access
-                await (await DisksClient.StartRevokeAccessAsync(rgName, diskName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await DisksClient.StartRevokeAccessAsync(rgName, diskName));
 
                 // Delete
-                await (await DisksClient.StartDeleteAsync(rgName, diskName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await DisksClient.StartDeleteAsync(rgName, diskName));
 
                 try
                 {
@@ -110,7 +109,7 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
             finally
             {
                 // Delete resource group
-                await (await ResourceGroupsClient.StartDeleteAsync(rgName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
         protected async Task Snapshot_CRUD_Execute(string diskCreateOption, string methodName, int? diskSizeGB = null, string location = null, bool incremental = false)
@@ -133,7 +132,7 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
                 await ResourceGroupsClient.CreateOrUpdateAsync(rgName, new ResourceGroup (DiskRPLocation));
 
                 // Put disk
-                Disk diskOut = await (await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, sourceDisk)).WaitForCompletionAsync();
+                Disk diskOut = await WaitForCompletionAsync(await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, sourceDisk));
                 Validate(sourceDisk, diskOut, DiskRPLocation);
 
                 // Generate snapshot using disk info
@@ -143,7 +142,7 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
                 // TEST
                 // **********
                 // Put
-                Snapshot snapshotOut = await (await SnapshotsClient.StartCreateOrUpdateAsync(rgName, snapshotName, snapshot)).WaitForCompletionAsync();
+                Snapshot snapshotOut = await WaitForCompletionAsync(await SnapshotsClient.StartCreateOrUpdateAsync(rgName, snapshotName, snapshot));
                 Validate(snapshot, snapshotOut, incremental: incremental);
 
                 // Get
@@ -162,7 +161,7 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
                 var updatesnapshot = new SnapshotUpdate();
                 const string tagKey = "tageKey";
                 updatesnapshot.Tags = new Dictionary<string, string>() { { tagKey, "tagvalue" } };
-                snapshotOut = await (await SnapshotsClient.StartUpdateAsync(rgName, snapshotName, updatesnapshot)).WaitForCompletionAsync();
+                snapshotOut = await WaitForCompletionAsync(await SnapshotsClient.StartUpdateAsync(rgName, snapshotName, updatesnapshot));
                 Validate(snapshot, snapshotOut, incremental: incremental);
 
                 // Get
@@ -170,10 +169,10 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
                 Validate(snapshot, snapshotOut, incremental: incremental);
 
                 // End access
-                await (await SnapshotsClient.StartRevokeAccessAsync(rgName, snapshotName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await SnapshotsClient.StartRevokeAccessAsync(rgName, snapshotName));
 
                 // Delete
-                await (await SnapshotsClient.StartDeleteAsync(rgName, snapshotName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await SnapshotsClient.StartDeleteAsync(rgName, snapshotName));
 
                 try
                 {
@@ -190,7 +189,7 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
             finally
             {
                 // Delete resource group
-                await (await ResourceGroupsClient.StartDeleteAsync(rgName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
 
@@ -209,7 +208,7 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
                 await ResourceGroupsClient.CreateOrUpdateAsync(rgName, new ResourceGroup (DiskRPLocation));
 
                 // Put DiskEncryptionSet
-                DiskEncryptionSet desOut = await (await DiskEncryptionSetsClient.StartCreateOrUpdateAsync(rgName, desName, des)).WaitForCompletionAsync();
+                DiskEncryptionSet desOut = await WaitForCompletionAsync(await DiskEncryptionSetsClient.StartCreateOrUpdateAsync(rgName, desName, des));
                 Validate(des, desOut, desName);
 
                 // Get DiskEncryptionSet
@@ -220,12 +219,12 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
                 const string tagKey = "tageKey";
                 var updateDes = new DiskEncryptionSetUpdate();
                 updateDes.Tags = new Dictionary<string, string>() { { tagKey, "tagvalue" } };
-                desOut = await (await DiskEncryptionSetsClient.StartUpdateAsync(rgName, desName, updateDes)).WaitForCompletionAsync();
+                desOut = await WaitForCompletionAsync(await DiskEncryptionSetsClient.StartUpdateAsync(rgName, desName, updateDes));
                 Validate(des, desOut, desName);
                 Assert.AreEqual(1, desOut.Tags.Count);
 
                 // Delete DiskEncryptionSet
-                await (await DiskEncryptionSetsClient.StartDeleteAsync(rgName, desName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await DiskEncryptionSetsClient.StartDeleteAsync(rgName, desName));
 
                 try
                 {
@@ -242,7 +241,7 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
             finally
             {
                 // Delete resource group
-                await (await ResourceGroupsClient.StartDeleteAsync(rgName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
 
@@ -330,10 +329,10 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
                 await ResourceGroupsClient.CreateOrUpdateAsync(rgName2, new ResourceGroup(DiskRPLocation));
 
                 // Put 4 disks, 2 in each resource group
-                Disk diskOut11 = await (await DisksClient.StartCreateOrUpdateAsync(rgName1, diskName1, disk1)).WaitForCompletionAsync();
-                Disk diskOut12 = await (await DisksClient.StartCreateOrUpdateAsync(rgName1, diskName2, disk2)).WaitForCompletionAsync();
-                Disk diskOut21 = await (await DisksClient.StartCreateOrUpdateAsync(rgName2, diskName1, disk1)).WaitForCompletionAsync();
-                Disk diskOut22 = await (await DisksClient.StartCreateOrUpdateAsync(rgName2, diskName2, disk2)).WaitForCompletionAsync();
+                Disk diskOut11 = await WaitForCompletionAsync(await DisksClient.StartCreateOrUpdateAsync(rgName1, diskName1, disk1));
+                Disk diskOut12 = await WaitForCompletionAsync(await DisksClient.StartCreateOrUpdateAsync(rgName1, diskName2, disk2));
+                Disk diskOut21 = await WaitForCompletionAsync(await DisksClient.StartCreateOrUpdateAsync(rgName2, diskName1, disk1));
+                Disk diskOut22 = await WaitForCompletionAsync(await DisksClient.StartCreateOrUpdateAsync(rgName2, diskName2, disk2));
 
                 // Generate 4 snapshots using disks info
                 Snapshot snapshot11 = GenerateDefaultSnapshot(diskOut11.Id);
@@ -342,10 +341,10 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
                 Snapshot snapshot22 = GenerateDefaultSnapshot(diskOut22.Id);
 
                 // Put 4 snapshots, 2 in each resource group
-                await (await SnapshotsClient.StartCreateOrUpdateAsync(rgName1, snapshotName1, snapshot11)).WaitForCompletionAsync();
-                await (await SnapshotsClient.StartCreateOrUpdateAsync(rgName1, snapshotName2, snapshot12)).WaitForCompletionAsync();
-                await (await SnapshotsClient.StartCreateOrUpdateAsync(rgName2, snapshotName1, snapshot21)).WaitForCompletionAsync();
-                await (await SnapshotsClient.StartCreateOrUpdateAsync(rgName2, snapshotName2, snapshot22)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await SnapshotsClient.StartCreateOrUpdateAsync(rgName1, snapshotName1, snapshot11));
+                await WaitForCompletionAsync(await SnapshotsClient.StartCreateOrUpdateAsync(rgName1, snapshotName2, snapshot12));
+                await WaitForCompletionAsync(await SnapshotsClient.StartCreateOrUpdateAsync(rgName2, snapshotName1, snapshot21));
+                await WaitForCompletionAsync(await SnapshotsClient.StartCreateOrUpdateAsync(rgName2, snapshotName2, snapshot22));
 
                 // **********
                 // TEST
@@ -372,8 +371,8 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
             finally
             {
                 // Delete resource group
-                await (await ResourceGroupsClient.StartDeleteAsync(rgName1)).WaitForCompletionAsync();
-                await (await ResourceGroupsClient.StartDeleteAsync(rgName2)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName1));
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName2));
             }
         }
 
@@ -462,18 +461,18 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
                     DiskEncryptionSetId = desOut.Id
                 };
                 //Put Disk
-                await (await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk));
                 Disk diskOut = await DisksClient.GetAsync(rgName, diskName);
 
                 Validate(disk, diskOut, disk.Location);
                 Assert.AreEqual(desOut.Id.ToLower(), diskOut.Encryption.DiskEncryptionSetId.ToLower());
                 Assert.AreEqual(EncryptionType.EncryptionAtRestWithCustomerKey, diskOut.Encryption.Type);
 
-                await (await DisksClient.StartDeleteAsync(rgName, diskName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await DisksClient.StartDeleteAsync(rgName, diskName));
             }
             finally
             {
-                await (await ResourceGroupsClient.StartDeleteAsync(rgName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
 
@@ -490,7 +489,7 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
             {
                 await ResourceGroupsClient.CreateOrUpdateAsync(rgName, new ResourceGroup(location));
                 // Put Disk with PlatformManagedKey
-                await (await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk));
                 Disk diskOut = await DisksClient.GetAsync(rgName, diskName);
 
                 Validate(disk, diskOut, disk.Location);
@@ -505,16 +504,16 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
                     Type = EncryptionType.EncryptionAtRestWithCustomerKey.ToString(),
                     DiskEncryptionSetId = desOut.Id
                 };
-                await (await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk));
                 diskOut = await DisksClient.GetAsync(rgName, diskName);
 
                 Assert.AreEqual(desOut.Id.ToLower(), diskOut.Encryption.DiskEncryptionSetId.ToLower());
                 Assert.AreEqual(EncryptionType.EncryptionAtRestWithCustomerKey, diskOut.Encryption.Type);
-                await (await DisksClient.StartDeleteAsync(rgName, diskName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await DisksClient.StartDeleteAsync(rgName, diskName));
             }
             finally
             {
-                await (await ResourceGroupsClient.StartDeleteAsync(rgName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
 
@@ -610,7 +609,7 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
 
         protected DiskEncryptionSet GenerateDefaultDiskEncryptionSet(string location)
         {
-            string testVaultId = @"/subscriptions/"+SubscriptionId+"/resourcegroups/swagger/providers/Microsoft.KeyVault/vaults/swaggervault";
+            string testVaultId = @"/subscriptions/"+TestEnvironment.SubscriptionId+"/resourcegroups/swagger/providers/Microsoft.KeyVault/vaults/swaggervault";
             string encryptionKeyUri = @"https://swaggervault.vault.azure.net/keys/diskRPSSEKey/4780bcaf12384596b75cf63731f2046c";
             var des = new DiskEncryptionSet(
                                             null,null,null,location,null,

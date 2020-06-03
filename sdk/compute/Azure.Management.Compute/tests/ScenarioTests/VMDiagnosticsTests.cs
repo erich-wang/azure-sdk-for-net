@@ -23,8 +23,6 @@ namespace Azure.Management.Compute.Tests
             {
                 InitializeBase();
             }
-            //ComputeManagementClient computeClient;
-            //ResourceManagementClient resourcesClient;
         }
         [Test]
         //[Trait("Name", "TestVMBootDiagnostics")]
@@ -59,7 +57,7 @@ namespace Azure.Management.Compute.Tests
                 await VirtualMachinesClient.StartDeallocateAsync(resourceGroupName, inputVM.Name);
                 await StorageAccountsClient.DeleteAsync(resourceGroupName, storageAccountForBootDiagnosticsName);
                 //await StorageAccountsClient.DeleteWithHttpMessagesAsync(resourceGroupName, storageAccountForBootDiagnosticsName).GetAwaiter().GetResult();
-                await (await VirtualMachinesClient.StartStartAsync(resourceGroupName, inputVM.Name)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachinesClient.StartStartAsync(resourceGroupName, inputVM.Name));
 
                 getVMWithInstanceViewResponse = await VirtualMachinesClient.GetAsync(resourceGroupName, inputVM.Name);
                 ValidateBootDiagnosticsInstanceView(getVMWithInstanceViewResponse.InstanceView.BootDiagnostics, hasError: true);

@@ -65,10 +65,9 @@ namespace Azure.Management.Compute.Tests.VMScaleSetTests
             finally
             {
                 //await ResourceGroupsClient.DeleteIfExists(rgName);
-                await (await ResourceGroupsClient.StartDeleteAsync(rgName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
-
 
         /// <summary>
         /// Checks if diagnostics profile can be set through API
@@ -77,7 +76,6 @@ namespace Azure.Management.Compute.Tests.VMScaleSetTests
         public async Task TestVMScaleSetDiagnosticsProfile()
         {
             EnsureClientsInitialized();
-
             // Create resource group
             string rgName = Recording.GenerateAssetName(TestPrefix) + 1;
             var vmssName = Recording.GenerateAssetName("vmss");
@@ -115,7 +113,7 @@ namespace Azure.Management.Compute.Tests.VMScaleSetTests
             finally
             {
                 //await ResourceGroupsClient.DeleteIfExists(rgName);
-                await (await ResourceGroupsClient.StartDeleteAsync(rgName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
     }

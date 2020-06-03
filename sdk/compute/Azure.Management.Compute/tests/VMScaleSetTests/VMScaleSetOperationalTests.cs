@@ -173,7 +173,7 @@ namespace Azure.Management.Compute.Tests
                     storageAccountOutput, imageRef, createWithManagedDisks: true);
                 VirtualMachineScaleSet vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
                 inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
-                await (await VirtualMachineScaleSetsClient.StartStartAsync(rgName, vmScaleSet.Name)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartStartAsync(rgName, vmScaleSet.Name));
                 // Shutdown VM with SkipShutdown = true
                 await VirtualMachineScaleSetsClient.StartPowerOffAsync(rgName, vmScaleSet.Name, true);
 

@@ -25,8 +25,6 @@ namespace Azure.Management.Compute.Tests
             {
                 InitializeBase();
             }
-            //ComputeManagementClient computeClient;
-            //ResourceManagementClient resourcesClient;
         }
         public class Image
         {
@@ -101,9 +99,9 @@ namespace Azure.Management.Compute.Tests
                 var returnTwovm = await CreateVM(rg1Name, as1Name, storageAccountOutput, imageRef);
                 var vm1 = returnTwovm.Item1;
                 inputVM1 = returnTwovm.Item2;
-                await (await VirtualMachinesClient.StartStartAsync(rg1Name, vm1.Name)).WaitForCompletionAsync();
-                await (await VirtualMachinesClient.StartRedeployAsync(rg1Name, vm1.Name)).WaitForCompletionAsync();
-                await (await VirtualMachinesClient.StartRestartAsync(rg1Name, vm1.Name)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachinesClient.StartStartAsync(rg1Name, vm1.Name));
+                await WaitForCompletionAsync(await VirtualMachinesClient.StartRedeployAsync(rg1Name, vm1.Name));
+                await WaitForCompletionAsync(await VirtualMachinesClient.StartRestartAsync(rg1Name, vm1.Name));
 
                 var runCommandImput = new RunCommandInput("RunPowerShellScript")
                 {
@@ -120,13 +118,13 @@ namespace Azure.Management.Compute.Tests
                             new RunCommandInputParameter("arg2","value2"),
                         }
                 };
-                RunCommandResult result = (await (await VirtualMachinesClient.StartRunCommandAsync(rg1Name, vm1.Name, runCommandImput)).WaitForCompletionAsync()).Value;
+                RunCommandResult result = (await WaitForCompletionAsync(await VirtualMachinesClient.StartRunCommandAsync(rg1Name, vm1.Name, runCommandImput))).Value;
                 Assert.NotNull(result);
                 Assert.NotNull(result.Value);
                 Assert.True(result.Value.Count > 0);
 
-                await (await VirtualMachinesClient.StartPowerOffAsync(rg1Name, vm1.Name)).WaitForCompletionAsync();
-                await (await VirtualMachinesClient.StartDeallocateAsync(rg1Name, vm1.Name)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachinesClient.StartPowerOffAsync(rg1Name, vm1.Name));
+                await WaitForCompletionAsync(await VirtualMachinesClient.StartDeallocateAsync(rg1Name, vm1.Name));
                 await VirtualMachinesClient.GeneralizeAsync(rg1Name, vm1.Name);
 
                 VirtualMachine ephemeralVM;
@@ -134,11 +132,11 @@ namespace Azure.Management.Compute.Tests
                 var returnTwoVM= await CreateVM(rg1Name, as2Name, storageAccountName, imageRef, hasManagedDisks: true, hasDiffDisks: true, vmSize: VirtualMachineSizeTypes.StandardDS5V2.ToString(),
                     osDiskStorageAccountType: StorageAccountTypes.StandardLRS.ToString(), dataDiskStorageAccountType: StorageAccountTypes.StandardLRS.ToString());
                 ephemeralVM = returnTwoVM.Item2;
-                await (await VirtualMachinesClient.StartReimageAsync(rg1Name, ephemeralVM.Name)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachinesClient.StartReimageAsync(rg1Name, ephemeralVM.Name));
                 //await VirtualMachinesClient.StartReimageAsync(rg1Name, ephemeralVM.Name, tempDisk: true);
                 var captureParams = new VirtualMachineCaptureParameters(Recording.GenerateAssetName(TestPrefix), Recording.GenerateAssetName(TestPrefix), true);
 
-                var captureResponse = await (await VirtualMachinesClient.StartCaptureAsync(rg1Name, vm1.Name, captureParams)).WaitForCompletionAsync();
+                var captureResponse = await WaitForCompletionAsync(await VirtualMachinesClient.StartCaptureAsync(rg1Name, vm1.Name, captureParams));
 
                 Assert.NotNull(captureResponse);
                 Assert.True(captureResponse.Value.Resources.Count > 0);
@@ -191,7 +189,7 @@ namespace Azure.Management.Compute.Tests
             {
                 // Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                 // of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                await (await ResourceGroupsClient.StartDeleteAsync(rg1Name)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rg1Name));
             }
         }
         /// <summary>
@@ -226,11 +224,11 @@ namespace Azure.Management.Compute.Tests
                 var returnTwovm = await CreateVM(rg1Name, asName, storageAccountOutput, imageRef);
                 VirtualMachine vm1 = returnTwovm.Item1;
                 inputVM1 = returnTwovm.Item2;
-                var redeployOperationResponse = await (await VirtualMachinesClient.StartRedeployAsync(rg1Name, vm1.Name)).WaitForCompletionAsync();
+                var redeployOperationResponse = await WaitForCompletionAsync(await VirtualMachinesClient.StartRedeployAsync(rg1Name, vm1.Name));
                 //.BeginRedeployWithHttpMessagesAsync
                 //Assert.Equal(HttpStatusCode.Accepted, redeployOperationResponse.Result.Response.StatusCode);
-                var lroResponse = await (await VirtualMachinesClient.StartRedeployAsync(rg1Name,
-                    vm1.Name)).WaitForCompletionAsync();
+                var lroResponse = await WaitForCompletionAsync(await VirtualMachinesClient.StartRedeployAsync(rg1Name,
+                    vm1.Name));
                 //var lroResponse = await VirtualMachinesClient.StartRedeployAsync(rg1Name,
                 //    vm1.Name).GetAwaiter().GetResult();
                 //Assert.Equal(ComputeOperationStatus.Succeeded, lroResponse.Status);
@@ -271,9 +269,9 @@ namespace Azure.Management.Compute.Tests
                 var returnTwovm = await CreateVM(rg1Name, asName, storageAccountOutput, imageRef);
                 VirtualMachine vm1 = returnTwovm.Item1;
                 inputVM1 = returnTwovm.Item2;
-                var reapplyperationResponse = await (await VirtualMachinesClient.StartReapplyAsync(rg1Name, vm1.Name)).WaitForCompletionAsync();
-                var lroResponse = await (await VirtualMachinesClient.StartReapplyAsync(rg1Name,
-                    vm1.Name)).WaitForCompletionAsync();
+                var reapplyperationResponse = await WaitForCompletionAsync(await VirtualMachinesClient.StartReapplyAsync(rg1Name, vm1.Name));
+                var lroResponse = await WaitForCompletionAsync(await VirtualMachinesClient.StartReapplyAsync(rg1Name,
+                    vm1.Name));
                 //var lroResponse =  await VirtualMachinesClient.StartReapplyAsync(rg1Name,
                 //    vm1.Name).GetAwaiter().GetResult();
 
@@ -283,7 +281,7 @@ namespace Azure.Management.Compute.Tests
             {
                 // Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                 // of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                var deleteRg1Response = await (await ResourceGroupsClient.StartDeleteAsync(rg1Name)).WaitForCompletionAsync();
+                var deleteRg1Response = await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rg1Name));
                 //var deleteRg1Response = await ResourceGroupsClient.BeginDeleteWithHttpMessagesAsync(rg1Name);
             }
 
@@ -320,9 +318,9 @@ namespace Azure.Management.Compute.Tests
                 var returnTwovm = await CreateVM(rg1Name, asName, storageAccountOutput, imageRef);
                 VirtualMachine vm1 = returnTwovm.Item1;
                 inputVM1 = returnTwovm.Item2;
-                await (await VirtualMachinesClient.StartStartAsync(rg1Name, vm1.Name)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachinesClient.StartStartAsync(rg1Name, vm1.Name));
                 // Shutdown VM with SkipShutdown = true
-                await (await VirtualMachinesClient.StartPowerOffAsync(rg1Name, vm1.Name, true)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachinesClient.StartPowerOffAsync(rg1Name, vm1.Name, true));
 
                 passed = true;
             }
@@ -330,7 +328,7 @@ namespace Azure.Management.Compute.Tests
             {
                 // Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                 // of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                var deleteRg1Response = await (await ResourceGroupsClient.StartDeleteAsync(rg1Name)).WaitForCompletionAsync();
+                var deleteRg1Response = await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rg1Name));
             }
 
             Assert.True(passed);
@@ -367,7 +365,7 @@ namespace Azure.Management.Compute.Tests
                 var returnTwovm = await CreateVM(rg1Name, asName, storageAccountOutput, imageRef);
                 VirtualMachine vm1 = returnTwovm.Item1;
                 inputVM1 = returnTwovm.Item2;
-                await (await VirtualMachinesClient.StartPerformMaintenanceAsync(rg1Name, vm1.Name)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachinesClient.StartPerformMaintenanceAsync(rg1Name, vm1.Name));
                 passed = true;
 
             }
@@ -382,7 +380,7 @@ namespace Azure.Management.Compute.Tests
             {
                 // Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                 // of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                var deleteRg1Response = await (await ResourceGroupsClient.StartDeleteAsync(rg1Name)).WaitForCompletionAsync();
+                var deleteRg1Response = await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rg1Name));
             }
             Assert.True(passed);
         }
@@ -436,7 +434,7 @@ namespace Azure.Management.Compute.Tests
             {
                 // Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                 // of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                var deleteRg1Response = await (await ResourceGroupsClient.StartDeleteAsync(rg1Name)).WaitForCompletionAsync();
+                var deleteRg1Response = await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rg1Name));
             }
             Assert.True(passed);
         }

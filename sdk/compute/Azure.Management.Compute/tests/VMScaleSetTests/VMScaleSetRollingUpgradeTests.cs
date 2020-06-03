@@ -58,7 +58,7 @@ namespace Azure.Management.Compute.Tests
 
                     var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
 
-                    await (await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist")).WaitForCompletionAsync();
+                    await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
 
                     var getTwoVirtualMachineScaleSet = await CreateVMScaleSet_NoAsyncTracking(
                         rgName,
@@ -101,14 +101,14 @@ namespace Azure.Management.Compute.Tests
                     Assert.NotNull(getInstanceViewResponse);
                     ValidateVMScaleSetInstanceView(inputVMScaleSet, getInstanceViewResponse);
 
-                    await (await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmssName)).WaitForCompletionAsync();
+                    await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmssName));
                 }
                 finally
                 {
                     Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", originalTestLocation);
                     //Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                     //of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                    await (await ResourceGroupsClient.StartDeleteAsync(rgName)).WaitForCompletionAsync();
+                    await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
                 }
         }
         /// <summary>
@@ -144,7 +144,7 @@ namespace Azure.Management.Compute.Tests
 
                 var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
 
-                await (await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist")).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
 
                 var getTwoVirtualMachineScaleSet = await CreateVMScaleSet_NoAsyncTracking(
                     rgName,
@@ -170,14 +170,14 @@ namespace Azure.Management.Compute.Tests
                 WaitSeconds(600);
                 var vmssStatus = await VirtualMachineScaleSetsClient.GetInstanceViewAsync(rgName, vmssName);
 
-                await (await VirtualMachineScaleSetRollingUpgradesClient.StartStartOSUpgradeAsync(rgName, vmssName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachineScaleSetRollingUpgradesClient.StartStartOSUpgradeAsync(rgName, vmssName));
                 var rollingUpgradeStatus = await VirtualMachineScaleSetRollingUpgradesClient.GetLatestAsync(rgName, vmssName);
                 Assert.AreEqual(inputVMScaleSet.Sku.Capacity, rollingUpgradeStatus.Value.Progress.SuccessfulInstanceCount);
 
-                var upgradeTask = await (await VirtualMachineScaleSetRollingUpgradesClient.StartStartOSUpgradeAsync(rgName, vmssName)).WaitForCompletionAsync();
+                var upgradeTask = await WaitForCompletionAsync(await VirtualMachineScaleSetRollingUpgradesClient.StartStartOSUpgradeAsync(rgName, vmssName));
                 vmssStatus = await VirtualMachineScaleSetsClient.GetInstanceViewAsync(rgName, vmssName);
 
-                await (await VirtualMachineScaleSetRollingUpgradesClient.StartCancelAsync(rgName, vmssName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachineScaleSetRollingUpgradesClient.StartCancelAsync(rgName, vmssName));
 
                 rollingUpgradeStatus = await VirtualMachineScaleSetRollingUpgradesClient.GetLatestAsync(rgName, vmssName);
 
@@ -189,7 +189,7 @@ namespace Azure.Management.Compute.Tests
                 Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", originalTestLocation);
                 //Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                 //of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                await (await ResourceGroupsClient.StartDeleteAsync(rgName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
         /// <summary>
@@ -224,7 +224,7 @@ namespace Azure.Management.Compute.Tests
 
                 var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
 
-                await (await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist")).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
 
                 var getTwoVirtualMachineScaleSet = await CreateVMScaleSet_NoAsyncTracking(
                     rgName,
@@ -246,7 +246,7 @@ namespace Azure.Management.Compute.Tests
                 WaitSeconds(600);
                 var vmssStatus = await VirtualMachineScaleSetsClient.GetInstanceViewAsync(rgName, vmssName);
 
-                await (await VirtualMachineScaleSetRollingUpgradesClient.StartStartOSUpgradeAsync(rgName, vmssName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachineScaleSetRollingUpgradesClient.StartStartOSUpgradeAsync(rgName, vmssName));
                 var rollingUpgrade = VirtualMachineScaleSetsClient.GetOSUpgradeHistoryAsync(rgName, vmssName);
                 var rollingUpgradeHistory = await rollingUpgrade.ToEnumerableAsync();
                 Assert.NotNull(rollingUpgradeHistory);
@@ -258,7 +258,7 @@ namespace Azure.Management.Compute.Tests
                 Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", originalTestLocation);
                 //Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                 //of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                await (await ResourceGroupsClient.StartDeleteAsync(rgName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
 
@@ -286,7 +286,7 @@ namespace Azure.Management.Compute.Tests
             {
                 var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
 
-                await (await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist")).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
 
                 var getTwoVirtualMachineScaleSet = await CreateVMScaleSet_NoAsyncTracking(
                     rgName,
@@ -342,7 +342,7 @@ namespace Azure.Management.Compute.Tests
                 Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", originalTestLocation);
                 //Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                 //of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                await (await ResourceGroupsClient.StartDeleteAsync(rgName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
 
@@ -353,6 +353,7 @@ namespace Azure.Management.Compute.Tests
         // Perform an extension rolling upgrade
         // Delete ResourceGroup
         [Test]
+        //[Ignore ""]
         //[Trait("Name", "TestVMScaleSetExtensionUpgradeAPIs")]
         public async Task TestVMScaleSetExtensionUpgradeAPIs()
         {
@@ -381,7 +382,7 @@ namespace Azure.Management.Compute.Tests
                 };
 
                 var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
-                await (await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist")).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
 
                 var getTwoVirtualMachineScaleSet = await CreateVMScaleSet_NoAsyncTracking(
                     rgName,
@@ -401,7 +402,7 @@ namespace Azure.Management.Compute.Tests
                 inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
                 ValidateVMScaleSet(inputVMScaleSet, getResponse, hasManagedDisks: true);
 
-                await (await VirtualMachineScaleSetRollingUpgradesClient.StartStartExtensionUpgradeAsync(rgName, vmssName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachineScaleSetRollingUpgradesClient.StartStartExtensionUpgradeAsync(rgName, vmssName));
                 var rollingUpgradeStatus = await VirtualMachineScaleSetRollingUpgradesClient.GetLatestAsync(rgName, vmssName);
                 Assert.AreEqual(inputVMScaleSet.Sku.Capacity, rollingUpgradeStatus.Value.Progress.SuccessfulInstanceCount);
             }
@@ -409,7 +410,7 @@ namespace Azure.Management.Compute.Tests
             {
                 Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", originalTestLocation);
                 // Cleanup resource group and revert default location to the original location
-                await (await ResourceGroupsClient.StartDeleteAsync(rgName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
     }

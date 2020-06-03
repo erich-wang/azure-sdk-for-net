@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 using System;
+using System.Threading.Tasks;
 using Azure.Core.TestFramework;
 using Azure.Management.Network;
 using Azure.Management.Resources;
@@ -14,10 +15,7 @@ namespace Azure.Management.Compute.Tests
     [NonParallelizable]
     public abstract class ComputeClientBase : RecordedTestBase<ComputeManagementTestEnvironment>
     {
-        private const string ApplicationIdKey = "ApplicationId";
-        public string TenantId { get; set; }
-        public string location { get; set; }
-        public string SubscriptionId { get; set; }
+        public static TimeSpan ZeroPollingInterval { get; } = TimeSpan.FromSeconds(0);
         public ResourceGroupsClient ResourceGroupsClient { get; set; }
         public ProvidersClient ProvidersClient { get; set; }
         public DeploymentsClient DeploymentsClient { get; set; }
@@ -69,8 +67,6 @@ namespace Azure.Management.Compute.Tests
 
         protected void InitializeBase()
         {
-            this.TenantId = TestEnvironment.TenantId;
-            this.SubscriptionId = TestEnvironment.SubscriptionId;
             var resourceManagementClient = GetResourceManagementClient();
             ResourceGroupsClient = resourceManagementClient.GetResourceGroupsClient();
             ProvidersClient = resourceManagementClient.GetProvidersClient();
@@ -122,25 +118,25 @@ namespace Azure.Management.Compute.Tests
         }
         internal ResourcesManagementClient GetResourceManagementClient()
         {
-            return InstrumentClient(new ResourcesManagementClient(this.SubscriptionId,
+            return InstrumentClient(new ResourcesManagementClient(this.TestEnvironment.SubscriptionId,
                 TestEnvironment.Credential,
                 Recording.InstrumentClientOptions(new ResourcesManagementClientOptions())));
         }
         internal ComputeManagementClient GetComputeManagementClient()
         {
-            return InstrumentClient(new ComputeManagementClient(this.SubscriptionId,
+            return InstrumentClient(new ComputeManagementClient(this.TestEnvironment.SubscriptionId,
                 TestEnvironment.Credential,
                 Recording.InstrumentClientOptions(new ComputeManagementClientOptions())));
         }
         internal NetworkManagementClient GetNetworkManagementClient()
         {
-            return InstrumentClient(new NetworkManagementClient(this.SubscriptionId,
+            return InstrumentClient(new NetworkManagementClient(this.TestEnvironment.SubscriptionId,
                 TestEnvironment.Credential,
                 Recording.InstrumentClientOptions(new NetworkManagementClientOptions())));
         }
         internal StorageManagementClient GetStorageManagementClient()
         {
-            return InstrumentClient(new StorageManagementClient(this.SubscriptionId,
+            return InstrumentClient(new StorageManagementClient(this.TestEnvironment.SubscriptionId,
                 TestEnvironment.Credential,
                 Recording.InstrumentClientOptions(new StorageManagementClientOptions())));
         }
@@ -151,9 +147,22 @@ namespace Azure.Management.Compute.Tests
                 System.Threading.Thread.Sleep(TimeSpan.FromSeconds(seconds));
             }
         }
+
         public void WaitMinutes(double minutes)
         {
             WaitSeconds(minutes * 60);
+        }
+
+        protected ValueTask<Response<T>> WaitForCompletionAsync<T>(Operation<T> operation)
+        {
+            if (Mode == RecordedTestMode.Playback)
+            {
+                return operation.WaitForCompletionAsync(ZeroPollingInterval, default);
+            }
+            else
+            {
+                return operation.WaitForCompletionAsync();
+            }
         }
     }
 }

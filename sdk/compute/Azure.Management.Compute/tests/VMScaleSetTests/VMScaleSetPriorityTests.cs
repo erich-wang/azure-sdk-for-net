@@ -214,7 +214,7 @@ namespace Azure.Management.Compute.Tests
                 Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", originalTestLocation);
                 //Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                 //of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                await (await ResourceGroupsClient.StartDeleteAsync(rgName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
     }

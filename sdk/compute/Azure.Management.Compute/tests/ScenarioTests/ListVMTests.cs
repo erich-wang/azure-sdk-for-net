@@ -17,6 +17,7 @@ namespace Azure.Management.Compute.Tests
            : base(isAsync)
         {
         }
+
         [SetUp]
         public void ClearChallengeCacheforRecord()
         {
@@ -24,9 +25,8 @@ namespace Azure.Management.Compute.Tests
             {
                 InitializeBase();
             }
-            //ComputeManagementClient computeClient;
-            //ResourceManagementClient resourcesClient;
         }
+
         [Test]
         public async Task TestListVMInSubscription()
         {
@@ -40,7 +40,6 @@ namespace Azure.Management.Compute.Tests
             string asName = Recording.GenerateAssetName("as");
             string storageAccountName = Recording.GenerateAssetName(TestPrefix);
             VirtualMachine inputVM1, inputVM2;
-
             try
             {
                 // Create Storage Account, so that both the VMs can share it
@@ -55,9 +54,7 @@ namespace Azure.Management.Compute.Tests
                 var listResponse = await (VirtualMachinesClient.ListAllAsync()).ToEnumerableAsync();
                 Assert.True(listResponse.Count() >= 2);
                 //Assert.Null(listResponse.NextPageLink);
-
                 int vmsValidatedCount = 0;
-
                 foreach (var vm in listResponse)
                 {
                     if (vm.Name == vm1.Name)
@@ -71,7 +68,6 @@ namespace Azure.Management.Compute.Tests
                         vmsValidatedCount++;
                     }
                 }
-
                 Assert.True(vmsValidatedCount == 2);
             }
             finally
@@ -80,11 +76,11 @@ namespace Azure.Management.Compute.Tests
                 // storage account, which is in rg1.
                 try
                 {
-                    await (await ResourceGroupsClient.StartDeleteAsync(rg2Name)).WaitForCompletionAsync();
+                    await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rg2Name));
                 }
                 finally
                 {
-                    await (await ResourceGroupsClient.StartDeleteAsync(rg1Name)).WaitForCompletionAsync();
+                    await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rg1Name));
                 }
             }
         }
@@ -93,16 +89,13 @@ namespace Azure.Management.Compute.Tests
         public async Task TestListVMsInSubscriptionByLocation()
         {
             EnsureClientsInitialized();
-
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
-
             string baseResourceGroupName = Recording.GenerateAssetName(TestPrefix);
             string resourceGroup1Name = baseResourceGroupName + "a";
             string resourceGroup2Name = baseResourceGroupName + "b";
             string availabilitySetName = Recording.GenerateAssetName(TestPrefix);
             string storageAccountName = Recording.GenerateAssetName(TestPrefix);
             VirtualMachine inputVM1, inputVM2;
-
             try
             {
                 // Create Storage Account, so that both VMs can share it
@@ -117,9 +110,7 @@ namespace Azure.Management.Compute.Tests
                 var listResponse = await (VirtualMachinesClient.ListByLocationAsync(DefaultLocation)).ToEnumerableAsync();
                 Assert.True(listResponse.Count() >= 2);
                 //Assert.Null(listResponse.NextPageLink);
-
                 int vmsValidatedCount = 0;
-
                 foreach (VirtualMachine vm in listResponse)
                 {
                     if (vm.Name.Equals(vm1.Name))
@@ -133,7 +124,6 @@ namespace Azure.Management.Compute.Tests
                         vmsValidatedCount++;
                     }
                 }
-
                 Assert.AreEqual(2, vmsValidatedCount);
             }
             finally
@@ -142,11 +132,11 @@ namespace Azure.Management.Compute.Tests
                 // storage account, which is in rg1.
                 try
                 {
-                    await (await ResourceGroupsClient.StartDeleteAsync(resourceGroup2Name)).WaitForCompletionAsync();
+                    await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(resourceGroup2Name));
                 }
                 finally
                 {
-                    await (await ResourceGroupsClient.StartDeleteAsync(resourceGroup1Name)).WaitForCompletionAsync();
+                    await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(resourceGroup1Name));
                 }
             }
 

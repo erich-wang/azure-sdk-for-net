@@ -27,8 +27,6 @@ namespace Azure.Management.Compute.Tests
             {
                 InitializeBase();
             }
-            //ComputeManagementClient computeClient;
-            //ResourceManagementClient resourcesClient;
         }
 
         [Test]
@@ -144,14 +142,14 @@ namespace Azure.Management.Compute.Tests
                 Assert.True(getNicResponse.Primary != null && getNicResponse.Primary.Value);
 
                 // Get Effective RouteTable
-                var getEffectiveRouteTable = (await (await NetworkInterfacesClient.StartGetEffectiveRouteTableAsync(rgName, nicResponse.Name)).WaitForCompletionAsync()).Value;
+                var getEffectiveRouteTable = (await WaitForCompletionAsync(await NetworkInterfacesClient.StartGetEffectiveRouteTableAsync(rgName, nicResponse.Name))).Value;
                 Assert.NotNull(getEffectiveRouteTable);
                 //Assert.AreNotEqual(0, getEffectiveRouteTable.Value.Count);
                 Assert.AreEqual(getEffectiveRouteTable.Value[0].Source, EffectiveRouteSource.Default);
                 Assert.AreEqual(getEffectiveRouteTable.Value[0].State, EffectiveRouteState.Active);
 
                 // Get Effecting NSG
-                var getEffectiveNSGresponse = (await (await NetworkInterfacesClient.StartListEffectiveNetworkSecurityGroupsAsync(rgName, nicResponse.Name.ToString())).WaitForCompletionAsync()).Value;
+                var getEffectiveNSGresponse = (await WaitForCompletionAsync(await NetworkInterfacesClient.StartListEffectiveNetworkSecurityGroupsAsync(rgName, nicResponse.Name.ToString()))).Value;
                 Assert.NotNull(getEffectiveNSGresponse);
                 Assert.AreNotEqual(0, getEffectiveNSGresponse.Value.Count);
                 Assert.NotNull(getEffectiveNSGresponse.Value[0].Association);
@@ -175,7 +173,7 @@ namespace Azure.Management.Compute.Tests
             finally
             {
                 // Cleanup the created resources
-                await (await ResourceGroupsClient.StartDeleteAsync(rgName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
         [Test]
@@ -248,7 +246,7 @@ namespace Azure.Management.Compute.Tests
             finally
             {
                 // Cleanup the created resources
-                await (await ResourceGroupsClient.StartDeleteAsync(rgName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
 

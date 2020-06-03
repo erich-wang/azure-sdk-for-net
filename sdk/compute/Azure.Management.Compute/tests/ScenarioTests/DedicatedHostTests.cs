@@ -26,8 +26,6 @@ namespace Azure.Management.Compute.Tests
             {
                 InitializeBase();
             }
-            //ComputeManagementClient computeClient;
-            //ResourceManagementClient resourcesClient;
         }
 
         [Test]
@@ -83,12 +81,12 @@ namespace Azure.Management.Compute.Tests
                 ValidateDedicatedHost(createdDH, listDHsResponseRes.First());
 
                 //Delete DedicatedHosts and DedicatedHostGroups
-                await (await DedicatedHostsClient.StartDeleteAsync(rgName, dhgName, dhName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await DedicatedHostsClient.StartDeleteAsync(rgName, dhgName, dhName));
                 await DedicatedHostGroupsClient.DeleteAsync(rgName, dhgName);
             }
             finally
             {
-                await (await ResourceGroupsClient.StartDeleteAsync(rgName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
                 Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", originalTestLocation);
             }
         }

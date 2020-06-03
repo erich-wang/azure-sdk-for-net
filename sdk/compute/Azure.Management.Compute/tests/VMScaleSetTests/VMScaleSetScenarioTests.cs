@@ -340,7 +340,7 @@ namespace Azure.Management.Compute.Tests
                 {
                     var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
 
-                    await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist");
+                    await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
 
                     AutomaticRepairsPolicy automaticRepairsPolicy = new AutomaticRepairsPolicy()
                     {
@@ -366,30 +366,30 @@ namespace Azure.Management.Compute.Tests
                     var getInstanceViewResponse = (await VirtualMachineScaleSetsClient.GetInstanceViewAsync(rgName, vmssName)).Value;
 
                     Assert.True(getInstanceViewResponse.OrchestrationServices.Count == 1);
-                    Assert.AreEqual("Running", getInstanceViewResponse.OrchestrationServices[0].ServiceState);
-                    Assert.AreEqual("AutomaticRepairs", getInstanceViewResponse.OrchestrationServices[0].ServiceName);
+                    Assert.AreEqual("Running", getInstanceViewResponse.OrchestrationServices[0].ServiceState.ToString());
+                    Assert.AreEqual("AutomaticRepairs", getInstanceViewResponse.OrchestrationServices[0].ServiceName.ToString());
 
 
                     ////TODO
                     OrchestrationServiceStateInput orchestrationServiceStateInput = new OrchestrationServiceStateInput(new OrchestrationServiceSummary().ServiceName,OrchestrationServiceStateAction.Suspend);
                     //OrchestrationServiceStateAction orchestrationServiceStateAction = new OrchestrationServiceStateAction();
-                    await VirtualMachineScaleSetsClient.StartSetOrchestrationServiceStateAsync(rgName, vmssName, orchestrationServiceStateInput);
+                    await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartSetOrchestrationServiceStateAsync(rgName, vmssName, orchestrationServiceStateInput));
 
                     getInstanceViewResponse = await VirtualMachineScaleSetsClient.GetInstanceViewAsync(rgName, vmssName);
-                    Assert.AreEqual(OrchestrationServiceState.Suspended.ToString(), getInstanceViewResponse.OrchestrationServices[0].ServiceState);
+                    Assert.AreEqual(OrchestrationServiceState.Suspended.ToString(), getInstanceViewResponse.OrchestrationServices[0].ServiceState.ToString());
 
                     orchestrationServiceStateInput = new OrchestrationServiceStateInput(new OrchestrationServiceSummary().ServiceName, OrchestrationServiceStateAction.Resume);
-                    await VirtualMachineScaleSetsClient.StartSetOrchestrationServiceStateAsync(rgName, vmssName, orchestrationServiceStateInput);
+                    await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartSetOrchestrationServiceStateAsync(rgName, vmssName, orchestrationServiceStateInput));
                     getInstanceViewResponse = await VirtualMachineScaleSetsClient.GetInstanceViewAsync(rgName, vmssName);
-                    Assert.AreEqual(OrchestrationServiceState.Running.ToString(), getInstanceViewResponse.OrchestrationServices[0].ServiceState);
+                    Assert.AreEqual(OrchestrationServiceState.Running.ToString(), getInstanceViewResponse.OrchestrationServices[0].ServiceState.ToString());
 
-                    await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmssName);
+                    await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmssName));
                 }
                 finally
                 {
                     //Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                     //of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                    await ResourceGroupsClient.StartDeleteAsync(rgName);
+                    await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
                 }
             }
             finally
@@ -423,7 +423,7 @@ namespace Azure.Management.Compute.Tests
             try
             {
                 var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
-                await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist");
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
                 string ppgId = null;
                 string ppgName = null;
                 if (isPpgScenario)
@@ -490,8 +490,7 @@ namespace Azure.Management.Compute.Tests
 
                 if (zones != null)
                 {
-                    var query = "LatestModelApplied eq true";
-                    //query.SetFilter(vm => vm.LatestModelApplied == true);
+                    var query = "properties/latestModelApplied eq true";
                     var listVMsResponse =  await (VirtualMachineScaleSetVMsClient.ListAsync(rgName, vmssName, query)).ToEnumerableAsync();
                     Assert.False(listVMsResponse == null, "VMScaleSetVMs not returned");
                     Assert.True(listVMsResponse.Count() == inputVMScaleSet.Sku.Capacity);

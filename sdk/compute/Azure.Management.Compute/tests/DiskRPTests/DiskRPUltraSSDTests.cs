@@ -17,6 +17,7 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
        : base(isAsync)
         {
         }
+
         [Test]
         public async Task UltraSSD_CRUD_EmptyDiskZones()
         {
@@ -58,7 +59,7 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
                 await ResourceGroupsClient.CreateOrUpdateAsync(rgName, new ResourceGroup(location));
 
                 // Put
-                Disk diskOut = await (await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk)).WaitForCompletionAsync();
+                Disk diskOut = await WaitForCompletionAsync(await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk));
                 Validate(disk, diskOut, location);
 
                 // Get
@@ -78,7 +79,7 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
                     updatedisk.MaxShares = 3;
                 }
                 updatedisk.Sku = new DiskSku(DiskStorageAccountTypes.UltraSSDLRS, "Ultra");
-                diskOut = await (await DisksClient.StartUpdateAsync(rgName, diskName, updatedisk)).WaitForCompletionAsync();
+                diskOut = await WaitForCompletionAsync(await DisksClient.StartUpdateAsync(rgName, diskName, updatedisk));
                 Validate(disk, diskOut, location, update: true);
                 Assert.AreEqual(updatedisk.DiskIopsReadWrite, diskOut.DiskIopsReadWrite);
                 Assert.AreEqual(updatedisk.DiskMBpsReadWrite, diskOut.DiskMBpsReadWrite);
@@ -102,8 +103,7 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
                 }
 
                 // Delete
-                await (await DisksClient.StartDeleteAsync(rgName, diskName)).WaitForCompletionAsync();
-
+                await WaitForCompletionAsync(await DisksClient.StartDeleteAsync(rgName, diskName));
                 try
                 {
                     // Ensure it was really deleted
@@ -119,7 +119,7 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
             finally
             {
                 // Delete resource group
-                await (await ResourceGroupsClient.StartDeleteAsync(rgName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
     }

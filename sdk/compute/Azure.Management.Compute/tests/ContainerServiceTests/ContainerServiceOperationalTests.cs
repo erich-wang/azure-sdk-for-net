@@ -25,9 +25,8 @@ namespace Azure.Management.Compute.Tests
             {
                 InitializeBase();
             }
-            //ComputeManagementClient computeClient;
-            //ResourceManagementClient resourcesClient;
         }
+
         [Test]
         public async Task TestDCOSOperations()
         {
@@ -62,6 +61,7 @@ namespace Azure.Management.Compute.Tests
                     await ResourceGroupsClient.StartDeleteAsync(rgName);
                 }
         }
+
         /// <summary>
         /// Covers following Operations:
         /// Create RG
@@ -82,10 +82,8 @@ namespace Azure.Management.Compute.Tests
             var agentPoolDnsPrefixName = Recording.GenerateAssetName(AgentPoolProfileDnsPrefix);
             try
             {
-
                 Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "australiasoutheast");
                 EnsureClientsInitialized();
-
                 ContainerService inputContainerService;
                 var getTwocontainerService =await CreateContainerService_NoAsyncTracking(
                     rgName,
@@ -96,14 +94,14 @@ namespace Azure.Management.Compute.Tests
                     cs => cs.OrchestratorProfile.OrchestratorType = ContainerServiceOrchestratorTypes.Swarm);
                 var containerService = getTwocontainerService.Item1;
                 inputContainerService = getTwocontainerService.Item2;
-                await (await ContainerServicesClient.StartDeleteAsync(rgName, containerService.Name)).WaitForCompletionAsync();
+                await WaitForCompletionAsync (await ContainerServicesClient.StartDeleteAsync(rgName, containerService.Name));
             }
             finally
             {
                 Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", originalTestLocation);
                 // Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                 // of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                await (await ResourceGroupsClient.StartDeleteAsync(rgName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
     }

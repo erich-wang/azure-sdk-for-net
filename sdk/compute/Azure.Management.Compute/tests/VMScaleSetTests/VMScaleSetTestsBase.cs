@@ -31,8 +31,6 @@ namespace Azure.Management.Compute.Tests
             {
                 InitializeBase();
             }
-            //ComputeManagementClient computeClient;
-            //ResourceManagementClient resourcesClient;
         }
         protected VirtualMachineScaleSetExtension GetTestVMSSVMExtension(
             string name = "vmssext01",
@@ -277,7 +275,7 @@ namespace Azure.Management.Compute.Tests
             catch
             {
                 // TODO: It is better to issue Delete and forget.
-                await (await ResourceGroupsClient.StartDeleteAsync(rgName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
                 throw;
             }
         }
@@ -327,7 +325,7 @@ namespace Azure.Management.Compute.Tests
         // PATCH verb is more relaxed and does not puts constraint to specify full parameters.
         protected async void PatchVMScaleSet(string rgName, string vmssName, VirtualMachineScaleSetUpdate inputVMScaleSet)
         {
-            var patchResponse = await (await VirtualMachineScaleSetsClient.StartUpdateAsync(rgName, vmssName, inputVMScaleSet)).WaitForCompletionAsync();
+            var patchResponse = await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartUpdateAsync(rgName, vmssName, inputVMScaleSet));
         }
 
         private async Task<(VirtualMachineScaleSet, VirtualMachineScaleSet)> CreateVMScaleSetAndGetOperationResponse(
@@ -384,8 +382,8 @@ namespace Azure.Management.Compute.Tests
                 osDisk.DiffDiskSettings = new DiffDiskSettings
                 {
                     Option ="Local",
-                    //Option = DiffDiskOptions.Local,
-                    Placement = DiffDiskPlacement.CacheDisk
+                    //TODO the value of "Placement" may not be given
+                    //Placement = DiffDiskPlacement.CacheDisk
                 };
                 inputVMScaleSet.VirtualMachineProfile.StorageProfile.OsDisk = osDisk;
             }
@@ -401,7 +399,7 @@ namespace Azure.Management.Compute.Tests
 
             try
             {
-                createOrUpdateResponse = await (await VirtualMachineScaleSetsClient.StartCreateOrUpdateAsync(rgName, vmssName, inputVMScaleSet)).WaitForCompletionAsync();
+                createOrUpdateResponse = await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartCreateOrUpdateAsync(rgName, vmssName, inputVMScaleSet));
 
                 Assert.True(createOrUpdateResponse.Name == vmssName);
                 Assert.True(createOrUpdateResponse.Location.ToLower() == inputVMScaleSet.Location.ToLower().Replace(" ", ""));
@@ -656,6 +654,7 @@ namespace Azure.Management.Compute.Tests
 
             if (ppgId != null)
             {
+
                 Assert.AreEqual(ppgId, vmScaleSetOut.ProximityPlacementGroup.Id);
             }
         }

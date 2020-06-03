@@ -52,7 +52,7 @@ namespace Azure.Management.Compute.Tests
                 {
                     if (!m_initialized)
                     {
-                        m_subId = SubscriptionId;
+                        m_subId = TestEnvironment.SubscriptionId;
                         if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("AZURE_VM_TEST_LOCATION")))
                         {
                             m_location = DefaultLocation;
@@ -152,8 +152,8 @@ namespace Azure.Management.Compute.Tests
                     });
                 var stoInput = new StorageAccountCreateParameters(new Sku(SkuName.StandardGRS), Kind.Storage, m_location);
 
-                StorageAccount storageAccountOutput = await (await StorageAccountsClient.StartCreateAsync(rgName,
-                    storageAccountName, stoInput)).WaitForCompletionAsync();
+                StorageAccount storageAccountOutput = await WaitForCompletionAsync(await StorageAccountsClient.StartCreateAsync(rgName,
+                    storageAccountName, stoInput));
 
                 var stos = await getAllstos(rgName);
                 bool created = false;
@@ -238,16 +238,16 @@ namespace Azure.Management.Compute.Tests
                 var inputVM = CreateDefaultVMInput(rgName, storageAccountName, imageRef, asetId, nicResponse.Id, hasManagedDisks, vmSize, osDiskStorageAccountType,
                     dataDiskStorageAccountType, writeAcceleratorEnabled, diskEncryptionSetId);
 
-                //if (hasDiffDisks)
-                //{
-                //    OSDisk osDisk = inputVM.StorageProfile.OsDisk;
-                //    osDisk.Caching = CachingTypes.ReadOnly;
-                //    osDisk.DiffDiskSettings = new DiffDiskSettings
-                //    {
-                //        Option = "Local",
-                //        Placement = DiffDiskPlacement.ResourceDisk
-                //    };
-                //}
+                if (hasDiffDisks)
+                {
+                    OSDisk osDisk = inputVM.StorageProfile.OsDisk;
+                    osDisk.Caching = CachingTypes.ReadOnly;
+                    osDisk.DiffDiskSettings = new DiffDiskSettings
+                    {
+                        Option = "Local",
+                        Placement = DiffDiskPlacement.ResourceDisk
+                    };
+                }
 
                 if (zones != null)
                 {
@@ -272,12 +272,12 @@ namespace Azure.Management.Compute.Tests
                 if (waitForCompletion)
                 {
                     // CreateOrUpdate polls for the operation completion and returns once the operation reaches a terminal state
-                    createOrUpdateResponse = (await (await VirtualMachinesClient.StartCreateOrUpdateAsync(rgName, inputVM.Name, inputVM)).WaitForCompletionAsync()).Value;
+                    createOrUpdateResponse = (await WaitForCompletionAsync(await VirtualMachinesClient.StartCreateOrUpdateAsync(rgName, inputVM.Name, inputVM))).Value;
                 }
                 else
                 {
                     // BeginCreateOrUpdate returns immediately after the request is accepted by CRP
-                    createOrUpdateResponse = (await (await VirtualMachinesClient.StartCreateOrUpdateAsync(rgName, inputVM.Name, inputVM)).WaitForCompletionAsync()).Value;
+                    createOrUpdateResponse = (await WaitForCompletionAsync(await VirtualMachinesClient.StartCreateOrUpdateAsync(rgName, inputVM.Name, inputVM))).Value;
                 }
 
                 Assert.True(createOrUpdateResponse.Name == inputVM.Name);
@@ -320,7 +320,7 @@ namespace Azure.Management.Compute.Tests
                 PrefixLength = prefixLength
             };
 
-            var putPublicIpPrefixResponse = await (await PublicIPPrefixesClient.StartCreateOrUpdateAsync(rgName, publicIpPrefixName, publicIpPrefix)).WaitForCompletionAsync();
+            var putPublicIpPrefixResponse = await WaitForCompletionAsync(await PublicIPPrefixesClient.StartCreateOrUpdateAsync(rgName, publicIpPrefixName, publicIpPrefix));
             var getPublicIpPrefixResponse = await PublicIPPrefixesClient.GetAsync(rgName, publicIpPrefixName);
 
             return getPublicIpPrefixResponse;
@@ -385,7 +385,7 @@ namespace Azure.Management.Compute.Tests
                             }
                         }
             };
-            VirtualNetwork putVnetResponse = (await (await VirtualNetworksClient.StartCreateOrUpdateAsync(rgName, vnetName, vnet)).WaitForCompletionAsync()).Value;
+            VirtualNetwork putVnetResponse = (await WaitForCompletionAsync(await VirtualNetworksClient.StartCreateOrUpdateAsync(rgName, vnetName, vnet))).Value;
             var getSubnetResponse = await SubnetsClient.GetAsync(rgName, vnetName, subnetName);
             return getSubnetResponse;
         }
@@ -427,7 +427,7 @@ namespace Azure.Management.Compute.Tests
                 vnet.Subnets.Add(subnet);
             }
 
-            var putVnetResponse = await (await VirtualNetworksClient.StartCreateOrUpdateAsync(rgName, vnetName, vnet)).WaitForCompletionAsync();
+            var putVnetResponse = await WaitForCompletionAsync(await VirtualNetworksClient.StartCreateOrUpdateAsync(rgName, vnetName, vnet));
             return putVnetResponse;
         }
 
@@ -981,7 +981,7 @@ namespace Azure.Management.Compute.Tests
                     Tags = new Dictionary<string, string>() { { rgName, DateTime.UtcNow.ToString("u") } }
                 });
             //var xx = return await response.WaitForCompletionAsync()
-            return await response.WaitForCompletionAsync();
+            return await WaitForCompletionAsync(response);
             //return await DedicatedHostsClient.StartCreateOrUpdateAsync(rgName, dedicatedHostGroupName, dedicatedHostName,
             //    new DedicatedHost(m_location,new Sku() { Name= "ESv3-Type1" })
             //    {

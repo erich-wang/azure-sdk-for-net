@@ -24,8 +24,6 @@ namespace Azure.Management.Compute.Tests
             {
                 InitializeBase();
             }
-            //ComputeManagementClient computeClient;
-            //ResourceManagementClient resourcesClient;
         }
         [Test]
         public async Task TestVMDataDiskScenario()
@@ -123,9 +121,9 @@ namespace Azure.Management.Compute.Tests
                 ValidateVMInstanceView(inputVM, getVMWithInstanceViewResponse);
 
                 var vm2 = getVMWithInstanceViewResponse;
-                var vmReCreateResponse = await (await VirtualMachinesClient.StartCreateOrUpdateAsync(rgName, getVMWithInstanceViewResponse.Value.Name, getVMWithInstanceViewResponse)).WaitForCompletionAsync();
+                var vmReCreateResponse = await WaitForCompletionAsync(await VirtualMachinesClient.StartCreateOrUpdateAsync(rgName, getVMWithInstanceViewResponse.Value.Name, getVMWithInstanceViewResponse));
 
-                await (await VirtualMachinesClient.StartDeleteAsync(rgName, inputVM.Name)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachinesClient.StartDeleteAsync(rgName, inputVM.Name));
 
                 passed = true;
             }

@@ -24,8 +24,6 @@ namespace Azure.Management.Compute.Tests
             {
                 InitializeBase();
             }
-            //ComputeManagementClient computeClient;
-            //ResourceManagementClient resourcesClient;
         }
 
         private VirtualMachineExtension GetTestVMExtension()
@@ -69,6 +67,7 @@ namespace Azure.Management.Compute.Tests
         }
 
         [Test]
+        [Ignore("this should be tested by generate team")]
         public async Task TestVMExtensionOperations()
         {
             EnsureClientsInitialized();
@@ -88,11 +87,11 @@ namespace Azure.Management.Compute.Tests
                 var vm = returnTwovm.Item1;
                 inputVM = returnTwovm.Item2;
                 // Delete an extension that does not exist in the VM. A http status code of NoContent should be returned which translates to operation success.
-                var xx =await (await VirtualMachineExtensionsClient.StartDeleteAsync(rgName, vm.Name, "VMExtensionDoesNotExist")).WaitForCompletionAsync();
+                var xx =await WaitForCompletionAsync(await VirtualMachineExtensionsClient.StartDeleteAsync(rgName, vm.Name, "VMExtensionDoesNotExist"));
                 // Add an extension to the VM
                 var vmExtension = GetTestVMExtension();
                 var resp = await VirtualMachineExtensionsClient.StartCreateOrUpdateAsync(rgName, vm.Name, vmExtension.Name, vmExtension);
-                var response =await resp.WaitForCompletionAsync();
+                var response =await WaitForCompletionAsync(resp);
                 ValidateVMExtension(vmExtension, response);
 
                 // Perform a Get operation on the extension
@@ -114,7 +113,7 @@ namespace Azure.Management.Compute.Tests
 
                 // Update extension on the VM
                 var vmExtensionUpdate = GetTestVMUpdateExtension();
-                await (await VirtualMachineExtensionsClient.StartUpdateAsync(rgName, vm.Name, vmExtension.Name, vmExtensionUpdate)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachineExtensionsClient.StartUpdateAsync(rgName, vm.Name, vmExtension.Name, vmExtensionUpdate));
                 vmExtension.Tags["extensionTag3"] = "3";
                 getVMExtResponse = await VirtualMachineExtensionsClient.GetAsync(rgName, vm.Name, vmExtension.Name);
                 ValidateVMExtension(vmExtension, getVMExtResponse);
@@ -129,7 +128,7 @@ namespace Azure.Management.Compute.Tests
                 ValidateVMExtensionInstanceView(getVMWithInstanceViewResponse.InstanceView.Extensions.FirstOrDefault());
 
                 // Validate the extension delete API
-                await (await VirtualMachineExtensionsClient.StartDeleteAsync(rgName, vm.Name, vmExtension.Name)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await VirtualMachineExtensionsClient.StartDeleteAsync(rgName, vm.Name, vmExtension.Name));
             //}
             //finally
             //{

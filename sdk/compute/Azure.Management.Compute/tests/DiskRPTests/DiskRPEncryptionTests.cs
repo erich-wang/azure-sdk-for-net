@@ -31,7 +31,7 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
         public async Task DiskEncryptionPositiveTest()
         {
             EnsureClientsInitialized();
-            string testVaultId = @"/subscriptions/" + SubscriptionId+ "/resourceGroups/24/providers/Microsoft.KeyVault/vaults/swaggervault2";
+            string testVaultId = @"/subscriptions/" + TestEnvironment.SubscriptionId+ "/resourceGroups/24/providers/Microsoft.KeyVault/vaults/swaggervault2";
             string encryptionKeyUri = @"https://swaggervault2.vault.azure.net/keys/swaggerkey/6108e4eb47c14bdf863f1465229f8e66";
             string secretUri = @"https://swaggervault2.vault.azure.net/secrets/swaggersecret/c464e5083aab4f73968700e8b077c54d";
             string encryptionSettingsVersion = "1.0";
@@ -41,21 +41,19 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
             Disk disk = await GenerateDefaultDisk(DiskCreateOption.Empty.ToString(), rgName, 10);
             disk.EncryptionSettingsCollection = GetDiskEncryptionSettings(testVaultId, encryptionKeyUri, secretUri, encryptionSettingsVersion: encryptionSettingsVersion);
             disk.Location = DiskRPLocation;
-
             try
             {
                 await ResourceGroupsClient.CreateOrUpdateAsync(rgName, new ResourceGroup(DiskRPLocation));
                 //put disk
                 await (await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk)).WaitForCompletionAsync();
                 Disk diskOut = await DisksClient.GetAsync(rgName, diskName);
-
                 Validate(disk, diskOut, disk.Location);
                 Assert.AreEqual(encryptionSettingsVersion, diskOut.EncryptionSettingsCollection.EncryptionSettingsVersion);
                 Assert.AreEqual(disk.EncryptionSettingsCollection.EncryptionSettings.First().DiskEncryptionKey.SecretUrl, diskOut.EncryptionSettingsCollection.EncryptionSettings.First().DiskEncryptionKey.SecretUrl);
                 Assert.AreEqual(disk.EncryptionSettingsCollection.EncryptionSettings.First().DiskEncryptionKey.SourceVault.Id, diskOut.EncryptionSettingsCollection.EncryptionSettings.First().DiskEncryptionKey.SourceVault.Id);
                 Assert.AreEqual(disk.EncryptionSettingsCollection.EncryptionSettings.First().KeyEncryptionKey.KeyUrl, diskOut.EncryptionSettingsCollection.EncryptionSettings.First().KeyEncryptionKey.KeyUrl);
                 Assert.AreEqual(disk.EncryptionSettingsCollection.EncryptionSettings.First().KeyEncryptionKey.SourceVault.Id, diskOut.EncryptionSettingsCollection.EncryptionSettings.First().KeyEncryptionKey.SourceVault.Id);
-                await (await DisksClient.StartDeleteAsync(rgName, diskName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await DisksClient.StartDeleteAsync(rgName, diskName));
             }
             finally
             {
@@ -68,7 +66,7 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
         {
             EnsureClientsInitialized();
             string fakeTestVaultId =
-            @"/subscriptions/" + SubscriptionId + "/resourceGroups/testrg/providers/Microsoft.KeyVault/vaults/keyvault";
+            @"/subscriptions/" + TestEnvironment.SubscriptionId + "/resourceGroups/testrg/providers/Microsoft.KeyVault/vaults/keyvault";
             string fakeEncryptionKeyUri = @"https://testvault.vault.azure.net/secrets/swaggersecret/test123";
 
             var rgName = Recording.GenerateAssetName(TestPrefix);
@@ -76,21 +74,18 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
             Disk disk = await GenerateDefaultDisk(DiskCreateOption.Empty.ToString(), rgName, 10);
             disk.EncryptionSettingsCollection = GetDiskEncryptionSettings(fakeTestVaultId, fakeEncryptionKeyUri, fakeEncryptionKeyUri);
             disk.Location = DiskRPLocation;
-
             try
             {
                 await ResourceGroupsClient.CreateOrUpdateAsync(rgName,
                     new ResourceGroup(DiskRPLocation));
-
                 await (await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk)).WaitForCompletionAsync();
                 Disk diskOut = await DisksClient.GetAsync(rgName, diskName);
-
                 Validate(disk, diskOut, disk.Location);
                 Assert.AreEqual(disk.EncryptionSettingsCollection.EncryptionSettings.First().DiskEncryptionKey.SecretUrl, diskOut.EncryptionSettingsCollection.EncryptionSettings.First().DiskEncryptionKey.SecretUrl);
                 Assert.AreEqual(disk.EncryptionSettingsCollection.EncryptionSettings.First().DiskEncryptionKey.SourceVault.Id, diskOut.EncryptionSettingsCollection.EncryptionSettings.First().DiskEncryptionKey.SourceVault.Id);
                 Assert.AreEqual(disk.EncryptionSettingsCollection.EncryptionSettings.First().KeyEncryptionKey.KeyUrl, diskOut.EncryptionSettingsCollection.EncryptionSettings.First().KeyEncryptionKey.KeyUrl);
                 Assert.AreEqual(disk.EncryptionSettingsCollection.EncryptionSettings.First().KeyEncryptionKey.SourceVault.Id, diskOut.EncryptionSettingsCollection.EncryptionSettings.First().KeyEncryptionKey.SourceVault.Id);
-                await (await DisksClient.StartDeleteAsync(rgName, diskName)).WaitForCompletionAsync();
+                await WaitForCompletionAsync(await DisksClient.StartDeleteAsync(rgName, diskName));
             }
             catch (Exception ex)
             {
@@ -116,32 +111,6 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
                         )
                     )
                 },encryptionSettingsVersion);
-            //{
-            //    Enabled = true,
-            //    EncryptionSettingsVersion = encryptionSettingsVersion,
-            //    EncryptionSettings = new List<EncryptionSettingsElement>
-            //    {
-            //        new EncryptionSettingsElement
-            //        {
-            //            DiskEncryptionKey = new KeyVaultAndSecretReference
-            //            {
-            //                SecretUrl = secretUri,
-            //                SourceVault = new SourceVault
-            //                {
-            //                    Id = testVaultId
-            //                }
-            //            },
-            //            KeyEncryptionKey = new KeyVaultAndKeyReference
-            //            {
-            //                KeyUrl = encryptionKeyUri,
-            //                SourceVault = new SourceVault
-            //                {
-            //                    Id = testVaultId
-            //                }
-            //            }
-            //        }
-            //    }
-            //};
             return diskEncryptionSettings;
         }
     }
