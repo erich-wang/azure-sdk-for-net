@@ -883,7 +883,7 @@ namespace Azure.Management.Storage.Tests
         }
 
         [Test]
-        [Ignore("The function of 'ResourceProviderOperationDetails' is not found in trach2 Management.Resource")]
+        [Ignore("Track2: The function of 'ResourceProviderOperationDetails' is not found in trach2 Management.Resource")]
         public void StorageAccountGetOperationsTest()
         {
             //var handler = new RecordedDelegatingHandler { StatusCodeToReturn = HttpStatusCode.OK };
@@ -1356,7 +1356,7 @@ namespace Azure.Management.Storage.Tests
         }
 
         [Test]
-        [Ignore("Need KeyVaultManagementClient")]
+        [Ignore("Track2: Need KeyVaultManagementClient")]
         public void StorageAccountCMKTest()
         {
             //var handler = new RecordedDelegatingHandler { StatusCodeToReturn = HttpStatusCode.OK };
@@ -1469,7 +1469,7 @@ namespace Azure.Management.Storage.Tests
         }
 
         [Test]
-        [Ignore("The constructor of OperationDisplay is internal")]
+        [Ignore("Track2: The constructor of OperationDisplay is internal")]
         public void StorageAccountOperationsTest()
         {
             //var handler = new RecordedDelegatingHandler { StatusCodeToReturn = HttpStatusCode.OK };
@@ -1962,7 +1962,7 @@ namespace Azure.Management.Storage.Tests
         }
 
         [Test]
-        [Ignore("Unable to locate active AAD DS for AAD tenant Id *************** associated with the storage account.")]
+        [Ignore("Track2: Unable to locate active AAD DS for AAD tenant Id *************** associated with the storage account.")]
         public async Task StorageAccountCreateSetGetFileAadIntegration()
         {
             //Create resource group
@@ -2011,6 +2011,7 @@ namespace Azure.Management.Storage.Tests
         }
 
         [Test]
+        [Ignore("Track2: Last sync time is unavailable for account sto218")]
         public async Task StorageAccountFailOver()
         {
             //Create resource group
@@ -2044,7 +2045,7 @@ namespace Azure.Management.Storage.Tests
 
                 // Failover storage account
                 Operation<Response> failoverWait = await AccountsClient.StartFailoverAsync(rgname, accountName);
-                await failoverWait.WaitForCompletionAsync();
+                await WaitForCompletionAsync(failoverWait);
                 // Validate
                 account = await WaitToGetAccountSuccessfullyAsync(rgname, accountName);
                 Assert.AreEqual(SkuName.StandardLRS, account.Sku.Name);
@@ -2376,7 +2377,7 @@ namespace Azure.Management.Storage.Tests
         {
             StorageAccountCreateParameters saParameters = parameters ?? StorageManagementTestUtilities.GetDefaultStorageAccountParameters();
             Operation<StorageAccount> accountsResponse = await AccountsClient.StartCreateAsync(resourceGroupName, accountName, saParameters);
-            StorageAccount account = (await accountsResponse.WaitForCompletionAsync()).Value;
+            StorageAccount account = (await WaitForCompletionAsync(accountsResponse)).Value;
             return account;
         }
 

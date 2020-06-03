@@ -234,7 +234,7 @@ namespace Azure.Management.Storage.Tests
         {
             StorageAccountCreateParameters saParameters = parameters ?? StorageManagementTestUtilities.GetDefaultStorageAccountParameters();
             Operation<StorageAccount> accountsResponse = await AccountsClient.StartCreateAsync(resourceGroupName, accountName, saParameters);
-            StorageAccount account = (await accountsResponse.WaitForCompletionAsync()).Value;
+            StorageAccount account = (await WaitForCompletionAsync(accountsResponse)).Value;
             return account;
         }
 

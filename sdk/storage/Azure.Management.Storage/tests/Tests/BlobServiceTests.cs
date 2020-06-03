@@ -864,7 +864,7 @@ namespace Azure.Management.Storage.Tests
 
         // Point In Time Restore test
         [Test]
-        [Ignore("Response<BlobRestoreStatus> restoreStatusResponse = await restoreStatus.WaitForCompletionAsync(); Always timeout")]
+        [Ignore("Track2: Response<BlobRestoreStatus> restoreStatusResponse = await WaitForCompletionAsync(restoreStatus); Always timeout")]
         public async Task PITRTest()
         {
             // Create resource group
@@ -919,7 +919,7 @@ namespace Azure.Management.Storage.Tests
                 DateTimeOffset dateTimeOffset = DateTime.UtcNow.AddSeconds(-1);
                 BlobRestoreParameters BlobRestoreParametersModel = new BlobRestoreParameters(dateTimeOffset, ranges);
                 Operation<BlobRestoreStatus> restoreStatus = await AccountsClient.StartRestoreBlobRangesAsync(rgName, accountName, BlobRestoreParametersModel);
-                Response<BlobRestoreStatus> restoreStatusResponse = await restoreStatus.WaitForCompletionAsync();
+                Response<BlobRestoreStatus> restoreStatusResponse = await WaitForCompletionAsync(restoreStatus);
                 Assert.AreEqual("Complete", restoreStatusResponse.Value.Status.ToString());
 
                 account = await AccountsClient.GetPropertiesAsync(rgName, accountName, StorageAccountExpand.BlobRestoreStatus);
@@ -1121,7 +1121,7 @@ namespace Azure.Management.Storage.Tests
         {
             StorageAccountCreateParameters saParameters = parameters ?? StorageManagementTestUtilities.GetDefaultStorageAccountParameters();
             Operation<StorageAccount> accountsResponse = await AccountsClient.StartCreateAsync(resourceGroupName, accountName, saParameters);
-            StorageAccount account = (await accountsResponse.WaitForCompletionAsync()).Value;
+            StorageAccount account = (await WaitForCompletionAsync(accountsResponse)).Value;
             return account;
         }
 
