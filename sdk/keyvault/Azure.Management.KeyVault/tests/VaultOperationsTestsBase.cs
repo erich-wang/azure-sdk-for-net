@@ -14,6 +14,7 @@ using Azure.Management.Resources;
 namespace Azure.Management.KeyVault.Tests
 {
     [ClientTestFixture]
+    [RunOnlyInTestModes(Live = true)]
     public abstract class VaultOperationsTestsBase : RecordedTestBase<KeyVaultManagementTestEnvironment>
     {
         private const string ObjectIdKey = "ObjectId";
