@@ -105,7 +105,7 @@ namespace Azure.Management.Network.Tests
         }
 
         [Test]
-        [Ignore("The corresponding configuration is needed, and the account is missing the key configuration")]
+        [Ignore("Track2: The corresponding configuration is needed, and the account is missing the key configuration")]
         public async Task ExpressRouteMicrosoftPeeringApiTest()
         {
             string resourceGroupName = Recording.GenerateAssetName("csmrg");
@@ -137,7 +137,7 @@ namespace Azure.Management.Network.Tests
         }
 
         [Test]
-        [Ignore("The corresponding configuration is needed, and the account is missing the key configuration")]
+        [Ignore("Track2: The corresponding configuration is needed, and the account is missing the key configuration")]
         public async Task ExpressRouteMicrosoftPeeringApiWithIpv6Test()
         {
             string resourceGroupName = Recording.GenerateAssetName("csmrg");

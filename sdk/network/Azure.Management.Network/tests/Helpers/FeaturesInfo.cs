@@ -8,11 +8,11 @@ namespace Azure.Management.Network.Tests.Helpers
 {
     public static class FeaturesInfo
     {
-        public static HashSet<string> defaultLocations = new HashSet<string>(new[] { "East US", "West US", "Central US", "West Europe" }, StringComparer.OrdinalIgnoreCase);
+        public static HashSet<string> DefaultLocations = new HashSet<string>(new[] { "East US", "West US", "Central US", "West Europe" }, StringComparer.OrdinalIgnoreCase);
 
-        public static HashSet<string> ipv6SupportedLocations = new HashSet<string>(new[] { "East US", "West US", "Central US", "West Europe" }, StringComparer.OrdinalIgnoreCase);
+        public static HashSet<string> Ipv6SupportedLocations = new HashSet<string>(new[] { "East US", "West US", "Central US", "West Europe" }, StringComparer.OrdinalIgnoreCase);
 
-        public static HashSet<string> allFeaturesSupportedLocations = new HashSet<string>(new[] { "West US", "West Europe" }, StringComparer.OrdinalIgnoreCase);
+        public static HashSet<string> AllFeaturesSupportedLocations = new HashSet<string>(new[] { "West US", "West Europe" }, StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// for every new feature added to sdk, you can create list of regions where it is enabled in the Hashset in utilities.

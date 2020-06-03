@@ -26,7 +26,7 @@ namespace Azure.Management.Network.Tests.Tests
         }
 
         [Test]
-        [Ignore("The NetworkWathcer is involved, so disable the test")]
+        [Ignore("Track2: The NetworkWathcer is involved, so disable the test")]
         public async Task AzureReachabilityReportCountryLevelAggregationTest()
         {
             AzureReachabilityReportParameters parameters = new AzureReachabilityReportParameters(
@@ -44,7 +44,7 @@ namespace Azure.Management.Network.Tests.Tests
         }
 
         [Test]
-        [Ignore("The NetworkWathcer is involved, so disable the test")]
+        [Ignore("Track2: The NetworkWathcer is involved, so disable the test")]
         public async Task AzureReachabilityReportStateLevelAggregationTest()
         {
             AzureReachabilityReportParameters parameters = new AzureReachabilityReportParameters(
@@ -63,7 +63,7 @@ namespace Azure.Management.Network.Tests.Tests
         }
 
         [Test]
-        [Ignore("The NetworkWathcer is involved, so disable the test")]
+        [Ignore("Track2: The NetworkWathcer is involved, so disable the test")]
         public async Task AzureReachabilityReportCityLevelAggregationTest()
         {
             AzureReachabilityReportParameters parameters = new AzureReachabilityReportParameters(

@@ -97,7 +97,7 @@ namespace Azure.Management.Network.Tests.Tests
         }
 
         [Test]
-        [Ignore("Need  RedisManagementClient")]
+        [Ignore("Track2: Need  RedisManagementClient")]
         public async Task SubnetResourceNavigationLinksTest()
         {
             string resourceGroupName = Recording.GenerateAssetName("csmrg");

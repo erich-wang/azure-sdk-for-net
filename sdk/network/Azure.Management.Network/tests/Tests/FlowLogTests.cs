@@ -28,7 +28,7 @@ namespace Azure.Management.Network.Tests.Tests
         }
 
         [Test]
-        [Ignore("Need OperationalInsightsManagementClient")]
+        [Ignore("Track2: Need OperationalInsightsManagementClient")]
         public async Task FlowLogApiTest()
         {
             string resourceGroupName = Recording.GenerateAssetName("azsmnet");

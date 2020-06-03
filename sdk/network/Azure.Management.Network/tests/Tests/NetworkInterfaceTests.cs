@@ -1025,7 +1025,7 @@ namespace Azure.Management.Network.Tests.Tests
         }
 
         [Test]
-        [Ignore("Need to use an existing virtual machine, but not create it in test case ")]
+        [Ignore("Track2: Need to use an existing virtual machine, but not create it in test case ")]
         public async Task NetworkInterfaceEffectiveNetworkSecurityGroupTest()
         {
             string resourceGroupName = Recording.GenerateAssetName("csmrg");
@@ -1140,7 +1140,7 @@ namespace Azure.Management.Network.Tests.Tests
         }
 
         [Test]
-        [Ignore("Need to use an existing virtual machine, but not create it in test case ")]
+        [Ignore("Track2: Need to use an existing virtual machine, but not create it in test case ")]
         public async Task NetworkInterfaceEffectiveRouteTableTest()
         {
             string resourceGroupName = Recording.GenerateAssetName("csmrg");

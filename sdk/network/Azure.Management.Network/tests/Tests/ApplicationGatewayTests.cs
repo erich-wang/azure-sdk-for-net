@@ -516,7 +516,7 @@ namespace Azure.Management.Network.Tests.Tests
         }
 
         [Test]
-        [Ignore("SSL is missing, and there is no explicit SSL creation in the test.")]
+        [Ignore("Track2: SSL is missing, and there is no explicit SSL creation in the test.")]
         public async Task ApplicationGatewayApiTest()
         {
             string resourceGroupName = Recording.GenerateAssetName("csmrg");

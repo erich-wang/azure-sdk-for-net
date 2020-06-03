@@ -25,16 +25,16 @@ namespace Azure.Management.Network.Tests.Helpers
             switch (feature)
             {
                 case FeaturesInfo.Type.Default:
-                    supportedLocations = FeaturesInfo.defaultLocations;
+                    supportedLocations = FeaturesInfo.DefaultLocations;
                     break;
                 case FeaturesInfo.Type.All:
-                    supportedLocations = FeaturesInfo.allFeaturesSupportedLocations;
+                    supportedLocations = FeaturesInfo.AllFeaturesSupportedLocations;
                     break;
                 case FeaturesInfo.Type.Ipv6:
-                    supportedLocations = FeaturesInfo.ipv6SupportedLocations;
+                    supportedLocations = FeaturesInfo.Ipv6SupportedLocations;
                     break;
                 case FeaturesInfo.Type.MultiCA:
-                    supportedLocations = FeaturesInfo.defaultLocations;
+                    supportedLocations = FeaturesInfo.DefaultLocations;
                     break;
             }
             string[] parts = resourceType.Split('/');
@@ -66,16 +66,16 @@ namespace Azure.Management.Network.Tests.Helpers
             switch (feature)
             {
                 case FeaturesInfo.Type.Default:
-                    supportedLocations = FeaturesInfo.defaultLocations;
+                    supportedLocations = FeaturesInfo.DefaultLocations;
                     break;
                 case FeaturesInfo.Type.All:
-                    supportedLocations = FeaturesInfo.allFeaturesSupportedLocations;
+                    supportedLocations = FeaturesInfo.AllFeaturesSupportedLocations;
                     break;
                 case FeaturesInfo.Type.Ipv6:
-                    supportedLocations = FeaturesInfo.ipv6SupportedLocations;
+                    supportedLocations = FeaturesInfo.Ipv6SupportedLocations;
                     break;
                 case FeaturesInfo.Type.MultiCA:
-                    supportedLocations = FeaturesInfo.defaultLocations;
+                    supportedLocations = FeaturesInfo.DefaultLocations;
                     break;
             }
             string[] parts = resourceType.Split('/');

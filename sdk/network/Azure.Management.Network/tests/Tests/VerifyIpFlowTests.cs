@@ -28,7 +28,7 @@ namespace Azure.Management.Network.Tests.Tests
         }
 
         [Test]
-        [Ignore("The NetworkWathcer is involved, so disable the test")]
+        [Ignore("Track2: The NetworkWathcer is involved, so disable the test")]
         public async Task VerifyIpFlowApiTest()
         {
             string resourceGroupName = Recording.GenerateAssetName("azsmnet");

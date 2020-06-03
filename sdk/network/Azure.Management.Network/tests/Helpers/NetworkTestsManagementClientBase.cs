@@ -1,7 +1,9 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Azure.Core.TestFramework;
 using Azure.Management.Compute;
 using Azure.Management.Resources;
@@ -12,6 +14,7 @@ namespace Azure.Management.Network.Tests.Helpers
     public class NetworkTestsManagementClientBase : RecordedTestBase<NetworkManagementTestEnvironment>
     {
         public bool IsTestTenant = false;
+        public static TimeSpan ZeroPollingInterval { get; } = TimeSpan.FromSeconds(0);
         public Dictionary<string, string> Tags { get; internal set; }
 
         public ResourcesManagementClient ResourceManagementClient { get; set; }
@@ -71,9 +74,21 @@ namespace Azure.Management.Network.Tests.Helpers
                  Recording.InstrumentClientOptions(new NetworkManagementClientOptions())));
         }
 
-        public override void StartTestRecording()
+        //public override void StartTestRecording()
+        //{
+        //    base.StartTestRecording();
+        //}
+
+        protected ValueTask<Response<T>> WaitForCompletionAsync<T>(Operation<T> operation)
         {
-            base.StartTestRecording();
+            if (Mode == RecordedTestMode.Playback)
+            {
+                return operation.WaitForCompletionAsync(ZeroPollingInterval, default);
+            }
+            else
+            {
+                return operation.WaitForCompletionAsync();
+            }
         }
     }
 }

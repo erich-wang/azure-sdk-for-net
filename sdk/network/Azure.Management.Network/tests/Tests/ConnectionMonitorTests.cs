@@ -29,7 +29,7 @@ namespace Azure.Management.Network.Tests.Tests
         }
 
         [Test]
-        [Ignore("ApiVersion does not meet the requirements")]
+        [Ignore("Track2: ApiVersion does not meet the requirements")]
         public async Task PutConnectionMonitorTest()
         {
             string resourceGroupName = Recording.GenerateAssetName("azsmnet");
@@ -106,7 +106,7 @@ namespace Azure.Management.Network.Tests.Tests
         }
 
         [Test]
-        [Ignore("ApiVersion does not meet the requirements")]
+        [Ignore("Track2: ApiVersion does not meet the requirements")]
         public async Task StartConnectionMonitorTest()
         {
             string resourceGroupName = Recording.GenerateAssetName("azsmnet");
@@ -184,7 +184,7 @@ namespace Azure.Management.Network.Tests.Tests
         }
 
         [Test]
-        [Ignore("ApiVersion does not meet the requirements")]
+        [Ignore("Track2: ApiVersion does not meet the requirements")]
         public async Task StopConnectionMonitorTest()
         {
             string resourceGroupName = Recording.GenerateAssetName("azsmnet");
@@ -260,7 +260,7 @@ namespace Azure.Management.Network.Tests.Tests
         }
 
         [Test]
-        [Ignore("ApiVersion does not meet the requirements")]
+        [Ignore("Track2: ApiVersion does not meet the requirements")]
         public async Task QueryConnectionMonitorTest()
         {
             string resourceGroupName = Recording.GenerateAssetName("azsmnet");
@@ -342,7 +342,7 @@ namespace Azure.Management.Network.Tests.Tests
         }
 
         [Test]
-        [Ignore("ApiVersion does not meet the requirements")]
+        [Ignore("Track2: ApiVersion does not meet the requirements")]
         public async Task UpdateConnectionMonitorTest()
         {
             string resourceGroupName = Recording.GenerateAssetName("azsmnet");
@@ -417,7 +417,7 @@ namespace Azure.Management.Network.Tests.Tests
         }
 
         [Test]
-        [Ignore("ApiVersion does not meet the requirements")]
+        [Ignore("Track2: ApiVersion does not meet the requirements")]
         public async Task DeleteConnectionMonitorTest()
         {
             string resourceGroupName = Recording.GenerateAssetName("azsmnet");

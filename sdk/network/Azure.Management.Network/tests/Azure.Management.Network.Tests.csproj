@@ -7,22 +7,10 @@
     <ProjectReference Include="..\src\Azure.Management.Network.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="TestData\DeploymentTemplate.json">
+    <None Update="TestData\*.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="TestData\DeploymentTemplateAsync.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\FirewallPolicyRuleGroupSampleResource.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\FirewallPolicyRuleGroupSampleResourceAsync.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\VmssDeploymentTemplate.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="TestData\VmssDeploymentTemplateAsync.json">
+      <None Update="SessionRecords\*.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

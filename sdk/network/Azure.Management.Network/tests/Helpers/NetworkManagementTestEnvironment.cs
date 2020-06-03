@@ -2,7 +2,6 @@
 // Licensed under the MIT License.
 
 using Azure.Core.TestFramework;
-//using Azure.Core.Testing;
 
 namespace Azure.Management.Network.Tests.Helpers
 {
