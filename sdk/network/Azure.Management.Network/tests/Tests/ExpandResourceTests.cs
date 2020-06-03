@@ -191,7 +191,7 @@ namespace Azure.Management.Network.Tests.Tests
 
                 // Create the loadBalancer
                 Operation<LoadBalancer> putLoadBalancerOperation = await NetworkManagementClient.GetLoadBalancersClient().StartCreateOrUpdateAsync(resourceGroupName, lbName, loadBalancer);
-                await putLoadBalancerOperation.WaitForCompletionAsync();
+                await WaitForCompletionAsync(putLoadBalancerOperation);
                 Response<LoadBalancer> getLoadBalancer = await NetworkManagementClient.GetLoadBalancersClient().GetAsync(resourceGroupName, lbName);
 
                 // Associate the nic with LB
@@ -202,13 +202,13 @@ namespace Azure.Management.Network.Tests.Tests
 
                 // Put Nics
                 NetworkInterfacesCreateOrUpdateOperation createOrUpdateOperation1 = await NetworkManagementClient.GetNetworkInterfacesClient().StartCreateOrUpdateAsync(resourceGroupName, nic1name, nic1);
-                await createOrUpdateOperation1.WaitForCompletionAsync();
+                await WaitForCompletionAsync(createOrUpdateOperation1);
 
                 NetworkInterfacesCreateOrUpdateOperation createOrUpdateOperation2 = await NetworkManagementClient.GetNetworkInterfacesClient().StartCreateOrUpdateAsync(resourceGroupName, nic2name, nic2);
-                await createOrUpdateOperation2.WaitForCompletionAsync();
+                await WaitForCompletionAsync(createOrUpdateOperation2);
 
                 NetworkInterfacesCreateOrUpdateOperation createOrUpdateOperation3 = await NetworkManagementClient.GetNetworkInterfacesClient().StartCreateOrUpdateAsync(resourceGroupName, nic3name, nic3);
-                await createOrUpdateOperation3.WaitForCompletionAsync();
+                await WaitForCompletionAsync(createOrUpdateOperation3);
 
                 // Get Nics
                 await NetworkManagementClient.GetNetworkInterfacesClient().GetAsync(resourceGroupName, nic1name);
@@ -291,7 +291,7 @@ namespace Azure.Management.Network.Tests.Tests
 
                 // Delete LoadBalancer
                 LoadBalancersDeleteOperation deleteOperation = await NetworkManagementClient.GetLoadBalancersClient().StartDeleteAsync(resourceGroupName, lbName);
-                await deleteOperation.WaitForCompletionAsync();
+                await WaitForCompletionAsync(deleteOperation);
 
                 // Verify Delete
                 AsyncPageable<LoadBalancer> listLoadBalancerAP = NetworkManagementClient.GetLoadBalancersClient().ListAsync(resourceGroupName);

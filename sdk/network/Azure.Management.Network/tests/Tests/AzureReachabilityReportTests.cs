@@ -35,7 +35,7 @@ namespace Azure.Management.Network.Tests.Tests
                 AzureLocations = new List<string> { "West US" }
             };
             Operation<AzureReachabilityReport> reportOperation = await NetworkManagementClient.GetNetworkWatchersClient().StartGetAzureReachabilityReportAsync("NetworkWatcherRG", "NetworkWatcher_westus", parameters);
-            Response<AzureReachabilityReport> report = await reportOperation.WaitForCompletionAsync();
+            Response<AzureReachabilityReport> report = await WaitForCompletionAsync(reportOperation);
 
             //Validation
             Assert.AreEqual("Country", report.Value.AggregationLevel);
@@ -53,7 +53,7 @@ namespace Azure.Management.Network.Tests.Tests
                 AzureLocations = new List<string> { "West US" }
             };
             Operation<AzureReachabilityReport> reportOperation = await NetworkManagementClient.GetNetworkWatchersClient().StartGetAzureReachabilityReportAsync("NetworkWatcherRG", "NetworkWatcher_westus", parameters);
-            Response<AzureReachabilityReport> report = await reportOperation.WaitForCompletionAsync();
+            Response<AzureReachabilityReport> report = await WaitForCompletionAsync(reportOperation);
 
             //Validation
             Assert.AreEqual("State", report.Value.AggregationLevel);
@@ -72,7 +72,7 @@ namespace Azure.Management.Network.Tests.Tests
                 AzureLocations = new List<string> { "West US" }
             };
             Operation<AzureReachabilityReport> reportOperation = await NetworkManagementClient.GetNetworkWatchersClient().StartGetAzureReachabilityReportAsync("NetworkWatcherRG", "NetworkWatcher_westus", parameters);
-            Response<AzureReachabilityReport> report = await reportOperation.WaitForCompletionAsync();
+            Response<AzureReachabilityReport> report = await WaitForCompletionAsync(reportOperation);
 
             //Validation
             Assert.AreEqual("City", report.Value.AggregationLevel);

@@ -86,9 +86,9 @@ namespace Azure.Management.Network.Tests.Tests
             finally
             {
                 ResourceGroupsDeleteOperation deleteOperation1 = await ResourceGroupsClient.StartDeleteAsync(resourceGroupName1);
-                await deleteOperation1.WaitForCompletionAsync();
+                await WaitForCompletionAsync(deleteOperation1);
                 ResourceGroupsDeleteOperation deleteOperation2 = await ResourceGroupsClient.StartDeleteAsync(resourceGroupName2);
-                await deleteOperation2.WaitForCompletionAsync();
+                await WaitForCompletionAsync(deleteOperation2);
             }
         }
     }

@@ -41,7 +41,7 @@ namespace Azure.Management.Network.Tests.Tests
 
                 // Put Nsg
                 NetworkSecurityGroupsCreateOrUpdateOperation putNsgResponseOperation = await NetworkManagementClient.GetNetworkSecurityGroupsClient().StartCreateOrUpdateAsync(resourceGroupName, networkSecurityGroupName, networkSecurityGroup);
-                Response<NetworkSecurityGroup> putNsgResponse = await putNsgResponseOperation.WaitForCompletionAsync();
+                Response<NetworkSecurityGroup> putNsgResponse = await WaitForCompletionAsync(putNsgResponseOperation);
                 Assert.AreEqual("Succeeded", putNsgResponse.Value.ProvisioningState.ToString());
 
                 // Get NSG
@@ -138,7 +138,7 @@ namespace Azure.Management.Network.Tests.Tests
 
                 // Put Nsg
                 NetworkSecurityGroupsCreateOrUpdateOperation putNsgResponseOperation = await NetworkManagementClient.GetNetworkSecurityGroupsClient().StartCreateOrUpdateAsync(resourceGroupName, networkSecurityGroupName, networkSecurityGroup);
-                Response<NetworkSecurityGroup> putNsgResponse = await putNsgResponseOperation.WaitForCompletionAsync();
+                Response<NetworkSecurityGroup> putNsgResponse = await WaitForCompletionAsync(putNsgResponseOperation);
                 Assert.AreEqual("Succeeded", putNsgResponse.Value.ProvisioningState.ToString());
 
                 // Get NSG
@@ -201,7 +201,7 @@ namespace Azure.Management.Network.Tests.Tests
                 networkSecurityGroup.SecurityRules.Add(SecurityRule);
 
                 putNsgResponseOperation = await NetworkManagementClient.GetNetworkSecurityGroupsClient().StartCreateOrUpdateAsync(resourceGroupName, networkSecurityGroupName, networkSecurityGroup);
-                await putNsgResponseOperation.WaitForCompletionAsync();
+                await WaitForCompletionAsync(putNsgResponseOperation);
                 // Get NSG
                 getNsgResponse = await NetworkManagementClient.GetNetworkSecurityGroupsClient().GetAsync(resourceGroupName, networkSecurityGroupName);
 

@@ -57,7 +57,7 @@ namespace Azure.Management.Network.Tests.Tests
 
                 // Put Vnet
                 VirtualNetworksCreateOrUpdateOperation putVnetResponseOperation = await NetworkManagementClient.GetVirtualNetworksClient().StartCreateOrUpdateAsync(resourceGroupName, vnetName, vnet);
-                Response<VirtualNetwork> putVnetResponse = await putVnetResponseOperation.WaitForCompletionAsync();
+                Response<VirtualNetwork> putVnetResponse = await WaitForCompletionAsync(putVnetResponseOperation);
                 Assert.AreEqual("Succeeded", putVnetResponse.Value.ProvisioningState.ToString());
 
                 // Get Vnet
@@ -87,7 +87,7 @@ namespace Azure.Management.Network.Tests.Tests
 
                 // Delete Vnet
                 VirtualNetworksDeleteOperation deleteOperation = await NetworkManagementClient.GetVirtualNetworksClient().StartDeleteAsync(resourceGroupName, vnetName);
-                await deleteOperation.WaitForCompletionAsync();
+                await WaitForCompletionAsync(deleteOperation);
 
                 // Get all Vnets
                 getAllVnetsAP = NetworkManagementClient.GetVirtualNetworksClient().ListAsync(resourceGroupName);
@@ -129,7 +129,7 @@ namespace Azure.Management.Network.Tests.Tests
 
                 // Put Vnet
                 VirtualNetworksCreateOrUpdateOperation putVnetResponseOperation = await NetworkManagementClient.GetVirtualNetworksClient().StartCreateOrUpdateAsync(resourceGroupName, vnetName, vnet);
-                Response<VirtualNetwork> putVnetResponse = await putVnetResponseOperation.WaitForCompletionAsync();
+                Response<VirtualNetwork> putVnetResponse = await WaitForCompletionAsync(putVnetResponseOperation);
                 Assert.AreEqual("Succeeded", putVnetResponse.Value.ProvisioningState.ToString());
 
                 Response<Subnet> getSubnetResponse = await NetworkManagementClient.GetSubnetsClient().GetAsync(resourceGroupName, vnetName, subnetName);
@@ -158,7 +158,8 @@ namespace Azure.Management.Network.Tests.Tests
                 };
 
                 NetworkInterfacesCreateOrUpdateOperation putNicResponseOperation = await NetworkManagementClient.GetNetworkInterfacesClient().StartCreateOrUpdateAsync(resourceGroupName, nicName, nicParameters);
-                await putNicResponseOperation.WaitForCompletionAsync();
+                await WaitForCompletionAsync(putNicResponseOperation);
+
                 // Check Ip Address availability API
                 Response<IPAddressAvailabilityResult> responseAvailable = await NetworkManagementClient.GetVirtualNetworksClient().CheckIPAddressAvailabilityAsync(resourceGroupName, vnetName, "10.0.1.10");
 
@@ -210,7 +211,7 @@ namespace Azure.Management.Network.Tests.Tests
 
                 // Put Vnet
                 VirtualNetworksCreateOrUpdateOperation putVnetResponseOperation = await NetworkManagementClient.GetVirtualNetworksClient().StartCreateOrUpdateAsync(resourceGroupName, vnet1Name, vnet);
-                Response<VirtualNetwork> putVnetResponse = await putVnetResponseOperation.WaitForCompletionAsync();
+                Response<VirtualNetwork> putVnetResponse = await WaitForCompletionAsync(putVnetResponseOperation);
                 Assert.AreEqual("Succeeded", putVnetResponse.Value.ProvisioningState.ToString());
 
                 // Get Vnet
@@ -232,7 +233,7 @@ namespace Azure.Management.Network.Tests.Tests
 
                 // Put Vnet2
                 VirtualNetworksCreateOrUpdateOperation putVnet2Operation = await NetworkManagementClient.GetVirtualNetworksClient().StartCreateOrUpdateAsync(resourceGroupName, vnet2Name, vnet2);
-                Response<VirtualNetwork> putVnet2 = await putVnet2Operation.WaitForCompletionAsync();
+                Response<VirtualNetwork> putVnet2 = await WaitForCompletionAsync(putVnet2Operation);
                 Assert.AreEqual("Succeeded", putVnet2.Value.ProvisioningState.ToString());
 
                 // Create peering object
@@ -278,7 +279,7 @@ namespace Azure.Management.Network.Tests.Tests
 
                 // Delete Peering
                 VirtualNetworkPeeringsDeleteOperation deleteOperation = await NetworkManagementClient.GetVirtualNetworkPeeringsClient().StartDeleteAsync(resourceGroupName, vnet1Name, "peer1");
-                await deleteOperation.WaitForCompletionAsync();
+                await WaitForCompletionAsync(deleteOperation);
 
                 listPeerAP = NetworkManagementClient.GetVirtualNetworkPeeringsClient().ListAsync(resourceGroupName, vnet1Name);
                 listPeer = await listPeerAP.ToEnumerableAsync();
@@ -326,7 +327,7 @@ namespace Azure.Management.Network.Tests.Tests
 
                 // Put Vnet
                 VirtualNetworksCreateOrUpdateOperation putVnetResponseOperation = await NetworkManagementClient.GetVirtualNetworksClient().StartCreateOrUpdateAsync(resourceGroupName, vnetName, vnet);
-                Response<VirtualNetwork> putVnetResponse = await putVnetResponseOperation.WaitForCompletionAsync();
+                Response<VirtualNetwork> putVnetResponse = await WaitForCompletionAsync(putVnetResponseOperation);
                 Assert.AreEqual("Succeeded", putVnetResponse.Value.ProvisioningState.ToString());
 
                 Response<Subnet> getSubnetResponse = await NetworkManagementClient.GetSubnetsClient().GetAsync(resourceGroupName, vnetName, subnetName);
@@ -360,7 +361,7 @@ namespace Azure.Management.Network.Tests.Tests
                 };
 
                 NetworkInterfacesCreateOrUpdateOperation putNicResponseOperation = await NetworkManagementClient.GetNetworkInterfacesClient().StartCreateOrUpdateAsync(resourceGroupName, nicName, nicParameters);
-                await putNicResponseOperation.WaitForCompletionAsync();
+                await WaitForCompletionAsync(putNicResponseOperation);
                 // Get Vnet usage again
                 listUsageResponseAP = NetworkManagementClient.GetVirtualNetworksClient().ListUsageAsync(resourceGroupName, vnetName);
                 listUsageResponse = await listUsageResponseAP.ToEnumerableAsync();

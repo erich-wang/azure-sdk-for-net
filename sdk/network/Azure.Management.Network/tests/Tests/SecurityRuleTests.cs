@@ -64,7 +64,7 @@ namespace Azure.Management.Network.Tests.Tests
 
                 // Put Nsg
                 NetworkSecurityGroupsCreateOrUpdateOperation putNsgResponseOperation = await NetworkManagementClient.GetNetworkSecurityGroupsClient().StartCreateOrUpdateAsync(resourceGroupName, networkSecurityGroupName, networkSecurityGroup);
-                Response<NetworkSecurityGroup> putNsgResponse = await putNsgResponseOperation.WaitForCompletionAsync();
+                Response<NetworkSecurityGroup> putNsgResponse = await WaitForCompletionAsync(putNsgResponseOperation);
                 Assert.AreEqual("Succeeded", putNsgResponse.Value.ProvisioningState.ToString());
 
                 // Get NSG
@@ -93,7 +93,7 @@ namespace Azure.Management.Network.Tests.Tests
                 };
 
                 SecurityRulesCreateOrUpdateOperation putSecurityRuleResponseOperation = await NetworkManagementClient.GetSecurityRulesClient().StartCreateOrUpdateAsync(resourceGroupName, networkSecurityGroupName, securityRule2, SecurityRule);
-                Response<SecurityRule> putSecurityRuleResponse = await putSecurityRuleResponseOperation.WaitForCompletionAsync();
+                Response<SecurityRule> putSecurityRuleResponse = await WaitForCompletionAsync(putSecurityRuleResponseOperation);
                 Assert.AreEqual("Succeeded", putSecurityRuleResponse.Value.ProvisioningState.ToString());
 
                 // Get NSG

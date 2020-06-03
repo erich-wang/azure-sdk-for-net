@@ -80,7 +80,7 @@ namespace Azure.Management.Network.Tests.Tests
 
                 VirtualNetworkGatewaysCreateOrUpdateOperation putVirtualNetworkGatewayResponseOperation =
                     await NetworkManagementClient.GetVirtualNetworkGatewaysClient().StartCreateOrUpdateAsync(resourceGroupName, virtualNetworkGatewayName, virtualNetworkGateway);
-                await putVirtualNetworkGatewayResponseOperation.WaitForCompletionAsync();
+                await WaitForCompletionAsync(putVirtualNetworkGatewayResponseOperation);
                 // GetVirtualNetworkGateway API
                 Response<VirtualNetworkGateway> getVirtualNetworkGatewayResponse =
                     await NetworkManagementClient.GetVirtualNetworkGatewaysClient().GetAsync(resourceGroupName, virtualNetworkGatewayName);
@@ -96,23 +96,23 @@ namespace Azure.Management.Network.Tests.Tests
                 var storageParameters = new StorageAccountCreateParameters(new Storage.Models.Sku(SkuName.StandardLRS), Kind.Storage, location);
 
                 Operation<StorageAccount> accountOperation = await StorageManagementClient.GetStorageAccountsClient().StartCreateAsync(resourceGroupName, storageName, storageParameters);
-                Response<StorageAccount> account = await accountOperation.WaitForCompletionAsync();
+                Response<StorageAccount> account = await WaitForCompletionAsync(accountOperation);
                 TroubleshootingParameters parameters = new TroubleshootingParameters(getVirtualNetworkGatewayResponse.Value.Id, account.Value.Id, "https://nwtestdbdzq4xsvskrei6.blob.core.windows.net/vhds");
 
                 //Get troubleshooting
                 NetworkWatchersGetTroubleshootingOperation troubleshootOperation = await NetworkManagementClient.GetNetworkWatchersClient().StartGetTroubleshootingAsync("NetworkWatcherRG", "NetworkWatcher_westus2", parameters);
-                await troubleshootOperation.WaitForCompletionAsync();
+                await WaitForCompletionAsync(troubleshootOperation);
                 QueryTroubleshootingParameters qParameters = new QueryTroubleshootingParameters(getVirtualNetworkGatewayResponse.Value.Id);
 
                 //Query last troubleshoot
                 NetworkWatchersGetTroubleshootingResultOperation queryTroubleshootOperation = await NetworkManagementClient.GetNetworkWatchersClient().StartGetTroubleshootingResultAsync("NetworkWatcherRG", "NetworkWatcher_westus2", qParameters);
-                await queryTroubleshootOperation.WaitForCompletionAsync();
+                await WaitForCompletionAsync(queryTroubleshootOperation);
                 //TODO: make verification once fixed for troubleshoot API deployed
             }
             finally
             {
                 ResourceGroupsDeleteOperation deleteOperation = await ResourceGroupsClient.StartDeleteAsync(resourceGroupName);
-                await deleteOperation.WaitForCompletionAsync();
+                await WaitForCompletionAsync(deleteOperation);
             }
         }
     }

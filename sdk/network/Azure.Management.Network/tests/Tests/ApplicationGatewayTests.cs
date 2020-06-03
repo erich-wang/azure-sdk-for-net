@@ -543,7 +543,7 @@ namespace Azure.Management.Network.Tests.Tests
                 };
 
                 VirtualNetworksCreateOrUpdateOperation putVnetResponseOperation = await NetworkManagementClient.GetVirtualNetworksClient().StartCreateOrUpdateAsync(resourceGroupName, vnetName, vnet);
-                await putVnetResponseOperation.WaitForCompletionAsync();
+                await WaitForCompletionAsync(putVnetResponseOperation);
                 Response<VirtualNetwork> getVnetResponse = await NetworkManagementClient.GetVirtualNetworksClient().GetAsync(resourceGroupName, vnetName);
                 Response<Subnet> getSubnetResponse = await NetworkManagementClient.GetSubnetsClient().GetAsync(resourceGroupName, vnetName, gwSubnetName);
                 Console.WriteLine("Virtual Network GatewaySubnet Id: {0}", getSubnetResponse.Value.Id);
@@ -553,7 +553,7 @@ namespace Azure.Management.Network.Tests.Tests
 
                 // Put AppGw
                 Operation<ApplicationGateway> putAppGw = await NetworkManagementClient.GetApplicationGatewaysClient().StartCreateOrUpdateAsync(resourceGroupName, appGwName, appGw);
-                Response<ApplicationGateway> putAppGwResponse = await putAppGw.WaitForCompletionAsync();
+                Response<ApplicationGateway> putAppGwResponse = await WaitForCompletionAsync(putAppGw);
                 Assert.AreEqual("Succeeded", putAppGwResponse.Value.ProvisioningState.ToString());
 
                 // Get AppGw
@@ -616,14 +616,14 @@ namespace Azure.Management.Network.Tests.Tests
                 nic2.Result.IpConfigurations[0].ApplicationGatewayBackendAddressPools = new List<ApplicationGatewayBackendAddressPool> { getGateway.Value.BackendAddressPools[1] };
                 // Put Nics
                 NetworkInterfacesCreateOrUpdateOperation createOrUpdateOperation1 = await NetworkManagementClient.GetNetworkInterfacesClient().StartCreateOrUpdateAsync(resourceGroupName, nic1name, nic1.Result);
-                await createOrUpdateOperation1.WaitForCompletionAsync();
+                await WaitForCompletionAsync(createOrUpdateOperation1);
 
                 NetworkInterfacesCreateOrUpdateOperation createOrUpdateOperation2 = await NetworkManagementClient.GetNetworkInterfacesClient().StartCreateOrUpdateAsync(resourceGroupName, nic2name, nic2.Result);
-                await createOrUpdateOperation2.WaitForCompletionAsync();
+                await WaitForCompletionAsync(createOrUpdateOperation2);
 
                 // Get AppGw backend health
                 Operation<ApplicationGatewayBackendHealth> backendHealthOperation = await NetworkManagementClient.GetApplicationGatewaysClient().StartBackendHealthAsync(resourceGroupName, appGwName, "true");
-                Response<ApplicationGatewayBackendHealth> backendHealth = await backendHealthOperation.WaitForCompletionAsync();
+                Response<ApplicationGatewayBackendHealth> backendHealth = await WaitForCompletionAsync(backendHealthOperation);
 
                 Assert.AreEqual(2, backendHealth.Value.BackendAddressPools.Count);
                 Assert.AreEqual(1, backendHealth.Value.BackendAddressPools[0].BackendHttpSettingsCollection.Count);

@@ -55,7 +55,7 @@ namespace Azure.Management.Network.Tests.Tests
                 };
 
                 VirtualNetworksCreateOrUpdateOperation putVnetResponseOperation = await NetworkManagementClient.GetVirtualNetworksClient().StartCreateOrUpdateAsync(resourceGroupName, vnetName, vnet);
-                await putVnetResponseOperation.WaitForCompletionAsync();
+                await WaitForCompletionAsync(putVnetResponseOperation);
                 // Create a Subnet
                 // Populate paramters for a Subnet
                 Subnet subnet = new Subnet()
@@ -66,7 +66,7 @@ namespace Azure.Management.Network.Tests.Tests
 
                 #region Verification
                 SubnetsCreateOrUpdateOperation putSubnetResponseOperation = await NetworkManagementClient.GetSubnetsClient().StartCreateOrUpdateAsync(resourceGroupName, vnetName, subnet2Name, subnet);
-                await putSubnetResponseOperation.WaitForCompletionAsync();
+                await WaitForCompletionAsync(putSubnetResponseOperation);
                 Response<VirtualNetwork> getVnetResponse = await NetworkManagementClient.GetVirtualNetworksClient().GetAsync(resourceGroupName, vnetName);
                 Assert.AreEqual(2, getVnetResponse.Value.Subnets.Count());
 
@@ -124,7 +124,7 @@ namespace Azure.Management.Network.Tests.Tests
                 };
 
                 VirtualNetworksCreateOrUpdateOperation putVnetResponseOperation = await NetworkManagementClient.GetVirtualNetworksClient().StartCreateOrUpdateAsync(resourceGroupName, vnetName, vnet);
-                await putVnetResponseOperation.WaitForCompletionAsync();
+                await WaitForCompletionAsync(putVnetResponseOperation);
                 Response<Subnet> getSubnetResponse = await NetworkManagementClient.GetSubnetsClient().GetAsync(resourceGroupName, vnetName, subnetName);
                 Assert.Null(getSubnetResponse.Value.ResourceNavigationLinks);
 

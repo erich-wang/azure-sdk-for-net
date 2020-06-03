@@ -65,7 +65,7 @@ namespace Azure.Management.Network.Tests.Tests
                 };
 
                 Compute.VirtualMachineExtensionsCreateOrUpdateOperation createOrUpdateOperation = await ComputeManagementClient.GetVirtualMachineExtensionsClient().StartCreateOrUpdateAsync(resourceGroupName, getVm.Value.Name, "NetworkWatcherAgent", parameters);
-                await createOrUpdateOperation.WaitForCompletionAsync();
+                await WaitForCompletionAsync(createOrUpdateOperation);
 
                 //TODO:There is no need to perform a separate create NetworkWatchers operation
                 //Create network Watcher
@@ -77,7 +77,7 @@ namespace Azure.Management.Network.Tests.Tests
                     new ConnectivityParameters(new ConnectivitySource(getVm.Value.Id), new ConnectivityDestination { Address = "bing.com", Port = 80 });
 
                 Operation<ConnectivityInformation> connectivityCheckOperation = await NetworkManagementClient.GetNetworkWatchersClient().StartCheckConnectivityAsync("NetworkWatcherRG", "NetworkWatcher_westus2", connectivityParameters);
-                Response<ConnectivityInformation> connectivityCheck = await connectivityCheckOperation.WaitForCompletionAsync();
+                Response<ConnectivityInformation> connectivityCheck = await WaitForCompletionAsync(connectivityCheckOperation);
 
                 //Validation
                 Assert.AreEqual("Reachable", connectivityCheck.Value.ConnectionStatus.ToString());
@@ -88,7 +88,7 @@ namespace Azure.Management.Network.Tests.Tests
             finally
             {
                 ResourceGroupsDeleteOperation deleteOperation = await ResourceGroupsClient.StartDeleteAsync(resourceGroupName);
-                await deleteOperation.WaitForCompletionAsync();
+                await WaitForCompletionAsync(deleteOperation);
             }
         }
     }

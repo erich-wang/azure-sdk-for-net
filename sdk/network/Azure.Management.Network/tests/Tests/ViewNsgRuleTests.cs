@@ -85,12 +85,12 @@ namespace Azure.Management.Network.Tests.Tests
                 Response<NetworkSecurityGroup> nsg = await NetworkManagementClient.GetNetworkSecurityGroupsClient().GetAsync(resourceGroupName, networkSecurityGroupName);
                 nsg.Value.SecurityRules.Add(SecurityRule);
                 NetworkSecurityGroupsCreateOrUpdateOperation createOrUpdateOperation = await NetworkManagementClient.GetNetworkSecurityGroupsClient().StartCreateOrUpdateAsync(resourceGroupName, networkSecurityGroupName, nsg);
-                Response<NetworkSecurityGroup> networkSecurityGroup = await createOrUpdateOperation.WaitForCompletionAsync();
+                Response<NetworkSecurityGroup> networkSecurityGroup = await WaitForCompletionAsync(createOrUpdateOperation);
 
                 //Get view security group rules
                 SecurityGroupViewParameters sgvProperties = new SecurityGroupViewParameters(getVm.Value.Id);
                 NetworkWatchersGetVMSecurityRulesOperation viewNSGRulesOperation = await NetworkManagementClient.GetNetworkWatchersClient().StartGetVMSecurityRulesAsync("NetworkWatcherRG", "NetworkWatcher_westus2", sgvProperties);
-                Response<SecurityGroupViewResult> viewNSGRules = await viewNSGRulesOperation.WaitForCompletionAsync();
+                Response<SecurityGroupViewResult> viewNSGRules = await WaitForCompletionAsync(viewNSGRulesOperation);
 
                 //Verify effective security rule defined earlier
                 IEnumerable<EffectiveNetworkSecurityRule> getEffectiveSecurityRule = viewNSGRules.Value.NetworkInterfaces.FirstOrDefault().SecurityRuleAssociations.EffectiveSecurityRules.Where(x => x.Name == "UserRule_" + securityRule1);
@@ -167,7 +167,7 @@ namespace Azure.Management.Network.Tests.Tests
             finally
             {
                 ResourceGroupsDeleteOperation deleteOperation = await ResourceGroupsClient.StartDeleteAsync(resourceGroupName);
-                await deleteOperation.WaitForCompletionAsync();
+                await WaitForCompletionAsync(deleteOperation);
             }
         }
     }

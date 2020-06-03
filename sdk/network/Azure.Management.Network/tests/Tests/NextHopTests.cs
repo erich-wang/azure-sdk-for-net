@@ -71,10 +71,10 @@ namespace Azure.Management.Network.Tests.Tests
                 NextHopParameters nhProperties2 = new NextHopParameters(getVm.Value.Id, sourceIPAddress, "12.11.12.14");
 
                 NetworkWatchersGetNextHopOperation getNextHop1Operation = await NetworkManagementClient.GetNetworkWatchersClient().StartGetNextHopAsync("NetworkWatcherRG", "NetworkWatcher_westus2", nhProperties1);
-                Response<NextHopResult> getNextHop1 = await getNextHop1Operation.WaitForCompletionAsync();
+                Response<NextHopResult> getNextHop1 = await WaitForCompletionAsync(getNextHop1Operation);
 
                 NetworkWatchersGetNextHopOperation getNextHop2Operation = await NetworkManagementClient.GetNetworkWatchersClient().StartGetNextHopAsync("NetworkWatcherRG", "NetworkWatcher_westus2", nhProperties2);
-                Response<NextHopResult> getNextHop2 = await getNextHop2Operation.WaitForCompletionAsync();
+                Response<NextHopResult> getNextHop2 = await WaitForCompletionAsync(getNextHop2Operation);
 
                 Response<RouteTable> routeTable = await NetworkManagementClient.GetRouteTablesClient().GetAsync(resourceGroupName, resourceGroupName + "RT");
 
@@ -87,7 +87,7 @@ namespace Azure.Management.Network.Tests.Tests
             finally
             {
                 ResourceGroupsDeleteOperation deleteOperation = await ResourceGroupsClient.StartDeleteAsync(resourceGroupName);
-                await deleteOperation.WaitForCompletionAsync();
+                await WaitForCompletionAsync(deleteOperation);
             }
         }
     }

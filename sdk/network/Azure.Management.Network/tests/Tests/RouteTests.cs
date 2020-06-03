@@ -55,7 +55,7 @@ namespace Azure.Management.Network.Tests.Tests
 
                 // Put RouteTable
                 RouteTablesCreateOrUpdateOperation putRouteTableResponseOperation = await NetworkManagementClient.GetRouteTablesClient().StartCreateOrUpdateAsync(resourceGroupName, routeTableName, routeTable);
-                Response<RouteTable> putRouteTableResponse = await putRouteTableResponseOperation.WaitForCompletionAsync();
+                Response<RouteTable> putRouteTableResponse = await WaitForCompletionAsync(putRouteTableResponseOperation);
                 Assert.AreEqual("Succeeded", putRouteTableResponse.Value.ProvisioningState.ToString());
 
                 // Get RouteTable
@@ -176,7 +176,7 @@ namespace Azure.Management.Network.Tests.Tests
                 // Put RouteTable
                 RouteTablesCreateOrUpdateOperation putRouteTableResponseOperation =
                     await NetworkManagementClient.GetRouteTablesClient().StartCreateOrUpdateAsync(resourceGroupName, routeTableName, routeTable);
-                Response<RouteTable> putRouteTableResponse = await putRouteTableResponseOperation.WaitForCompletionAsync();
+                Response<RouteTable> putRouteTableResponse = await WaitForCompletionAsync(putRouteTableResponseOperation);
                 Assert.AreEqual("Succeeded", putRouteTableResponse.Value.ProvisioningState.ToString());
 
                 // Get RouteTable

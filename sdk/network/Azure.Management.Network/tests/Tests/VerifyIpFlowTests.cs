@@ -84,13 +84,13 @@ namespace Azure.Management.Network.Tests.Tests
                 Response<NetworkSecurityGroup> nsg = await NetworkManagementClient.GetNetworkSecurityGroupsClient().GetAsync(resourceGroupName, networkSecurityGroupName);
                 nsg.Value.SecurityRules.Add(SecurityRule);
                 NetworkSecurityGroupsCreateOrUpdateOperation createOrUpdateOperation = await NetworkManagementClient.GetNetworkSecurityGroupsClient().StartCreateOrUpdateAsync(resourceGroupName, networkSecurityGroupName, nsg);
-                await createOrUpdateOperation.WaitForCompletionAsync();
+                await WaitForCompletionAsync(createOrUpdateOperation);
 
                 VerificationIPFlowParameters ipFlowProperties = new VerificationIPFlowParameters(getVm1.Value.Id, "Outbound", "TCP", "80", "80", localIPAddress, "12.11.12.14");
 
                 //Verify IP flow from a VM to a location given the configured  rule
                 NetworkWatchersVerifyIPFlowOperation verifyIpFlowOperation = await NetworkManagementClient.GetNetworkWatchersClient().StartVerifyIPFlowAsync("NetworkWatcherRG", "NetworkWatcher_westus2", ipFlowProperties);
-                Response<VerificationIPFlowResult> verifyIpFlow = await verifyIpFlowOperation.WaitForCompletionAsync();
+                Response<VerificationIPFlowResult> verifyIpFlow = await WaitForCompletionAsync(verifyIpFlowOperation);
                 //Verify validity of the result
                 Assert.AreEqual("Deny", verifyIpFlow.Value.Access.ToString());
                 Assert.AreEqual("securityRules/" + securityRule1, verifyIpFlow.Value.RuleName);
@@ -98,7 +98,7 @@ namespace Azure.Management.Network.Tests.Tests
             finally
             {
                 ResourceGroupsDeleteOperation deleteOperation = await ResourceGroupsClient.StartDeleteAsync(resourceGroupName);
-                await deleteOperation.WaitForCompletionAsync();
+                await WaitForCompletionAsync(deleteOperation);
             }
         }
     }
