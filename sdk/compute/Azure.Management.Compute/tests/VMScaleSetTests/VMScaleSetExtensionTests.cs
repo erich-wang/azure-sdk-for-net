@@ -202,7 +202,7 @@ namespace Azure.Management.Compute.Tests
             Assert.True(!string.IsNullOrEmpty(vmssExtensionOut.ProvisioningState));
 
             Assert.True(vmssExtension.Publisher == vmssExtensionOut.Publisher);
-            Assert.True(vmssExtension.Type == vmssExtensionOut.Type);
+            Assert.True(vmssExtension.TypePropertiesType == vmssExtensionOut.TypePropertiesType);
             Assert.True(vmssExtension.AutoUpgradeMinorVersion == vmssExtensionOut.AutoUpgradeMinorVersion);
             Assert.True(vmssExtension.TypeHandlerVersion == vmssExtensionOut.TypeHandlerVersion);
             Assert.True(vmssExtension.Settings.ToString() == vmssExtensionOut.Settings.ToString());

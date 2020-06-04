@@ -63,8 +63,8 @@ namespace Azure.Management.Compute.Tests
 
                 string expectedVMReferenceId = Helpers.GetVMReferenceId(m_subId, rgName, inputVM.Name);
 
-                var createOrUpdateResponse = await VirtualMachinesClient.StartCreateOrUpdateAsync(
-                     rgName, inputVM.Name, inputVM);
+                var createOrUpdateResponse = await WaitForCompletionAsync(await VirtualMachinesClient.StartCreateOrUpdateAsync(
+                     rgName, inputVM.Name, inputVM));
 
                 Assert.NotNull(createOrUpdateResponse);
 
@@ -84,7 +84,7 @@ namespace Azure.Management.Compute.Tests
             finally
             {
                 // Cleanup the created resources
-                await ResourceGroupsClient.StartDeleteAsync(rgName);
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
 
@@ -123,8 +123,8 @@ namespace Azure.Management.Compute.Tests
 
                 string expectedVMReferenceId = Helpers.GetVMReferenceId(m_subId, rgName, inputVM.Name);
 
-                var createOrUpdateResponse = await VirtualMachinesClient.StartCreateOrUpdateAsync(
-                     rgName, inputVM.Name, inputVM);
+                var createOrUpdateResponse = await WaitForCompletionAsync(await VirtualMachinesClient.StartCreateOrUpdateAsync(
+                     rgName, inputVM.Name, inputVM));
 
                 Assert.NotNull(createOrUpdateResponse);
 
@@ -222,7 +222,7 @@ namespace Azure.Management.Compute.Tests
 
                 string expectedVMReferenceId = Helpers.GetVMReferenceId(m_subId, rgName, inputVM.Name);
 
-                var createOrUpdateResponse = await VirtualMachinesClient.StartCreateOrUpdateAsync(rgName, inputVM.Name, inputVM);
+                var createOrUpdateResponse = await WaitForCompletionAsync(await VirtualMachinesClient.StartCreateOrUpdateAsync(rgName, inputVM.Name, inputVM));
 
                 var getVMResponse = (await VirtualMachinesClient.GetAsync(rgName, inputVM.Name)).Value;
 
@@ -296,7 +296,7 @@ namespace Azure.Management.Compute.Tests
 
                 string expectedVMReferenceId = Helpers.GetVMReferenceId(m_subId, rgName, inputVM.Name);
 
-                var createOrUpdateResponse = await VirtualMachinesClient.StartCreateOrUpdateAsync(rgName, inputVM.Name, inputVM);
+                var createOrUpdateResponse = await WaitForCompletionAsync(await VirtualMachinesClient.StartCreateOrUpdateAsync(rgName, inputVM.Name, inputVM));
 
                 var getVMResponse = (await VirtualMachinesClient.GetAsync(rgName, inputVM.Name)).Value;
 
@@ -328,7 +328,7 @@ namespace Azure.Management.Compute.Tests
             finally
             {
                 // Cleanup the created resources
-                await ResourceGroupsClient.StartDeleteAsync(rgName);
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
     }

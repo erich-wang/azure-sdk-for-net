@@ -150,7 +150,7 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
                 Validate(snapshot, snapshotOut, incremental: incremental);
 
                 // Get access
-                AccessUri accessUri = await (await SnapshotsClient.StartGrantAccessAsync(rgName, snapshotName, new GrantAccessData(AccessDataDefault.Access,AccessDataDefault.DurationInSeconds))).WaitForCompletionAsync();
+                AccessUri accessUri = await WaitForCompletionAsync((await SnapshotsClient.StartGrantAccessAsync(rgName, snapshotName, new GrantAccessData(AccessDataDefault.Access,AccessDataDefault.DurationInSeconds))));
                 Assert.NotNull(accessUri.AccessSAS);
 
                 // Get
@@ -271,10 +271,10 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
                 }
 
                 // Put 4 disks, 2 in each resource group
-                await DisksClient.StartCreateOrUpdateAsync(rgName1, diskName1, disk1);
-                await DisksClient.StartCreateOrUpdateAsync(rgName1, diskName2, disk2);
-                await DisksClient.StartCreateOrUpdateAsync(rgName2, diskName1, disk1);
-                await DisksClient.StartCreateOrUpdateAsync(rgName2, diskName2, disk2);
+                await WaitForCompletionAsync(await DisksClient.StartCreateOrUpdateAsync(rgName1, diskName1, disk1));
+                await WaitForCompletionAsync(await DisksClient.StartCreateOrUpdateAsync(rgName1, diskName2, disk2));
+                await WaitForCompletionAsync(await DisksClient.StartCreateOrUpdateAsync(rgName2, diskName1, disk1));
+                await WaitForCompletionAsync(await DisksClient.StartCreateOrUpdateAsync(rgName2, diskName2, disk2));
 
                 // **********
                 // TEST
@@ -301,8 +301,8 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
             finally
             {
                 // Delete resource group
-                await ResourceGroupsClient.StartDeleteAsync(rgName1);
-                await ResourceGroupsClient.StartDeleteAsync(rgName2);
+                await WaitForCompletionAsync( await ResourceGroupsClient.StartDeleteAsync(rgName1));
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName2));
             }        }
 
         protected async Task Snapshot_List_Execute(string diskCreateOption, string methodName, int? diskSizeGB = null)
@@ -399,10 +399,10 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
                 await ResourceGroupsClient.CreateOrUpdateAsync(rgName2, new ResourceGroup(DiskRPLocation));
 
                 // Put 4 diskEncryptionSets, 2 in each resource group
-                await DiskEncryptionSetsClient.StartCreateOrUpdateAsync(rgName1, desName1, des1);
-                await DiskEncryptionSetsClient.StartCreateOrUpdateAsync(rgName1, desName2, des2);
-                await DiskEncryptionSetsClient.StartCreateOrUpdateAsync(rgName2, desName1, des1);
-                await DiskEncryptionSetsClient.StartCreateOrUpdateAsync(rgName2, desName2, des2);
+                await WaitForCompletionAsync(await DiskEncryptionSetsClient.StartCreateOrUpdateAsync(rgName1, desName1, des1));
+                await WaitForCompletionAsync(await DiskEncryptionSetsClient.StartCreateOrUpdateAsync(rgName1, desName2, des2));
+                await WaitForCompletionAsync(await DiskEncryptionSetsClient.StartCreateOrUpdateAsync(rgName2, desName1, des1));
+                await WaitForCompletionAsync(await DiskEncryptionSetsClient.StartCreateOrUpdateAsync(rgName2, desName2, des2));
 
                 // **********
                 // TEST
@@ -427,16 +427,16 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
                 //}
 
                 // Delete diskEncryptionSets
-                await DiskEncryptionSetsClient.StartDeleteAsync(rgName1, desName1);
-                await DiskEncryptionSetsClient.StartDeleteAsync(rgName1, desName2);
-                await DiskEncryptionSetsClient.StartDeleteAsync(rgName2, desName1);
-                await DiskEncryptionSetsClient.StartDeleteAsync(rgName2, desName2);
+                await WaitForCompletionAsync(await DiskEncryptionSetsClient.StartDeleteAsync(rgName1, desName1));
+                await WaitForCompletionAsync(await DiskEncryptionSetsClient.StartDeleteAsync(rgName1, desName2));
+                await WaitForCompletionAsync(await DiskEncryptionSetsClient.StartDeleteAsync(rgName2, desName1));
+                await WaitForCompletionAsync(await DiskEncryptionSetsClient.StartDeleteAsync(rgName2, desName2));
             }
             finally
             {
                 // Delete resource group
-                await ResourceGroupsClient.StartDeleteAsync(rgName1);
-                await ResourceGroupsClient.StartDeleteAsync(rgName2);
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName1));
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName2));
             }
         }
 
@@ -579,8 +579,8 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
             string subscription = id[2];
             var uri = createdVM.StorageProfile.OsDisk.Vhd.Uri;
 
-            await VirtualMachinesClient.StartDeleteAsync(rgName, inputVM.Name);
-            await VirtualMachinesClient.StartDeleteAsync(rgName, createdVM.Name);
+            await WaitForCompletionAsync(await VirtualMachinesClient.StartDeleteAsync(rgName, inputVM.Name));
+            await WaitForCompletionAsync(await VirtualMachinesClient.StartDeleteAsync(rgName, createdVM.Name));
 
             Disk disk = GenerateBaseDisk(diskCreateOption);
             disk.CreationData.SourceUri = uri;
@@ -597,10 +597,10 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
             // Create an empty disk
             Disk originalDisk = await GenerateDefaultDisk("Empty", rgName, diskSizeGB: diskSizeGB);
             await ResourceGroupsClient.CreateOrUpdateAsync(rgName, new ResourceGroup (location));
-            Disk diskOut = (await DisksClient.StartCreateOrUpdateAsync(rgName, Recording.GenerateAssetName(DiskNamePrefix + "_original"), originalDisk)).Value;
+            Disk diskOut = await WaitForCompletionAsync((await DisksClient.StartCreateOrUpdateAsync(rgName, Recording.GenerateAssetName(DiskNamePrefix + "_original"), originalDisk)));
 
             Snapshot snapshot = GenerateDefaultSnapshot(diskOut.Id);
-            Snapshot snapshotOut = (await SnapshotsClient.StartCreateOrUpdateAsync(rgName, "snapshotswaaggertest", snapshot)).Value;
+            Snapshot snapshotOut = await WaitForCompletionAsync((await SnapshotsClient.StartCreateOrUpdateAsync(rgName, "snapshotswaaggertest", snapshot)));
 
             Disk copyDisk = GenerateBaseDisk("Import");
             copyDisk.CreationData.SourceResourceId = snapshotOut.Id;

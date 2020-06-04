@@ -114,7 +114,7 @@ namespace Azure.Management.Compute.Tests
             var StorageManagementClient = GetStorageManagementClient();
             StorageAccountsClient = StorageManagementClient.GetStorageAccountsClient();
             BlobContainersClient = StorageManagementClient.GetBlobContainersClient();
-            DefaultLocation = "southeastasia";
+            DefaultLocation = "SoutheastAsia";
         }
         internal ResourcesManagementClient GetResourceManagementClient()
         {

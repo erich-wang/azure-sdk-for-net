@@ -53,14 +53,14 @@ namespace Azure.Management.Compute.Tests
 
                 // Scale Out VMScaleSet
                 inputVMScaleSet.Sku.Capacity = 3;
-                UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
+                await UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
 
                 getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmScaleSet.Name);
                 ValidateVMScaleSet(inputVMScaleSet, getResponse);
 
                 // Scale In VMScaleSet
                 inputVMScaleSet.Sku.Capacity = 1;
-                UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
+                await UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
 
                 getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmScaleSet.Name);
                 ValidateVMScaleSet(inputVMScaleSet, getResponse);
@@ -118,7 +118,7 @@ namespace Azure.Management.Compute.Tests
                 };
                 inputVMScaleSet.VirtualMachineProfile.ExtensionProfile = extensionProfile;
 
-                UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
+                await UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
 
                 getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmScaleSet.Name);
                 ValidateVMScaleSet(inputVMScaleSet, getResponse);

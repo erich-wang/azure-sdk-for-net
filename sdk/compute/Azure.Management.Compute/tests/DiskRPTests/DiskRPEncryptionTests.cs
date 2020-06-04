@@ -45,7 +45,7 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
             {
                 await ResourceGroupsClient.CreateOrUpdateAsync(rgName, new ResourceGroup(DiskRPLocation));
                 //put disk
-                await (await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk)).WaitForCompletionAsync();
+                await WaitForCompletionAsync((await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk)));
                 Disk diskOut = await DisksClient.GetAsync(rgName, diskName);
                 Validate(disk, diskOut, disk.Location);
                 Assert.AreEqual(encryptionSettingsVersion, diskOut.EncryptionSettingsCollection.EncryptionSettingsVersion);
@@ -57,7 +57,7 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
             }
             finally
             {
-                await ResourceGroupsClient.StartDeleteAsync(rgName);
+                await WaitForCompletionAsync (await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
 
@@ -78,7 +78,7 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
             {
                 await ResourceGroupsClient.CreateOrUpdateAsync(rgName,
                     new ResourceGroup(DiskRPLocation));
-                await (await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk)).WaitForCompletionAsync();
+                await WaitForCompletionAsync((await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk)));
                 Disk diskOut = await DisksClient.GetAsync(rgName, diskName);
                 Validate(disk, diskOut, disk.Location);
                 Assert.AreEqual(disk.EncryptionSettingsCollection.EncryptionSettings.First().DiskEncryptionKey.SecretUrl, diskOut.EncryptionSettingsCollection.EncryptionSettings.First().DiskEncryptionKey.SecretUrl);
@@ -87,16 +87,16 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
                 Assert.AreEqual(disk.EncryptionSettingsCollection.EncryptionSettings.First().KeyEncryptionKey.SourceVault.Id, diskOut.EncryptionSettingsCollection.EncryptionSettings.First().KeyEncryptionKey.SourceVault.Id);
                 await WaitForCompletionAsync(await DisksClient.StartDeleteAsync(rgName, diskName));
             }
-            catch (Exception ex)
+            catch (Exception cex)
             {
                 string coreresponsestring = fakeEncryptionKeyUri +
                     " is not a valid versioned Key Vault Secret URL. It should be in the format https://<vaultEndpoint>/secrets/<secretName>/<secretVersion>.";
-                Assert.AreEqual(coreresponsestring, ex.Message);
+                Assert.IsTrue(cex.Message.Contains(coreresponsestring));
                 //Assert.True(ex.Response.StatusCode == HttpStatusCode.BadRequest);
             }
             finally
             {
-                await ResourceGroupsClient.StartDeleteAsync(rgName);
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
 

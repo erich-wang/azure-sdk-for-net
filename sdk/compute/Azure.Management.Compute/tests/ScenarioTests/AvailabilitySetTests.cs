@@ -90,7 +90,7 @@ namespace Azure.Management.Compute.Tests
             finally
             {
                 Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", originalTestLocation);
-                await ResourceGroupsClient.StartDeleteAsync(resourceGroup1Name);
+                await WaitForCompletionAsync( await ResourceGroupsClient.StartDeleteAsync(resourceGroup1Name));
             }
         }
 
@@ -372,7 +372,7 @@ namespace Azure.Management.Compute.Tests
             }
             finally
             {
-                await ResourceGroupsClient.StartDeleteAsync(resourceGroup2Name);
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(resourceGroup2Name));
             }
         }
 

@@ -170,7 +170,7 @@ namespace Azure.Management.Compute.Tests
             }
             catch
             {
-                await ResourceGroupsClient.StartDeleteAsync(rgName);
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
                 throw;
             }
         }
@@ -245,7 +245,8 @@ namespace Azure.Management.Compute.Tests
                     osDisk.DiffDiskSettings = new DiffDiskSettings
                     {
                         Option = "Local",
-                        Placement = DiffDiskPlacement.ResourceDisk
+                        //The value of 'placement' may not be given
+                        //Placement = DiffDiskPlacement.ResourceDisk
                     };
                 }
 
@@ -304,7 +305,7 @@ namespace Azure.Management.Compute.Tests
             catch
             {
                 // Just trigger DeleteRG, rest would be taken care of by ARM
-                await ResourceGroupsClient.StartDeleteAsync(rgName);
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
                 throw;
             }
         }
@@ -346,7 +347,7 @@ namespace Azure.Management.Compute.Tests
                 }
             };
 
-            var putPublicIpAddressResponse = await PublicIPAddressesClient.StartCreateOrUpdateAsync(rgName, publicIpName, publicIp);
+            var putPublicIpAddressResponse = await WaitForCompletionAsync(await PublicIPAddressesClient.StartCreateOrUpdateAsync(rgName, publicIpName, publicIp));
             var getPublicIpAddressResponse = await PublicIPAddressesClient.GetAsync(rgName, publicIpName);
             return getPublicIpAddressResponse;
         }
@@ -439,7 +440,7 @@ namespace Azure.Management.Compute.Tests
                 Location = m_location
             };
 
-            var putNSgResponse = await NetworkSecurityGroupsClient.StartCreateOrUpdateAsync(rgName, nsgName, nsgParameters);
+            var putNSgResponse = await WaitForCompletionAsync(await NetworkSecurityGroupsClient.StartCreateOrUpdateAsync(rgName, nsgName, nsgParameters));
             var getNsgResponse = await NetworkSecurityGroupsClient.GetAsync(rgName, nsgName);
 
             return getNsgResponse;
@@ -475,7 +476,7 @@ namespace Azure.Management.Compute.Tests
                 nicParameters.IpConfigurations[0].PublicIPAddress = new Azure.Management.Network.Models.PublicIPAddress() { Id = publicIPaddress };
             }
 
-            var putNicResponse = await NetworkInterfacesClient.StartCreateOrUpdateAsync(rgName, nicname, nicParameters);
+            var putNicResponse = await WaitForCompletionAsync(await NetworkInterfacesClient.StartCreateOrUpdateAsync(rgName, nicname, nicParameters));
             var getNicResponse = await NetworkInterfacesClient.GetAsync(rgName, nicname);
             return getNicResponse;
         }
@@ -515,7 +516,7 @@ namespace Azure.Management.Compute.Tests
                 }
             };
 
-            var putNicResponse = await NetworkInterfacesClient.StartCreateOrUpdateAsync(rgName, nicname, nicParameters);
+            var putNicResponse = await WaitForCompletionAsync(await NetworkInterfacesClient.StartCreateOrUpdateAsync(rgName, nicname, nicParameters));
             var getNicResponse = await NetworkInterfacesClient.GetAsync(rgName, nicname);
             return getNicResponse;
         }
@@ -650,7 +651,7 @@ namespace Azure.Management.Compute.Tests
                 }
             };
 
-            var putGwResponse = await ApplicationGatewaysClient.StartCreateOrUpdateAsync(rgName, gatewayName, appGw);
+            var putGwResponse = await WaitForCompletionAsync(await ApplicationGatewaysClient.StartCreateOrUpdateAsync(rgName, gatewayName, appGw));
             var getGwResponse = await ApplicationGatewaysClient.GetAsync(rgName, gatewayName);
             return getGwResponse;
         }
@@ -670,7 +671,7 @@ namespace Azure.Management.Compute.Tests
             var probeId =
                 $"/subscriptions/{m_subId}/resourceGroups/{rgName}/providers/Microsoft.Network/loadBalancers/{loadBalancerName}/probes/{loadBalancerProbeName}";
 
-            var putLBResponse = await LoadBalancersClient.StartCreateOrUpdateAsync(rgName, loadBalancerName, new LoadBalancer
+            var putLBResponse = await WaitForCompletionAsync(await LoadBalancersClient.StartCreateOrUpdateAsync(rgName, loadBalancerName, new LoadBalancer
             {
                 Location = m_location,
                 FrontendIPConfigurations = new List<FrontendIPConfiguration>
@@ -724,7 +725,7 @@ namespace Azure.Management.Compute.Tests
                         Protocol = "Tcp",
                     }
                 }
-            });
+            }));
 
             var getLBResponse = await LoadBalancersClient.GetAsync(rgName, loadBalancerName);
             return getLBResponse;
@@ -975,7 +976,7 @@ namespace Azure.Management.Compute.Tests
             {
                 existingDHG = await CreateDedicatedHostGroup(rgName, dedicatedHostGroupName);
             }
-            var response = await DedicatedHostsClient.StartCreateOrUpdateAsync(rgName, dedicatedHostGroupName, dedicatedHostName,
+            var response =await DedicatedHostsClient.StartCreateOrUpdateAsync(rgName, dedicatedHostGroupName, dedicatedHostName,
                 new DedicatedHost(m_location, new CM.Sku() { Name= "ESv3-Type1"})
                 {
                     Tags = new Dictionary<string, string>() { { rgName, DateTime.UtcNow.ToString("u") } }

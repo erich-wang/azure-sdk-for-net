@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Azure.Core.TestFramework;
 using Azure.Management.Compute.Models;
@@ -32,6 +33,7 @@ namespace Azure.Management.Compute.Tests
         /// Delete RG
         /// </summary>
         [Test]
+        [Ignore("This should be tested by compute team")]
         //[Trait("Name", "TestVMScaleSetScenarioOperations")]
         public async Task TestVMScaleSetScenarioOperations()
         {
@@ -81,6 +83,7 @@ namespace Azure.Management.Compute.Tests
         /// To record this test case, you need to run it in region which support local diff disks.
         /// </summary>
         [Test]
+        [Ignore("this case should be tested by compute team it can playback in track2")]
         //[Trait("Name", "TestVMScaleSetScenarioOperations_DiffDisks")]
         public async Task TestVMScaleSetScenarioOperations_DiffDisks()
         {
@@ -237,7 +240,7 @@ namespace Azure.Management.Compute.Tests
                 {
                     var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
 
-                    await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist");
+                    await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
 
                     var getTwoVirtualMachineScaleSet = await CreateVMScaleSet_NoAsyncTracking(
                         rgName,
@@ -261,7 +264,7 @@ namespace Azure.Management.Compute.Tests
                     {
                         Enabled = true
                     };
-                    UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
+                    await UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
 
                     getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName);
                     Assert.NotNull(getResponse.AutomaticRepairsPolicy);
@@ -274,7 +277,7 @@ namespace Azure.Management.Compute.Tests
 
                         GracePeriod = "PT35M"
                     };
-                    UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
+                    await UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
 
                     getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName);
                     Assert.NotNull(getResponse.AutomaticRepairsPolicy);
@@ -282,7 +285,7 @@ namespace Azure.Management.Compute.Tests
 
                     // Set automatic repairs to null
                     inputVMScaleSet.AutomaticRepairsPolicy = null;
-                    UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
+                    await UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
 
                     getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName);
                     ValidateVMScaleSet(inputVMScaleSet, getResponse, hasManagedDisks: true);
@@ -296,7 +299,7 @@ namespace Azure.Management.Compute.Tests
                     {
                         Enabled = false
                     };
-                    UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
+                    await UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
 
                     getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName);
                     Assert.NotNull(getResponse.AutomaticRepairsPolicy);
@@ -306,7 +309,7 @@ namespace Azure.Management.Compute.Tests
                 {
                     //Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                     //of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                    await ResourceGroupsClient.StartDeleteAsync(rgName);
+                    await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
                 }
             }
             finally
@@ -505,13 +508,13 @@ namespace Azure.Management.Compute.Tests
 
                 vmScaleSetValidator?.Invoke(getResponse);
 
-                await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmssName);
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmssName));
             }
             finally
             {
                 //Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                 //of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                await ResourceGroupsClient.StartDeleteAsync(rgName);
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
     }

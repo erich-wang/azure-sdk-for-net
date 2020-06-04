@@ -75,7 +75,7 @@ namespace Azure.Management.Compute.Tests
                 Assert.NotNull(getVM.Identity.UserAssignedIdentities[identity].PrincipalId);
                 Assert.NotNull(getVM.Identity.UserAssignedIdentities[identity].ClientId);
 
-                await VirtualMachinesClient.StartDeleteAsync(rgName, inputVM.Name);
+                await WaitForCompletionAsync(await VirtualMachinesClient.StartDeleteAsync(rgName, inputVM.Name));
 
                 passed = true;
             }

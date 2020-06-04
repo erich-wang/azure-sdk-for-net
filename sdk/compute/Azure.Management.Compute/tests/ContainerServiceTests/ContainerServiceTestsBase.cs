@@ -23,7 +23,7 @@ namespace Azure.Management.Compute.Tests
         protected const string MasterProfileDnsPrefix = "mdp";
         protected const string MesosOrchestratorType = "Mesos";
         protected const string DefaultAgentPoolProfileName = "agentpool1";
-        protected string DefaultVmSize = VirtualMachineSizeTypes.StandardA2.ToString();
+        protected string DefaultVmSize = VirtualMachineSizeTypes.StandardA1.ToString();
         protected const string DefaultLinuxAdminUsername = "azureuser";
         protected const string ContainerServiceType = "Microsoft.ContainerService/ContainerServices";
         private const string DefaultSshPublicKey =
@@ -98,14 +98,14 @@ namespace Azure.Management.Compute.Tests
             }
             catch
             {
-                await ResourceGroupsClient.StartDeleteAsync(rgName);
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
                 throw;
             }
         }
 
         protected async void UpdateContainerService(string rgName, string vmssName, ContainerService inputContainerService)
         {
-            var createOrUpdateResponse = await ContainerServicesClient.StartCreateOrUpdateAsync(rgName, vmssName, inputContainerService);
+            var createOrUpdateResponse = await WaitForCompletionAsync(await ContainerServicesClient.StartCreateOrUpdateAsync(rgName, vmssName, inputContainerService));
         }
 
         private async Task<(ContainerService, ContainerService)> CreateContainerServiceAndGetOperationResponse(
@@ -124,16 +124,14 @@ namespace Azure.Management.Compute.Tests
             {
                 containerServiceCustomizer(inputContainerService);
             }
-            var createOrUpdateResponse =await ContainerServicesClient.StartCreateOrUpdateAsync(rgName, csName, inputContainerService);
-            await WaitForCompletionAsync(createOrUpdateResponse);
+            var createOrUpdateResponse = await WaitForCompletionAsync(await ContainerServicesClient.StartCreateOrUpdateAsync(rgName, csName, inputContainerService));
             Assert.AreEqual(csName, createOrUpdateResponse.Value.Name);
             Assert.AreEqual(inputContainerService.Location.ToLower().Replace(" ", ""), createOrUpdateResponse.Value.Location.ToLower());
-            ;
             Assert.AreEqual(ContainerServiceType, createOrUpdateResponse.Value.Type);
 
             ValidateContainerService(inputContainerService, createOrUpdateResponse.Value);
 
-            return (createOrUpdateResponse.Value,inputContainerService);
+            return (createOrUpdateResponse,inputContainerService);
             ;
         }
 

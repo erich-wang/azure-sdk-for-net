@@ -292,7 +292,7 @@ namespace Azure.Management.Compute.Tests
                 // Fire and forget. No need to wait for RG deletion completion
                 try
                 {
-                    await ResourceGroupsClient.StartDeleteAsync(rgName);
+                    await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
                 }
                 catch (Exception e)
                 {

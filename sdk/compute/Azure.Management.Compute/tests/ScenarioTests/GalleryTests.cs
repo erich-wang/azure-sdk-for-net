@@ -156,7 +156,7 @@ namespace Azure.Management.Compute.Tests
                     rgName));
                 string galleryImageName = Recording.GenerateAssetName(GalleryImageNamePrefix);
                 GalleryImage inputGalleryImage = GetTestInputGalleryImage();
-                await (await GalleryImagesClient.StartCreateOrUpdateAsync(rgName, galleryName, galleryImageName, inputGalleryImage)).WaitForCompletionAsync();
+                await WaitForCompletionAsync((await GalleryImagesClient.StartCreateOrUpdateAsync(rgName, galleryName, galleryImageName, inputGalleryImage)));
                 Trace.TraceInformation(string.Format("Created the gallery image: {0} in gallery: {1}", galleryImageName,
                     galleryName));
 

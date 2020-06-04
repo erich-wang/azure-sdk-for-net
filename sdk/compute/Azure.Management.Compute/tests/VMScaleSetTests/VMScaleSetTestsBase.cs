@@ -316,9 +316,9 @@ namespace Azure.Management.Compute.Tests
         //    }
         //}
 
-        protected async void UpdateVMScaleSet(string rgName, string vmssName, VirtualMachineScaleSet inputVMScaleSet)
+        protected async Task UpdateVMScaleSet(string rgName, string vmssName, VirtualMachineScaleSet inputVMScaleSet)
         {
-            var createOrUpdateResponse = await VirtualMachineScaleSetsClient.StartCreateOrUpdateAsync(rgName, vmssName, inputVMScaleSet);
+            var createOrUpdateResponse = WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartCreateOrUpdateAsync(rgName, vmssName, inputVMScaleSet));
         }
 
         // This method is used to Update VM Scale Set but it internally calls PATCH verb instead of PUT.

@@ -33,15 +33,15 @@ namespace Azure.Management.Compute.Tests.DiskRPTests
             {
                 await ResourceGroupsClient.CreateOrUpdateAsync(rgName, new ResourceGroup(DiskRPLocation));
                 //put disk
-                await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk);
+                await WaitForCompletionAsync(await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk));
                 Disk diskOut = await DisksClient.GetAsync(rgName, diskName);
                 Validate(disk, diskOut, disk.Location);
                 Assert.AreEqual(disk.CreationData.CreateOption, diskOut.CreationData.CreateOption);
-                await DisksClient.StartDeleteAsync(rgName, diskName);
+                await WaitForCompletionAsync(await DisksClient.StartDeleteAsync(rgName, diskName));
             }
             finally
             {
-                await ResourceGroupsClient.StartDeleteAsync(rgName);
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
 

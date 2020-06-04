@@ -81,16 +81,16 @@ namespace Azure.Management.Compute.Tests
                 VirtualMachineScaleSet vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
                 inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
                 // TODO: AutoRest skips the following methods - Start, Restart, PowerOff, Deallocate
-                await VirtualMachineScaleSetsClient.StartStartAsync(rgName, vmScaleSet.Name);
-                await VirtualMachineScaleSetsClient.StartReimageAsync(rgName, vmScaleSet.Name);
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartStartAsync(rgName, vmScaleSet.Name));
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartReimageAsync(rgName, vmScaleSet.Name));
                 if (hasManagedDisks)
                 {
-                    await VirtualMachineScaleSetsClient.StartReimageAllAsync(rgName, vmScaleSet.Name);
+                    await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartReimageAllAsync(rgName, vmScaleSet.Name));
                 }
-                await VirtualMachineScaleSetsClient.StartRestartAsync(rgName, vmScaleSet.Name);
-                await VirtualMachineScaleSetsClient.StartPowerOffAsync(rgName, vmScaleSet.Name);
-                await VirtualMachineScaleSetsClient.StartDeallocateAsync(rgName, vmScaleSet.Name);
-                await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmScaleSet.Name);
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartRestartAsync(rgName, vmScaleSet.Name));
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartPowerOffAsync(rgName, vmScaleSet.Name));
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeallocateAsync(rgName, vmScaleSet.Name));
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmScaleSet.Name));
 
                 passed = true;
             }
@@ -98,7 +98,7 @@ namespace Azure.Management.Compute.Tests
             {
                 // Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                 // of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                await ResourceGroupsClient.StartDeleteAsync(rgName);
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
 
             Assert.True(passed);
@@ -128,7 +128,7 @@ namespace Azure.Management.Compute.Tests
                     storageAccountOutput, imageRef, createWithManagedDisks: true);
                 VirtualMachineScaleSet vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
                 inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
-                await VirtualMachineScaleSetsClient.StartRedeployAsync(rgName, vmScaleSet.Name);
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartRedeployAsync(rgName, vmScaleSet.Name));
 
                 passed = true;
             }
@@ -137,7 +137,7 @@ namespace Azure.Management.Compute.Tests
                 Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", originalTestLocation);
                 // Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                 // of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                await ResourceGroupsClient.StartDeleteAsync(rgName);
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
 
             Assert.True(passed);
@@ -175,7 +175,7 @@ namespace Azure.Management.Compute.Tests
                 inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
                 await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartStartAsync(rgName, vmScaleSet.Name));
                 // Shutdown VM with SkipShutdown = true
-                await VirtualMachineScaleSetsClient.StartPowerOffAsync(rgName, vmScaleSet.Name, true);
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartPowerOffAsync(rgName, vmScaleSet.Name, true));
 
                 passed = true;
             }
@@ -183,7 +183,7 @@ namespace Azure.Management.Compute.Tests
             {
                 // Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                 // of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                await ResourceGroupsClient.StartDeleteAsync(rgName);
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
 
             Assert.True(passed);
@@ -214,7 +214,7 @@ namespace Azure.Management.Compute.Tests
                     createWithManagedDisks: true);
                 vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
                 inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
-                await VirtualMachineScaleSetsClient.StartPerformMaintenanceAsync(rgName, vmScaleSet.Name);
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartPerformMaintenanceAsync(rgName, vmScaleSet.Name));
 
                 passed = true;
             }
@@ -224,14 +224,14 @@ namespace Azure.Management.Compute.Tests
                 string expectedMessage =
                     $"Operation 'performMaintenance' is not allowed on VM '{vmScaleSet.Name}_0' " +
                     "since the Subscription of this VM is not eligible.";
-                Assert.AreEqual(expectedMessage, cex.Message);
+                Assert.IsTrue(cex.Message.Contains(expectedMessage));
             }
             finally
             {
                 Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", originalTestLocation);
                 // Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                 // of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                await ResourceGroupsClient.StartDeleteAsync(rgName);
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
 
             Assert.True(passed);
@@ -285,25 +285,25 @@ namespace Azure.Management.Compute.Tests
                 var virtualMachineScaleSetInstanceIDs = new VirtualMachineScaleSetVMInstanceIDs( new List<string>() { "0", "1" });
                 var virtualMachineScaleSetInstanceID = new List<string>() { "0", "1" };
                 var virtualMachineScaleSetRequ = new VirtualMachineScaleSetVMInstanceRequiredIDs(new List<string>() { "0", "1" });
-                await VirtualMachineScaleSetsClient.StartStartAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetInstanceIDs);
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartStartAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetInstanceIDs));
                 virtualMachineScaleSetInstanceIDs = new VirtualMachineScaleSetVMInstanceIDs(new List<string>() { "0" });
                 VirtualMachineScaleSetReimageParameters virtualMachineScaleSetReimageParameters = new VirtualMachineScaleSetReimageParameters
                 {
                     InstanceIds = virtualMachineScaleSetInstanceID
                 };
-                await VirtualMachineScaleSetsClient.StartReimageAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetReimageParameters);
-                await VirtualMachineScaleSetsClient.StartReimageAllAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetInstanceIDs);
-                await VirtualMachineScaleSetsClient.StartPowerOffAsync(rgName, vmScaleSet.Name, null, virtualMachineScaleSetInstanceIDs);
-                await VirtualMachineScaleSetsClient.StartUpdateInstancesAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetRequ);
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartReimageAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetReimageParameters));
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartReimageAllAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetInstanceIDs));
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartPowerOffAsync(rgName, vmScaleSet.Name, null, virtualMachineScaleSetInstanceIDs));
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartUpdateInstancesAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetRequ));
                 virtualMachineScaleSetInstanceID = new List<string>() { "1" };
-                await VirtualMachineScaleSetsClient.StartRestartAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetInstanceIDs);
-                await VirtualMachineScaleSetsClient.StartDeallocateAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetInstanceIDs);
-                await VirtualMachineScaleSetsClient.StartDeleteInstancesAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetRequ);
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartRestartAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetInstanceIDs));
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeallocateAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetInstanceIDs));
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteInstancesAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetRequ));
                 passed = true;
             }
             finally
             {
-                await ResourceGroupsClient.StartDeleteAsync(rgName);
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
 
             Assert.True(passed);
@@ -336,7 +336,7 @@ namespace Azure.Management.Compute.Tests
                 inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
                 List<string> virtualMachineScaleSetInstanceIDs = new List<string> { "0", "1" };
                 var virtualMachineScaleSetInstanceID = new VirtualMachineScaleSetVMInstanceIDs(new List<string>() { "0", "1" });
-                await VirtualMachineScaleSetsClient.StartRedeployAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetInstanceID);
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartRedeployAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetInstanceID));
 
                 passed = true;
             }
@@ -345,7 +345,7 @@ namespace Azure.Management.Compute.Tests
                 Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", originalTestLocation);
                 // Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                 // of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                await ResourceGroupsClient.StartDeleteAsync(rgName);
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
 
             Assert.True(passed);
@@ -379,8 +379,8 @@ namespace Azure.Management.Compute.Tests
                 inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
                 List<string> virtualMachineScaleSetInstanceIDs = new List<string> { "0", "1" };
                 var virtualMachineScaleSetInstanceID = new VirtualMachineScaleSetVMInstanceIDs(new List<string>() { "0", "1" });
-                await VirtualMachineScaleSetsClient.StartPerformMaintenanceAsync(rgName, vmScaleSet.Name,
-                    virtualMachineScaleSetInstanceID);
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartPerformMaintenanceAsync(rgName, vmScaleSet.Name,
+                    virtualMachineScaleSetInstanceID));
 
                 passed = true;
             }
@@ -390,16 +390,15 @@ namespace Azure.Management.Compute.Tests
                 string expectedMessage =
                     $"Operation 'performMaintenance' is not allowed on VM '{vmScaleSet.Name}_0' " +
                     "since the Subscription of this VM is not eligible.";
-                Assert.AreEqual(expectedMessage, cex.Message);
+                Assert.IsTrue(cex.Message.Contains(expectedMessage));
             }
             finally
             {
                 Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", originalTestLocation);
                 // Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                 // of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                await ResourceGroupsClient.StartDeleteAsync(rgName);
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
-
             Assert.True(passed);
         }
     }

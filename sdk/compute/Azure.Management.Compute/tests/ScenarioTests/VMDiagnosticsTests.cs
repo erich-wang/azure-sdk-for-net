@@ -54,7 +54,7 @@ namespace Azure.Management.Compute.Tests
                 ValidateBootDiagnosticsInstanceView(getVMWithInstanceViewResponse.InstanceView.BootDiagnostics, hasError: false);
 
                 // Make boot diagnostics encounter an error due to a missing boot diagnostics storage account
-                await VirtualMachinesClient.StartDeallocateAsync(resourceGroupName, inputVM.Name);
+                await WaitForCompletionAsync(await VirtualMachinesClient.StartDeallocateAsync(resourceGroupName, inputVM.Name));
                 await StorageAccountsClient.DeleteAsync(resourceGroupName, storageAccountForBootDiagnosticsName);
                 //await StorageAccountsClient.DeleteWithHttpMessagesAsync(resourceGroupName, storageAccountForBootDiagnosticsName).GetAwaiter().GetResult();
                 await WaitForCompletionAsync(await VirtualMachinesClient.StartStartAsync(resourceGroupName, inputVM.Name));
@@ -64,7 +64,7 @@ namespace Azure.Management.Compute.Tests
             }
             finally
             {
-                await ResourceGroupsClient.StartDeleteAsync(resourceGroupName);
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(resourceGroupName));
             }
 
         }

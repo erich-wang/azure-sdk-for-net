@@ -60,7 +60,7 @@ namespace Azure.Management.Compute.Tests
             {
                 StorageAccount storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
 
-                await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist");
+                await WaitForCompletionAsync( await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
 
                 var vnetResponse = await CreateVNETWithSubnets(rgName, 2);
                 var vmssSubnet = vnetResponse.Subnets[1];
@@ -96,14 +96,14 @@ namespace Azure.Management.Compute.Tests
 
                 ValidateEncryptionSettingsInVMScaleSetVMInstanceView(vmInstanceViewResponse, hasManagedDisks);
 
-                await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmssName);
+                await WaitForCompletionAsync( await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmssName));
                 testSucceeded = true;
             }
             finally
             {
                 //Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                 //of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                await ResourceGroupsClient.StartDeleteAsync(rgName);
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
 
             Assert.True(testSucceeded);

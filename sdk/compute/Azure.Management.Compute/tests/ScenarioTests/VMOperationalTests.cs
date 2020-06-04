@@ -239,7 +239,7 @@ namespace Azure.Management.Compute.Tests
             {
                 // Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                 // of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                var deleteRg1Response = await ResourceGroupsClient.StartDeleteAsync(rg1Name);
+                var deleteRg1Response = await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rg1Name));
                 //var deleteRg1Response = await ResourceGroups.BeginDeleteWithHttpMessagesAsync(rg1Name);
                 //Assert.True(deleteRg1Response.StatusCode == HttpStatusCode.Accepted,
                 //    "BeginDeleting status was not Accepted.");
@@ -374,7 +374,7 @@ namespace Azure.Management.Compute.Tests
                 passed = true;
                 string expectedMessage = $"Operation 'performMaintenance' is not allowed on VM '{inputVM1.Name}' since the Subscription of this VM" +
                     " is not eligible.";
-                Assert.AreEqual(expectedMessage, cex.Message);
+                Assert.IsTrue(cex.Message.Contains(expectedMessage));
             }
             finally
             {

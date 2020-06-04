@@ -144,7 +144,7 @@ namespace Azure.Management.Compute.Tests
         private async Task TestVMScaleSetPriorityOperationsInternal(
             string priority,
             BillingProfile billingProfile = null,
-            string evictionPolicy = null,
+            VirtualMachineEvictionPolicyTypes? evictionPolicy = null,
             bool hasManagedDisks = false,
             IList<string> zones = null
             )
@@ -165,7 +165,7 @@ namespace Azure.Management.Compute.Tests
 
                 var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
 
-                await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist");
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
 
                 var getTwoVirtualMachineScaleSet = await CreateVMScaleSet_NoAsyncTracking(
                     rgName,
@@ -207,7 +207,7 @@ namespace Azure.Management.Compute.Tests
                 Assert.AreEqual(inputVMScaleSet.VirtualMachineProfile.Priority.ToString(), priority);
                 //Assert.Same(inputVMScaleSet.VirtualMachineProfile.Priority.ToString(), priority);
 
-                await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmssName);
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmssName));
             }
             finally
             {

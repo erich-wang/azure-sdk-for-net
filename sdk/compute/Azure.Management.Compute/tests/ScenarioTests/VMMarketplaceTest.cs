@@ -94,7 +94,7 @@ namespace Azure.Management.Compute.Tests
                 // Validate the VMM Plan field
                 ValidateMarketplaceVMPlanField(vm1, img);
 
-                await VirtualMachinesClient.StartDeleteAsync(rgName, inputVM.Name);
+                await WaitForCompletionAsync(await VirtualMachinesClient.StartDeleteAsync(rgName, inputVM.Name));
             }
             finally
             {
@@ -152,7 +152,7 @@ namespace Azure.Management.Compute.Tests
                 //Assert.True(getResponse.Status == HttpStatusCode.OK);
                 ValidateVM(inputVM, getResponse,
                     Helpers.GetVMReferenceId(m_subId, rgName, inputVM.Name));
-                var lroResponse = await VirtualMachinesClient.StartDeleteAsync(rgName, inputVM.Name);
+                var lroResponse = await WaitForCompletionAsync(await VirtualMachinesClient.StartDeleteAsync(rgName, inputVM.Name));
                 //var lroResponse = await VirtualMachinesClient.DeleteWithHttpMessagesAsync(rgName, inputVM.Name).GetAwaiter().GetResult();
                 /////TODO
                 //Assert.True(lroResponse .StatusCode == HttpStatusCode.OK);
@@ -163,7 +163,7 @@ namespace Azure.Management.Compute.Tests
                 // the resources from this test.
                 //var deleteResourceGroupResponse = m_ResourcesClient.ResourceGroups.BeginDeleteWithHttpMessagesAsync(rgName);
                 //await ResourceGroupsClient.BeginDeleteWithHttpMessagesAsync(rgName);
-                await ResourceGroupsClient.StartDeleteAsync(rgName);
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
                 //Assert.True(deleteResourceGroupResponse.Result.Response.StatusCode == HttpStatusCode.Accepted ||
                 //   deleteResourceGroupResponse.Result.Response.StatusCode == HttpStatusCode.NotFound);
             }

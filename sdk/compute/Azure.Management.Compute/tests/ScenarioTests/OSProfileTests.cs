@@ -289,7 +289,7 @@ namespace Azure.Management.Compute.Tests
             {
                 if (m_ResourcesClient != null)
                 {
-                    await ResourceGroupsClient.StartDeleteAsync(rgName);
+                    await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
                 }
             }
         }

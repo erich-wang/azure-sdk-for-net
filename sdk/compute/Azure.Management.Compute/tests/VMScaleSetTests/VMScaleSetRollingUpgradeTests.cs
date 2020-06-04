@@ -92,7 +92,7 @@ namespace Azure.Management.Compute.Tests
                     var vmssStatus = await VirtualMachineScaleSetsClient.GetInstanceViewAsync(rgName, vmssName);
 
                     inputVMScaleSet.VirtualMachineProfile.ExtensionProfile = extensionProfile;
-                    UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
+                    await UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
 
                     getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName);
                     ValidateVMScaleSet(inputVMScaleSet, getResponse, hasManagedDisks: true);
@@ -311,14 +311,14 @@ namespace Azure.Management.Compute.Tests
 
                 // Set Automatic OS Upgrade
                 inputVMScaleSet.UpgradePolicy.AutomaticOSUpgradePolicy.EnableAutomaticOSUpgrade = true;
-                UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
+                await UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
 
                 getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName);
                 ValidateVMScaleSet(inputVMScaleSet, getResponse, hasManagedDisks: true);
 
                 // with automatic OS upgrade policy as null
                 inputVMScaleSet.UpgradePolicy.AutomaticOSUpgradePolicy = null;
-                UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
+                await UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
 
                 getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName);
                 ValidateVMScaleSet(inputVMScaleSet, getResponse, hasManagedDisks: true);
@@ -332,7 +332,7 @@ namespace Azure.Management.Compute.Tests
                     DisableAutomaticRollback = true,
                     EnableAutomaticOSUpgrade = false
                 };
-                UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
+                await UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
 
                 getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName);
                 ValidateVMScaleSet(inputVMScaleSet, getResponse, hasManagedDisks: true);

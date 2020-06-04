@@ -173,7 +173,7 @@ namespace Azure.Management.Compute.Tests
                 Assert.True(getImage.Tags.ContainsKey(tagKey));
                 var listResponse = await (ImagesClient.ListByResourceGroupAsync(rgName)).ToEnumerableAsync();
                 Assert.IsTrue(listResponse.Count()==1);
-                await ImagesClient.StartDeleteAsync(rgName, image.Value.Name);
+                await WaitForCompletionAsync(await ImagesClient.StartDeleteAsync(rgName, image.Value.Name));
             }
             finally
             {

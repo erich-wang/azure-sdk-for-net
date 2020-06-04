@@ -59,7 +59,7 @@ namespace Azure.Management.Compute.Tests
             }
             finally
             {
-                await ResourceGroupsClient.StartDeleteAsync(m_resourceGroup1Name);
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(m_resourceGroup1Name));
             }
 
         }
@@ -391,7 +391,7 @@ namespace Azure.Management.Compute.Tests
             }
             finally
             {
-                await ResourceGroupsClient.StartDeleteAsync(resourceGroup2Name);
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(resourceGroup2Name));
                 // Delete ProximityPlacementGroup
                 await ProximityPlacementGroupsClient.DeleteAsync(m_resourceGroup1Name, proximityPlacementGroup1Name);
             }

@@ -62,7 +62,7 @@ namespace Azure.Management.Compute.Tests
                 var listRes = ContainerServicesClient.ListByResourceGroupAsync(rgName);
                 var listResult = await listRes.ToEnumerableAsync();
                 //Assert.Contains(listResult, a => a.Name == containerService.Name);
-                await ContainerServicesClient.StartDeleteAsync(rgName, containerService.Name);
+                await WaitForCompletionAsync( await ContainerServicesClient.StartDeleteAsync(rgName, containerService.Name));
                 var listResultAfterDeletionResult = ContainerServicesClient.ListByResourceGroupAsync(rgName);
                 var listResultAfterDeletion = await listResultAfterDeletionResult.ToEnumerableAsync();
                 Assert.True(!listResultAfterDeletion.Any());
@@ -72,7 +72,7 @@ namespace Azure.Management.Compute.Tests
                 Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", originalTestLocation);
                 //Cleanup the created resources. But don't wait since it takes too long, and it's not the purpose
                 //of the test to cover deletion. CSM does persistent retrying over all RG resources.
-                await ResourceGroupsClient.StartDeleteAsync(rgName);
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
     }

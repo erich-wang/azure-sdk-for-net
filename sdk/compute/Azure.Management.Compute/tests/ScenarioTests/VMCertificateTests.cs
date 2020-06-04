@@ -59,11 +59,11 @@ namespace Azure.Management.Compute.Tests
                 var returnTwoVM = await CreateVM(rgName, asName, storageAccountOutput, imageRef, AddCertificateInfo);
                 VirtualMachine vm1 = returnTwoVM.Item1;
                 inputVM = returnTwoVM.Item2;
-                await VirtualMachinesClient.StartDeleteAsync(rgName, inputVM.Name);
+                await WaitForCompletionAsync(await VirtualMachinesClient.StartDeleteAsync(rgName, inputVM.Name));
             }
             finally
             {
-                await ResourceGroupsClient.StartDeleteAsync(rgName);
+                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rgName));
             }
         }
 

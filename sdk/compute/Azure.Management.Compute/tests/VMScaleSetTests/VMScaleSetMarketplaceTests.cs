@@ -67,7 +67,7 @@ namespace Azure.Management.Compute.Tests
                 // Validate the VMM Plan field
                 ValidateMarketplaceVMScaleSetPlanField(vmScaleSet, img);
 
-                await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmssName);
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmssName));
             }
             catch (Exception ex)
             {

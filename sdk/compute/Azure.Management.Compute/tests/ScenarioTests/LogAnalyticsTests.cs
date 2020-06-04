@@ -43,7 +43,7 @@ namespace Azure.Management.Compute.Tests
 
                     RequestRateByIntervalInput requestRateByIntervalInput = new RequestRateByIntervalInput(sasUri, DateTime.UtcNow.AddDays(-10), DateTime.UtcNow.AddDays(-8), IntervalInMins.FiveMins);
 
-                    var result = await LogAnalyticsClient.StartExportRequestRateByIntervalAsync("westcentralus" ,requestRateByIntervalInput);
+                    var result = await WaitForCompletionAsync(await LogAnalyticsClient.StartExportRequestRateByIntervalAsync("westcentralus" ,requestRateByIntervalInput));
                     //BUG: LogAnalytics API does not return correct result.
                     //Assert.EndsWith(".csv", result.Properties.Output);
 
@@ -52,14 +52,14 @@ namespace Azure.Management.Compute.Tests
                         GroupByOperationName = true,
                     };
 
-                    var result1= await LogAnalyticsClient.StartExportThrottledRequestsAsync("westcentralus" ,throttledRequestsInput);
+                    var result1= await WaitForCompletionAsync(await LogAnalyticsClient.StartExportThrottledRequestsAsync("westcentralus" ,throttledRequestsInput));
 
                     //BUG: LogAnalytics API does not return correct result.
                     //Assert.EndsWith(".csv", result.Properties.Output);
                 }
                 finally
                 {
-                    await ResourceGroupsClient.StartDeleteAsync(rg1Name);
+                    await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(rg1Name));
                 }
         }
 
