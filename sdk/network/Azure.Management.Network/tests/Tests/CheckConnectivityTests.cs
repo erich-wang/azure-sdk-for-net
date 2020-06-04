@@ -29,6 +29,7 @@ namespace Azure.Management.Network.Tests.Tests
         }
 
         [Test]
+        [Category("Must be online")]
         public async Task CheckConnectivityVmToInternetTest()
         {
             string resourceGroupName = Recording.GenerateAssetName("azsmnet");

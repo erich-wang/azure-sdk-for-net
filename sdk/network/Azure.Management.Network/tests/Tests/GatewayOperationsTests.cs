@@ -39,6 +39,7 @@ namespace Azure.Management.Network.Tests.Tests
 
         // Tests Resource:-VirtualNetworkGateway 6 APIs:-
         [Test]
+        [Category("Must be online")]
         public async Task VirtualNetworkGatewayOperationsApisTest()
         {
             string resourceGroupName = Recording.GenerateAssetName("csmrg");
@@ -774,6 +775,7 @@ namespace Azure.Management.Network.Tests.Tests
 
         // Tests Resource:-VirtualNetworkGatewayConnectionSharedKey 3 APIs:-
         [Test]
+        [Category("Must be online")]
         public async Task VirtualNetworkGatewayConnectionSharedKeyOperationsApisTest()
         {
             string resourceGroupName = Recording.GenerateAssetName("csmrg");
@@ -1206,7 +1208,7 @@ namespace Azure.Management.Network.Tests.Tests
         }
 
         [Test]
-        [Category("Track2: Occasionally succeed")]
+        [Ignore("Track2: Occasionally succeed in online")]
         public async Task VirtualNetworkGatewayBgpRouteApiTest()
         {
             string resourceGroupName = Recording.GenerateAssetName("csmrg");

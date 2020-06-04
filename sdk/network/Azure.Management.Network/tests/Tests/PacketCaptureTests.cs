@@ -31,6 +31,7 @@ namespace Azure.Management.Network.Tests.Tests
         }
 
         [Test]
+        [Category("Must be online")]
         public async Task PacketCaptureApiTest()
         {
             string resourceGroupName = Recording.GenerateAssetName("azsmnet");

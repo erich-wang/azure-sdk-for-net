@@ -10,8 +10,5 @@
     <None Update="TestData\*.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-      <None Update="SessionRecords\*.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 </Project>

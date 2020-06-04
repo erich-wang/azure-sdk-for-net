@@ -28,6 +28,7 @@ namespace Azure.Management.Network.Tests.Tests
         }
 
         [Test]
+        [Category("Must be online")]
         public async Task NextHopApiTest()
         {
             string resourceGroupName = Recording.GenerateAssetName("azsmnet");

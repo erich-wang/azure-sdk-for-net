@@ -28,6 +28,7 @@ namespace Azure.Management.Network.Tests.Tests
         }
 
         [Test]
+        [Category("Must be online")]
         public async Task TopologyApiTest()
         {
             string resourceGroupName1 = Recording.GenerateAssetName("azsmnet");

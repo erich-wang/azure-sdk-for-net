@@ -74,11 +74,6 @@ namespace Azure.Management.Network.Tests.Helpers
                  Recording.InstrumentClientOptions(new NetworkManagementClientOptions())));
         }
 
-        //public override void StartTestRecording()
-        //{
-        //    base.StartTestRecording();
-        //}
-
         protected ValueTask<Response<T>> WaitForCompletionAsync<T>(Operation<T> operation)
         {
             if (Mode == RecordedTestMode.Playback)
