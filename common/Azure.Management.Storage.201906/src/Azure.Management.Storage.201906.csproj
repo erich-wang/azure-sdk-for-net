@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Version>1.0.0-preview.1</Version>
+    <PackageId>Azure.Management.Storage201906</PackageId>
+	<RootNamespace>Azure.Management.Storage201906</RootNamespace>
+    <AssemblyName>Azure.Management.Storage201906</AssemblyName>
+    <Description>Azure management client SDK for Azure resource provider Microsoft.Storage</Description>
+    <PackageTags>azure;management;storage</PackageTags>
+    <NoWarn>$(NoWarn);AZC0008</NoWarn>
+  </PropertyGroup>
+</Project>

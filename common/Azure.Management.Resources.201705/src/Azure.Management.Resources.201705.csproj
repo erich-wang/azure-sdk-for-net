@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Version>1.0.0-preview.1</Version>
+    <PackageId>Azure.Management.Resources201705</PackageId>
+    <RootNamespace>Azure.Management.Resources201705</RootNamespace>
+    <Description>Azure management client SDK for Azure resource provider Microsoft.Resources</Description>
+    <PackageTags>azure;management;resources</PackageTags>
+    <NoWarn>$(NoWarn);AZC0001;AZC0008</NoWarn>
+    <AssemblyName>Azure.Management.Resources201705</AssemblyName>
+  </PropertyGroup>
+</Project>
