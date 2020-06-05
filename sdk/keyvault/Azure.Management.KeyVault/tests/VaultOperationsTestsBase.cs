@@ -7,9 +7,9 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Azure.Core.TestFramework;
-using Azure.Graph.Rbac;
+using Azure.Management.Graph.Rbac;
 using Azure.Management.KeyVault.Models;
-using Azure.Management.Resources;
+using Azure.Management.Resources201705;
 
 namespace Azure.Management.KeyVault.Tests
 {
@@ -78,7 +78,7 @@ namespace Azure.Management.KeyVault.Tests
                 ).First().Locations.FirstOrDefault();
 
             ResGroupName = Recording.GenerateAssetName("sdktestrg");
-            await ResourceGroupsClient.CreateOrUpdateAsync(ResGroupName, new Resources.Models.ResourceGroup(Location));
+            await ResourceGroupsClient.CreateOrUpdateAsync(ResGroupName, new Resources201705.Models.ResourceGroup(Location));
             VaultName = Recording.GenerateAssetName("sdktestvault");
 
             TenantIdGuid = new Guid(TestEnvironment.TenantId);
