@@ -1,0 +1,119 @@
+{
+  "Entries": [
+    {
+      "RequestUri": "https://management.azure.com/subscriptions/0b1f6471-1bf0-4dda-aec3-cb9272f09590/resourcegroups/csmrg5648?api-version=2019-10-01",
+      "RequestMethod": "PUT",
+      "RequestHeaders": {
+        "Authorization": "Sanitized",
+        "Content-Length": "26",
+        "Content-Type": "application/json",
+        "traceparent": "00-8bfa30540989944ea29a33b320ca511b-4c7a3ff894cf2641-00",
+        "User-Agent": [
+          "azsdk-net-Management.Resources/1.0.0-dev.20200526.1",
+          "(.NET Framework 4.8.4180.0; Microsoft Windows 10.0.19041 )"
+        ],
+        "x-ms-client-request-id": "47b94e70a6d120c0ef6dc1bce40a1426",
+        "x-ms-return-client-request-id": "true"
+      },
+      "RequestBody": {
+        "location": "West Europe"
+      },
+      "StatusCode": 201,
+      "ResponseHeaders": {
+        "Cache-Control": "no-cache",
+        "Content-Length": "271",
+        "Content-Type": "application/json; charset=utf-8",
+        "Date": "Tue, 26 May 2020 10:01:16 GMT",
+        "Expires": "-1",
+        "Pragma": "no-cache",
+        "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+        "X-Content-Type-Options": "nosniff",
+        "x-ms-correlation-request-id": "4ddb2121-6281-4b92-9575-947dcc97f0b6",
+        "x-ms-ratelimit-remaining-subscription-writes": "1199",
+        "x-ms-request-id": "4ddb2121-6281-4b92-9575-947dcc97f0b6",
+        "x-ms-routing-request-id": "SOUTHEASTASIA:20200526T100117Z:4ddb2121-6281-4b92-9575-947dcc97f0b6"
+      },
+      "ResponseBody": {
+        "id": "/subscriptions/0b1f6471-1bf0-4dda-aec3-cb9272f09590/resourceGroups/csmrg5648",
+        "name": "csmrg5648",
+        "type": "Microsoft.Resources/resourceGroups",
+        "location": "westeurope",
+        "tags": {
+          "StorageType": "Standard_LRS",
+          "type": "test"
+        },
+        "properties": {
+          "provisioningState": "Succeeded"
+        }
+      }
+    },
+    {
+      "RequestUri": "https://management.azure.com/subscriptions/0b1f6471-1bf0-4dda-aec3-cb9272f09590/resourcegroups/csmrg5648/providers/Microsoft.Resources/deployments/csmd5609/validate?api-version=2019-10-01",
+      "RequestMethod": "POST",
+      "RequestHeaders": {
+        "Authorization": "Sanitized",
+        "Content-Length": "377",
+        "Content-Type": "application/json",
+        "traceparent": "00-cd8cb3cfdeed3c41ab7ebd6432539381-d0b6e1a57113f449-00",
+        "User-Agent": [
+          "azsdk-net-Management.Resources/1.0.0-dev.20200526.1",
+          "(.NET Framework 4.8.4180.0; Microsoft Windows 10.0.19041 )"
+        ],
+        "x-ms-client-request-id": "bace41531c37c653cf9f3da910886616",
+        "x-ms-return-client-request-id": "true"
+      },
+      "RequestBody": {
+        "properties": {
+          "templateLink": {
+            "uri": "https://testtemplates.blob.core.windows.net/templates/bad-website-1.js"
+          },
+          "parameters": {
+            "siteName": {
+              "value": "mctest0101"
+            },
+            "hostingPlanName": {
+              "value": "mctest0101"
+            },
+            "siteMode": {
+              "value": "Limited"
+            },
+            "computeMode": {
+              "value": "Shared"
+            },
+            "siteLocation": {
+              "value": "North Europe"
+            },
+            "sku": {
+              "value": "Free"
+            },
+            "workerSize": {
+              "value": "0"
+            }
+          },
+          "mode": "Incremental"
+        }
+      },
+      "StatusCode": 400,
+      "ResponseHeaders": {
+        "Cache-Control": "no-cache",
+        "Content-Length": "559",
+        "Content-Type": "application/json; charset=utf-8",
+        "Date": "Tue, 26 May 2020 10:01:18 GMT",
+        "Expires": "-1",
+        "Pragma": "no-cache",
+        "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+        "X-Content-Type-Options": "nosniff",
+        "x-ms-correlation-request-id": "24b410e2-4838-40ad-ba74-784250c99dc9",
+        "x-ms-failure-cause": "gateway",
+        "x-ms-ratelimit-remaining-subscription-writes": "1199",
+        "x-ms-request-id": "24b410e2-4838-40ad-ba74-784250c99dc9",
+        "x-ms-routing-request-id": "SOUTHEASTASIA:20200526T100118Z:24b410e2-4838-40ad-ba74-784250c99dc9"
+      },
+      "ResponseBody": "{\u0022error\u0022:{\u0022code\u0022:\u0022InvalidTemplate\u0022,\u0022message\u0022:\u0022Deployment template validation failed: \u0027The template parameters \u0027hostingPlanName, siteMode, computeMode, siteLocation, sku, workerSize\u0027 in the parameters file are not valid; they are not present in the original template and can therefore not be provided at deployment time. The only supported parameters for this template are \u0027siteName\u0027. Please see https://aka.ms/arm-deploy/#parameter-file for usage details.\u0027.\u0022,\u0022additionalInfo\u0022:[{\u0022type\u0022:\u0022TemplateViolation\u0022,\u0022info\u0022:{\u0022lineNumber\u0022:0,\u0022linePosition\u0022:0,\u0022path\u0022:\u0022\u0022}}]}}"
+    }
+  ],
+  "Variables": {
+    "RandomSeed": "1801227131",
+    "SUBSCRIPTION_ID": "0b1f6471-1bf0-4dda-aec3-cb9272f09590"
+  }
+}

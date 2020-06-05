@@ -1,0 +1,268 @@
+{
+  "Entries": [
+    {
+      "RequestUri": "https://management.azure.com/subscriptions/b9f138a1-1d64-4108-8413-9ea3be1c1b2d/resourcegroups/csmrg9629?api-version=2019-10-01",
+      "RequestMethod": "PUT",
+      "RequestHeaders": {
+        "Authorization": "Sanitized",
+        "Content-Length": "31",
+        "Content-Type": "application/json",
+        "traceparent": "00-da4227c822b7ce4bad37863ba7c1b4ee-546d89142736b34e-00",
+        "User-Agent": [
+          "azsdk-net-Management.Resources/1.0.0-dev.20200529.1",
+          "(.NET Framework 4.8.4180.0; Microsoft Windows 10.0.19041 )"
+        ],
+        "x-ms-client-request-id": "c64c3a1ff80ae73284e4070f02195b88",
+        "x-ms-return-client-request-id": "true"
+      },
+      "RequestBody": {
+        "location": "South Central US"
+      },
+      "StatusCode": 201,
+      "ResponseHeaders": {
+        "Cache-Control": "no-cache",
+        "Content-Length": "223",
+        "Content-Type": "application/json; charset=utf-8",
+        "Date": "Fri, 29 May 2020 07:10:00 GMT",
+        "Expires": "-1",
+        "Pragma": "no-cache",
+        "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+        "X-Content-Type-Options": "nosniff",
+        "x-ms-correlation-request-id": "3b884f54-f90c-4141-948d-7763f5d68311",
+        "x-ms-ratelimit-remaining-subscription-writes": "1199",
+        "x-ms-request-id": "3b884f54-f90c-4141-948d-7763f5d68311",
+        "x-ms-routing-request-id": "EASTASIA:20200529T071000Z:3b884f54-f90c-4141-948d-7763f5d68311"
+      },
+      "ResponseBody": {
+        "id": "/subscriptions/b9f138a1-1d64-4108-8413-9ea3be1c1b2d/resourceGroups/csmrg9629",
+        "name": "csmrg9629",
+        "type": "Microsoft.Resources/resourceGroups",
+        "location": "southcentralus",
+        "properties": {
+          "provisioningState": "Succeeded"
+        }
+      }
+    },
+    {
+      "RequestUri": "https://management.azure.com/subscriptions/b9f138a1-1d64-4108-8413-9ea3be1c1b2d/resourcegroups/csmrg9629/providers/Microsoft.Resources/deployments/csmd846?api-version=2019-10-01",
+      "RequestMethod": "PUT",
+      "RequestHeaders": {
+        "Authorization": "Sanitized",
+        "Content-Length": "347",
+        "Content-Type": "application/json",
+        "traceparent": "00-723ba35941d26d4992f2617977db4c52-cdcd3ea2acb7bf4f-00",
+        "User-Agent": [
+          "azsdk-net-Management.Resources/1.0.0-dev.20200529.1",
+          "(.NET Framework 4.8.4180.0; Microsoft Windows 10.0.19041 )"
+        ],
+        "x-ms-client-request-id": "ec9273b20cb5bad157f745d3a476d1db",
+        "x-ms-return-client-request-id": "true"
+      },
+      "RequestBody": {
+        "properties": {
+          "templateLink": {
+            "uri": "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/201-web-app-github-deploy/azuredeploy.json"
+          },
+          "parameters": {
+            "repoURL": {
+              "value": "https://github.com/devigned/az-roadshow-oss.git"
+            },
+            "siteName": {
+              "value": "csmr8591"
+            },
+            "location": {
+              "value": "westus"
+            },
+            "sku": {
+              "value": "F1"
+            }
+          },
+          "mode": "Incremental"
+        }
+      },
+      "StatusCode": 201,
+      "ResponseHeaders": {
+        "Azure-AsyncOperation": "https://management.azure.com/subscriptions/b9f138a1-1d64-4108-8413-9ea3be1c1b2d/resourcegroups/csmrg9629/providers/Microsoft.Resources/deployments/csmd846/operationStatuses/08586108706835980961?api-version=2019-10-01",
+        "Cache-Control": "no-cache",
+        "Content-Length": "1993",
+        "Content-Type": "application/json; charset=utf-8",
+        "Date": "Fri, 29 May 2020 07:10:07 GMT",
+        "Expires": "-1",
+        "Pragma": "no-cache",
+        "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+        "X-Content-Type-Options": "nosniff",
+        "x-ms-correlation-request-id": "27c2d413-1063-4fd8-971a-b121f36c1702",
+        "x-ms-ratelimit-remaining-subscription-writes": "1198",
+        "x-ms-request-id": "27c2d413-1063-4fd8-971a-b121f36c1702",
+        "x-ms-routing-request-id": "EASTASIA:20200529T071008Z:27c2d413-1063-4fd8-971a-b121f36c1702"
+      },
+      "ResponseBody": {
+        "id": "/subscriptions/b9f138a1-1d64-4108-8413-9ea3be1c1b2d/resourceGroups/csmrg9629/providers/Microsoft.Resources/deployments/csmd846",
+        "name": "csmd846",
+        "type": "Microsoft.Resources/deployments",
+        "properties": {
+          "templateLink": {
+            "uri": "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/201-web-app-github-deploy/azuredeploy.json",
+            "contentVersion": "1.0.0.1"
+          },
+          "templateHash": "12192946132745292451",
+          "parameters": {
+            "siteName": {
+              "type": "String",
+              "value": "csmr8591"
+            },
+            "location": {
+              "type": "String",
+              "value": "westus"
+            },
+            "sku": {
+              "type": "String",
+              "value": "F1"
+            },
+            "workerSize": {
+              "type": "String",
+              "value": "0"
+            },
+            "repoURL": {
+              "type": "String",
+              "value": "https://github.com/devigned/az-roadshow-oss.git"
+            },
+            "branch": {
+              "type": "String",
+              "value": "master"
+            }
+          },
+          "mode": "Incremental",
+          "provisioningState": "Accepted",
+          "timestamp": "2020-05-29T07:10:06.4263465Z",
+          "duration": "PT4.546815S",
+          "correlationId": "27c2d413-1063-4fd8-971a-b121f36c1702",
+          "providers": [
+            {
+              "namespace": "Microsoft.Web",
+              "resourceTypes": [
+                {
+                  "resourceType": "serverfarms",
+                  "locations": [
+                    "westus"
+                  ]
+                },
+                {
+                  "resourceType": "sites",
+                  "locations": [
+                    "westus"
+                  ]
+                },
+                {
+                  "resourceType": "sites/sourcecontrols",
+                  "locations": [
+                    "westus"
+                  ]
+                }
+              ]
+            }
+          ],
+          "dependencies": [
+            {
+              "dependsOn": [
+                {
+                  "id": "/subscriptions/b9f138a1-1d64-4108-8413-9ea3be1c1b2d/resourceGroups/csmrg9629/providers/Microsoft.Web/serverfarms/hpn-csmrg9629",
+                  "resourceType": "Microsoft.Web/serverfarms",
+                  "resourceName": "hpn-csmrg9629"
+                }
+              ],
+              "id": "/subscriptions/b9f138a1-1d64-4108-8413-9ea3be1c1b2d/resourceGroups/csmrg9629/providers/Microsoft.Web/sites/csmr8591",
+              "resourceType": "Microsoft.Web/sites",
+              "resourceName": "csmr8591"
+            },
+            {
+              "dependsOn": [
+                {
+                  "id": "/subscriptions/b9f138a1-1d64-4108-8413-9ea3be1c1b2d/resourceGroups/csmrg9629/providers/Microsoft.Web/sites/csmr8591",
+                  "resourceType": "Microsoft.Web/sites",
+                  "resourceName": "csmr8591"
+                }
+              ],
+              "id": "/subscriptions/b9f138a1-1d64-4108-8413-9ea3be1c1b2d/resourceGroups/csmrg9629/providers/Microsoft.Web/sites/csmr8591/sourcecontrols/web",
+              "resourceType": "Microsoft.Web/sites/sourcecontrols",
+              "resourceName": "csmr8591/web"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "RequestUri": "https://management.azure.com/subscriptions/b9f138a1-1d64-4108-8413-9ea3be1c1b2d/resourcegroups/csmrg9629/deployments/csmd846/operations?api-version=2019-10-01",
+      "RequestMethod": "GET",
+      "RequestHeaders": {
+        "Authorization": "Sanitized",
+        "User-Agent": [
+          "azsdk-net-Management.Resources/1.0.0-dev.20200529.1",
+          "(.NET Framework 4.8.4180.0; Microsoft Windows 10.0.19041 )"
+        ],
+        "x-ms-client-request-id": "ebdbb7ebf65c125268916e13b25e420e",
+        "x-ms-return-client-request-id": "true"
+      },
+      "RequestBody": null,
+      "StatusCode": 200,
+      "ResponseHeaders": {
+        "Cache-Control": "no-cache",
+        "Content-Length": "1390",
+        "Content-Type": "application/json; charset=utf-8",
+        "Date": "Fri, 29 May 2020 07:10:38 GMT",
+        "Expires": "-1",
+        "Pragma": "no-cache",
+        "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+        "X-Content-Type-Options": "nosniff",
+        "x-ms-correlation-request-id": "fb723853-b539-409c-a3ba-7d87d4e47d4f",
+        "x-ms-ratelimit-remaining-subscription-reads": "11996",
+        "x-ms-request-id": "fb723853-b539-409c-a3ba-7d87d4e47d4f",
+        "x-ms-routing-request-id": "EASTASIA:20200529T071039Z:fb723853-b539-409c-a3ba-7d87d4e47d4f"
+      },
+      "ResponseBody": {
+        "value": [
+          {
+            "id": "/subscriptions/b9f138a1-1d64-4108-8413-9ea3be1c1b2d/resourceGroups/csmrg9629/providers/Microsoft.Resources/deployments/csmd846/operations/161E89964E8AA80D",
+            "operationId": "161E89964E8AA80D",
+            "properties": {
+              "provisioningOperation": "Create",
+              "provisioningState": "Succeeded",
+              "timestamp": "2020-05-29T07:10:37.232486Z",
+              "duration": "PT20.9564576S",
+              "trackingId": "b2288ca6-8e2e-4a4d-97e9-1d0c46c159f3",
+              "serviceRequestId": "bc271c90-35d7-46d8-a706-a7ef4fe2132a",
+              "statusCode": "OK",
+              "targetResource": {
+                "id": "/subscriptions/b9f138a1-1d64-4108-8413-9ea3be1c1b2d/resourceGroups/csmrg9629/providers/Microsoft.Web/sites/csmr8591",
+                "resourceType": "Microsoft.Web/sites",
+                "resourceName": "csmr8591"
+              }
+            }
+          },
+          {
+            "id": "/subscriptions/b9f138a1-1d64-4108-8413-9ea3be1c1b2d/resourceGroups/csmrg9629/providers/Microsoft.Resources/deployments/csmd846/operations/D5D6E9D8E0D62F52",
+            "operationId": "D5D6E9D8E0D62F52",
+            "properties": {
+              "provisioningOperation": "Create",
+              "provisioningState": "Succeeded",
+              "timestamp": "2020-05-29T07:10:16.198181Z",
+              "duration": "PT7.7839863S",
+              "trackingId": "467a7046-b901-424e-8174-ad332e803498",
+              "serviceRequestId": "7cd058d9-f2fa-4ae9-a3f5-b946cfefbf5d",
+              "statusCode": "OK",
+              "targetResource": {
+                "id": "/subscriptions/b9f138a1-1d64-4108-8413-9ea3be1c1b2d/resourceGroups/csmrg9629/providers/Microsoft.Web/serverfarms/hpn-csmrg9629",
+                "resourceType": "Microsoft.Web/serverfarms",
+                "resourceName": "hpn-csmrg9629"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "Variables": {
+    "RandomSeed": "919183627",
+    "SUBSCRIPTION_ID": "b9f138a1-1d64-4108-8413-9ea3be1c1b2d"
+  }
+}

@@ -1,5 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);CA1812;SA1633;SA1649</NoWarn>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\Azure.Management.Resources.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="ScenarioTests\*.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>
