@@ -134,6 +134,7 @@ namespace Azure.Management.Compute.Tests
         /// To record this test case, you need to run it in zone supported regions like eastus2.
         /// </summary>
         [Test]
+        [Ignore ("This case should be tested by compute team because of the incorrect subscriptionid")]
         //[Trait("Name", "TestVMScenarioOperations_ManagedDisks_PirImage_Zones")]
         public async Task TestVMScenarioOperations_ManagedDisks_PirImage_Zones()
         {
@@ -174,6 +175,7 @@ namespace Azure.Management.Compute.Tests
         /// To record this test case, you need to run it in zone supported regions like eastus2euap.
         /// </summary>
         [Test]
+        [Ignore("This case should be tested by compute team because of the incorrect subscriptionid")]
         //[Trait("Name", "TestVMScenarioOperations_PpgScenario")]
         public async Task TestVMScenarioOperations_PpgScenario()
         {

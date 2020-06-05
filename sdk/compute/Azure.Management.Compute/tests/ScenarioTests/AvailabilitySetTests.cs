@@ -55,37 +55,23 @@ namespace Azure.Management.Compute.Tests
             string originalTestLocation = Environment.GetEnvironmentVariable("AZURE_VM_TEST_LOCATION");
             try
             {
-                Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "westcentralus");
+                //Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "westcentralus");
                 EnsureClientsInitialized();
-
-                Initialize();
-                //subId = subscriptionId;
-                //location = m_location;
-
-
-                //baseResourceGroupName = Recording.GenerateAssetName(TestPrefix);
-                //resourceGroup1Name = baseResourceGroupName + "_1";
-
-                //resourceGroup1 = await ResourceGroupsClient.CreateOrUpdateAsync(
-                //    resourceGroup1Name,
-                //    new ResourceGroup(location)
-                //    {
-                //        Tags = new Dictionary<string, string>() { { resourceGroup1Name, DateTime.UtcNow.ToString("u") } }
-                //    });
+                await Initialize();
                 // Attempt to Create Availability Set with out of bounds FD and UD values
-                VerifyInvalidFDUDValuesFail();
+                await VerifyInvalidFDUDValuesFail();
 
                 // Create a Availability Set with default values
-                VerifyDefaultValuesSucceed();
+                await VerifyDefaultValuesSucceed();
 
                 // Make sure non default FD and UD values succeed
-                VerifyNonDefaultValuesSucceed();
+                await VerifyNonDefaultValuesSucceed();
 
                 // Updating an Availability Set should fail
                 //VerifyUpdateFails();
 
                 // Make sure availability sets across resource groups are listed successfully
-                VerifyListAvailabilitySetsInSubscription();
+                await VerifyListAvailabilitySetsInSubscription();
             }
             finally
             {
@@ -94,7 +80,7 @@ namespace Azure.Management.Compute.Tests
             }
         }
 
-        private async void VerifyInvalidFDUDValuesFail()
+        private async Task VerifyInvalidFDUDValuesFail()
         {
             var inputAvailabilitySetName = Recording.GenerateAssetName("invalidfdud");
             var inputAvailabilitySet = new AvailabilitySet(TestEnvironment.Location)
@@ -173,7 +159,7 @@ namespace Azure.Management.Compute.Tests
             Assert.True(createOrUpdateResponse == null);
         }
 
-        private async void VerifyDefaultValuesSucceed()
+        private async Task VerifyDefaultValuesSucceed()
         {
             var inputAvailabilitySetName = Recording.GenerateAssetName("asdefaultvalues");
             var inputAvailabilitySet = new AvailabilitySet(TestEnvironment.Location)
@@ -212,7 +198,7 @@ namespace Azure.Management.Compute.Tests
             ValidateResults(createOrUpdateResponse, inputAvailabilitySet, resourceGroup1Name, inputAvailabilitySetName, defaultFD, defaultUD);
         }
 
-        private async void VerifyNonDefaultValuesSucceed()
+        private async Task VerifyNonDefaultValuesSucceed()
         {
             // Negative tests for a bug in 5.0.0 that read-only fields have side-effect on the request body
             var testStatus = new InstanceViewStatus
@@ -234,10 +220,10 @@ namespace Azure.Management.Compute.Tests
                 PlatformUpdateDomainCount = nonDefaultUD
             };
 
-            var createOrUpdateResponse = await AvailabilitySetsClient.CreateOrUpdateAsync(
+            var createOrUpdateResponse = (await AvailabilitySetsClient.CreateOrUpdateAsync(
                 resourceGroup1Name,
                 inputAvailabilitySetName,
-                inputAvailabilitySet);
+                inputAvailabilitySet)).Value;
 
             // This call will also delete the Availability Set
             ValidateResults(createOrUpdateResponse, inputAvailabilitySet, resourceGroup1Name, inputAvailabilitySetName, nonDefaultFD, nonDefaultUD);
@@ -288,15 +274,15 @@ namespace Azure.Management.Compute.Tests
         }
 
         // Make sure availability sets across resource groups are listed successfully
-        private async void VerifyListAvailabilitySetsInSubscription()
+        private async Task VerifyListAvailabilitySetsInSubscription()
         {
             string resourceGroup2Name = baseResourceGroupName + "_2";
             string baseInputAvailabilitySetName = Recording.GenerateAssetName("asdefaultvalues");
             string availabilitySet1Name = baseInputAvailabilitySetName + "_1";
             string availabilitySet2Name = baseInputAvailabilitySetName + "_2";
 
-            try
-            {
+            //try
+            //{
                 AvailabilitySet inputAvailabilitySet1 = new AvailabilitySet(TestEnvironment.Location)
                 {
                     Tags = new Dictionary<string, string>()
@@ -310,12 +296,12 @@ namespace Azure.Management.Compute.Tests
                     availabilitySet1Name,
                     inputAvailabilitySet1);
 
-                resourceGroup2 = await ResourceGroupsClient.CreateOrUpdateAsync(
+                resourceGroup2 = (await ResourceGroupsClient.CreateOrUpdateAsync(
                     resourceGroup2Name,
                     new ResourceGroup(TestEnvironment.Location)
                     {
                         Tags = new Dictionary<string, string>() { { resourceGroup2Name, DateTime.UtcNow.ToString("u") } }
-                    });
+                    })).Value;
 
                 AvailabilitySet inputAvailabilitySet2 = new AvailabilitySet(TestEnvironment.Location)
                 {
@@ -325,10 +311,10 @@ namespace Azure.Management.Compute.Tests
                         {"testTag", "2"},
                     },
                 };
-                AvailabilitySet outputAvailabilitySet2 = await AvailabilitySetsClient.CreateOrUpdateAsync(
+                AvailabilitySet outputAvailabilitySet2 = (await AvailabilitySetsClient.CreateOrUpdateAsync(
                     resourceGroup2Name,
                     availabilitySet2Name,
-                    inputAvailabilitySet2);
+                    inputAvailabilitySet2)).Value;
                 var response = AvailabilitySetsClient.ListBySubscriptionAsync();
                 var resp = await response.ToEnumerableAsync();
                 //Assert.Null(resp.NextPageLink);
@@ -369,14 +355,14 @@ namespace Azure.Management.Compute.Tests
                 }
 
                 Assert.True(validationCount == 2);
-            }
-            finally
-            {
-                await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(resourceGroup2Name));
-            }
+            //}
+            //finally
+            //{
+                //await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(resourceGroup2Name));
+            //}
         }
 
-        private async void Initialize()
+        private async Task Initialize()
         {
             subId = TestEnvironment.SubscriptionId;
             //.Location = m_location;

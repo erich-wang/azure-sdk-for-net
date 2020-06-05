@@ -128,7 +128,7 @@ namespace Azure.Management.Compute.Tests
             Assert.IsEmpty(listGalleryImagesResult);
             Trace.TraceInformation(string.Format("Deleted the gallery image: {0} in gallery: {1}", galleryImageName,
                 galleryName));
-
+            WaitSeconds(30);
             await WaitForCompletionAsync(await GalleriesClient.StartDeleteAsync(rgName, galleryName));
         }
 
@@ -212,7 +212,9 @@ namespace Azure.Management.Compute.Tests
                 Trace.TraceInformation("Deleted the virtual machine.");
                 await WaitForCompletionAsync(await GalleryImagesClient.StartDeleteAsync(rgName, galleryName, galleryImageName));
                 Trace.TraceInformation("Deleted the gallery image.");
+                WaitSeconds(30);
                 await WaitForCompletionAsync(await GalleriesClient.StartDeleteAsync(rgName, galleryName));
+                WaitSeconds(30);
                 Trace.TraceInformation("Deleted the gallery.");
             }
             finally

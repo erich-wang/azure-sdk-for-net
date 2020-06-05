@@ -10,7 +10,7 @@ namespace Azure.Management.Compute.Tests
         {
         }
 
-        public static string DefaultLocations = "SoutheastAsia";
+        public static string DefaultLocations = "southeastasia";
 
         public string GenerateName(string prefix = null,
             [System.Runtime.CompilerServices.CallerMemberName]

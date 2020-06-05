@@ -37,6 +37,7 @@ namespace Azure.Management.Compute.Tests
         /// Delete RG
         /// </summary>
         [Test]
+        [Ignore ("This test should be skipped")]
         //[Test(Skip = "TODO: Wait for KMS Client")]
         public async Task TestVMCertificatesOperations()
         {

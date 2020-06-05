@@ -37,7 +37,7 @@ namespace Azure.Management.Compute.Tests
             var agentPoolDnsPrefixName = Recording.GenerateAssetName(AgentPoolProfileDnsPrefix);
             try
             {
-                Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "australiasoutheast");
+                //Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "australiasoutheast");
                 EnsureClientsInitialized();
 
                 ContainerService inputContainerService;

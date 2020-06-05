@@ -36,6 +36,7 @@ namespace Azure.Management.Compute.Tests
         public string m_resourceGroup1Name;
 
         [Test]
+        [Ignore ("need to be skipped")]
         //[Trait("Name", "TestProximityPlacementGroupsOperations")]
         public async Task TestProximityPlacementGroupsOperations()
         {

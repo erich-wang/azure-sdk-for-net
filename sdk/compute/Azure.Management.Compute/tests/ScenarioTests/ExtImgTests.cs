@@ -77,6 +77,7 @@ namespace Azure.Management.Compute.Tests
         }
 
         [Test]
+        [Ignore("this case should be tested by compute team because of different provided version of different locations and subscriptions")]
         public async Task TestExtImgListVersionsFilters()
         {
             string existingVersionPrefix = existingVersion.Substring(0, existingVersion.LastIndexOf('.'));

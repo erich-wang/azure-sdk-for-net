@@ -38,20 +38,13 @@ namespace Azure.Management.Compute.Tests
         {
             var publicKeys = new ContainerServiceSshPublicKey(DefaultSshPublicKey);
 
-            var agentPoolProfiles = new ContainerServiceAgentPoolProfile(DefaultAgentPoolProfileName,1, DefaultVmSize, agentPoolDnsPrefix)
-            {
-                //DnsPrefix = agentPoolDnsPrefix,
-                //Name = DefaultAgentPoolProfileName,
-                //VmSize = DefaultVmSize,
-                //Count = 1 // This should be added because of AutoRest bug.
+            var agentPoolProfiles = new ContainerServiceAgentPoolProfile(DefaultAgentPoolProfileName,1, DefaultVmSize, agentPoolDnsPrefix){
             };
 
             return new ContainerService(m_location)
             {
-                //Location = m_location,
                 Tags = new Dictionary<string, string>() { { "RG", "rg" }, { "testTag", "1" } },
                 AgentPoolProfiles = new[] { agentPoolProfiles },
-
                 // Todo: DiagnosticsProfile will be available in GA
                 //DiagnosticsProfile = new ContainerServiceDiagnosticsProfile
                 //{

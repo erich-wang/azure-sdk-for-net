@@ -83,6 +83,7 @@ namespace Azure.Management.Compute.Tests
                 //Delete DedicatedHosts and DedicatedHostGroups
                 await WaitForCompletionAsync(await DedicatedHostsClient.StartDeleteAsync(rgName, dhgName, dhName));
                 await DedicatedHostGroupsClient.DeleteAsync(rgName, dhgName);
+                WaitMinutes(1);
             }
             finally
             {

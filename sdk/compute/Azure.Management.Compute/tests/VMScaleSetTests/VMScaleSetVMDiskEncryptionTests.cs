@@ -26,6 +26,7 @@ namespace Azure.Management.Compute.Tests
         /// Delete RG
         /// </summary>
         [Test]
+        [Ignore ("This test should be skipped")]
         //[Test(Skip = "ReRecord due to CR change")]
         //[Trait("Name", "TestVMScaleSetVMDiskEncryptionOperation")]
         public async Task TestVMScaleSetVMDiskEncryptionOperation()

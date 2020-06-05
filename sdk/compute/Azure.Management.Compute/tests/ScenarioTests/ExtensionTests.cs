@@ -28,7 +28,7 @@ namespace Azure.Management.Compute.Tests
 
         private VirtualMachineExtension GetTestVMExtension()
         {
-            var vmExtension = new VirtualMachineExtension(null, "vmext01", "Microsoft.Compute/virtualMachines/extensions", "SoutheastAsia",
+            var vmExtension = new VirtualMachineExtension(null, "vmext01", "Microsoft.Compute/virtualMachines/extensions", "southeastasia",
                 new Dictionary<string, string>() { { "extensionTag1", "1" }, { "extensionTag2", "2" } },
                 "RerunExtension",
                 "Microsoft.Compute",
