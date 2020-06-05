@@ -1,5 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
+    <Compile Include="..\..\..\..\common\TestShared\RunOnlyInTestModesAttribute.cs" Link="TestShared/RunOnlyInTestModesAttribute.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\..\testcommon\Azure.Graph.Rbac\src\Azure.Graph.Rbac.csproj" />
     <ProjectReference Include="..\..\..\testcommon\Azure.Management.Resources.2017_05\src\Azure.Management.Resources.csproj" />
     <ProjectReference Include="..\src\Azure.Management.KeyVault.csproj" />
