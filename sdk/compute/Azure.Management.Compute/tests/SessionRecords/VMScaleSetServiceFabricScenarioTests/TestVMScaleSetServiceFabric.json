@@ -1,66 +1,39 @@
 {
   "Entries": [
     {
-      "RequestUri": "/subscriptions/24fb23e3-6ba3-41f0-9b6e-e41131d5d61e/resourceGroups/crptestrgr97ryo0ni/providers/Microsoft.Compute/virtualMachineScaleSets/crptesthtn39hve/forceRecoveryServiceFabricPlatformUpdateDomainWalk?api-version=2018-04-01&platformUpdateDomain=0",
-      "EncodedRequestUri": "L3N1YnNjcmlwdGlvbnMvMjRmYjIzZTMtNmJhMy00MWYwLTliNmUtZTQxMTMxZDVkNjFlL3Jlc291cmNlR3JvdXBzL2NycHRlc3RyZ3I5N3J5bzBuaS9wcm92aWRlcnMvTWljcm9zb2Z0LkNvbXB1dGUvdmlydHVhbE1hY2hpbmVTY2FsZVNldHMvY3JwdGVzdGh0bjM5aHZlL2ZvcmNlUmVjb3ZlcnlTZXJ2aWNlRmFicmljUGxhdGZvcm1VcGRhdGVEb21haW5XYWxrP2FwaS12ZXJzaW9uPTIwMTgtMDQtMDEmcGxhdGZvcm1VcGRhdGVEb21haW49MA==",
+      "RequestUri": "https://management.azure.com/subscriptions/c9cbd920-c00c-427c-852b-8aaf38badaeb/resourceGroups/crptestrgr97ryo0ni/providers/Microsoft.Compute/virtualMachineScaleSets/crptesthtn39hve/forceRecoveryServiceFabricPlatformUpdateDomainWalk?api-version=2019-12-01\u0026platformUpdateDomain=0",
       "RequestMethod": "POST",
-      "RequestBody": "",
       "RequestHeaders": {
-        "x-ms-client-request-id": [
-          "214f6dbc-0c95-494a-a50f-9cd23cab45d9"
-        ],
-        "accept-language": [
-          "en-US"
-        ],
+        "Authorization": "Sanitized",
+        "traceparent": "00-1329b431e9f27d4c8def8dc1e06e9660-e3d7ecab38cc6147-00",
         "User-Agent": [
-          "FxVersion/4.6.25714.03",
-          "Microsoft.Azure.Management.Compute.ComputeManagementClient/18.0.0.0"
-        ]
+          "azsdk-net-Management.Compute/1.0.0-dev.20200605.1",
+          "(.NET Core 4.6.28801.04; Microsoft Windows 10.0.19041 )"
+        ],
+        "x-ms-client-request-id": "129556a66ed8717359754af3aaa9c1b7",
+        "x-ms-return-client-request-id": "true"
       },
-      "ResponseBody": "{\r\n  \"error\": {\r\n    \"code\": \"ResourceGroupNotFound\",\r\n    \"message\": \"Resource group 'crptestrgr97ryo0ni' could not be found.\"\r\n  }\r\n}",
+      "RequestBody": null,
+      "StatusCode": 404,
       "ResponseHeaders": {
-        "Content-Length": [
-          "110"
-        ],
-        "Content-Type": [
-          "application/json; charset=utf-8"
-        ],
-        "Expires": [
-          "-1"
-        ],
-        "Cache-Control": [
-          "no-cache"
-        ],
-        "Date": [
-          "Thu, 03 May 2018 15:09:27 GMT"
-        ],
-        "Pragma": [
-          "no-cache"
-        ],
-        "x-ms-failure-cause": [
-          "gateway"
-        ],
-        "x-ms-request-id": [
-          "be3175a0-aeba-4fc8-842a-e50349c380d6"
-        ],
-        "x-ms-correlation-request-id": [
-          "be3175a0-aeba-4fc8-842a-e50349c380d6"
-        ],
-        "x-ms-routing-request-id": [
-          "WESTUS2:20180503T150928Z:be3175a0-aeba-4fc8-842a-e50349c380d6"
-        ],
-        "Strict-Transport-Security": [
-          "max-age=31536000; includeSubDomains"
-        ],
-        "X-Content-Type-Options": [
-          "nosniff"
-        ]
+        "Cache-Control": "no-cache",
+        "Content-Length": "110",
+        "Content-Type": "application/json; charset=utf-8",
+        "Date": "Fri, 05 Jun 2020 18:56:01 GMT",
+        "Expires": "-1",
+        "Pragma": "no-cache",
+        "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+        "X-Content-Type-Options": "nosniff",
+        "x-ms-correlation-request-id": "320a1b33-d684-4a75-a4b1-2a299ab8c00e",
+        "x-ms-failure-cause": "gateway",
+        "x-ms-request-id": "320a1b33-d684-4a75-a4b1-2a299ab8c00e",
+        "x-ms-routing-request-id": "KOREASOUTH:20200605T185601Z:320a1b33-d684-4a75-a4b1-2a299ab8c00e"
       },
-      "StatusCode": 404
+      "ResponseBody": "{\u0022error\u0022:{\u0022code\u0022:\u0022ResourceGroupNotFound\u0022,\u0022message\u0022:\u0022Resource group \u0027crptestrgr97ryo0ni\u0027 could not be found.\u0022}}"
     }
   ],
-  "Names": {},
   "Variables": {
-    "SubscriptionId": "24fb23e3-6ba3-41f0-9b6e-e41131d5d61e"
+    "RandomSeed": "129186345",
+    "SUBSCRIPTION_ID": "c9cbd920-c00c-427c-852b-8aaf38badaeb"
   }
 }

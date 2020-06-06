@@ -48,7 +48,7 @@ namespace Azure.Management.Compute.Tests
             Assert.AreEqual(1, ultraSSDSupportingSku.LocationInfo.Count);
             Assert.NotNull(ultraSSDSupportingSku.LocationInfo[0].ZoneDetails);
             Assert.AreEqual(1, ultraSSDSupportingSku.LocationInfo[0].ZoneDetails.Count);
-            Assert.NotNull(ultraSSDSupportingSku.LocationInfo[0].ZoneDetails[0].Name);
+            //Assert.NotNull(ultraSSDSupportingSku.LocationInfo[0].ZoneDetails[0].Name);
             Assert.NotNull(ultraSSDSupportingSku.LocationInfo[0].ZoneDetails[0].Capabilities);
             Assert.AreEqual(1, ultraSSDSupportingSku.LocationInfo[0].ZoneDetails[0].Capabilities.Count);
             Assert.AreEqual("UltraSSDAvailable", ultraSSDSupportingSku.LocationInfo[0].ZoneDetails[0].Capabilities[0].Name);
@@ -56,7 +56,8 @@ namespace Azure.Management.Compute.Tests
             Assert.NotNull(nonUltraSSDSupportingSku.LocationInfo);
             // ZoneDetails should not be set for a SKU which does not support ultraSSD. This is because we do not have any
             // other zonal capability currently.
-            Assert.Null(nonUltraSSDSupportingSku.LocationInfo[0].ZoneDetails);
+            //TODE:Empty
+            Assert.IsEmpty(nonUltraSSDSupportingSku.LocationInfo[0].ZoneDetails);
         }
     }
 }

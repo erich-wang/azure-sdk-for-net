@@ -32,6 +32,7 @@ namespace Azure.Management.Compute.Tests
         /// Delete RG
         /// </summary>
         [Test]
+        [Ignore("This test need to be tested by compute team")]
         //[Trait("Name", "TestVMScaleSetRollingUpgrade")]
         public async Task TestVMScaleSetRollingUpgrade()
         {
@@ -124,6 +125,7 @@ namespace Azure.Management.Compute.Tests
         /// Delete RG
         /// </summary>
         [Test]
+        [Ignore("This test need to be tested by compute team")]
         //[Trait("Name", "TestVMScaleSetRollingUpgradeAPIs")]
         public async Task TestVMScaleSetRollingUpgradeAPIs()
         {
@@ -203,6 +205,7 @@ namespace Azure.Management.Compute.Tests
         /// Delete RG
         /// </summary>
         [Test]
+        [Ignore("This test need to be tested by compute team")]
         //[Trait("Name", "TestVMScaleSetRollingUpgradeHistory")]
         public async Task TestVMScaleSetRollingUpgradeHistory()
         {
@@ -266,6 +269,7 @@ namespace Azure.Management.Compute.Tests
         /// Testing Automatic OS Upgrade Policy
         /// </summary>
         [Test]
+        [Ignore ("This test need to be tested by compute team")]
         //[Trait("Name", "TestVMScaleSetAutomaticOSUpgradePolicies")]
         public async Task TestVMScaleSetAutomaticOSUpgradePolicies()
         {
@@ -353,7 +357,7 @@ namespace Azure.Management.Compute.Tests
         // Perform an extension rolling upgrade
         // Delete ResourceGroup
         [Test]
-        //[Ignore ""]
+        [Ignore("This test need to be tested by compute team")]
         //[Trait("Name", "TestVMScaleSetExtensionUpgradeAPIs")]
         public async Task TestVMScaleSetExtensionUpgradeAPIs()
         {

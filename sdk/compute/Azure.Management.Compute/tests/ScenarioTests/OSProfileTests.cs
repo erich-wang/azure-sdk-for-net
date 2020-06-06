@@ -164,6 +164,7 @@ namespace Azure.Management.Compute.Tests
         // into SecretVaultHelper, below.
         //[Test(Skip = "Secret Vault")]
         [Test]
+        [Ignore ("skip in track 1")]
         public void TestVMWithWindowsOSProfile()
         {
             EnsureClientsInitialized();
