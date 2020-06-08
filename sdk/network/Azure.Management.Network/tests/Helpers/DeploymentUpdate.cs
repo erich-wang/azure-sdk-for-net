@@ -23,7 +23,8 @@ namespace Azure.Management.Network.Tests.Helpers
             string networkInterfaceName,
             string networkSecurityGroupName,
             string diagnosticsStorageAccountName,
-            string deploymentName)
+            string deploymentName,
+            string adminPassword)
         {
             string deploymentParams = "{" +
                 "\"resourceGroupName\": {\"value\": \"" + resourceGroupName + "\"}," +
@@ -36,7 +37,7 @@ namespace Azure.Management.Network.Tests.Helpers
                 "\"virtualNetworkName\": { \"value\": \"" + resourceGroupName + "-vnet\"}," +
                 "\"networkInterfaceName\": { \"value\": \"" + networkInterfaceName + "\"}," +
                 "\"networkSecurityGroupName\": { \"value\": \"" + networkSecurityGroupName + "\"}," +
-                "\"adminPassword\": { \"value\": \"" + NetworkManagementTestUtilities.GetRandomPassword() + "\"}," +
+                "\"adminPassword\": { \"value\": \"" + adminPassword + "\"}," +
                 "\"storageAccountType\": { \"value\": \"Premium_LRS\"}," +
                 "\"diagnosticsStorageAccountName\": { \"value\": \"" + diagnosticsStorageAccountName + "\"}," +
                 "\"diagnosticsStorageAccountId\": { \"value\": \"Microsoft.Storage/storageAccounts/" + diagnosticsStorageAccountName + "\"}," +

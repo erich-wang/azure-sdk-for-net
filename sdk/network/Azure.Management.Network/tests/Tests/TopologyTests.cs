@@ -28,7 +28,6 @@ namespace Azure.Management.Network.Tests.Tests
         }
 
         [Test]
-        [Category("Must be online")]
         public async Task TopologyApiTest()
         {
             string resourceGroupName1 = Recording.GenerateAssetName("azsmnet");
@@ -53,7 +52,8 @@ namespace Azure.Management.Network.Tests.Tests
                     networkInterfaceName: networkInterfaceName,
                     networkSecurityGroupName: networkSecurityGroupName,
                     diagnosticsStorageAccountName: Recording.GenerateAssetName("azsmnet"),
-                    deploymentName: Recording.GenerateAssetName("azsmnet")
+                    deploymentName: Recording.GenerateAssetName("azsmnet"),
+                    adminPassword: Recording.GenerateAlphaNumericId("AzureSDKNetworkTest#")
                     );
 
                 await ResourceGroupsClient.CreateOrUpdateAsync(resourceGroupName2, new ResourceGroup(location));

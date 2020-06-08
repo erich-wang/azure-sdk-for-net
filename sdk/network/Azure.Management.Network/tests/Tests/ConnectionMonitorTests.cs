@@ -52,7 +52,8 @@ namespace Azure.Management.Network.Tests.Tests
                      networkInterfaceName: networkInterfaceName,
                      networkSecurityGroupName: networkSecurityGroupName,
                      diagnosticsStorageAccountName: Recording.GenerateAssetName("azsmnet"),
-                     deploymentName: Recording.GenerateAssetName("azsmnet")
+                     deploymentName: Recording.GenerateAssetName("azsmnet"),
+                     adminPassword: Recording.GenerateAlphaNumericId("AzureSDKNetworkTest#")
                      );
 
                 Response<VirtualMachine> getVm = await ComputeManagementClient.GetVirtualMachinesClient().GetAsync(resourceGroupName, virtualMachineName);
@@ -130,7 +131,8 @@ namespace Azure.Management.Network.Tests.Tests
                      networkInterfaceName: networkInterfaceName,
                      networkSecurityGroupName: networkSecurityGroupName,
                      diagnosticsStorageAccountName: Recording.GenerateAssetName("azsmnet"),
-                     deploymentName: Recording.GenerateAssetName("azsmnet")
+                     deploymentName: Recording.GenerateAssetName("azsmnet"),
+                     adminPassword: Recording.GenerateAlphaNumericId("AzureSDKNetworkTest#")
                      );
 
                 Response<VirtualMachine> getVm = await ComputeManagementClient.GetVirtualMachinesClient().GetAsync(resourceGroupName, virtualMachineName);
@@ -207,7 +209,8 @@ namespace Azure.Management.Network.Tests.Tests
                     networkInterfaceName: networkInterfaceName,
                     networkSecurityGroupName: networkSecurityGroupName,
                     diagnosticsStorageAccountName: Recording.GenerateAssetName("azsmnet"),
-                    deploymentName: Recording.GenerateAssetName("azsmnet")
+                    deploymentName: Recording.GenerateAssetName("azsmnet"),
+                    adminPassword: Recording.GenerateAlphaNumericId("AzureSDKNetworkTest#")
                     );
 
                 Response<VirtualMachine> getVm = await ComputeManagementClient.GetVirtualMachinesClient().GetAsync(resourceGroupName, virtualMachineName);
@@ -283,7 +286,8 @@ namespace Azure.Management.Network.Tests.Tests
                     networkInterfaceName: networkInterfaceName,
                     networkSecurityGroupName: networkSecurityGroupName,
                     diagnosticsStorageAccountName: Recording.GenerateAssetName("azsmnet"),
-                    deploymentName: Recording.GenerateAssetName("azsmnet")
+                    deploymentName: Recording.GenerateAssetName("azsmnet"),
+                    adminPassword: Recording.GenerateAlphaNumericId("AzureSDKNetworkTest#")
                     );
 
                 Response<VirtualMachine> getVm = await ComputeManagementClient.GetVirtualMachinesClient().GetAsync(resourceGroupName, virtualMachineName);
@@ -365,7 +369,8 @@ namespace Azure.Management.Network.Tests.Tests
                     networkInterfaceName: networkInterfaceName,
                     networkSecurityGroupName: networkSecurityGroupName,
                     diagnosticsStorageAccountName: Recording.GenerateAssetName("azsmnet"),
-                    deploymentName: Recording.GenerateAssetName("azsmnet")
+                    deploymentName: Recording.GenerateAssetName("azsmnet"),
+                    adminPassword: Recording.GenerateAlphaNumericId("AzureSDKNetworkTest#")
                     );
 
                 Response<VirtualMachine> getVm = await ComputeManagementClient.GetVirtualMachinesClient().GetAsync(resourceGroupName, virtualMachineName);
@@ -440,7 +445,8 @@ namespace Azure.Management.Network.Tests.Tests
                     networkInterfaceName: networkInterfaceName,
                     networkSecurityGroupName: networkSecurityGroupName,
                     diagnosticsStorageAccountName: Recording.GenerateAssetName("azsmnet"),
-                    deploymentName: Recording.GenerateAssetName("azsmnet")
+                    deploymentName: Recording.GenerateAssetName("azsmnet"),
+                    adminPassword: Recording.GenerateAlphaNumericId("AzureSDKNetworkTest#")
                     );
 
                 Response<VirtualMachine> getVm = await ComputeManagementClient.GetVirtualMachinesClient().GetAsync(resourceGroupName, virtualMachineName);

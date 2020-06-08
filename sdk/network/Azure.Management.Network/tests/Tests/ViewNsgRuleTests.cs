@@ -53,7 +53,8 @@ namespace Azure.Management.Network.Tests.Tests
                     networkInterfaceName: networkInterfaceName,
                     networkSecurityGroupName: networkSecurityGroupName,
                     diagnosticsStorageAccountName: Recording.GenerateAssetName("azsmnet"),
-                    deploymentName: Recording.GenerateAssetName("azsmnet")
+                    deploymentName: Recording.GenerateAssetName("azsmnet"),
+                    adminPassword: Recording.GenerateAlphaNumericId("AzureSDKNetworkTest#")
                     );
 
                 //TODO:There is no need to perform a separate create NetworkWatchers operation

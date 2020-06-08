@@ -99,7 +99,7 @@ namespace Azure.Management.Network.Tests.Helpers
         /// <returns>Randomly generated password string</returns>
         public static string GetRandomPassword()
         {
-            return "AzureSDKNetworkTest#" + Guid.NewGuid().ToString().Replace("-", "@");
+            return "" + Guid.NewGuid().ToString().Replace("-", "@");
         }
     }
 }
