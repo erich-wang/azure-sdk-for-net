@@ -18,7 +18,7 @@
       "RequestBody": {
         "location": "eastus2",
         "tags": {
-          "crptestar6466DH": "2020-06-05 02:16:59Z"
+          "crptestar6466DH": "2020-06-05 02:12:50Z"
         }
       },
       "StatusCode": 201,
@@ -41,7 +41,7 @@
         "name": "crptestar6466DH",
         "location": "eastus2",
         "tags": {
-          "crptestar6466DH": "2020-06-05 02:16:59Z"
+          "crptestar6466DH": "2020-06-05 02:12:50Z"
         },
         "properties": {
           "provisioningState": "Succeeded"
@@ -400,7 +400,7 @@
         },
         "location": "eastus2",
         "tags": {
-          "crptestar6466DH": "2020-06-05 02:17:16Z"
+          "crptestar6466DH": "2020-06-05 02:12:50Z"
         },
         "properties": {}
       },
@@ -1771,6 +1771,7 @@
   ],
   "Variables": {
     "RandomSeed": "660843023",
-    "SUBSCRIPTION_ID": "c9cbd920-c00c-427c-852b-8aaf38badaeb"
+    "SUBSCRIPTION_ID": "c9cbd920-c00c-427c-852b-8aaf38badaeb",
+	"DateTimeOffsetNow" : "2020-06-05 02:12:50Z"
   }
 }

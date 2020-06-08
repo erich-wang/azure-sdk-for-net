@@ -47,7 +47,7 @@ namespace Azure.Management.Compute.Tests
                     rgName,
                     new ResourceGroup(m_location)
                     {
-                        Tags = new Dictionary<string, string>() { { rgName, DateTime.UtcNow.ToString("u") } }
+                        Tags = new Dictionary<string, string>() { { rgName, Recording.UtcNow.ToString("u") } }
                     });
 
                 // Create Storage Account, so that both the VMs can share it
@@ -106,7 +106,7 @@ namespace Azure.Management.Compute.Tests
                     rgName,
                     new ResourceGroup(m_location)
                     {
-                        Tags = new Dictionary<string, string>() { { rgName, DateTime.UtcNow.ToString("u") } }
+                        Tags = new Dictionary<string, string>() { { rgName, Recording.UtcNow.ToString("u") } }
                     });
 
                 // Create Storage Account, so that both the VMs can share it
@@ -195,7 +195,7 @@ namespace Azure.Management.Compute.Tests
                     rgName,
                     new ResourceGroup(m_location)
                     {
-                        Tags = new Dictionary<string, string>() { { rgName, DateTime.UtcNow.ToString("u") } }
+                        Tags = new Dictionary<string, string>() { { rgName, Recording.UtcNow.ToString("u") } }
                     });
 
                 // Create Storage Account, so that both the VMs can share it
@@ -269,7 +269,7 @@ namespace Azure.Management.Compute.Tests
                     rgName,
                     new ResourceGroup(m_location)
                     {
-                        Tags = new Dictionary<string, string>() { { rgName, DateTime.UtcNow.ToString("u") } }
+                        Tags = new Dictionary<string, string>() { { rgName, Recording.UtcNow.ToString("u") } }
                     });
 
                 // Create Storage Account, so that both the VMs can share it

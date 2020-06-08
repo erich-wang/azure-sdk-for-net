@@ -5854,7 +5854,7 @@
       "RequestBody": {
         "location": "southeastasia",
         "tags": {
-          "crptestar1512_2": "2020-06-05 02:53:15Z"
+          "crptestar1512_2": "2020-06-05 02:53:09Z"
         }
       },
       "StatusCode": 201,
@@ -5877,7 +5877,7 @@
         "name": "crptestar1512_2",
         "location": "southeastasia",
         "tags": {
-          "crptestar1512_2": "2020-06-05 02:53:15Z"
+          "crptestar1512_2": "2020-06-05 02:53:09Z"
         },
         "properties": {
           "provisioningState": "Succeeded"
@@ -13824,6 +13824,7 @@
   "Variables": {
     "LOCATION": "southeastasia",
     "RandomSeed": "220923189",
-    "SUBSCRIPTION_ID": "c9cbd920-c00c-427c-852b-8aaf38badaeb"
+    "SUBSCRIPTION_ID": "c9cbd920-c00c-427c-852b-8aaf38badaeb",
+	"DateTimeOffsetNow": "2020-06-05 02:53:09Z"
   }
 }

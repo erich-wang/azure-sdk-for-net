@@ -133,7 +133,6 @@ namespace Azure.Management.Compute.Tests
                     osDiskStorageAccountType: StorageAccountTypes.StandardLRS.ToString(), dataDiskStorageAccountType: StorageAccountTypes.StandardLRS.ToString());
                 ephemeralVM = returnTwoVM.Item2;
                 await WaitForCompletionAsync(await VirtualMachinesClient.StartReimageAsync(rg1Name, ephemeralVM.Name));
-                //await VirtualMachinesClient.StartReimageAsync(rg1Name, ephemeralVM.Name, tempDisk: true);
                 var captureParams = new VirtualMachineCaptureParameters(Recording.GenerateAssetName(TestPrefix), Recording.GenerateAssetName(TestPrefix), true);
 
                 var captureResponse = await WaitForCompletionAsync(await VirtualMachinesClient.StartCaptureAsync(rg1Name, vm1.Name, captureParams));
@@ -141,30 +140,8 @@ namespace Azure.Management.Compute.Tests
                 Assert.NotNull(captureResponse);
                 Assert.True(captureResponse.Value.Resources.Count > 0);
                 string resource = captureResponse.Value.Resources[0].ToString();
-                bool containResource1 = false;
-                foreach (var resourceDetail in resource.ToLowerInvariant())
-                {
-                    if (resourceDetail.ToString() == captureParams.DestinationContainerName.ToLowerInvariant())
-                    {
-                        containResource1 = true;
-                        break;
-                    }
-                }
-                bool containResource2 = false;
-                foreach (var resourceDetail in resource.ToLowerInvariant())
-                {
-                    if (resourceDetail.ToString() == captureParams.VhdPrefix.ToLowerInvariant())
-                    {
-                        containResource2 = true;
-                        break;
-                    }
-                }
-                Assert.True(containResource1);
-                Assert.True(containResource2);
-
-                //Assert.Contains(captureParams.DestinationContainerName.ToLowerInvariant(), resource.ToLowerInvariant());
-                //Assert.Contains(captureParams.VhdPrefix.ToLowerInvariant(), resource.ToLowerInvariant());
-
+                Assert.IsTrue(resource.ToLowerInvariant().Contains(captureParams.DestinationContainerName.ToLowerInvariant()));
+                Assert.IsTrue(resource.ToLowerInvariant().Contains(captureParams.VhdPrefix.ToLowerInvariant()));
                 Resource template = JsonSerializer.Deserialize<Resource>(resource);
                 string imageUri = template.Properties.StorageProfile.OSDisk.Image.Uri;
                 Assert.False(string.IsNullOrEmpty(imageUri));

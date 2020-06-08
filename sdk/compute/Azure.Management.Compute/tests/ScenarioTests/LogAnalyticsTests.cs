@@ -41,13 +41,13 @@ namespace Azure.Management.Compute.Tests
 
                     string sasUri = await GetBlobContainerSasUri(rg1Name, storageAccountName);
 
-                    RequestRateByIntervalInput requestRateByIntervalInput = new RequestRateByIntervalInput(sasUri, DateTime.UtcNow.AddDays(-10), DateTime.UtcNow.AddDays(-8), IntervalInMins.FiveMins);
+                    RequestRateByIntervalInput requestRateByIntervalInput = new RequestRateByIntervalInput(sasUri, Recording.UtcNow.AddDays(-10), Recording.UtcNow.AddDays(-8), IntervalInMins.FiveMins);
 
                     var result = await WaitForCompletionAsync(await LogAnalyticsClient.StartExportRequestRateByIntervalAsync("westcentralus" ,requestRateByIntervalInput));
                     //BUG: LogAnalytics API does not return correct result.
                     //Assert.EndsWith(".csv", result.Properties.Output);
 
-                    ThrottledRequestsInput throttledRequestsInput = new ThrottledRequestsInput(sasUri, DateTime.UtcNow.AddDays(-10), DateTime.UtcNow.AddDays(-8))
+                    ThrottledRequestsInput throttledRequestsInput = new ThrottledRequestsInput(sasUri, Recording.UtcNow.AddDays(-10), Recording.UtcNow.AddDays(-8))
                     {
                         GroupByOperationName = true,
                     };
@@ -85,8 +85,8 @@ namespace Azure.Management.Compute.Tests
         private string GetContainerSasUri(BlobContainer container)
         {
             //SharedAccessBlobPolicy sasConstraints = new SharedAccessBlobPolicy();
-            //sasConstraints.SharedAccessStartTime = DateTime.UtcNow.AddDays(-1);
-            //sasConstraints.SharedAccessExpiryTime = DateTime.UtcNow.AddDays(2);
+            //sasConstraints.SharedAccessStartTime = Recording.UtcNow.AddDays(-1);
+            //sasConstraints.SharedAccessExpiryTime = Recording.UtcNow.AddDays(2);
             //sasConstraints.Permissions = SharedAccessBlobPermissions.Read | SharedAccessBlobPermissions.Write;
 
             ////Generate the shared access signature on the blob, setting the constraints directly on the signature.

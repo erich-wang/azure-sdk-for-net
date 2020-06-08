@@ -527,8 +527,8 @@ namespace Azure.Management.Compute.Tests
                 //pageBlob.UploadFromByteArrayAsync(bytes, 0, bytes.Length);
 
                 //SharedAccessBlobPolicy sasConstraints = new SharedAccessBlobPolicy();
-                //sasConstraints.SharedAccessStartTime = DateTime.UtcNow.AddDays(-1);
-                //sasConstraints.SharedAccessExpiryTime = DateTime.UtcNow.AddDays(2);
+                //sasConstraints.SharedAccessStartTime = Recording.UtcNow.AddDays(-1);
+                //sasConstraints.SharedAccessExpiryTime = Recording.UtcNow.AddDays(2);
                 //sasConstraints.Permissions = SharedAccessBlobPermissions.Read | SharedAccessBlobPermissions.Write;
 
                 ////Generate the shared access signature on the blob, setting the constraints directly on the signature.

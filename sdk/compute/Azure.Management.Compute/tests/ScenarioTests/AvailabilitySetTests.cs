@@ -300,7 +300,7 @@ namespace Azure.Management.Compute.Tests
                     resourceGroup2Name,
                     new ResourceGroup(TestEnvironment.Location)
                     {
-                        Tags = new Dictionary<string, string>() { { resourceGroup2Name, DateTime.UtcNow.ToString("u") } }
+                        Tags = new Dictionary<string, string>() { { resourceGroup2Name, Recording.UtcNow.ToString("u") } }
                     })).Value;
 
                 AvailabilitySet inputAvailabilitySet2 = new AvailabilitySet(TestEnvironment.Location)
@@ -374,7 +374,7 @@ namespace Azure.Management.Compute.Tests
                 resourceGroup1Name,
                 new ResourceGroup(TestEnvironment.Location)
                 {
-                    Tags = new Dictionary<string, string>() { { resourceGroup1Name, DateTime.UtcNow.ToString("u") } }
+                    Tags = new Dictionary<string, string>() { { resourceGroup1Name, Recording.UtcNow.ToString("u") } }
                 });
         }
     }

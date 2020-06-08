@@ -148,7 +148,7 @@ namespace Azure.Management.Compute.Tests
                     rgName,
                     new ResourceGroup(m_location)
                     {
-                        Tags = new Dictionary<string, string>() { { rgName, DateTime.UtcNow.ToString("u") } }
+                        Tags = new Dictionary<string, string>() { { rgName, Recording.UtcNow.ToString("u") } }
                     });
                 var stoInput = new StorageAccountCreateParameters(new Sku(SkuName.StandardGRS), Kind.Storage, m_location);
 
@@ -214,7 +214,7 @@ namespace Azure.Management.Compute.Tests
                     rgName,
                     new ResourceGroup(m_location)
                     {
-                        Tags = new Dictionary<string, string>() { { rgName, DateTime.UtcNow.ToString("u") } }
+                        Tags = new Dictionary<string, string>() { { rgName, Recording.UtcNow.ToString("u") } }
                     });
 
                 PublicIPAddress getPublicIpAddressResponse = createWithPublicIpAddress ? null : await CreatePublicIP(rgName);
@@ -957,7 +957,7 @@ namespace Azure.Management.Compute.Tests
                    rgName,
                    new ResourceGroup(m_location)
                    {
-                       Tags = new Dictionary<string, string>() { { rgName, DateTime.UtcNow.ToString("u") } }
+                       Tags = new Dictionary<string, string>() { { rgName, Recording.UtcNow.ToString("u") } }
                    });
 
             DedicatedHostGroup dedicatedHostGroup = new DedicatedHostGroup(m_location)
@@ -979,14 +979,14 @@ namespace Azure.Management.Compute.Tests
             var response =await DedicatedHostsClient.StartCreateOrUpdateAsync(rgName, dedicatedHostGroupName, dedicatedHostName,
                 new DedicatedHost(m_location, new CM.Sku() { Name= "ESv3-Type1"})
                 {
-                    Tags = new Dictionary<string, string>() { { rgName, DateTime.UtcNow.ToString("u") } }
+                    Tags = new Dictionary<string, string>() { { rgName, Recording.UtcNow.ToString("u") } }
                 });
             //var xx = return await response.WaitForCompletionAsync()
             return await WaitForCompletionAsync(response);
             //return await DedicatedHostsClient.StartCreateOrUpdateAsync(rgName, dedicatedHostGroupName, dedicatedHostName,
             //    new DedicatedHost(m_location,new Sku() { Name= "ESv3-Type1" })
             //    {
-            //        Tags = new Dictionary<string, string>() { { rgName, DateTime.UtcNow.ToString("u") } }
+            //        Tags = new Dictionary<string, string>() { { rgName, Recording.UtcNow.ToString("u") } }
             //    });
         }
 

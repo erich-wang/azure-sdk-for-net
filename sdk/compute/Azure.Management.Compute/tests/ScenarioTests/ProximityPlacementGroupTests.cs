@@ -74,7 +74,7 @@ namespace Azure.Management.Compute.Tests
                 m_resourceGroup1Name,
                 new ResourceGroup(m_location)
                 {
-                    Tags = new Dictionary<string, string>() { { m_resourceGroup1Name, DateTime.UtcNow.ToString("u") } }
+                    Tags = new Dictionary<string, string>() { { m_resourceGroup1Name, Recording.UtcNow.ToString("u") } }
                 });
         }
 
@@ -339,7 +339,7 @@ namespace Azure.Management.Compute.Tests
                     resourceGroup2Name,
                     new ResourceGroup(m_location)
                     {
-                        Tags = new Dictionary<string, string>() { { resourceGroup2Name, DateTime.UtcNow.ToString("u") } }
+                        Tags = new Dictionary<string, string>() { { resourceGroup2Name, Recording.UtcNow.ToString("u") } }
                     });
 
                 ProximityPlacementGroup inputProximityPlacementGroup2 = new ProximityPlacementGroup(m_location)
