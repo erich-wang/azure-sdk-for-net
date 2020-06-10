@@ -61,7 +61,7 @@ namespace Azure.ResourceManager.Storage.Tests.Helpers
 
         private StorageManagementClient GetStorageManagementClient()
         {
-            return CreateClient<StorageManagementClient>(new StorageManagementClient(TestEnvironment.SubscriptionId,
+            return InstrumentClient(new StorageManagementClient(TestEnvironment.SubscriptionId,
                  TestEnvironment.Credential,
                  Recording.InstrumentClientOptions(new StorageManagementClientOptions())));
         }
