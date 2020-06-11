@@ -6,8 +6,8 @@
       "RequestHeaders": {
         "Authorization": "Sanitized",
         "User-Agent": [
-          "azsdk-net-Management.Storage/1.0.0-dev.20200601.1",
-          "(.NET Framework 4.8.4180.0; Microsoft Windows 10.0.19041 )"
+          "azsdk-net-ResourceManager.Storage/1.0.0-dev.20200611.1",
+          "(.NET Core 4.6.28801.04; Microsoft Windows 10.0.19041 )"
         ],
         "x-ms-client-request-id": "fe75c3a7a20566000e4570d0c82f4bde",
         "x-ms-return-client-request-id": "true"
@@ -16,17 +16,17 @@
       "StatusCode": 200,
       "ResponseHeaders": {
         "Cache-Control": "no-cache",
-        "Content-Length": "458225",
+        "Content-Length": "471777",
         "Content-Type": "application/json; charset=utf-8",
-        "Date": "Mon, 01 Jun 2020 06:38:04 GMT",
+        "Date": "Thu, 11 Jun 2020 05:01:18 GMT",
         "Expires": "-1",
         "Pragma": "no-cache",
         "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
         "X-Content-Type-Options": "nosniff",
-        "x-ms-correlation-request-id": "da35672e-ee82-42fe-81b0-68240c22485e",
-        "x-ms-ratelimit-remaining-subscription-reads": "11004",
-        "x-ms-request-id": "da35672e-ee82-42fe-81b0-68240c22485e",
-        "x-ms-routing-request-id": "SOUTHEASTASIA:20200601T063805Z:da35672e-ee82-42fe-81b0-68240c22485e"
+        "x-ms-correlation-request-id": "fa5d7141-e5e3-4729-88da-a30abed6f6e4",
+        "x-ms-ratelimit-remaining-subscription-reads": "10239",
+        "x-ms-request-id": "fa5d7141-e5e3-4729-88da-a30abed6f6e4",
+        "x-ms-routing-request-id": "KOREASOUTH:20200611T050118Z:fa5d7141-e5e3-4729-88da-a30abed6f6e4"
       },
       "ResponseBody": {
         "value": [
@@ -288,6 +288,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -383,617 +387,6 @@
               },
               {
                 "name": "supportsPrivateEndpointConnections",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileactivedirectory",
-                "value": "true"
-              }
-            ],
-            "restrictions": []
-          },
-          {
-            "resourceType": "storageAccounts",
-            "name": "Standard_LRS",
-            "tier": "Standard",
-            "kind": "Storage",
-            "locations": [
-              "eastus"
-            ],
-            "locationInfo": [
-              {
-                "location": "eastus",
-                "zones": [],
-                "zoneDetails": []
-              }
-            ],
-            "capabilities": [
-              {
-                "name": "supportsfileencryption",
-                "value": "true"
-              },
-              {
-                "name": "supportshoeboxcapacitymetrics",
-                "value": "true"
-              },
-              {
-                "name": "supportsnetworkacls",
-                "value": "true"
-              },
-              {
-                "name": "supportslargefileshares",
-                "value": "true"
-              },
-              {
-                "name": "supportsthreatdetection",
-                "value": "true"
-              },
-              {
-                "name": "supportseventgridforadls",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileactivedirectory",
-                "value": "true"
-              }
-            ],
-            "restrictions": []
-          },
-          {
-            "resourceType": "storageAccounts",
-            "name": "Standard_GRS",
-            "tier": "Standard",
-            "kind": "Storage",
-            "locations": [
-              "eastus"
-            ],
-            "locationInfo": [
-              {
-                "location": "eastus",
-                "zones": [],
-                "zoneDetails": []
-              }
-            ],
-            "capabilities": [
-              {
-                "name": "supportsfileencryption",
-                "value": "true"
-              },
-              {
-                "name": "supportshoeboxcapacitymetrics",
-                "value": "true"
-              },
-              {
-                "name": "supportsnetworkacls",
-                "value": "true"
-              },
-              {
-                "name": "supportscustomercontrolledfailover",
-                "value": "true"
-              },
-              {
-                "name": "supportsthreatdetection",
-                "value": "true"
-              },
-              {
-                "name": "supportseventgridforadls",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileactivedirectory",
-                "value": "true"
-              }
-            ],
-            "restrictions": []
-          },
-          {
-            "resourceType": "storageAccounts",
-            "name": "Standard_RAGRS",
-            "tier": "Standard",
-            "kind": "Storage",
-            "locations": [
-              "eastus"
-            ],
-            "locationInfo": [
-              {
-                "location": "eastus",
-                "zones": [],
-                "zoneDetails": []
-              }
-            ],
-            "capabilities": [
-              {
-                "name": "supportsfileencryption",
-                "value": "true"
-              },
-              {
-                "name": "supportshoeboxcapacitymetrics",
-                "value": "true"
-              },
-              {
-                "name": "supportsnetworkacls",
-                "value": "true"
-              },
-              {
-                "name": "supportscustomercontrolledfailover",
-                "value": "true"
-              },
-              {
-                "name": "supportsthreatdetection",
-                "value": "true"
-              },
-              {
-                "name": "supportseventgridforadls",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileactivedirectory",
-                "value": "true"
-              }
-            ],
-            "restrictions": []
-          },
-          {
-            "resourceType": "storageAccounts",
-            "name": "Standard_LRS",
-            "tier": "Standard",
-            "kind": "StorageV2",
-            "locations": [
-              "eastus"
-            ],
-            "locationInfo": [
-              {
-                "location": "eastus",
-                "zones": [],
-                "zoneDetails": []
-              }
-            ],
-            "capabilities": [
-              {
-                "name": "supportsarchivepreview",
-                "value": "true"
-              },
-              {
-                "name": "supportschangenotification",
-                "value": "true"
-              },
-              {
-                "name": "supportsmanagementpolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileencryption",
-                "value": "true"
-              },
-              {
-                "name": "supportshoeboxcapacitymetrics",
-                "value": "true"
-              },
-              {
-                "name": "supportsnetworkacls",
-                "value": "true"
-              },
-              {
-                "name": "supportsstaticwebsite",
-                "value": "true"
-              },
-              {
-                "name": "supportshierarchicalnamespace",
-                "value": "true"
-              },
-              {
-                "name": "supportsazureblobfs",
-                "value": "true"
-              },
-              {
-                "name": "supportscompliancepolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportslargefileshares",
-                "value": "true"
-              },
-              {
-                "name": "supportsthreatdetection",
-                "value": "true"
-              },
-              {
-                "name": "supportseventgridforadls",
-                "value": "true"
-              },
-              {
-                "name": "supportsPrivateEndpointConnections",
-                "value": "true"
-              },
-              {
-                "name": "supportsMultiProtocolAccess",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileactivedirectory",
-                "value": "true"
-              }
-            ],
-            "restrictions": []
-          },
-          {
-            "resourceType": "storageAccounts",
-            "name": "Standard_GRS",
-            "tier": "Standard",
-            "kind": "StorageV2",
-            "locations": [
-              "eastus"
-            ],
-            "locationInfo": [
-              {
-                "location": "eastus",
-                "zones": [],
-                "zoneDetails": []
-              }
-            ],
-            "capabilities": [
-              {
-                "name": "supportsarchivepreview",
-                "value": "true"
-              },
-              {
-                "name": "supportschangenotification",
-                "value": "true"
-              },
-              {
-                "name": "supportsmanagementpolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileencryption",
-                "value": "true"
-              },
-              {
-                "name": "supportshoeboxcapacitymetrics",
-                "value": "true"
-              },
-              {
-                "name": "supportsnetworkacls",
-                "value": "true"
-              },
-              {
-                "name": "supportsstaticwebsite",
-                "value": "true"
-              },
-              {
-                "name": "supportshierarchicalnamespace",
-                "value": "true"
-              },
-              {
-                "name": "supportsazureblobfs",
-                "value": "true"
-              },
-              {
-                "name": "supportscompliancepolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportscustomercontrolledfailover",
-                "value": "true"
-              },
-              {
-                "name": "supportsthreatdetection",
-                "value": "true"
-              },
-              {
-                "name": "supportseventgridforadls",
-                "value": "true"
-              },
-              {
-                "name": "supportsPrivateEndpointConnections",
-                "value": "true"
-              },
-              {
-                "name": "supportsMultiProtocolAccess",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileactivedirectory",
-                "value": "true"
-              }
-            ],
-            "restrictions": []
-          },
-          {
-            "resourceType": "storageAccounts",
-            "name": "Standard_RAGRS",
-            "tier": "Standard",
-            "kind": "StorageV2",
-            "locations": [
-              "eastus"
-            ],
-            "locationInfo": [
-              {
-                "location": "eastus",
-                "zones": [],
-                "zoneDetails": []
-              }
-            ],
-            "capabilities": [
-              {
-                "name": "supportsarchivepreview",
-                "value": "true"
-              },
-              {
-                "name": "supportschangenotification",
-                "value": "true"
-              },
-              {
-                "name": "supportsmanagementpolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileencryption",
-                "value": "true"
-              },
-              {
-                "name": "supportshoeboxcapacitymetrics",
-                "value": "true"
-              },
-              {
-                "name": "supportsnetworkacls",
-                "value": "true"
-              },
-              {
-                "name": "supportsstaticwebsite",
-                "value": "true"
-              },
-              {
-                "name": "supportshierarchicalnamespace",
-                "value": "true"
-              },
-              {
-                "name": "supportsazureblobfs",
-                "value": "true"
-              },
-              {
-                "name": "supportscompliancepolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportscustomercontrolledfailover",
-                "value": "true"
-              },
-              {
-                "name": "supportsthreatdetection",
-                "value": "true"
-              },
-              {
-                "name": "supportseventgridforadls",
-                "value": "true"
-              },
-              {
-                "name": "supportsPrivateEndpointConnections",
-                "value": "true"
-              },
-              {
-                "name": "supportsMultiProtocolAccess",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileactivedirectory",
-                "value": "true"
-              }
-            ],
-            "restrictions": []
-          },
-          {
-            "resourceType": "storageAccounts",
-            "name": "Standard_LRS",
-            "tier": "Standard",
-            "kind": "BlobStorage",
-            "locations": [
-              "eastus"
-            ],
-            "locationInfo": [
-              {
-                "location": "eastus",
-                "zones": [],
-                "zoneDetails": []
-              }
-            ],
-            "capabilities": [
-              {
-                "name": "supportsarchivepreview",
-                "value": "true"
-              },
-              {
-                "name": "supportschangenotification",
-                "value": "true"
-              },
-              {
-                "name": "supportsmanagementpolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportshoeboxcapacitymetrics",
-                "value": "true"
-              },
-              {
-                "name": "supportsnetworkacls",
-                "value": "true"
-              },
-              {
-                "name": "supportshierarchicalnamespace",
-                "value": "true"
-              },
-              {
-                "name": "supportsazureblobfs",
-                "value": "true"
-              },
-              {
-                "name": "supportscompliancepolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportsthreatdetection",
-                "value": "true"
-              },
-              {
-                "name": "supportseventgridforadls",
-                "value": "true"
-              },
-              {
-                "name": "supportsPrivateEndpointConnections",
-                "value": "true"
-              },
-              {
-                "name": "supportsMultiProtocolAccess",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileactivedirectory",
-                "value": "true"
-              }
-            ],
-            "restrictions": []
-          },
-          {
-            "resourceType": "storageAccounts",
-            "name": "Standard_GRS",
-            "tier": "Standard",
-            "kind": "BlobStorage",
-            "locations": [
-              "eastus"
-            ],
-            "locationInfo": [
-              {
-                "location": "eastus",
-                "zones": [],
-                "zoneDetails": []
-              }
-            ],
-            "capabilities": [
-              {
-                "name": "supportsarchivepreview",
-                "value": "true"
-              },
-              {
-                "name": "supportschangenotification",
-                "value": "true"
-              },
-              {
-                "name": "supportsmanagementpolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportshoeboxcapacitymetrics",
-                "value": "true"
-              },
-              {
-                "name": "supportsnetworkacls",
-                "value": "true"
-              },
-              {
-                "name": "supportshierarchicalnamespace",
-                "value": "true"
-              },
-              {
-                "name": "supportsazureblobfs",
-                "value": "true"
-              },
-              {
-                "name": "supportscompliancepolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportscustomercontrolledfailover",
-                "value": "true"
-              },
-              {
-                "name": "supportsthreatdetection",
-                "value": "true"
-              },
-              {
-                "name": "supportseventgridforadls",
-                "value": "true"
-              },
-              {
-                "name": "supportsPrivateEndpointConnections",
-                "value": "true"
-              },
-              {
-                "name": "supportsMultiProtocolAccess",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileactivedirectory",
-                "value": "true"
-              }
-            ],
-            "restrictions": []
-          },
-          {
-            "resourceType": "storageAccounts",
-            "name": "Standard_RAGRS",
-            "tier": "Standard",
-            "kind": "BlobStorage",
-            "locations": [
-              "eastus"
-            ],
-            "locationInfo": [
-              {
-                "location": "eastus",
-                "zones": [],
-                "zoneDetails": []
-              }
-            ],
-            "capabilities": [
-              {
-                "name": "supportsarchivepreview",
-                "value": "true"
-              },
-              {
-                "name": "supportschangenotification",
-                "value": "true"
-              },
-              {
-                "name": "supportsmanagementpolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportshoeboxcapacitymetrics",
-                "value": "true"
-              },
-              {
-                "name": "supportsnetworkacls",
-                "value": "true"
-              },
-              {
-                "name": "supportshierarchicalnamespace",
-                "value": "true"
-              },
-              {
-                "name": "supportsazureblobfs",
-                "value": "true"
-              },
-              {
-                "name": "supportscompliancepolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportscustomercontrolledfailover",
-                "value": "true"
-              },
-              {
-                "name": "supportsthreatdetection",
-                "value": "true"
-              },
-              {
-                "name": "supportseventgridforadls",
-                "value": "true"
-              },
-              {
-                "name": "supportsPrivateEndpointConnections",
-                "value": "true"
-              },
-              {
-                "name": "supportsMultiProtocolAccess",
                 "value": "true"
               },
               {
@@ -1209,6 +602,629 @@
           },
           {
             "resourceType": "storageAccounts",
+            "name": "Standard_LRS",
+            "tier": "Standard",
+            "kind": "Storage",
+            "locations": [
+              "eastus"
+            ],
+            "locationInfo": [
+              {
+                "location": "eastus",
+                "zones": [],
+                "zoneDetails": []
+              }
+            ],
+            "capabilities": [
+              {
+                "name": "supportsfileencryption",
+                "value": "true"
+              },
+              {
+                "name": "supportshoeboxcapacitymetrics",
+                "value": "true"
+              },
+              {
+                "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportslargefileshares",
+                "value": "true"
+              },
+              {
+                "name": "supportsthreatdetection",
+                "value": "true"
+              },
+              {
+                "name": "supportseventgridforadls",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileactivedirectory",
+                "value": "true"
+              }
+            ],
+            "restrictions": []
+          },
+          {
+            "resourceType": "storageAccounts",
+            "name": "Standard_GRS",
+            "tier": "Standard",
+            "kind": "Storage",
+            "locations": [
+              "eastus"
+            ],
+            "locationInfo": [
+              {
+                "location": "eastus",
+                "zones": [],
+                "zoneDetails": []
+              }
+            ],
+            "capabilities": [
+              {
+                "name": "supportsfileencryption",
+                "value": "true"
+              },
+              {
+                "name": "supportshoeboxcapacitymetrics",
+                "value": "true"
+              },
+              {
+                "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportscustomercontrolledfailover",
+                "value": "true"
+              },
+              {
+                "name": "supportsthreatdetection",
+                "value": "true"
+              },
+              {
+                "name": "supportseventgridforadls",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileactivedirectory",
+                "value": "true"
+              }
+            ],
+            "restrictions": []
+          },
+          {
+            "resourceType": "storageAccounts",
+            "name": "Standard_RAGRS",
+            "tier": "Standard",
+            "kind": "Storage",
+            "locations": [
+              "eastus"
+            ],
+            "locationInfo": [
+              {
+                "location": "eastus",
+                "zones": [],
+                "zoneDetails": []
+              }
+            ],
+            "capabilities": [
+              {
+                "name": "supportsfileencryption",
+                "value": "true"
+              },
+              {
+                "name": "supportshoeboxcapacitymetrics",
+                "value": "true"
+              },
+              {
+                "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportscustomercontrolledfailover",
+                "value": "true"
+              },
+              {
+                "name": "supportsthreatdetection",
+                "value": "true"
+              },
+              {
+                "name": "supportseventgridforadls",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileactivedirectory",
+                "value": "true"
+              }
+            ],
+            "restrictions": []
+          },
+          {
+            "resourceType": "storageAccounts",
+            "name": "Standard_LRS",
+            "tier": "Standard",
+            "kind": "StorageV2",
+            "locations": [
+              "eastus"
+            ],
+            "locationInfo": [
+              {
+                "location": "eastus",
+                "zones": [],
+                "zoneDetails": []
+              }
+            ],
+            "capabilities": [
+              {
+                "name": "supportsarchivepreview",
+                "value": "true"
+              },
+              {
+                "name": "supportschangenotification",
+                "value": "true"
+              },
+              {
+                "name": "supportsmanagementpolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileencryption",
+                "value": "true"
+              },
+              {
+                "name": "supportshoeboxcapacitymetrics",
+                "value": "true"
+              },
+              {
+                "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportsstaticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportshierarchicalnamespace",
+                "value": "true"
+              },
+              {
+                "name": "supportsazureblobfs",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportslargefileshares",
+                "value": "true"
+              },
+              {
+                "name": "supportsthreatdetection",
+                "value": "true"
+              },
+              {
+                "name": "supportseventgridforadls",
+                "value": "true"
+              },
+              {
+                "name": "supportsPrivateEndpointConnections",
+                "value": "true"
+              },
+              {
+                "name": "supportsMultiProtocolAccess",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileactivedirectory",
+                "value": "true"
+              }
+            ],
+            "restrictions": []
+          },
+          {
+            "resourceType": "storageAccounts",
+            "name": "Standard_GRS",
+            "tier": "Standard",
+            "kind": "StorageV2",
+            "locations": [
+              "eastus"
+            ],
+            "locationInfo": [
+              {
+                "location": "eastus",
+                "zones": [],
+                "zoneDetails": []
+              }
+            ],
+            "capabilities": [
+              {
+                "name": "supportsarchivepreview",
+                "value": "true"
+              },
+              {
+                "name": "supportschangenotification",
+                "value": "true"
+              },
+              {
+                "name": "supportsmanagementpolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileencryption",
+                "value": "true"
+              },
+              {
+                "name": "supportshoeboxcapacitymetrics",
+                "value": "true"
+              },
+              {
+                "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportsstaticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportshierarchicalnamespace",
+                "value": "true"
+              },
+              {
+                "name": "supportsazureblobfs",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportscustomercontrolledfailover",
+                "value": "true"
+              },
+              {
+                "name": "supportsthreatdetection",
+                "value": "true"
+              },
+              {
+                "name": "supportseventgridforadls",
+                "value": "true"
+              },
+              {
+                "name": "supportsPrivateEndpointConnections",
+                "value": "true"
+              },
+              {
+                "name": "supportsMultiProtocolAccess",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileactivedirectory",
+                "value": "true"
+              }
+            ],
+            "restrictions": []
+          },
+          {
+            "resourceType": "storageAccounts",
+            "name": "Standard_RAGRS",
+            "tier": "Standard",
+            "kind": "StorageV2",
+            "locations": [
+              "eastus"
+            ],
+            "locationInfo": [
+              {
+                "location": "eastus",
+                "zones": [],
+                "zoneDetails": []
+              }
+            ],
+            "capabilities": [
+              {
+                "name": "supportsarchivepreview",
+                "value": "true"
+              },
+              {
+                "name": "supportschangenotification",
+                "value": "true"
+              },
+              {
+                "name": "supportsmanagementpolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileencryption",
+                "value": "true"
+              },
+              {
+                "name": "supportshoeboxcapacitymetrics",
+                "value": "true"
+              },
+              {
+                "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportsstaticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportshierarchicalnamespace",
+                "value": "true"
+              },
+              {
+                "name": "supportsazureblobfs",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportscustomercontrolledfailover",
+                "value": "true"
+              },
+              {
+                "name": "supportsthreatdetection",
+                "value": "true"
+              },
+              {
+                "name": "supportseventgridforadls",
+                "value": "true"
+              },
+              {
+                "name": "supportsPrivateEndpointConnections",
+                "value": "true"
+              },
+              {
+                "name": "supportsMultiProtocolAccess",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileactivedirectory",
+                "value": "true"
+              }
+            ],
+            "restrictions": []
+          },
+          {
+            "resourceType": "storageAccounts",
+            "name": "Standard_LRS",
+            "tier": "Standard",
+            "kind": "BlobStorage",
+            "locations": [
+              "eastus"
+            ],
+            "locationInfo": [
+              {
+                "location": "eastus",
+                "zones": [],
+                "zoneDetails": []
+              }
+            ],
+            "capabilities": [
+              {
+                "name": "supportsarchivepreview",
+                "value": "true"
+              },
+              {
+                "name": "supportschangenotification",
+                "value": "true"
+              },
+              {
+                "name": "supportsmanagementpolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportshoeboxcapacitymetrics",
+                "value": "true"
+              },
+              {
+                "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportshierarchicalnamespace",
+                "value": "true"
+              },
+              {
+                "name": "supportsazureblobfs",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportsthreatdetection",
+                "value": "true"
+              },
+              {
+                "name": "supportseventgridforadls",
+                "value": "true"
+              },
+              {
+                "name": "supportsPrivateEndpointConnections",
+                "value": "true"
+              },
+              {
+                "name": "supportsMultiProtocolAccess",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileactivedirectory",
+                "value": "true"
+              }
+            ],
+            "restrictions": []
+          },
+          {
+            "resourceType": "storageAccounts",
+            "name": "Standard_GRS",
+            "tier": "Standard",
+            "kind": "BlobStorage",
+            "locations": [
+              "eastus"
+            ],
+            "locationInfo": [
+              {
+                "location": "eastus",
+                "zones": [],
+                "zoneDetails": []
+              }
+            ],
+            "capabilities": [
+              {
+                "name": "supportsarchivepreview",
+                "value": "true"
+              },
+              {
+                "name": "supportschangenotification",
+                "value": "true"
+              },
+              {
+                "name": "supportsmanagementpolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportshoeboxcapacitymetrics",
+                "value": "true"
+              },
+              {
+                "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportshierarchicalnamespace",
+                "value": "true"
+              },
+              {
+                "name": "supportsazureblobfs",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportscustomercontrolledfailover",
+                "value": "true"
+              },
+              {
+                "name": "supportsthreatdetection",
+                "value": "true"
+              },
+              {
+                "name": "supportseventgridforadls",
+                "value": "true"
+              },
+              {
+                "name": "supportsPrivateEndpointConnections",
+                "value": "true"
+              },
+              {
+                "name": "supportsMultiProtocolAccess",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileactivedirectory",
+                "value": "true"
+              }
+            ],
+            "restrictions": []
+          },
+          {
+            "resourceType": "storageAccounts",
+            "name": "Standard_RAGRS",
+            "tier": "Standard",
+            "kind": "BlobStorage",
+            "locations": [
+              "eastus"
+            ],
+            "locationInfo": [
+              {
+                "location": "eastus",
+                "zones": [],
+                "zoneDetails": []
+              }
+            ],
+            "capabilities": [
+              {
+                "name": "supportsarchivepreview",
+                "value": "true"
+              },
+              {
+                "name": "supportschangenotification",
+                "value": "true"
+              },
+              {
+                "name": "supportsmanagementpolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportshoeboxcapacitymetrics",
+                "value": "true"
+              },
+              {
+                "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportshierarchicalnamespace",
+                "value": "true"
+              },
+              {
+                "name": "supportsazureblobfs",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportscustomercontrolledfailover",
+                "value": "true"
+              },
+              {
+                "name": "supportsthreatdetection",
+                "value": "true"
+              },
+              {
+                "name": "supportseventgridforadls",
+                "value": "true"
+              },
+              {
+                "name": "supportsPrivateEndpointConnections",
+                "value": "true"
+              },
+              {
+                "name": "supportsMultiProtocolAccess",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileactivedirectory",
+                "value": "true"
+              }
+            ],
+            "restrictions": []
+          },
+          {
+            "resourceType": "storageAccounts",
             "name": "Premium_LRS",
             "tier": "Premium",
             "kind": "Storage",
@@ -1322,6 +1338,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -1366,6 +1386,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -1416,6 +1440,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportscustomercontrolledfailover",
                 "value": "true"
               },
@@ -1460,6 +1488,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -2404,6 +2436,14 @@
               {
                 "name": "supportsadlsgen2snapshot",
                 "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2staticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2wormpolicy",
+                "value": "true"
               }
             ],
             "restrictions": []
@@ -2793,6 +2833,14 @@
               {
                 "name": "supportsadlsgen2snapshot",
                 "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2staticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2wormpolicy",
+                "value": "true"
               }
             ],
             "restrictions": []
@@ -2900,6 +2948,14 @@
               {
                 "name": "supportsadlsgen2snapshot",
                 "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2staticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2wormpolicy",
+                "value": "true"
               }
             ],
             "restrictions": []
@@ -3006,6 +3062,14 @@
               },
               {
                 "name": "supportsadlsgen2snapshot",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2staticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2wormpolicy",
                 "value": "true"
               }
             ],
@@ -3102,6 +3166,14 @@
               {
                 "name": "supportsadlsgen2snapshot",
                 "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2staticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2wormpolicy",
+                "value": "true"
               }
             ],
             "restrictions": []
@@ -3196,6 +3268,14 @@
               },
               {
                 "name": "supportsadlsgen2snapshot",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2staticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2wormpolicy",
                 "value": "true"
               }
             ],
@@ -3292,6 +3372,14 @@
               {
                 "name": "supportsadlsgen2snapshot",
                 "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2staticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2wormpolicy",
+                "value": "true"
               }
             ],
             "restrictions": []
@@ -3322,6 +3410,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -3372,6 +3464,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportsthreatdetection",
                 "value": "true"
               },
@@ -3412,6 +3508,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -3459,6 +3559,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -4241,6 +4345,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -4281,6 +4389,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -4327,6 +4439,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportscustomercontrolledfailover",
                 "value": "true"
               },
@@ -4367,6 +4483,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -5346,6 +5466,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -5389,6 +5513,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportsthreatdetection",
                 "value": "true"
               },
@@ -5425,6 +5553,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -5468,6 +5600,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -6287,6 +6423,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -6506,6 +6646,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -6549,6 +6693,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportscustomercontrolledfailover",
                 "value": "true"
               },
@@ -6589,6 +6737,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -7035,6 +7187,100 @@
               },
               {
                 "name": "supportsthreatdetection",
+                "value": "true"
+              },
+              {
+                "name": "supportseventgridforadls",
+                "value": "true"
+              },
+              {
+                "name": "supportsPrivateEndpointConnections",
+                "value": "true"
+              },
+              {
+                "name": "supportsMultiProtocolAccess",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileactivedirectory",
+                "value": "true"
+              }
+            ],
+            "restrictions": []
+          },
+          {
+            "resourceType": "storageAccounts",
+            "name": "Premium_ZRS",
+            "tier": "Premium",
+            "kind": "FileStorage",
+            "locations": [
+              "southeastasia"
+            ],
+            "locationInfo": [
+              {
+                "location": "southeastasia",
+                "zones": [],
+                "zoneDetails": []
+              }
+            ],
+            "capabilities": [
+              {
+                "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportslargefileshares",
+                "value": "true"
+              },
+              {
+                "name": "supportseventgridforadls",
+                "value": "true"
+              },
+              {
+                "name": "supportsPrivateEndpointConnections",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileactivedirectory",
+                "value": "true"
+              }
+            ],
+            "restrictions": []
+          },
+          {
+            "resourceType": "storageAccounts",
+            "name": "Premium_ZRS",
+            "tier": "Premium",
+            "kind": "BlockBlobStorage",
+            "locations": [
+              "southeastasia"
+            ],
+            "locationInfo": [
+              {
+                "location": "southeastasia",
+                "zones": [],
+                "zoneDetails": []
+              }
+            ],
+            "capabilities": [
+              {
+                "name": "supportschangenotification",
+                "value": "true"
+              },
+              {
+                "name": "supportsmanagementpolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportsstaticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -7128,6 +7374,10 @@
                 "value": "true"
               },
               {
+                "name": "supportsRoutingPreferences",
+                "value": "true"
+              },
+              {
                 "name": "supportsfileactivedirectory",
                 "value": "true"
               }
@@ -7156,6 +7406,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -7202,6 +7456,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -7245,6 +7503,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportscustomercontrolledfailover",
                 "value": "true"
               },
@@ -7285,6 +7547,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -7379,6 +7645,10 @@
                 "value": "true"
               },
               {
+                "name": "supportsRoutingPreferences",
+                "value": "true"
+              },
+              {
                 "name": "supportsfileactivedirectory",
                 "value": "true"
               }
@@ -7458,6 +7728,10 @@
                 "value": "true"
               },
               {
+                "name": "supportsRoutingPreferences",
+                "value": "true"
+              },
+              {
                 "name": "supportsfileactivedirectory",
                 "value": "true"
               }
@@ -7534,6 +7808,10 @@
               },
               {
                 "name": "supportsMultiProtocolAccess",
+                "value": "true"
+              },
+              {
+                "name": "supportsRoutingPreferences",
                 "value": "true"
               },
               {
@@ -7604,6 +7882,10 @@
                 "value": "true"
               },
               {
+                "name": "supportsRoutingPreferences",
+                "value": "true"
+              },
+              {
                 "name": "supportsfileactivedirectory",
                 "value": "true"
               }
@@ -7675,6 +7957,10 @@
                 "value": "true"
               },
               {
+                "name": "supportsRoutingPreferences",
+                "value": "true"
+              },
+              {
                 "name": "supportsfileactivedirectory",
                 "value": "true"
               }
@@ -7743,6 +8029,10 @@
               },
               {
                 "name": "supportsMultiProtocolAccess",
+                "value": "true"
+              },
+              {
+                "name": "supportsRoutingPreferences",
                 "value": "true"
               },
               {
@@ -7818,6 +8108,10 @@
               },
               {
                 "name": "supportsMultiProtocolAccess",
+                "value": "true"
+              },
+              {
+                "name": "supportsRoutingPreferences",
                 "value": "true"
               },
               {
@@ -7892,6 +8186,10 @@
                 "value": "true"
               },
               {
+                "name": "supportsRoutingPreferences",
+                "value": "true"
+              },
+              {
                 "name": "supportsfileactivedirectory",
                 "value": "true"
               }
@@ -7963,6 +8261,10 @@
                 "value": "true"
               },
               {
+                "name": "supportsRoutingPreferences",
+                "value": "true"
+              },
+              {
                 "name": "supportsfileactivedirectory",
                 "value": "true"
               }
@@ -8139,6 +8441,10 @@
                 "value": "true"
               },
               {
+                "name": "supportsRoutingPreferences",
+                "value": "true"
+              },
+              {
                 "name": "supportsfileactivedirectory",
                 "value": "true"
               }
@@ -8167,6 +8473,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -8213,6 +8523,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportsthreatdetection",
                 "value": "true"
               },
@@ -8249,6 +8563,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -8292,6 +8610,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -8386,6 +8708,10 @@
                 "value": "true"
               },
               {
+                "name": "supportsRoutingPreferences",
+                "value": "true"
+              },
+              {
                 "name": "supportsfileactivedirectory",
                 "value": "true"
               }
@@ -8465,6 +8791,10 @@
                 "value": "true"
               },
               {
+                "name": "supportsRoutingPreferences",
+                "value": "true"
+              },
+              {
                 "name": "supportsfileactivedirectory",
                 "value": "true"
               }
@@ -8541,6 +8871,10 @@
               },
               {
                 "name": "supportsMultiProtocolAccess",
+                "value": "true"
+              },
+              {
+                "name": "supportsRoutingPreferences",
                 "value": "true"
               },
               {
@@ -8611,6 +8945,10 @@
                 "value": "true"
               },
               {
+                "name": "supportsRoutingPreferences",
+                "value": "true"
+              },
+              {
                 "name": "supportsfileactivedirectory",
                 "value": "true"
               }
@@ -8682,6 +9020,10 @@
                 "value": "true"
               },
               {
+                "name": "supportsRoutingPreferences",
+                "value": "true"
+              },
+              {
                 "name": "supportsfileactivedirectory",
                 "value": "true"
               }
@@ -8750,6 +9092,10 @@
               },
               {
                 "name": "supportsMultiProtocolAccess",
+                "value": "true"
+              },
+              {
+                "name": "supportsRoutingPreferences",
                 "value": "true"
               },
               {
@@ -8976,6 +9322,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -9023,6 +9373,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportsthreatdetection",
                 "value": "true"
               },
@@ -9063,6 +9417,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -9110,6 +9468,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -9838,6 +10200,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -9885,6 +10251,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportsthreatdetection",
                 "value": "true"
               },
@@ -9925,6 +10295,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -9972,6 +10346,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -10680,6 +11058,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -10724,6 +11106,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -10774,6 +11160,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportscustomercontrolledfailover",
                 "value": "true"
               },
@@ -10818,6 +11208,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -11890,6 +12284,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -12011,6 +12409,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -12054,6 +12456,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportscustomercontrolledfailover",
                 "value": "true"
               },
@@ -12094,6 +12500,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -12766,6 +13176,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -12809,6 +13223,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportsthreatdetection",
                 "value": "true"
               },
@@ -12845,6 +13263,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -12888,6 +13310,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -13458,6 +13884,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -13501,6 +13931,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportsthreatdetection",
                 "value": "true"
               },
@@ -13537,6 +13971,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -13580,6 +14018,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -14421,6 +14863,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -14464,6 +14910,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportsthreatdetection",
                 "value": "true"
               },
@@ -14500,6 +14950,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -14543,6 +14997,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -15113,695 +15571,7 @@
                 "value": "true"
               },
               {
-                "name": "supportslargefileshares",
-                "value": "true"
-              },
-              {
-                "name": "supportsthreatdetection",
-                "value": "true"
-              },
-              {
-                "name": "supportseventgridforadls",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileactivedirectory",
-                "value": "true"
-              }
-            ],
-            "restrictions": []
-          },
-          {
-            "resourceType": "storageAccounts",
-            "name": "Standard_ZRS",
-            "tier": "Standard",
-            "kind": "Storage",
-            "locations": [
-              "southindia"
-            ],
-            "locationInfo": [
-              {
-                "location": "southindia",
-                "zones": [],
-                "zoneDetails": []
-              }
-            ],
-            "capabilities": [
-              {
-                "name": "supportsfileencryption",
-                "value": "true"
-              },
-              {
-                "name": "supportsnetworkacls",
-                "value": "true"
-              },
-              {
-                "name": "supportsthreatdetection",
-                "value": "true"
-              },
-              {
-                "name": "supportseventgridforadls",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileactivedirectory",
-                "value": "true"
-              }
-            ],
-            "restrictions": []
-          },
-          {
-            "resourceType": "storageAccounts",
-            "name": "Standard_GRS",
-            "tier": "Standard",
-            "kind": "Storage",
-            "locations": [
-              "southindia"
-            ],
-            "locationInfo": [
-              {
-                "location": "southindia",
-                "zones": [],
-                "zoneDetails": []
-              }
-            ],
-            "capabilities": [
-              {
-                "name": "supportsfileencryption",
-                "value": "true"
-              },
-              {
-                "name": "supportsnetworkacls",
-                "value": "true"
-              },
-              {
-                "name": "supportscustomercontrolledfailover",
-                "value": "true"
-              },
-              {
-                "name": "supportsthreatdetection",
-                "value": "true"
-              },
-              {
-                "name": "supportseventgridforadls",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileactivedirectory",
-                "value": "true"
-              }
-            ],
-            "restrictions": []
-          },
-          {
-            "resourceType": "storageAccounts",
-            "name": "Standard_RAGRS",
-            "tier": "Standard",
-            "kind": "Storage",
-            "locations": [
-              "southindia"
-            ],
-            "locationInfo": [
-              {
-                "location": "southindia",
-                "zones": [],
-                "zoneDetails": []
-              }
-            ],
-            "capabilities": [
-              {
-                "name": "supportsfileencryption",
-                "value": "true"
-              },
-              {
-                "name": "supportsnetworkacls",
-                "value": "true"
-              },
-              {
-                "name": "supportscustomercontrolledfailover",
-                "value": "true"
-              },
-              {
-                "name": "supportsthreatdetection",
-                "value": "true"
-              },
-              {
-                "name": "supportseventgridforadls",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileactivedirectory",
-                "value": "true"
-              }
-            ],
-            "restrictions": []
-          },
-          {
-            "resourceType": "storageAccounts",
-            "name": "Standard_LRS",
-            "tier": "Standard",
-            "kind": "StorageV2",
-            "locations": [
-              "southindia"
-            ],
-            "locationInfo": [
-              {
-                "location": "southindia",
-                "zones": [],
-                "zoneDetails": []
-              }
-            ],
-            "capabilities": [
-              {
-                "name": "supportsarchivepreview",
-                "value": "true"
-              },
-              {
-                "name": "supportschangenotification",
-                "value": "true"
-              },
-              {
-                "name": "supportsmanagementpolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileencryption",
-                "value": "true"
-              },
-              {
-                "name": "supportsnetworkacls",
-                "value": "true"
-              },
-              {
-                "name": "supportsstaticwebsite",
-                "value": "true"
-              },
-              {
-                "name": "supportshierarchicalnamespace",
-                "value": "true"
-              },
-              {
-                "name": "supportsazureblobfs",
-                "value": "true"
-              },
-              {
                 "name": "supportscompliancepolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportslargefileshares",
-                "value": "true"
-              },
-              {
-                "name": "supportsthreatdetection",
-                "value": "true"
-              },
-              {
-                "name": "supportseventgridforadls",
-                "value": "true"
-              },
-              {
-                "name": "supportsPrivateEndpointConnections",
-                "value": "true"
-              },
-              {
-                "name": "supportsMultiProtocolAccess",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileactivedirectory",
-                "value": "true"
-              }
-            ],
-            "restrictions": []
-          },
-          {
-            "resourceType": "storageAccounts",
-            "name": "Standard_GRS",
-            "tier": "Standard",
-            "kind": "StorageV2",
-            "locations": [
-              "southindia"
-            ],
-            "locationInfo": [
-              {
-                "location": "southindia",
-                "zones": [],
-                "zoneDetails": []
-              }
-            ],
-            "capabilities": [
-              {
-                "name": "supportsarchivepreview",
-                "value": "true"
-              },
-              {
-                "name": "supportschangenotification",
-                "value": "true"
-              },
-              {
-                "name": "supportsmanagementpolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileencryption",
-                "value": "true"
-              },
-              {
-                "name": "supportsnetworkacls",
-                "value": "true"
-              },
-              {
-                "name": "supportsstaticwebsite",
-                "value": "true"
-              },
-              {
-                "name": "supportshierarchicalnamespace",
-                "value": "true"
-              },
-              {
-                "name": "supportsazureblobfs",
-                "value": "true"
-              },
-              {
-                "name": "supportscompliancepolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportscustomercontrolledfailover",
-                "value": "true"
-              },
-              {
-                "name": "supportsthreatdetection",
-                "value": "true"
-              },
-              {
-                "name": "supportseventgridforadls",
-                "value": "true"
-              },
-              {
-                "name": "supportsPrivateEndpointConnections",
-                "value": "true"
-              },
-              {
-                "name": "supportsMultiProtocolAccess",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileactivedirectory",
-                "value": "true"
-              }
-            ],
-            "restrictions": []
-          },
-          {
-            "resourceType": "storageAccounts",
-            "name": "Standard_RAGRS",
-            "tier": "Standard",
-            "kind": "StorageV2",
-            "locations": [
-              "southindia"
-            ],
-            "locationInfo": [
-              {
-                "location": "southindia",
-                "zones": [],
-                "zoneDetails": []
-              }
-            ],
-            "capabilities": [
-              {
-                "name": "supportsarchivepreview",
-                "value": "true"
-              },
-              {
-                "name": "supportschangenotification",
-                "value": "true"
-              },
-              {
-                "name": "supportsmanagementpolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileencryption",
-                "value": "true"
-              },
-              {
-                "name": "supportsnetworkacls",
-                "value": "true"
-              },
-              {
-                "name": "supportsstaticwebsite",
-                "value": "true"
-              },
-              {
-                "name": "supportshierarchicalnamespace",
-                "value": "true"
-              },
-              {
-                "name": "supportsazureblobfs",
-                "value": "true"
-              },
-              {
-                "name": "supportscompliancepolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportscustomercontrolledfailover",
-                "value": "true"
-              },
-              {
-                "name": "supportsthreatdetection",
-                "value": "true"
-              },
-              {
-                "name": "supportseventgridforadls",
-                "value": "true"
-              },
-              {
-                "name": "supportsPrivateEndpointConnections",
-                "value": "true"
-              },
-              {
-                "name": "supportsMultiProtocolAccess",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileactivedirectory",
-                "value": "true"
-              }
-            ],
-            "restrictions": []
-          },
-          {
-            "resourceType": "storageAccounts",
-            "name": "Standard_LRS",
-            "tier": "Standard",
-            "kind": "BlobStorage",
-            "locations": [
-              "southindia"
-            ],
-            "locationInfo": [
-              {
-                "location": "southindia",
-                "zones": [],
-                "zoneDetails": []
-              }
-            ],
-            "capabilities": [
-              {
-                "name": "supportsarchivepreview",
-                "value": "true"
-              },
-              {
-                "name": "supportschangenotification",
-                "value": "true"
-              },
-              {
-                "name": "supportsmanagementpolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportsnetworkacls",
-                "value": "true"
-              },
-              {
-                "name": "supportshierarchicalnamespace",
-                "value": "true"
-              },
-              {
-                "name": "supportsazureblobfs",
-                "value": "true"
-              },
-              {
-                "name": "supportscompliancepolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportsthreatdetection",
-                "value": "true"
-              },
-              {
-                "name": "supportseventgridforadls",
-                "value": "true"
-              },
-              {
-                "name": "supportsPrivateEndpointConnections",
-                "value": "true"
-              },
-              {
-                "name": "supportsMultiProtocolAccess",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileactivedirectory",
-                "value": "true"
-              }
-            ],
-            "restrictions": []
-          },
-          {
-            "resourceType": "storageAccounts",
-            "name": "Standard_GRS",
-            "tier": "Standard",
-            "kind": "BlobStorage",
-            "locations": [
-              "southindia"
-            ],
-            "locationInfo": [
-              {
-                "location": "southindia",
-                "zones": [],
-                "zoneDetails": []
-              }
-            ],
-            "capabilities": [
-              {
-                "name": "supportsarchivepreview",
-                "value": "true"
-              },
-              {
-                "name": "supportschangenotification",
-                "value": "true"
-              },
-              {
-                "name": "supportsmanagementpolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportsnetworkacls",
-                "value": "true"
-              },
-              {
-                "name": "supportshierarchicalnamespace",
-                "value": "true"
-              },
-              {
-                "name": "supportsazureblobfs",
-                "value": "true"
-              },
-              {
-                "name": "supportscompliancepolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportscustomercontrolledfailover",
-                "value": "true"
-              },
-              {
-                "name": "supportsthreatdetection",
-                "value": "true"
-              },
-              {
-                "name": "supportseventgridforadls",
-                "value": "true"
-              },
-              {
-                "name": "supportsPrivateEndpointConnections",
-                "value": "true"
-              },
-              {
-                "name": "supportsMultiProtocolAccess",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileactivedirectory",
-                "value": "true"
-              }
-            ],
-            "restrictions": []
-          },
-          {
-            "resourceType": "storageAccounts",
-            "name": "Standard_RAGRS",
-            "tier": "Standard",
-            "kind": "BlobStorage",
-            "locations": [
-              "southindia"
-            ],
-            "locationInfo": [
-              {
-                "location": "southindia",
-                "zones": [],
-                "zoneDetails": []
-              }
-            ],
-            "capabilities": [
-              {
-                "name": "supportsarchivepreview",
-                "value": "true"
-              },
-              {
-                "name": "supportschangenotification",
-                "value": "true"
-              },
-              {
-                "name": "supportsmanagementpolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportsnetworkacls",
-                "value": "true"
-              },
-              {
-                "name": "supportshierarchicalnamespace",
-                "value": "true"
-              },
-              {
-                "name": "supportsazureblobfs",
-                "value": "true"
-              },
-              {
-                "name": "supportscompliancepolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportscustomercontrolledfailover",
-                "value": "true"
-              },
-              {
-                "name": "supportsthreatdetection",
-                "value": "true"
-              },
-              {
-                "name": "supportseventgridforadls",
-                "value": "true"
-              },
-              {
-                "name": "supportsPrivateEndpointConnections",
-                "value": "true"
-              },
-              {
-                "name": "supportsMultiProtocolAccess",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileactivedirectory",
-                "value": "true"
-              }
-            ],
-            "restrictions": []
-          },
-          {
-            "resourceType": "storageAccounts",
-            "name": "Premium_LRS",
-            "tier": "Premium",
-            "kind": "Storage",
-            "locations": [
-              "centralindia"
-            ],
-            "locationInfo": [
-              {
-                "location": "centralindia",
-                "zones": [],
-                "zoneDetails": []
-              }
-            ],
-            "capabilities": [
-              {
-                "name": "supportsnetworkacls",
-                "value": "true"
-              },
-              {
-                "name": "supportsthreatdetection",
-                "value": "true"
-              },
-              {
-                "name": "supportseventgridforadls",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileactivedirectory",
-                "value": "true"
-              }
-            ],
-            "restrictions": []
-          },
-          {
-            "resourceType": "storageAccounts",
-            "name": "Premium_LRS",
-            "tier": "Premium",
-            "kind": "StorageV2",
-            "locations": [
-              "centralindia"
-            ],
-            "locationInfo": [
-              {
-                "location": "centralindia",
-                "zones": [],
-                "zoneDetails": []
-              }
-            ],
-            "capabilities": [
-              {
-                "name": "supportsarchivepreview",
-                "value": "true"
-              },
-              {
-                "name": "supportsnetworkacls",
-                "value": "true"
-              },
-              {
-                "name": "supportsthreatdetection",
-                "value": "true"
-              },
-              {
-                "name": "supportseventgridforadls",
-                "value": "true"
-              },
-              {
-                "name": "supportsPrivateEndpointConnections",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileactivedirectory",
-                "value": "true"
-              }
-            ],
-            "restrictions": []
-          },
-          {
-            "resourceType": "storageAccounts",
-            "name": "Standard_LRS",
-            "tier": "Standard",
-            "kind": "Storage",
-            "locations": [
-              "centralindia"
-            ],
-            "locationInfo": [
-              {
-                "location": "centralindia",
-                "zones": [],
-                "zoneDetails": []
-              }
-            ],
-            "capabilities": [
-              {
-                "name": "supportsfileencryption",
-                "value": "true"
-              },
-              {
-                "name": "supportsnetworkacls",
                 "value": "true"
               },
               {
@@ -15829,6 +15599,667 @@
             "tier": "Standard",
             "kind": "Storage",
             "locations": [
+              "southindia"
+            ],
+            "locationInfo": [
+              {
+                "location": "southindia",
+                "zones": [],
+                "zoneDetails": []
+              }
+            ],
+            "capabilities": [
+              {
+                "name": "supportsfileencryption",
+                "value": "true"
+              },
+              {
+                "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportsthreatdetection",
+                "value": "true"
+              },
+              {
+                "name": "supportseventgridforadls",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileactivedirectory",
+                "value": "true"
+              }
+            ],
+            "restrictions": []
+          },
+          {
+            "resourceType": "storageAccounts",
+            "name": "Standard_GRS",
+            "tier": "Standard",
+            "kind": "Storage",
+            "locations": [
+              "southindia"
+            ],
+            "locationInfo": [
+              {
+                "location": "southindia",
+                "zones": [],
+                "zoneDetails": []
+              }
+            ],
+            "capabilities": [
+              {
+                "name": "supportsfileencryption",
+                "value": "true"
+              },
+              {
+                "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportscustomercontrolledfailover",
+                "value": "true"
+              },
+              {
+                "name": "supportsthreatdetection",
+                "value": "true"
+              },
+              {
+                "name": "supportseventgridforadls",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileactivedirectory",
+                "value": "true"
+              }
+            ],
+            "restrictions": []
+          },
+          {
+            "resourceType": "storageAccounts",
+            "name": "Standard_RAGRS",
+            "tier": "Standard",
+            "kind": "Storage",
+            "locations": [
+              "southindia"
+            ],
+            "locationInfo": [
+              {
+                "location": "southindia",
+                "zones": [],
+                "zoneDetails": []
+              }
+            ],
+            "capabilities": [
+              {
+                "name": "supportsfileencryption",
+                "value": "true"
+              },
+              {
+                "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportscustomercontrolledfailover",
+                "value": "true"
+              },
+              {
+                "name": "supportsthreatdetection",
+                "value": "true"
+              },
+              {
+                "name": "supportseventgridforadls",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileactivedirectory",
+                "value": "true"
+              }
+            ],
+            "restrictions": []
+          },
+          {
+            "resourceType": "storageAccounts",
+            "name": "Standard_LRS",
+            "tier": "Standard",
+            "kind": "StorageV2",
+            "locations": [
+              "southindia"
+            ],
+            "locationInfo": [
+              {
+                "location": "southindia",
+                "zones": [],
+                "zoneDetails": []
+              }
+            ],
+            "capabilities": [
+              {
+                "name": "supportsarchivepreview",
+                "value": "true"
+              },
+              {
+                "name": "supportschangenotification",
+                "value": "true"
+              },
+              {
+                "name": "supportsmanagementpolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileencryption",
+                "value": "true"
+              },
+              {
+                "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportsstaticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportshierarchicalnamespace",
+                "value": "true"
+              },
+              {
+                "name": "supportsazureblobfs",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportslargefileshares",
+                "value": "true"
+              },
+              {
+                "name": "supportsthreatdetection",
+                "value": "true"
+              },
+              {
+                "name": "supportseventgridforadls",
+                "value": "true"
+              },
+              {
+                "name": "supportsPrivateEndpointConnections",
+                "value": "true"
+              },
+              {
+                "name": "supportsMultiProtocolAccess",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileactivedirectory",
+                "value": "true"
+              }
+            ],
+            "restrictions": []
+          },
+          {
+            "resourceType": "storageAccounts",
+            "name": "Standard_GRS",
+            "tier": "Standard",
+            "kind": "StorageV2",
+            "locations": [
+              "southindia"
+            ],
+            "locationInfo": [
+              {
+                "location": "southindia",
+                "zones": [],
+                "zoneDetails": []
+              }
+            ],
+            "capabilities": [
+              {
+                "name": "supportsarchivepreview",
+                "value": "true"
+              },
+              {
+                "name": "supportschangenotification",
+                "value": "true"
+              },
+              {
+                "name": "supportsmanagementpolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileencryption",
+                "value": "true"
+              },
+              {
+                "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportsstaticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportshierarchicalnamespace",
+                "value": "true"
+              },
+              {
+                "name": "supportsazureblobfs",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportscustomercontrolledfailover",
+                "value": "true"
+              },
+              {
+                "name": "supportsthreatdetection",
+                "value": "true"
+              },
+              {
+                "name": "supportseventgridforadls",
+                "value": "true"
+              },
+              {
+                "name": "supportsPrivateEndpointConnections",
+                "value": "true"
+              },
+              {
+                "name": "supportsMultiProtocolAccess",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileactivedirectory",
+                "value": "true"
+              }
+            ],
+            "restrictions": []
+          },
+          {
+            "resourceType": "storageAccounts",
+            "name": "Standard_RAGRS",
+            "tier": "Standard",
+            "kind": "StorageV2",
+            "locations": [
+              "southindia"
+            ],
+            "locationInfo": [
+              {
+                "location": "southindia",
+                "zones": [],
+                "zoneDetails": []
+              }
+            ],
+            "capabilities": [
+              {
+                "name": "supportsarchivepreview",
+                "value": "true"
+              },
+              {
+                "name": "supportschangenotification",
+                "value": "true"
+              },
+              {
+                "name": "supportsmanagementpolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileencryption",
+                "value": "true"
+              },
+              {
+                "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportsstaticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportshierarchicalnamespace",
+                "value": "true"
+              },
+              {
+                "name": "supportsazureblobfs",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportscustomercontrolledfailover",
+                "value": "true"
+              },
+              {
+                "name": "supportsthreatdetection",
+                "value": "true"
+              },
+              {
+                "name": "supportseventgridforadls",
+                "value": "true"
+              },
+              {
+                "name": "supportsPrivateEndpointConnections",
+                "value": "true"
+              },
+              {
+                "name": "supportsMultiProtocolAccess",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileactivedirectory",
+                "value": "true"
+              }
+            ],
+            "restrictions": []
+          },
+          {
+            "resourceType": "storageAccounts",
+            "name": "Standard_LRS",
+            "tier": "Standard",
+            "kind": "BlobStorage",
+            "locations": [
+              "southindia"
+            ],
+            "locationInfo": [
+              {
+                "location": "southindia",
+                "zones": [],
+                "zoneDetails": []
+              }
+            ],
+            "capabilities": [
+              {
+                "name": "supportsarchivepreview",
+                "value": "true"
+              },
+              {
+                "name": "supportschangenotification",
+                "value": "true"
+              },
+              {
+                "name": "supportsmanagementpolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportshierarchicalnamespace",
+                "value": "true"
+              },
+              {
+                "name": "supportsazureblobfs",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportsthreatdetection",
+                "value": "true"
+              },
+              {
+                "name": "supportseventgridforadls",
+                "value": "true"
+              },
+              {
+                "name": "supportsPrivateEndpointConnections",
+                "value": "true"
+              },
+              {
+                "name": "supportsMultiProtocolAccess",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileactivedirectory",
+                "value": "true"
+              }
+            ],
+            "restrictions": []
+          },
+          {
+            "resourceType": "storageAccounts",
+            "name": "Standard_GRS",
+            "tier": "Standard",
+            "kind": "BlobStorage",
+            "locations": [
+              "southindia"
+            ],
+            "locationInfo": [
+              {
+                "location": "southindia",
+                "zones": [],
+                "zoneDetails": []
+              }
+            ],
+            "capabilities": [
+              {
+                "name": "supportsarchivepreview",
+                "value": "true"
+              },
+              {
+                "name": "supportschangenotification",
+                "value": "true"
+              },
+              {
+                "name": "supportsmanagementpolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportshierarchicalnamespace",
+                "value": "true"
+              },
+              {
+                "name": "supportsazureblobfs",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportscustomercontrolledfailover",
+                "value": "true"
+              },
+              {
+                "name": "supportsthreatdetection",
+                "value": "true"
+              },
+              {
+                "name": "supportseventgridforadls",
+                "value": "true"
+              },
+              {
+                "name": "supportsPrivateEndpointConnections",
+                "value": "true"
+              },
+              {
+                "name": "supportsMultiProtocolAccess",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileactivedirectory",
+                "value": "true"
+              }
+            ],
+            "restrictions": []
+          },
+          {
+            "resourceType": "storageAccounts",
+            "name": "Standard_RAGRS",
+            "tier": "Standard",
+            "kind": "BlobStorage",
+            "locations": [
+              "southindia"
+            ],
+            "locationInfo": [
+              {
+                "location": "southindia",
+                "zones": [],
+                "zoneDetails": []
+              }
+            ],
+            "capabilities": [
+              {
+                "name": "supportsarchivepreview",
+                "value": "true"
+              },
+              {
+                "name": "supportschangenotification",
+                "value": "true"
+              },
+              {
+                "name": "supportsmanagementpolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportshierarchicalnamespace",
+                "value": "true"
+              },
+              {
+                "name": "supportsazureblobfs",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportscustomercontrolledfailover",
+                "value": "true"
+              },
+              {
+                "name": "supportsthreatdetection",
+                "value": "true"
+              },
+              {
+                "name": "supportseventgridforadls",
+                "value": "true"
+              },
+              {
+                "name": "supportsPrivateEndpointConnections",
+                "value": "true"
+              },
+              {
+                "name": "supportsMultiProtocolAccess",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileactivedirectory",
+                "value": "true"
+              }
+            ],
+            "restrictions": []
+          },
+          {
+            "resourceType": "storageAccounts",
+            "name": "Premium_LRS",
+            "tier": "Premium",
+            "kind": "Storage",
+            "locations": [
+              "centralindia"
+            ],
+            "locationInfo": [
+              {
+                "location": "centralindia",
+                "zones": [],
+                "zoneDetails": []
+              }
+            ],
+            "capabilities": [
+              {
+                "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportsthreatdetection",
+                "value": "true"
+              },
+              {
+                "name": "supportseventgridforadls",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileactivedirectory",
+                "value": "true"
+              }
+            ],
+            "restrictions": []
+          },
+          {
+            "resourceType": "storageAccounts",
+            "name": "Premium_LRS",
+            "tier": "Premium",
+            "kind": "StorageV2",
+            "locations": [
+              "centralindia"
+            ],
+            "locationInfo": [
+              {
+                "location": "centralindia",
+                "zones": [],
+                "zoneDetails": []
+              }
+            ],
+            "capabilities": [
+              {
+                "name": "supportsarchivepreview",
+                "value": "true"
+              },
+              {
+                "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportsthreatdetection",
+                "value": "true"
+              },
+              {
+                "name": "supportseventgridforadls",
+                "value": "true"
+              },
+              {
+                "name": "supportsPrivateEndpointConnections",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileactivedirectory",
+                "value": "true"
+              }
+            ],
+            "restrictions": []
+          },
+          {
+            "resourceType": "storageAccounts",
+            "name": "Standard_LRS",
+            "tier": "Standard",
+            "kind": "Storage",
+            "locations": [
               "centralindia"
             ],
             "locationInfo": [
@@ -15845,6 +16276,57 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportslargefileshares",
+                "value": "true"
+              },
+              {
+                "name": "supportsthreatdetection",
+                "value": "true"
+              },
+              {
+                "name": "supportseventgridforadls",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileactivedirectory",
+                "value": "true"
+              }
+            ],
+            "restrictions": []
+          },
+          {
+            "resourceType": "storageAccounts",
+            "name": "Standard_ZRS",
+            "tier": "Standard",
+            "kind": "Storage",
+            "locations": [
+              "centralindia"
+            ],
+            "locationInfo": [
+              {
+                "location": "centralindia",
+                "zones": [],
+                "zoneDetails": []
+              }
+            ],
+            "capabilities": [
+              {
+                "name": "supportsfileencryption",
+                "value": "true"
+              },
+              {
+                "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -15884,6 +16366,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -15927,6 +16413,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -16490,6 +16980,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -16536,6 +17030,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportsthreatdetection",
                 "value": "true"
               },
@@ -16572,6 +17070,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -16615,6 +17117,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -17161,6 +17667,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -17204,6 +17714,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportsthreatdetection",
                 "value": "true"
               },
@@ -17240,6 +17754,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -17283,6 +17801,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -17913,6 +18435,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -17956,6 +18482,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportsthreatdetection",
                 "value": "true"
               },
@@ -17992,6 +18522,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -18035,6 +18569,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -19024,6 +19562,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -19068,6 +19610,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -19118,6 +19664,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportscustomercontrolledfailover",
                 "value": "true"
               },
@@ -19162,6 +19712,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -20683,6 +21237,10 @@
                 "value": "true"
               },
               {
+                "name": "supportsNfsv3",
+                "value": "true"
+              },
+              {
                 "name": "supportschangefeed",
                 "value": "true"
               },
@@ -20796,6 +21354,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -20836,6 +21398,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -20882,6 +21448,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportscustomercontrolledfailover",
                 "value": "true"
               },
@@ -20922,6 +21492,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -21909,6 +22483,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -21952,6 +22530,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportsthreatdetection",
                 "value": "true"
               },
@@ -21988,6 +22570,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -22031,6 +22617,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -22601,6 +23191,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -22644,6 +23238,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportsthreatdetection",
                 "value": "true"
               },
@@ -22680,6 +23278,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -22723,6 +23325,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -23489,6 +24095,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -23532,6 +24142,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportsthreatdetection",
                 "value": "true"
               },
@@ -23568,6 +24182,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -23611,6 +24229,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -24188,6 +24810,14 @@
               },
               {
                 "name": "supportsadlsgen2snapshot",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2staticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2wormpolicy",
                 "value": "true"
               }
             ],
@@ -24296,6 +24926,14 @@
               {
                 "name": "supportsadlsgen2snapshot",
                 "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2staticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2wormpolicy",
+                "value": "true"
               }
             ],
             "restrictions": []
@@ -24403,6 +25041,14 @@
               {
                 "name": "supportsadlsgen2snapshot",
                 "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2staticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2wormpolicy",
+                "value": "true"
               }
             ],
             "restrictions": []
@@ -24706,6 +25352,14 @@
               {
                 "name": "supportsadlsgen2snapshot",
                 "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2staticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2wormpolicy",
+                "value": "true"
               }
             ],
             "restrictions": []
@@ -24817,6 +25471,14 @@
               {
                 "name": "supportsadlsgen2snapshot",
                 "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2staticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2wormpolicy",
+                "value": "true"
               }
             ],
             "restrictions": []
@@ -24927,6 +25589,14 @@
               },
               {
                 "name": "supportsadlsgen2snapshot",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2staticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2wormpolicy",
                 "value": "true"
               }
             ],
@@ -25027,6 +25697,14 @@
               {
                 "name": "supportsadlsgen2snapshot",
                 "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2staticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2wormpolicy",
+                "value": "true"
               }
             ],
             "restrictions": []
@@ -25126,6 +25804,14 @@
               {
                 "name": "supportsadlsgen2snapshot",
                 "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2staticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2wormpolicy",
+                "value": "true"
               }
             ],
             "restrictions": []
@@ -25224,6 +25910,14 @@
               },
               {
                 "name": "supportsadlsgen2snapshot",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2staticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2wormpolicy",
                 "value": "true"
               }
             ],
@@ -25680,6 +26374,14 @@
               {
                 "name": "supportsadlsgen2snapshot",
                 "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2staticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2wormpolicy",
+                "value": "true"
               }
             ],
             "restrictions": []
@@ -25787,6 +26489,14 @@
               {
                 "name": "supportsadlsgen2snapshot",
                 "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2staticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2wormpolicy",
+                "value": "true"
               }
             ],
             "restrictions": []
@@ -25893,6 +26603,14 @@
               },
               {
                 "name": "supportsadlsgen2snapshot",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2staticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2wormpolicy",
                 "value": "true"
               }
             ],
@@ -25989,6 +26707,14 @@
               {
                 "name": "supportsadlsgen2snapshot",
                 "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2staticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2wormpolicy",
+                "value": "true"
               }
             ],
             "restrictions": []
@@ -26084,6 +26810,14 @@
               {
                 "name": "supportsadlsgen2snapshot",
                 "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2staticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2wormpolicy",
+                "value": "true"
               }
             ],
             "restrictions": []
@@ -26178,6 +26912,14 @@
               },
               {
                 "name": "supportsadlsgen2snapshot",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2staticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2wormpolicy",
                 "value": "true"
               }
             ],
@@ -26301,6 +27043,14 @@
               {
                 "name": "supportsadlsgen2snapshot",
                 "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2staticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportsadlsgen2wormpolicy",
+                "value": "true"
               }
             ],
             "restrictions": []
@@ -26421,6 +27171,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -26542,6 +27296,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -26585,6 +27343,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportscustomercontrolledfailover",
                 "value": "true"
               },
@@ -26625,6 +27387,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -27259,6 +28025,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -27302,6 +28072,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportsthreatdetection",
                 "value": "true"
               },
@@ -27338,6 +28112,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -27381,6 +28159,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -28035,6 +28817,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -28078,6 +28864,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportsthreatdetection",
                 "value": "true"
               },
@@ -28114,6 +28904,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -28157,6 +28951,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -28260,85 +29058,6 @@
           {
             "resourceType": "storageAccounts",
             "name": "Standard_GRS",
-            "tier": "Standard",
-            "kind": "StorageV2",
-            "locations": [
-              "australiacentral"
-            ],
-            "locationInfo": [
-              {
-                "location": "australiacentral",
-                "zones": [],
-                "zoneDetails": []
-              }
-            ],
-            "capabilities": [
-              {
-                "name": "supportsarchivepreview",
-                "value": "true"
-              },
-              {
-                "name": "supportschangenotification",
-                "value": "true"
-              },
-              {
-                "name": "supportsmanagementpolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileencryption",
-                "value": "true"
-              },
-              {
-                "name": "supportsnetworkacls",
-                "value": "true"
-              },
-              {
-                "name": "supportsstaticwebsite",
-                "value": "true"
-              },
-              {
-                "name": "supportshierarchicalnamespace",
-                "value": "true"
-              },
-              {
-                "name": "supportsazureblobfs",
-                "value": "true"
-              },
-              {
-                "name": "supportscompliancepolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportscustomercontrolledfailover",
-                "value": "true"
-              },
-              {
-                "name": "supportsthreatdetection",
-                "value": "true"
-              },
-              {
-                "name": "supportseventgridforadls",
-                "value": "true"
-              },
-              {
-                "name": "supportsPrivateEndpointConnections",
-                "value": "true"
-              },
-              {
-                "name": "supportsMultiProtocolAccess",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileactivedirectory",
-                "value": "true"
-              }
-            ],
-            "restrictions": []
-          },
-          {
-            "resourceType": "storageAccounts",
-            "name": "Standard_RAGRS",
             "tier": "Standard",
             "kind": "StorageV2",
             "locations": [
@@ -28417,6 +29136,85 @@
           },
           {
             "resourceType": "storageAccounts",
+            "name": "Standard_RAGRS",
+            "tier": "Standard",
+            "kind": "StorageV2",
+            "locations": [
+              "australiacentral"
+            ],
+            "locationInfo": [
+              {
+                "location": "australiacentral",
+                "zones": [],
+                "zoneDetails": []
+              }
+            ],
+            "capabilities": [
+              {
+                "name": "supportsarchivepreview",
+                "value": "true"
+              },
+              {
+                "name": "supportschangenotification",
+                "value": "true"
+              },
+              {
+                "name": "supportsmanagementpolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileencryption",
+                "value": "true"
+              },
+              {
+                "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportsstaticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportshierarchicalnamespace",
+                "value": "true"
+              },
+              {
+                "name": "supportsazureblobfs",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportscustomercontrolledfailover",
+                "value": "true"
+              },
+              {
+                "name": "supportsthreatdetection",
+                "value": "true"
+              },
+              {
+                "name": "supportseventgridforadls",
+                "value": "true"
+              },
+              {
+                "name": "supportsPrivateEndpointConnections",
+                "value": "true"
+              },
+              {
+                "name": "supportsMultiProtocolAccess",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileactivedirectory",
+                "value": "true"
+              }
+            ],
+            "restrictions": []
+          },
+          {
+            "resourceType": "storageAccounts",
             "name": "Standard_LRS",
             "tier": "Standard",
             "kind": "BlobStorage",
@@ -28727,6 +29525,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -28770,6 +29572,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportsthreatdetection",
                 "value": "true"
               },
@@ -28806,6 +29612,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -28849,6 +29659,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -28952,85 +29766,6 @@
           {
             "resourceType": "storageAccounts",
             "name": "Standard_GRS",
-            "tier": "Standard",
-            "kind": "StorageV2",
-            "locations": [
-              "australiacentral2"
-            ],
-            "locationInfo": [
-              {
-                "location": "australiacentral2",
-                "zones": [],
-                "zoneDetails": []
-              }
-            ],
-            "capabilities": [
-              {
-                "name": "supportsarchivepreview",
-                "value": "true"
-              },
-              {
-                "name": "supportschangenotification",
-                "value": "true"
-              },
-              {
-                "name": "supportsmanagementpolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileencryption",
-                "value": "true"
-              },
-              {
-                "name": "supportsnetworkacls",
-                "value": "true"
-              },
-              {
-                "name": "supportsstaticwebsite",
-                "value": "true"
-              },
-              {
-                "name": "supportshierarchicalnamespace",
-                "value": "true"
-              },
-              {
-                "name": "supportsazureblobfs",
-                "value": "true"
-              },
-              {
-                "name": "supportscompliancepolicy",
-                "value": "true"
-              },
-              {
-                "name": "supportscustomercontrolledfailover",
-                "value": "true"
-              },
-              {
-                "name": "supportsthreatdetection",
-                "value": "true"
-              },
-              {
-                "name": "supportseventgridforadls",
-                "value": "true"
-              },
-              {
-                "name": "supportsPrivateEndpointConnections",
-                "value": "true"
-              },
-              {
-                "name": "supportsMultiProtocolAccess",
-                "value": "true"
-              },
-              {
-                "name": "supportsfileactivedirectory",
-                "value": "true"
-              }
-            ],
-            "restrictions": []
-          },
-          {
-            "resourceType": "storageAccounts",
-            "name": "Standard_RAGRS",
             "tier": "Standard",
             "kind": "StorageV2",
             "locations": [
@@ -29109,6 +29844,85 @@
           },
           {
             "resourceType": "storageAccounts",
+            "name": "Standard_RAGRS",
+            "tier": "Standard",
+            "kind": "StorageV2",
+            "locations": [
+              "australiacentral2"
+            ],
+            "locationInfo": [
+              {
+                "location": "australiacentral2",
+                "zones": [],
+                "zoneDetails": []
+              }
+            ],
+            "capabilities": [
+              {
+                "name": "supportsarchivepreview",
+                "value": "true"
+              },
+              {
+                "name": "supportschangenotification",
+                "value": "true"
+              },
+              {
+                "name": "supportsmanagementpolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileencryption",
+                "value": "true"
+              },
+              {
+                "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportsstaticwebsite",
+                "value": "true"
+              },
+              {
+                "name": "supportshierarchicalnamespace",
+                "value": "true"
+              },
+              {
+                "name": "supportsazureblobfs",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
+                "name": "supportscustomercontrolledfailover",
+                "value": "true"
+              },
+              {
+                "name": "supportsthreatdetection",
+                "value": "true"
+              },
+              {
+                "name": "supportseventgridforadls",
+                "value": "true"
+              },
+              {
+                "name": "supportsPrivateEndpointConnections",
+                "value": "true"
+              },
+              {
+                "name": "supportsMultiProtocolAccess",
+                "value": "true"
+              },
+              {
+                "name": "supportsfileactivedirectory",
+                "value": "true"
+              }
+            ],
+            "restrictions": []
+          },
+          {
+            "resourceType": "storageAccounts",
             "name": "Standard_LRS",
             "tier": "Standard",
             "kind": "BlobStorage",
@@ -29407,6 +30221,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -29446,6 +30264,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportseventgridforadls",
                 "value": "true"
               },
@@ -29478,6 +30300,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -29517,6 +30343,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -29999,6 +30829,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -30105,6 +30939,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -30144,6 +30982,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportscustomercontrolledfailover",
                 "value": "true"
               },
@@ -30180,6 +31022,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -30667,6 +31513,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -30713,6 +31563,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportsthreatdetection",
                 "value": "true"
               },
@@ -30749,6 +31603,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -30792,6 +31650,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -31307,6 +32169,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -31353,6 +32219,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportsthreatdetection",
                 "value": "true"
               },
@@ -31389,6 +32259,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -31432,6 +32306,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -31947,6 +32825,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -31993,6 +32875,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportsthreatdetection",
                 "value": "true"
               },
@@ -32029,6 +32915,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -32072,6 +32962,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -32559,6 +33453,10 @@
                 "value": "true"
               },
               {
+                "name": "supportsRoutingPreferences",
+                "value": "true"
+              },
+              {
                 "name": "supportsfileactivedirectory",
                 "value": "true"
               }
@@ -32587,6 +33485,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -32633,6 +33535,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportsthreatdetection",
                 "value": "true"
               },
@@ -32669,6 +33575,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -32712,6 +33622,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -32798,6 +33712,10 @@
                 "value": "true"
               },
               {
+                "name": "supportsRoutingPreferences",
+                "value": "true"
+              },
+              {
                 "name": "supportsfileactivedirectory",
                 "value": "true"
               }
@@ -32869,6 +33787,10 @@
                 "value": "true"
               },
               {
+                "name": "supportsRoutingPreferences",
+                "value": "true"
+              },
+              {
                 "name": "supportsfileactivedirectory",
                 "value": "true"
               }
@@ -32937,6 +33859,10 @@
               },
               {
                 "name": "supportsMultiProtocolAccess",
+                "value": "true"
+              },
+              {
+                "name": "supportsRoutingPreferences",
                 "value": "true"
               },
               {
@@ -32999,6 +33925,10 @@
                 "value": "true"
               },
               {
+                "name": "supportsRoutingPreferences",
+                "value": "true"
+              },
+              {
                 "name": "supportsfileactivedirectory",
                 "value": "true"
               }
@@ -33062,6 +33992,10 @@
                 "value": "true"
               },
               {
+                "name": "supportsRoutingPreferences",
+                "value": "true"
+              },
+              {
                 "name": "supportsfileactivedirectory",
                 "value": "true"
               }
@@ -33122,6 +34056,10 @@
               },
               {
                 "name": "supportsMultiProtocolAccess",
+                "value": "true"
+              },
+              {
+                "name": "supportsRoutingPreferences",
                 "value": "true"
               },
               {
@@ -33199,6 +34137,10 @@
                 "value": "true"
               },
               {
+                "name": "supportsRoutingPreferences",
+                "value": "true"
+              },
+              {
                 "name": "supportsfileactivedirectory",
                 "value": "true"
               }
@@ -33227,6 +34169,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -33273,6 +34219,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportsthreatdetection",
                 "value": "true"
               },
@@ -33309,6 +34259,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -33352,6 +34306,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -33438,6 +34396,10 @@
                 "value": "true"
               },
               {
+                "name": "supportsRoutingPreferences",
+                "value": "true"
+              },
+              {
                 "name": "supportsfileactivedirectory",
                 "value": "true"
               }
@@ -33509,6 +34471,10 @@
                 "value": "true"
               },
               {
+                "name": "supportsRoutingPreferences",
+                "value": "true"
+              },
+              {
                 "name": "supportsfileactivedirectory",
                 "value": "true"
               }
@@ -33577,6 +34543,10 @@
               },
               {
                 "name": "supportsMultiProtocolAccess",
+                "value": "true"
+              },
+              {
+                "name": "supportsRoutingPreferences",
                 "value": "true"
               },
               {
@@ -33639,6 +34609,10 @@
                 "value": "true"
               },
               {
+                "name": "supportsRoutingPreferences",
+                "value": "true"
+              },
+              {
                 "name": "supportsfileactivedirectory",
                 "value": "true"
               }
@@ -33702,6 +34676,10 @@
                 "value": "true"
               },
               {
+                "name": "supportsRoutingPreferences",
+                "value": "true"
+              },
+              {
                 "name": "supportsfileactivedirectory",
                 "value": "true"
               }
@@ -33762,6 +34740,10 @@
               },
               {
                 "name": "supportsMultiProtocolAccess",
+                "value": "true"
+              },
+              {
+                "name": "supportsRoutingPreferences",
                 "value": "true"
               },
               {
@@ -33870,6 +34852,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -33913,6 +34899,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportsthreatdetection",
                 "value": "true"
               },
@@ -33949,6 +34939,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -33992,6 +34986,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -34502,6 +35500,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -34541,6 +35543,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportseventgridforadls",
                 "value": "true"
               },
@@ -34573,6 +35579,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -34612,6 +35622,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -35094,6 +36108,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportslargefileshares",
                 "value": "true"
               },
@@ -35133,6 +36151,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportseventgridforadls",
                 "value": "true"
               },
@@ -35165,6 +36187,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -35204,6 +36230,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -35686,6 +36716,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportseventgridforadls",
                 "value": "true"
               },
@@ -35721,6 +36755,10 @@
                 "value": "true"
               },
               {
+                "name": "supportscompliancepolicy",
+                "value": "true"
+              },
+              {
                 "name": "supportseventgridforadls",
                 "value": "true"
               },
@@ -35753,6 +36791,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -35792,6 +36834,10 @@
               },
               {
                 "name": "supportsnetworkacls",
+                "value": "true"
+              },
+              {
+                "name": "supportscompliancepolicy",
                 "value": "true"
               },
               {
@@ -36185,7 +37231,6 @@
   ],
   "Variables": {
     "RandomSeed": "167671665",
-    "SUBSCRIPTION_ID": "45b60d85-fd72-427a-a708-f994d26e593e",
-    "TENANT_ID": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+    "SUBSCRIPTION_ID": "45b60d85-fd72-427a-a708-f994d26e593e"
   }
 }
