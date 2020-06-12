@@ -31,10 +31,10 @@ namespace Azure.ResourceManager.Compute.Tests
         protected const string TestPrefix = "crptestar";
         protected const string PLACEHOLDER = "[PLACEHOLDEr1]";
         protected const string ComputerName = "Test";
-        protected ResourcesManagementClient m_ResourcesClient;
-        protected ComputeManagementClient m_CrpClient;
+        //protected ResourcesManagementClient m_ResourcesClient;
+        //protected ComputeManagementClient m_CrpClient;
         //protected StorageManagementClient m_SrpClient;
-        protected NetworkManagementClient m_NrpClient;
+        //protected NetworkManagementClient m_NrpClient;
 
         //public static string DefaultLocation = "SoutheastAsia";
         protected bool m_initialized = false;
@@ -84,21 +84,21 @@ namespace Azure.ResourceManager.Compute.Tests
         {
             if (useWindowsImage)
             {
-                if (m_windowsImageReference == null)
-                {
+                //if (m_windowsImageReference == null)
+                //{
                     Trace.TraceInformation("Querying available Windows Server image from PIR...");
                     m_windowsImageReference = await FindVMImage("MicrosoftWindowsServer", "WindowsServer", "2012-R2-Datacenter");
-                }
+                //}
                 return m_windowsImageReference;
             }
 
-            if (m_linuxImageReference == null)
-            {
+            //if (m_linuxImageReference == null)
+            //{
                 Trace.TraceInformation("Querying available Ubuntu image from PIR...");
                 // If this sku disappears, query latest with
                 // GET https://management.azure.com/subscriptions/<subId>/providers/Microsoft.Compute/locations/SoutheastAsia/publishers/Canonical/artifacttypes/vmimage/offers/UbuntuServer/skus?api-version=2015-06-15
                 m_linuxImageReference = await FindVMImage("Canonical", "UbuntuServer", "19.04");
-            }
+            //}
             return m_linuxImageReference;
         }
 
@@ -787,7 +787,7 @@ namespace Azure.ResourceManager.Compute.Tests
 
         protected async Task<string> CreateProximityPlacementGroup(string rgName, string ppgName)
         {
-            return await CreateProximityPlacementGroup(m_subId, rgName, ppgName, m_CrpClient, m_location);
+            return await CreateProximityPlacementGroup(m_subId, rgName, ppgName, ComputeManagementClient, m_location);
         }
 
         protected VirtualMachine CreateDefaultVMInput(string rgName, string storageAccountName, ImageReference imageRef, string asetId, string nicId, bool hasManagedDisks = false,

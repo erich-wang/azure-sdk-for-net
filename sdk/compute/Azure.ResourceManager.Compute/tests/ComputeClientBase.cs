@@ -62,6 +62,7 @@ namespace Azure.ResourceManager
         public LoadBalancersClient LoadBalancersClient { get; set; }
         public NetworkSecurityGroupsClient NetworkSecurityGroupsClient { get; set; }
         public PublicIPPrefixesClient PublicIPPrefixesClient { get; set; }
+        public ComputeManagementClient ComputeManagementClient { get; set; }
         public string DefaultLocation { get; set; }
         protected ComputeClientBase(bool isAsync)
             : base(isAsync)
@@ -76,7 +77,7 @@ namespace Azure.ResourceManager
             DeploymentsClient = resourceManagementClient.GetDeploymentsClient();
             TagsClient = resourceManagementClient.GetTagsClient();
             ResourcesClient = resourceManagementClient.GetResourcesClient();
-            var ComputeManagementClient = GetComputeManagementClient();
+            ComputeManagementClient = GetComputeManagementClient();
             VirtualMachineImagesClient = ComputeManagementClient.GetVirtualMachineImagesClient();
             AvailabilitySetsClient = ComputeManagementClient.GetAvailabilitySetsClient();
             ContainerServicesClient = ComputeManagementClient.GetContainerServicesClient();
