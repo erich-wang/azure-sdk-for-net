@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 using Azure.Core;
 using Azure.Core.TestFramework;
-using Azure.Management.Resources;
+using Azure.ResourceManager.Resources;
 
 namespace Azure.ResourceManager.TestFramework
 {
