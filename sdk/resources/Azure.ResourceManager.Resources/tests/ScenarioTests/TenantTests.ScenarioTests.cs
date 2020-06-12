@@ -10,7 +10,6 @@ using NUnit.Framework;
 
 namespace ResourceGroups.Tests
 {
-    [RunFrequency(RunTestFrequency.Manually)]
     public class LiveTenantTests : ResourceOperationsTestsBase
     {
         public LiveTenantTests(bool isAsync)

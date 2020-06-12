@@ -10,6 +10,7 @@ using Azure.ResourceManager.TestFramework;
 
 namespace Azure.ResourceManager.Resources.Tests
 {
+    [RunFrequency(RunTestFrequency.Manually)]
     public abstract class ResourceOperationsTestsBase : ManagementRecordedTestBase<ResourceManagementTestEnvironment>
     {
         public static TimeSpan ZeroPollingInterval { get; } = TimeSpan.FromSeconds(0);

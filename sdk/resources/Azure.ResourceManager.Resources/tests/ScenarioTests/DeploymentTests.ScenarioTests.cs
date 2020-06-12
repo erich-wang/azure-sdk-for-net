@@ -18,7 +18,6 @@ using NUnit.Framework;
 
 namespace ResourceGroups.Tests
 {
-    [RunFrequency(RunTestFrequency.Manually)]
     public class LiveDeploymentTests : ResourceOperationsTestsBase
     {
         public LiveDeploymentTests(bool isAsync)

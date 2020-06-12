@@ -15,7 +15,6 @@ using NUnit.Framework;
 
 namespace Policy.Tests
 {
-    [RunFrequency(RunTestFrequency.Manually)]
     public class LivePolicyTests : ResourceOperationsTestsBase
     {
         public LivePolicyTests(bool isAsync)

@@ -19,7 +19,6 @@ using NUnit.Framework;
 
 namespace ResourceGroups.Tests
 {
-    [RunFrequency(RunTestFrequency.Manually)]
     public class InMemoryResourceTests : ResourceOperationsTestsBase
     {
         public InMemoryResourceTests(bool isAsync) : base(isAsync)
