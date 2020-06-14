@@ -121,7 +121,8 @@ namespace Azure.ResourceManager.Compute.Tests
             bool createOSDisk = !hasManagedDisks || osDiskSizeInGB != null;
 
             string vmSize = zones == null ? VirtualMachineSizeTypes.StandardA0.ToString() : VirtualMachineSizeTypes.StandardA1V2.ToString();
-
+            var test1 = Recording.GenerateAssetName("vmsstestnetconfig");
+            var test2 = Recording.GenerateAssetName("vmsstestnetconfig");
             var vmScaleSet = new VirtualMachineScaleSet(m_location)
             {
                 Location = m_location,
@@ -188,12 +189,12 @@ namespace Azure.ResourceManager.Compute.Tests
                         },
                         NetworkInterfaceConfigurations = new List<VirtualMachineScaleSetNetworkConfiguration>()
                         {
-                            new VirtualMachineScaleSetNetworkConfiguration(Recording.GenerateAssetName("vmsstestnetconfig"))
+                            new VirtualMachineScaleSetNetworkConfiguration(test1)
                             {
                                 Primary = true,
                                 IpConfigurations = new List<VirtualMachineScaleSetIPConfiguration>
                                 {
-                                    new VirtualMachineScaleSetIPConfiguration(Recording.GenerateAssetName("vmsstestnetconfig"))
+                                    new VirtualMachineScaleSetIPConfiguration(test2)
                                     {
                                         Subnet = new Azure.ResourceManager.Compute.Models.ApiEntityReference()
                                         {
@@ -362,7 +363,7 @@ namespace Azure.ResourceManager.Compute.Tests
 
             var subnetResponse = subnet ?? await CreateVNET(rgName);
 
-            var nicResponse = CreateNIC(
+            var nicResponse = await CreateNIC(
                 rgName,
                 subnetResponse,
                 getPublicIpAddressResponse != null ? getPublicIpAddressResponse.IpAddress : null);

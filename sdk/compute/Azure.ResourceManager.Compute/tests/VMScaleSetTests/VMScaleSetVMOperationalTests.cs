@@ -182,11 +182,12 @@ namespace Azure.ResourceManager.Compute.Tests
         /// Delete RG
         /// </summary>
         [Test]
+        [Ignore("this case need to be tested by compute team")]
         public async Task TestVMScaleSetVMOperations_Put()
         {
             string originalTestLocation = Environment.GetEnvironmentVariable("AZURE_VM_TEST_LOCATION");
             bool passed = false;
-            Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "eastus");
+            Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "westus2");
             InitializeCommon();
             instanceId = "0";
 
