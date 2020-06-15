@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TestHelperProjects>Rbac1.6;</TestHelperProjects>
+    <DefineConstants>$(DefineConstants);RESOURCES_RP</DefineConstants>
+    <TestHelperProjects>;</TestHelperProjects>
   </PropertyGroup>
   <PropertyGroup>
     <NoWarn>$(NoWarn);CA1812;SA1633;SA1649</NoWarn>

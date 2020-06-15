@@ -2,8 +2,6 @@
 // Licensed under the MIT License.
 
 using System;
-using System.Threading.Tasks;
-using Azure.Core;
 using Azure.Core.TestFramework;
 using Azure.ResourceManager.Resource.Tests;
 using Azure.ResourceManager.TestFramework;
@@ -36,7 +34,7 @@ namespace Azure.ResourceManager.Resources.Tests
 
         protected void Initialize()
         {
-            ResourcesManagementClient = GetResourcesManagementClient();
+            ResourcesManagementClient = GetResourceManagementClient();
             ResourceGroupsClient = ResourcesManagementClient.GetResourceGroupsClient();
             DeploymentsClient = ResourcesManagementClient.GetDeploymentsClient();
             DeploymentScriptsClient = ResourcesManagementClient.GetDeploymentScriptsClient();
@@ -50,18 +48,6 @@ namespace Azure.ResourceManager.Resources.Tests
             PolicyAssignmentsClient = ResourcesManagementClient.GetPolicyAssignmentsClient();
             PolicyDefinitionsClient = ResourcesManagementClient.GetPolicyDefinitionsClient();
             PolicySetDefinitionsClient = ResourcesManagementClient.GetPolicySetDefinitionsClient();
-        }
-
-        internal ResourcesManagementClient GetResourcesManagementClient()
-        {
-            var options = Recording.InstrumentClientOptions(new ResourcesManagementClientOptions());
-            CleanupPolicy = new ResourceGroupCleanupPolicy();
-            options.AddPolicy(CleanupPolicy, HttpPipelinePosition.PerCall);
-
-            return CreateClient<ResourcesManagementClient>(
-                TestEnvironment.SubscriptionId,
-                TestEnvironment.Credential,
-                options);
         }
     }
 }

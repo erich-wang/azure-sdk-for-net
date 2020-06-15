@@ -362,7 +362,7 @@ namespace ResourceGroups.Tests
                     'outputs': {}
                 }".Replace("'", "\"");
                 var mockResponse = new MockResponse((int)HttpStatusCode.OK);
-                
+
                 JsonElement jsonParameter = JsonSerializer.Deserialize<JsonElement>(item);
                 if (!jsonParameter.TryGetProperty("parameters", out JsonElement parameter))
                 {
