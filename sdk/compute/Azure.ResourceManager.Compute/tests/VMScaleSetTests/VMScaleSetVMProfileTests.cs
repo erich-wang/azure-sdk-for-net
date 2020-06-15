@@ -50,7 +50,7 @@ namespace Azure.ResourceManager.Compute.Tests.VMScaleSetTests
                 VirtualMachineScaleSet vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
                 inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
 
-                var response = (await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName)).Value;
+                var response = (await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmssName)).Value;
 
                 Assert.AreEqual("Windows_Server", response.VirtualMachineProfile.LicenseType);
             }
@@ -98,7 +98,7 @@ namespace Azure.ResourceManager.Compute.Tests.VMScaleSetTests
                 );
             VirtualMachineScaleSet getResponse = getTwoVirtualMachineScaleSet.Item1;
             inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
-            var response = (await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName)).Value;
+            var response = (await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmssName)).Value;
 
             Assert.True(response.VirtualMachineProfile.DiagnosticsProfile.BootDiagnostics.Enabled.GetValueOrDefault(true));
         }

@@ -54,14 +54,14 @@ namespace Azure.ResourceManager.Compute.Tests.DiskRPTests
                 disk.DiskMBpsReadOnly = 8;
                 disk.MaxShares = 2;
             }
-            await ResourceGroupsClient.CreateOrUpdateAsync(rgName, new ResourceGroup(location));
+            await ResourceGroupsOperations.CreateOrUpdateAsync(rgName, new ResourceGroup(location));
 
             // Put
-            Disk diskOut = await WaitForCompletionAsync(await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk));
+            Disk diskOut = await WaitForCompletionAsync(await DisksOperations.StartCreateOrUpdateAsync(rgName, diskName, disk));
             Validate(disk, diskOut, location);
 
             // Get
-            diskOut = (await DisksClient.GetAsync(rgName, diskName)).Value;
+            diskOut = (await DisksOperations.GetAsync(rgName, diskName)).Value;
             Validate(disk, diskOut, location);
 
             // Patch
@@ -77,7 +77,7 @@ namespace Azure.ResourceManager.Compute.Tests.DiskRPTests
                 updatedisk.MaxShares = 3;
             }
             updatedisk.Sku = new DiskSku(DiskStorageAccountTypes.UltraSSDLRS, "Ultra");
-            diskOut = await WaitForCompletionAsync(await DisksClient.StartUpdateAsync(rgName, diskName, updatedisk));
+            diskOut = await WaitForCompletionAsync(await DisksOperations.StartUpdateAsync(rgName, diskName, updatedisk));
             Validate(disk, diskOut, location, update: true);
             Assert.AreEqual(updatedisk.DiskIopsReadWrite, diskOut.DiskIopsReadWrite);
             Assert.AreEqual(updatedisk.DiskMBpsReadWrite, diskOut.DiskMBpsReadWrite);
@@ -89,7 +89,7 @@ namespace Azure.ResourceManager.Compute.Tests.DiskRPTests
             }
 
             // Get
-            diskOut = await DisksClient.GetAsync(rgName, diskName);
+            diskOut = await DisksOperations.GetAsync(rgName, diskName);
             Validate(disk, diskOut, location, update: true);
             Assert.AreEqual(updatedisk.DiskIopsReadWrite, diskOut.DiskIopsReadWrite);
             Assert.AreEqual(updatedisk.DiskMBpsReadWrite, diskOut.DiskMBpsReadWrite);
@@ -101,11 +101,11 @@ namespace Azure.ResourceManager.Compute.Tests.DiskRPTests
             }
 
             // Delete
-            await WaitForCompletionAsync(await DisksClient.StartDeleteAsync(rgName, diskName));
+            await WaitForCompletionAsync(await DisksOperations.StartDeleteAsync(rgName, diskName));
             try
             {
                 // Ensure it was really deleted
-                await DisksClient.GetAsync(rgName, diskName);
+                await DisksOperations.GetAsync(rgName, diskName);
                 Assert.False(true);
             }
             catch (Exception ex)

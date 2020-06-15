@@ -64,7 +64,7 @@ namespace Azure.ResourceManager.Compute.Tests
             var returnTwoVM = await CreateVM(rgName, asName, storageAccountOutput, imageRef, AddCertificateInfo);
             VirtualMachine vm1 = returnTwoVM.Item1;
             inputVM = returnTwoVM.Item2;
-            await WaitForCompletionAsync(await VirtualMachinesClient.StartDeleteAsync(rgName, inputVM.Name));
+            await WaitForCompletionAsync(await VirtualMachinesOperations.StartDeleteAsync(rgName, inputVM.Name));
         }
 
         private void SetCertificateInfo(VirtualMachine vm)

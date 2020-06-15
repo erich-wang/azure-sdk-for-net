@@ -34,7 +34,7 @@ namespace Azure.ResourceManager.Compute.Tests
         [Test]
         public async Task TestListSkus()
         {
-            var skus = ResourceSkusClient.ListAsync();
+            var skus = ResourceSkusOperations.ListAsync();
             var skusres = await skus.ToEnumerableAsync();
             Assert.True(skusres.Any(), "Assert that the array of skus has at least 1 member.");
             Assert.True(skusres.Any(sku => sku.ResourceType == "availabilitySets"), "Assert that the sku list at least contains" +

@@ -47,7 +47,7 @@ namespace Azure.ResourceManager.Compute.Tests
             string dhName = "DH-1";
             // Create a dedicated host group, then get the dedicated host group and validate that they match
             DedicatedHostGroup createdDHG = await CreateDedicatedHostGroup(rgName, dhgName);
-            DedicatedHostGroup returnedDHG = await DedicatedHostGroupsClient.GetAsync(rgName, dhgName);
+            DedicatedHostGroup returnedDHG = await DedicatedHostGroupsOperations.GetAsync(rgName, dhgName);
             ValidateDedicatedHostGroup(createdDHG, returnedDHG);
 
             // Update existing dedicated host group
@@ -57,16 +57,16 @@ namespace Azure.ResourceManager.Compute.Tests
             };
             createdDHG.Tags = updateDHGInput.Tags;
             updateDHGInput.PlatformFaultDomainCount = returnedDHG.PlatformFaultDomainCount; // There is a bug in PATCH.  PlatformFaultDomainCount is a required property now.
-            returnedDHG = await DedicatedHostGroupsClient.UpdateAsync(rgName, dhgName, updateDHGInput);
+            returnedDHG = await DedicatedHostGroupsOperations.UpdateAsync(rgName, dhgName, updateDHGInput);
             ValidateDedicatedHostGroup(createdDHG, returnedDHG);
 
             //List DedicatedHostGroups by subscription and by resourceGroup
-            var listDHGsResponse = DedicatedHostGroupsClient.ListByResourceGroupAsync(rgName);
+            var listDHGsResponse = DedicatedHostGroupsOperations.ListByResourceGroupAsync(rgName);
             var listDHGsResponseRes = await listDHGsResponse.ToEnumerableAsync();
             Assert.IsTrue(listDHGsResponseRes.Count() == 1);
             //Assert.Single(listDHGsResponse);
             ValidateDedicatedHostGroup(createdDHG, listDHGsResponseRes.First());
-            listDHGsResponse = DedicatedHostGroupsClient.ListBySubscriptionAsync();
+            listDHGsResponse = DedicatedHostGroupsOperations.ListBySubscriptionAsync();
             listDHGsResponseRes = await listDHGsResponse.ToEnumerableAsync();
             //There might be multiple dedicated host groups in the subscription, we only care about the one that we created.
             returnedDHG = listDHGsResponseRes.First(dhg => dhg.Id == createdDHG.Id);
@@ -75,18 +75,18 @@ namespace Azure.ResourceManager.Compute.Tests
 
             //Create DedicatedHost within the DedicatedHostGroup and validate
             var createdDH = await CreateDedicatedHost(rgName, dhgName, dhName);
-            var returnedDH = await DedicatedHostsClient.GetAsync(rgName, dhgName, dhName);
+            var returnedDH = await DedicatedHostsOperations.GetAsync(rgName, dhgName, dhName);
             ValidateDedicatedHost(createdDH, returnedDH);
 
             //List DedicatedHosts
-            var listDHsResponse = DedicatedHostsClient.ListByHostGroupAsync(rgName, dhgName);
+            var listDHsResponse = DedicatedHostsOperations.ListByHostGroupAsync(rgName, dhgName);
             var listDHsResponseRes = await listDHsResponse.ToEnumerableAsync();
             Assert.IsTrue(listDHsResponseRes.Count() == 1);
             ValidateDedicatedHost(createdDH, listDHsResponseRes.First());
 
             //Delete DedicatedHosts and DedicatedHostGroups
-            await WaitForCompletionAsync(await DedicatedHostsClient.StartDeleteAsync(rgName, dhgName, dhName));
-            await DedicatedHostGroupsClient.DeleteAsync(rgName, dhgName);
+            await WaitForCompletionAsync(await DedicatedHostsOperations.StartDeleteAsync(rgName, dhgName, dhName));
+            await DedicatedHostGroupsOperations.DeleteAsync(rgName, dhgName);
             WaitMinutes(1);
         }
 

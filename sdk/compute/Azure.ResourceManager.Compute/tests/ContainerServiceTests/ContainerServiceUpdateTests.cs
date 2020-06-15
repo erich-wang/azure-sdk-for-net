@@ -62,14 +62,14 @@ namespace Azure.ResourceManager.Compute.Tests
             containerService.AgentPoolProfiles[0].Count = 2;
             UpdateContainerService(rgName, csName, containerService);
 
-            containerService = await ContainerServicesClient.GetAsync(rgName, containerService.Name);
+            containerService = await ContainerServicesOperations.GetAsync(rgName, containerService.Name);
             ValidateContainerService(containerService, containerService);
 
-            var listRes = ContainerServicesClient.ListByResourceGroupAsync(rgName);
+            var listRes = ContainerServicesOperations.ListByResourceGroupAsync(rgName);
             var listResult = await listRes.ToEnumerableAsync();
             //Assert.Contains(listResult, a => a.Name == containerService.Name);
-            await WaitForCompletionAsync(await ContainerServicesClient.StartDeleteAsync(rgName, containerService.Name));
-            var listResultAfterDeletionResult = ContainerServicesClient.ListByResourceGroupAsync(rgName);
+            await WaitForCompletionAsync(await ContainerServicesOperations.StartDeleteAsync(rgName, containerService.Name));
+            var listResultAfterDeletionResult = ContainerServicesOperations.ListByResourceGroupAsync(rgName);
             var listResultAfterDeletion = await listResultAfterDeletionResult.ToEnumerableAsync();
             Assert.True(!listResultAfterDeletion.Any());
         }

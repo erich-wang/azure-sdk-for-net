@@ -237,7 +237,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 VirtualMachineScaleSet inputVMScaleSet;
                 var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
 
-                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
 
                 var getTwoVirtualMachineScaleSet = await CreateVMScaleSet_NoAsyncTracking(
                     rgName,
@@ -263,7 +263,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 };
                 await UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
 
-                getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName);
+                getResponse = await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmssName);
                 Assert.NotNull(getResponse.AutomaticRepairsPolicy);
                 ValidateVMScaleSet(inputVMScaleSet, getResponse, hasManagedDisks: true);
 
@@ -276,7 +276,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 };
                 await UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
 
-                getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName);
+                getResponse = await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmssName);
                 Assert.NotNull(getResponse.AutomaticRepairsPolicy);
                 ValidateVMScaleSet(inputVMScaleSet, getResponse, hasManagedDisks: true);
 
@@ -284,7 +284,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 inputVMScaleSet.AutomaticRepairsPolicy = null;
                 await UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
 
-                getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName);
+                getResponse = await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmssName);
                 ValidateVMScaleSet(inputVMScaleSet, getResponse, hasManagedDisks: true);
                 Assert.NotNull(getResponse.AutomaticRepairsPolicy);
                 Assert.True(getResponse.AutomaticRepairsPolicy.Enabled == true);
@@ -298,7 +298,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 };
                 await UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
 
-                getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName);
+                getResponse = await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmssName);
                 Assert.NotNull(getResponse.AutomaticRepairsPolicy);
                 Assert.True(getResponse.AutomaticRepairsPolicy.Enabled == false);
             }
@@ -330,7 +330,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 VirtualMachineScaleSet inputVMScaleSet;
                 var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
 
-                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
 
                 AutomaticRepairsPolicy automaticRepairsPolicy = new AutomaticRepairsPolicy()
                 {
@@ -353,7 +353,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 VirtualMachineScaleSet getResponse = getTwoVirtualMachineScaleSet.Item1;
                 inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
                 ValidateVMScaleSet(inputVMScaleSet, getResponse, hasManagedDisks: true);
-                var getInstanceViewResponse = (await VirtualMachineScaleSetsClient.GetInstanceViewAsync(rgName, vmssName)).Value;
+                var getInstanceViewResponse = (await VirtualMachineScaleSetsOperations.GetInstanceViewAsync(rgName, vmssName)).Value;
 
                 Assert.True(getInstanceViewResponse.OrchestrationServices.Count == 1);
                 Assert.AreEqual("Running", getInstanceViewResponse.OrchestrationServices[0].ServiceState.ToString());
@@ -363,17 +363,17 @@ namespace Azure.ResourceManager.Compute.Tests
                 ////TODO
                 OrchestrationServiceStateInput orchestrationServiceStateInput = new OrchestrationServiceStateInput(new OrchestrationServiceSummary().ServiceName, OrchestrationServiceStateAction.Suspend);
                 //OrchestrationServiceStateAction orchestrationServiceStateAction = new OrchestrationServiceStateAction();
-                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartSetOrchestrationServiceStateAsync(rgName, vmssName, orchestrationServiceStateInput));
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartSetOrchestrationServiceStateAsync(rgName, vmssName, orchestrationServiceStateInput));
 
-                getInstanceViewResponse = await VirtualMachineScaleSetsClient.GetInstanceViewAsync(rgName, vmssName);
+                getInstanceViewResponse = await VirtualMachineScaleSetsOperations.GetInstanceViewAsync(rgName, vmssName);
                 Assert.AreEqual(OrchestrationServiceState.Suspended.ToString(), getInstanceViewResponse.OrchestrationServices[0].ServiceState.ToString());
 
                 orchestrationServiceStateInput = new OrchestrationServiceStateInput(new OrchestrationServiceSummary().ServiceName, OrchestrationServiceStateAction.Resume);
-                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartSetOrchestrationServiceStateAsync(rgName, vmssName, orchestrationServiceStateInput));
-                getInstanceViewResponse = await VirtualMachineScaleSetsClient.GetInstanceViewAsync(rgName, vmssName);
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartSetOrchestrationServiceStateAsync(rgName, vmssName, orchestrationServiceStateInput));
+                getInstanceViewResponse = await VirtualMachineScaleSetsOperations.GetInstanceViewAsync(rgName, vmssName);
                 Assert.AreEqual(OrchestrationServiceState.Running.ToString(), getInstanceViewResponse.OrchestrationServices[0].ServiceState.ToString());
 
-                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmssName));
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartDeleteAsync(rgName, vmssName));
             }
             finally
             {
@@ -403,7 +403,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 }
             };
             var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
             string ppgId = null;
             string ppgName = null;
             if (isPpgScenario)
@@ -450,43 +450,43 @@ namespace Azure.ResourceManager.Compute.Tests
 
             ValidateVMScaleSet(inputVMScaleSet, getResponse, hasManagedDisks, ppgId: ppgId);
 
-            var getInstanceViewResponse = await VirtualMachineScaleSetsClient.GetInstanceViewAsync(rgName, vmssName);
+            var getInstanceViewResponse = await VirtualMachineScaleSetsOperations.GetInstanceViewAsync(rgName, vmssName);
             Assert.NotNull(getInstanceViewResponse);
             ValidateVMScaleSetInstanceView(inputVMScaleSet, getInstanceViewResponse);
 
             if (isPpgScenario)
             {
-                ProximityPlacementGroup outProximityPlacementGroup = await ProximityPlacementGroupsClient.GetAsync(rgName, ppgName);
+                ProximityPlacementGroup outProximityPlacementGroup = await ProximityPlacementGroupsOperations.GetAsync(rgName, ppgName);
                 Assert.AreEqual(1, outProximityPlacementGroup.VirtualMachineScaleSets.Count);
                 string expectedVmssReferenceId = Helpers.GetVMScaleSetReferenceId(m_subId, rgName, vmssName);
                 Assert.AreEqual(expectedVmssReferenceId.ToLower(), outProximityPlacementGroup.VirtualMachineScaleSets.First().Id.ToLower());
             }
 
-            var listResponse = await (VirtualMachineScaleSetsClient.ListAsync(rgName)).ToEnumerableAsync();
+            var listResponse = await (VirtualMachineScaleSetsOperations.ListAsync(rgName)).ToEnumerableAsync();
             ValidateVMScaleSet(inputVMScaleSet, listResponse.FirstOrDefault(x => x.Name == vmssName), hasManagedDisks);
 
-            var listSkusResponse = await (VirtualMachineScaleSetsClient.ListSkusAsync(rgName, vmssName)).ToEnumerableAsync();
+            var listSkusResponse = await (VirtualMachineScaleSetsOperations.ListSkusAsync(rgName, vmssName)).ToEnumerableAsync();
             Assert.NotNull(listSkusResponse);
             Assert.False(listSkusResponse.Count() == 0);
 
             if (zones != null)
             {
                 var query = "properties/latestModelApplied eq true";
-                var listVMsResponse = await (VirtualMachineScaleSetVMsClient.ListAsync(rgName, vmssName, query)).ToEnumerableAsync();
+                var listVMsResponse = await (VirtualMachineScaleSetVMsOperations.ListAsync(rgName, vmssName, query)).ToEnumerableAsync();
                 Assert.False(listVMsResponse == null, "VMScaleSetVMs not returned");
                 Assert.True(listVMsResponse.Count() == inputVMScaleSet.Sku.Capacity);
 
                 foreach (var vmScaleSetVM in listVMsResponse)
                 {
                     string instanceId = vmScaleSetVM.InstanceId;
-                    var getVMResponse = await VirtualMachineScaleSetVMsClient.GetAsync(rgName, vmssName, instanceId);
+                    var getVMResponse = await VirtualMachineScaleSetVMsOperations.GetAsync(rgName, vmssName, instanceId);
                     ValidateVMScaleSetVM(inputVMScaleSet, instanceId, getVMResponse, hasManagedDisks);
                 }
             }
 
             vmScaleSetValidator?.Invoke(getResponse);
 
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmssName));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartDeleteAsync(rgName, vmssName));
         }
     }
 }

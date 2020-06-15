@@ -41,17 +41,17 @@ namespace Azure.ResourceManager.Compute.Tests.DiskRPTests
             Disk disk = await GenerateDefaultDisk(DiskCreateOption.Empty.ToString(), rgName, 10);
             disk.EncryptionSettingsCollection = GetDiskEncryptionSettings(testVaultId, encryptionKeyUri, secretUri, encryptionSettingsVersion: encryptionSettingsVersion);
             disk.Location = DiskRPLocation;
-            await ResourceGroupsClient.CreateOrUpdateAsync(rgName, new ResourceGroup(DiskRPLocation));
+            await ResourceGroupsOperations.CreateOrUpdateAsync(rgName, new ResourceGroup(DiskRPLocation));
             //put disk
-            await WaitForCompletionAsync((await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk)));
-            Disk diskOut = await DisksClient.GetAsync(rgName, diskName);
+            await WaitForCompletionAsync((await DisksOperations.StartCreateOrUpdateAsync(rgName, diskName, disk)));
+            Disk diskOut = await DisksOperations.GetAsync(rgName, diskName);
             Validate(disk, diskOut, disk.Location);
             Assert.AreEqual(encryptionSettingsVersion, diskOut.EncryptionSettingsCollection.EncryptionSettingsVersion);
             Assert.AreEqual(disk.EncryptionSettingsCollection.EncryptionSettings.First().DiskEncryptionKey.SecretUrl, diskOut.EncryptionSettingsCollection.EncryptionSettings.First().DiskEncryptionKey.SecretUrl);
             Assert.AreEqual(disk.EncryptionSettingsCollection.EncryptionSettings.First().DiskEncryptionKey.SourceVault.Id, diskOut.EncryptionSettingsCollection.EncryptionSettings.First().DiskEncryptionKey.SourceVault.Id);
             Assert.AreEqual(disk.EncryptionSettingsCollection.EncryptionSettings.First().KeyEncryptionKey.KeyUrl, diskOut.EncryptionSettingsCollection.EncryptionSettings.First().KeyEncryptionKey.KeyUrl);
             Assert.AreEqual(disk.EncryptionSettingsCollection.EncryptionSettings.First().KeyEncryptionKey.SourceVault.Id, diskOut.EncryptionSettingsCollection.EncryptionSettings.First().KeyEncryptionKey.SourceVault.Id);
-            await WaitForCompletionAsync(await DisksClient.StartDeleteAsync(rgName, diskName));
+            await WaitForCompletionAsync(await DisksOperations.StartDeleteAsync(rgName, diskName));
         }
 
         [Test]
@@ -69,16 +69,16 @@ namespace Azure.ResourceManager.Compute.Tests.DiskRPTests
             disk.Location = DiskRPLocation;
             try
             {
-                await ResourceGroupsClient.CreateOrUpdateAsync(rgName,
+                await ResourceGroupsOperations.CreateOrUpdateAsync(rgName,
                     new ResourceGroup(DiskRPLocation));
-                await WaitForCompletionAsync((await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk)));
-                Disk diskOut = await DisksClient.GetAsync(rgName, diskName);
+                await WaitForCompletionAsync((await DisksOperations.StartCreateOrUpdateAsync(rgName, diskName, disk)));
+                Disk diskOut = await DisksOperations.GetAsync(rgName, diskName);
                 Validate(disk, diskOut, disk.Location);
                 Assert.AreEqual(disk.EncryptionSettingsCollection.EncryptionSettings.First().DiskEncryptionKey.SecretUrl, diskOut.EncryptionSettingsCollection.EncryptionSettings.First().DiskEncryptionKey.SecretUrl);
                 Assert.AreEqual(disk.EncryptionSettingsCollection.EncryptionSettings.First().DiskEncryptionKey.SourceVault.Id, diskOut.EncryptionSettingsCollection.EncryptionSettings.First().DiskEncryptionKey.SourceVault.Id);
                 Assert.AreEqual(disk.EncryptionSettingsCollection.EncryptionSettings.First().KeyEncryptionKey.KeyUrl, diskOut.EncryptionSettingsCollection.EncryptionSettings.First().KeyEncryptionKey.KeyUrl);
                 Assert.AreEqual(disk.EncryptionSettingsCollection.EncryptionSettings.First().KeyEncryptionKey.SourceVault.Id, diskOut.EncryptionSettingsCollection.EncryptionSettings.First().KeyEncryptionKey.SourceVault.Id);
-                await WaitForCompletionAsync(await DisksClient.StartDeleteAsync(rgName, diskName));
+                await WaitForCompletionAsync(await DisksOperations.StartDeleteAsync(rgName, diskName));
             }
             catch (Exception cex)
             {

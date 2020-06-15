@@ -29,13 +29,13 @@ namespace Azure.ResourceManager.Compute.Tests.DiskRPTests
             var diskName = Recording.GenerateAssetName(DiskNamePrefix);
             Disk disk = await GenerateDefaultDisk(DiskCreateOption.Upload.ToString(), rgName, 32767);
             disk.Location = DiskRPLocation;
-            await ResourceGroupsClient.CreateOrUpdateAsync(rgName, new ResourceGroup(DiskRPLocation));
+            await ResourceGroupsOperations.CreateOrUpdateAsync(rgName, new ResourceGroup(DiskRPLocation));
             //put disk
-            await WaitForCompletionAsync(await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk));
-            Disk diskOut = await DisksClient.GetAsync(rgName, diskName);
+            await WaitForCompletionAsync(await DisksOperations.StartCreateOrUpdateAsync(rgName, diskName, disk));
+            Disk diskOut = await DisksOperations.GetAsync(rgName, diskName);
             Validate(disk, diskOut, disk.Location);
             Assert.AreEqual(disk.CreationData.CreateOption, diskOut.CreationData.CreateOption);
-            await WaitForCompletionAsync(await DisksClient.StartDeleteAsync(rgName, diskName));
+            await WaitForCompletionAsync(await DisksOperations.StartDeleteAsync(rgName, diskName));
         }
 
         /// <summary>
@@ -51,14 +51,14 @@ namespace Azure.ResourceManager.Compute.Tests.DiskRPTests
             Disk disk = GenerateBaseDisk(DiskCreateOption.FromImage.ToString());
             disk.Location = DiskRPLocation;
             disk.CreationData.GalleryImageReference = new ImageDiskReference("/subscriptions/0296790d-427c-48ca-b204-8b729bbd8670/resourceGroups/swaggertests/providers/Microsoft.Compute/galleries/swaggergallery/images/lunexample2/versions/1.0.0", 1);
-            await ResourceGroupsClient.CreateOrUpdateAsync(rgName, new ResourceGroup(DiskRPLocation));
+            await ResourceGroupsOperations.CreateOrUpdateAsync(rgName, new ResourceGroup(DiskRPLocation));
             //put disk
-            await WaitForCompletionAsync(await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk));
-            Disk diskOut = await DisksClient.GetAsync(rgName, diskName);
+            await WaitForCompletionAsync(await DisksOperations.StartCreateOrUpdateAsync(rgName, diskName, disk));
+            Disk diskOut = await DisksOperations.GetAsync(rgName, diskName);
 
             Validate(disk, diskOut, disk.Location);
             Assert.AreEqual(disk.CreationData.CreateOption, diskOut.CreationData.CreateOption);
-            await WaitForCompletionAsync(await DisksClient.StartDeleteAsync(rgName, diskName));
+            await WaitForCompletionAsync(await DisksOperations.StartDeleteAsync(rgName, diskName));
         }
     }
 }

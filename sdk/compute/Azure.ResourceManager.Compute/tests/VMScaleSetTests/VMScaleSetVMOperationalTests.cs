@@ -93,7 +93,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 createWithManagedDisks: hasManagedDisks);
             VirtualMachineScaleSet vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
             inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
-            var getResponse = (await VirtualMachineScaleSetVMsClient.GetAsync(rgName, vmScaleSet.Name, instanceId)).Value;
+            var getResponse = (await VirtualMachineScaleSetVMsOperations.GetAsync(rgName, vmScaleSet.Name, instanceId)).Value;
 
             var imageReference = getResponse.StorageProfile.ImageReference;
             Assert.NotNull(imageReference?.ExactVersion);
@@ -102,7 +102,7 @@ namespace Azure.ResourceManager.Compute.Tests
             VirtualMachineScaleSetVM vmScaleSetVMModel = GenerateVMScaleSetVMModel(vmScaleSet, instanceId, hasManagedDisks);
             ValidateVMScaleSetVM(vmScaleSetVMModel, vmScaleSet.Sku.Name, getResponse, hasManagedDisks);
 
-            var getInstanceViewResponse = await VirtualMachineScaleSetVMsClient.GetInstanceViewAsync(rgName,
+            var getInstanceViewResponse = await VirtualMachineScaleSetVMsOperations.GetInstanceViewAsync(rgName,
                 vmScaleSet.Name, instanceId);
             Assert.True(getInstanceViewResponse != null, "VMScaleSetVM not returned.");
             ValidateVMScaleSetVMInstanceView(getInstanceViewResponse, hasManagedDisks);
@@ -110,28 +110,28 @@ namespace Azure.ResourceManager.Compute.Tests
             //var query = new Microsoft.Rest.Azure.OData.ODataQuery<VirtualMachineScaleSetVM>();
             //query.SetFilter(vm => vm.LatestModelApplied == true);
             var query = "properties/latestModelApplied eq true";
-            var listResponse = await (VirtualMachineScaleSetVMsClient.ListAsync(rgName, vmssName, query)).ToEnumerableAsync();
+            var listResponse = await (VirtualMachineScaleSetVMsOperations.ListAsync(rgName, vmssName, query)).ToEnumerableAsync();
             Assert.False(listResponse == null, "VMScaleSetVMs not returned");
             Assert.True(listResponse.Count() == inputVMScaleSet.Sku.Capacity);
 
             query = null;
             //query.Filter = null;
             //query.Expand = "instanceView";
-            listResponse = await (VirtualMachineScaleSetVMsClient.ListAsync(rgName, vmssName, query, null, "instanceView")).ToEnumerableAsync();
+            listResponse = await (VirtualMachineScaleSetVMsOperations.ListAsync(rgName, vmssName, query, null, "instanceView")).ToEnumerableAsync();
             Assert.False(listResponse == null, "VMScaleSetVMs not returned");
             Assert.True(listResponse.Count() == inputVMScaleSet.Sku.Capacity);
 
-            await WaitForCompletionAsync(await VirtualMachineScaleSetVMsClient.StartStartAsync(rgName, vmScaleSet.Name, instanceId));
-            await WaitForCompletionAsync(await VirtualMachineScaleSetVMsClient.StartReimageAsync(rgName, vmScaleSet.Name, instanceId));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetVMsOperations.StartStartAsync(rgName, vmScaleSet.Name, instanceId));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetVMsOperations.StartReimageAsync(rgName, vmScaleSet.Name, instanceId));
 
             if (hasManagedDisks)
             {
-                await WaitForCompletionAsync(await VirtualMachineScaleSetVMsClient.StartReimageAllAsync(rgName, vmScaleSet.Name, instanceId));
+                await WaitForCompletionAsync(await VirtualMachineScaleSetVMsOperations.StartReimageAllAsync(rgName, vmScaleSet.Name, instanceId));
             }
-            await WaitForCompletionAsync(await VirtualMachineScaleSetVMsClient.StartRestartAsync(rgName, vmScaleSet.Name, instanceId));
-            await WaitForCompletionAsync(await VirtualMachineScaleSetVMsClient.StartPowerOffAsync(rgName, vmScaleSet.Name, instanceId));
-            await WaitForCompletionAsync(await VirtualMachineScaleSetVMsClient.StartDeallocateAsync(rgName, vmScaleSet.Name, instanceId));
-            await WaitForCompletionAsync(await VirtualMachineScaleSetVMsClient.StartDeleteAsync(rgName, vmScaleSet.Name, instanceId));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetVMsOperations.StartRestartAsync(rgName, vmScaleSet.Name, instanceId));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetVMsOperations.StartPowerOffAsync(rgName, vmScaleSet.Name, instanceId));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetVMsOperations.StartDeallocateAsync(rgName, vmScaleSet.Name, instanceId));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetVMsOperations.StartDeleteAsync(rgName, vmScaleSet.Name, instanceId));
             passed = true;
             Assert.True(passed);
         }
@@ -160,9 +160,9 @@ namespace Azure.ResourceManager.Compute.Tests
                 createWithManagedDisks: true);
             VirtualMachineScaleSet vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
             inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
-            await WaitForCompletionAsync(await VirtualMachineScaleSetVMsClient.StartStartAsync(rgName, vmScaleSet.Name, instanceId));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetVMsOperations.StartStartAsync(rgName, vmScaleSet.Name, instanceId));
 
-            RunCommandResult result = (await WaitForCompletionAsync(await VirtualMachineScaleSetVMsClient.StartRunCommandAsync(rgName, vmScaleSet.Name, instanceId, new RunCommandInput("ipconfig")))).Value;
+            RunCommandResult result = (await WaitForCompletionAsync(await VirtualMachineScaleSetVMsOperations.StartRunCommandAsync(rgName, vmScaleSet.Name, instanceId, new RunCommandInput("ipconfig")))).Value;
             Assert.NotNull(result);
             Assert.NotNull(result.Value);
             Assert.True(result.Value.Count > 0);
@@ -197,12 +197,12 @@ namespace Azure.ResourceManager.Compute.Tests
                 rgName, vmssName, storageAccountOutput, imageRef, createWithManagedDisks: true, machineSizeType: VirtualMachineSizeTypes.StandardA1V2.ToString());
             VirtualMachineScaleSet vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
             inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
-            VirtualMachineScaleSetVM vmssVM = await VirtualMachineScaleSetVMsClient.GetAsync(rgName, vmScaleSet.Name, instanceId);
+            VirtualMachineScaleSetVM vmssVM = await VirtualMachineScaleSetVMsOperations.GetAsync(rgName, vmScaleSet.Name, instanceId);
 
             VirtualMachineScaleSetVM vmScaleSetVMModel = GenerateVMScaleSetVMModel(vmScaleSet, instanceId, hasManagedDisks: true);
             ValidateVMScaleSetVM(vmScaleSetVMModel, vmScaleSet.Sku.Name, vmssVM, hasManagedDisks: true);
             await AttachDataDiskToVMScaleSetVM(vmssVM, vmScaleSetVMModel, 2);
-            VirtualMachineScaleSetVM vmssVMReturned = (await WaitForCompletionAsync(await VirtualMachineScaleSetVMsClient.StartUpdateAsync(rgName, vmScaleSet.Name, vmssVM.InstanceId, vmssVM))).Value;
+            VirtualMachineScaleSetVM vmssVMReturned = (await WaitForCompletionAsync(await VirtualMachineScaleSetVMsOperations.StartUpdateAsync(rgName, vmScaleSet.Name, vmssVM.InstanceId, vmssVM))).Value;
             ValidateVMScaleSetVM(vmScaleSetVMModel, vmScaleSet.Sku.Name, vmssVMReturned, hasManagedDisks: true);
             passed = true;
             Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", originalTestLocation);
@@ -232,7 +232,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 storageAccountOutput, imageRef, createWithManagedDisks: true);
             VirtualMachineScaleSet vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
             inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
-            await VirtualMachineScaleSetVMsClient.StartRedeployAsync(rgName, vmScaleSet.Name, instanceId);
+            await VirtualMachineScaleSetVMsOperations.StartRedeployAsync(rgName, vmScaleSet.Name, instanceId);
 
             passed = true;
             Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", originalTestLocation);
@@ -266,7 +266,7 @@ namespace Azure.ResourceManager.Compute.Tests
                     createWithManagedDisks: true);
                 vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
                 inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
-                await WaitForCompletionAsync(await VirtualMachineScaleSetVMsClient.StartPerformMaintenanceAsync(rgName, vmScaleSet.Name, instanceId));
+                await WaitForCompletionAsync(await VirtualMachineScaleSetVMsOperations.StartPerformMaintenanceAsync(rgName, vmScaleSet.Name, instanceId));
 
                 passed = true;
             }
@@ -291,7 +291,7 @@ namespace Azure.ResourceManager.Compute.Tests
             var disk = new Disk(null, null, null, TestEnvironment.Location, null, null, null, null, null, null, null, null, null, 10, null, null, null, null, null, null, null, null, null, null, null, null);
             disk.Sku = new DiskSku(StorageAccountTypes.StandardLRS.ToString(), null);
             disk.CreationData = new CreationData(DiskCreateOption.Empty);
-            return await WaitForCompletionAsync((await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk)));
+            return await WaitForCompletionAsync((await DisksOperations.StartCreateOrUpdateAsync(rgName, diskName, disk)));
         }
 
         private DataDisk CreateModelDataDisk(Disk disk)

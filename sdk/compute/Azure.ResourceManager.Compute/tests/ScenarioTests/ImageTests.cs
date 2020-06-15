@@ -138,8 +138,8 @@ namespace Azure.ResourceManager.Compute.Tests
                 },
                 HyperVGeneration = HyperVGenerationTypes.V1
             };
-            var image = await WaitForCompletionAsync(await ImagesClient.StartCreateOrUpdateAsync(rgName, imageName, imageInput));
-            var getImage = (await ImagesClient.GetAsync(rgName, imageName)).Value;
+            var image = await WaitForCompletionAsync(await ImagesOperations.StartCreateOrUpdateAsync(rgName, imageName, imageInput));
+            var getImage = (await ImagesOperations.GetAsync(rgName, imageName)).Value;
             ValidateImage(imageInput, getImage);
             if (diskEncryptionSetId != null)
             {
@@ -157,12 +157,12 @@ namespace Azure.ResourceManager.Compute.Tests
             };
             string tagKey = "UpdateTag";
             updateParams.Tags.Add(tagKey, "TagValue");
-            await WaitForCompletionAsync(await ImagesClient.StartUpdateAsync(rgName, imageName, updateParams));
-            getImage = (await ImagesClient.GetAsync(rgName, imageName)).Value;
+            await WaitForCompletionAsync(await ImagesOperations.StartUpdateAsync(rgName, imageName, updateParams));
+            getImage = (await ImagesOperations.GetAsync(rgName, imageName)).Value;
             Assert.True(getImage.Tags.ContainsKey(tagKey));
-            var listResponse = await (ImagesClient.ListByResourceGroupAsync(rgName)).ToEnumerableAsync();
+            var listResponse = await (ImagesOperations.ListByResourceGroupAsync(rgName)).ToEnumerableAsync();
             Assert.IsTrue(listResponse.Count() == 1);
-            await WaitForCompletionAsync(await ImagesClient.StartDeleteAsync(rgName, image.Value.Name));
+            await WaitForCompletionAsync(await ImagesOperations.StartDeleteAsync(rgName, image.Value.Name));
         }
 
         public void ValidateImage(Image imageIn, Image imageOut)

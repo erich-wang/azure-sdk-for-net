@@ -59,7 +59,7 @@ namespace Azure.ResourceManager.Compute.Tests
             bool testSucceeded = false;
             StorageAccount storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
 
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
 
             var vnetResponse = await CreateVNETWithSubnets(rgName, 2);
             var vmssSubnet = vnetResponse.Subnets[1];
@@ -90,12 +90,12 @@ namespace Azure.ResourceManager.Compute.Tests
             inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
 
             VirtualMachineScaleSetVMInstanceView vmInstanceViewResponse =
-                await VirtualMachineScaleSetVMsClient.GetInstanceViewAsync(rgName, vmScaleSet.Name, "0");
+                await VirtualMachineScaleSetVMsOperations.GetInstanceViewAsync(rgName, vmScaleSet.Name, "0");
             Assert.True(vmInstanceViewResponse != null, "VMScaleSetVM not returned.");
 
             ValidateEncryptionSettingsInVMScaleSetVMInstanceView(vmInstanceViewResponse, hasManagedDisks);
 
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmssName));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartDeleteAsync(rgName, vmssName));
             testSucceeded = true;
             Assert.True(testSucceeded);
         }

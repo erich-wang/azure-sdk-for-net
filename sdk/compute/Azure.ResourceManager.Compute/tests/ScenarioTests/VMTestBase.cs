@@ -68,7 +68,7 @@ namespace Azure.ResourceManager.Compute.Tests
 
         protected async Task<ImageReference> FindVMImage(string publisher, string offer, string sku)
         {
-            var images = await VirtualMachineImagesClient.ListAsync(
+            var images = await VirtualMachineImagesOperations.ListAsync(
                 location: m_location, publisherName: publisher, offer: offer, skus: sku,
                 top: 1);
             var image = images.Value.First();
@@ -144,7 +144,7 @@ namespace Azure.ResourceManager.Compute.Tests
             try
             {
                 //Create the resource Group.
-                var resourceGroup = await ResourceGroupsClient.CreateOrUpdateAsync(
+                var resourceGroup = await ResourceGroupsOperations.CreateOrUpdateAsync(
                     rgName,
                     new ResourceGroup(m_location)
                     {
@@ -152,7 +152,7 @@ namespace Azure.ResourceManager.Compute.Tests
                     });
                 var stoInput = new StorageAccountCreateParameters(new Sku(SkuName.StandardGRS), Kind.Storage, m_location);
 
-                StorageAccount storageAccountOutput = await WaitForCompletionAsync(await StorageAccountsClient.StartCreateAsync(rgName,
+                StorageAccount storageAccountOutput = await WaitForCompletionAsync(await StorageAccountsOperations.StartCreateAsync(rgName,
                     storageAccountName, stoInput));
 
                 var stos = await getAllstos(rgName);
@@ -166,7 +166,7 @@ namespace Azure.ResourceManager.Compute.Tests
                     //    t =>
                     //        StringComparer.OrdinalIgnoreCase.Equals(t.Name, storageAccountName));
                 }
-                return await StorageAccountsClient.GetPropertiesAsync(rgName, storageAccountName);
+                return await StorageAccountsOperations.GetPropertiesAsync(rgName, storageAccountName);
             }
             catch
             {
@@ -175,7 +175,7 @@ namespace Azure.ResourceManager.Compute.Tests
         }
         public async Task<IList<StorageAccount>> getAllstos(string rgName)
         {
-            return await (StorageAccountsClient.ListByResourceGroupAsync(rgName)).ToEnumerableAsync();
+            return await (StorageAccountsOperations.ListByResourceGroupAsync(rgName)).ToEnumerableAsync();
         }
 
         protected async Task<(VirtualMachine,VirtualMachine)> CreateVM(
@@ -209,7 +209,7 @@ namespace Azure.ResourceManager.Compute.Tests
             try
             {
                 // Create the resource Group, it might have been already created during StorageAccount creation.
-                await ResourceGroupsClient.CreateOrUpdateAsync(
+                await ResourceGroupsOperations.CreateOrUpdateAsync(
                     rgName,
                     new ResourceGroup(m_location)
                     {
@@ -272,12 +272,12 @@ namespace Azure.ResourceManager.Compute.Tests
                 if (waitForCompletion)
                 {
                     // CreateOrUpdate polls for the operation completion and returns once the operation reaches a terminal state
-                    createOrUpdateResponse = (await WaitForCompletionAsync(await VirtualMachinesClient.StartCreateOrUpdateAsync(rgName, inputVM.Name, inputVM))).Value;
+                    createOrUpdateResponse = (await WaitForCompletionAsync(await VirtualMachinesOperations.StartCreateOrUpdateAsync(rgName, inputVM.Name, inputVM))).Value;
                 }
                 else
                 {
                     // BeginCreateOrUpdate returns immediately after the request is accepted by CRP
-                    createOrUpdateResponse = (await WaitForCompletionAsync(await VirtualMachinesClient.StartCreateOrUpdateAsync(rgName, inputVM.Name, inputVM))).Value;
+                    createOrUpdateResponse = (await WaitForCompletionAsync(await VirtualMachinesOperations.StartCreateOrUpdateAsync(rgName, inputVM.Name, inputVM))).Value;
                 }
 
                 Assert.True(createOrUpdateResponse.Name == inputVM.Name);
@@ -296,7 +296,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 //}
 
                 // The intent here is to validate that the GET response is as expected.
-                var getResponse = await VirtualMachinesClient.GetAsync(rgName, inputVM.Name);
+                var getResponse = await VirtualMachinesOperations.GetAsync(rgName, inputVM.Name);
                 ValidateVM(inputVM, getResponse, expectedVMReferenceId, hasManagedDisks, writeAcceleratorEnabled: writeAcceleratorEnabled, hasDiffDisks: hasDiffDisks, hasUserDefinedAS: hasUserDefinedAvSet, expectedPpgReferenceId: ppgId);
 
                 return (getResponse,inputVM);
@@ -319,8 +319,8 @@ namespace Azure.ResourceManager.Compute.Tests
                 PrefixLength = prefixLength
             };
 
-            var putPublicIpPrefixResponse = await WaitForCompletionAsync(await PublicIPPrefixesClient.StartCreateOrUpdateAsync(rgName, publicIpPrefixName, publicIpPrefix));
-            var getPublicIpPrefixResponse = await PublicIPPrefixesClient.GetAsync(rgName, publicIpPrefixName);
+            var putPublicIpPrefixResponse = await WaitForCompletionAsync(await PublicIPPrefixesOperations.StartCreateOrUpdateAsync(rgName, publicIpPrefixName, publicIpPrefix));
+            var getPublicIpPrefixResponse = await PublicIPPrefixesOperations.GetAsync(rgName, publicIpPrefixName);
 
             return getPublicIpPrefixResponse;
         }
@@ -345,8 +345,8 @@ namespace Azure.ResourceManager.Compute.Tests
                 }
             };
 
-            var putPublicIpAddressResponse = await WaitForCompletionAsync(await PublicIPAddressesClient.StartCreateOrUpdateAsync(rgName, publicIpName, publicIp));
-            var getPublicIpAddressResponse = await PublicIPAddressesClient.GetAsync(rgName, publicIpName);
+            var putPublicIpAddressResponse = await WaitForCompletionAsync(await PublicIPAddressesOperations.StartCreateOrUpdateAsync(rgName, publicIpName, publicIp));
+            var getPublicIpAddressResponse = await PublicIPAddressesOperations.GetAsync(rgName, publicIpName);
             return getPublicIpAddressResponse;
         }
 
@@ -384,8 +384,8 @@ namespace Azure.ResourceManager.Compute.Tests
                             }
                         }
             };
-            VirtualNetwork putVnetResponse = (await WaitForCompletionAsync(await VirtualNetworksClient.StartCreateOrUpdateAsync(rgName, vnetName, vnet))).Value;
-            var getSubnetResponse = await SubnetsClient.GetAsync(rgName, vnetName, subnetName);
+            VirtualNetwork putVnetResponse = (await WaitForCompletionAsync(await VirtualNetworksOperations.StartCreateOrUpdateAsync(rgName, vnetName, vnet))).Value;
+            var getSubnetResponse = await SubnetsOperations.GetAsync(rgName, vnetName, subnetName);
             return getSubnetResponse;
         }
 
@@ -426,7 +426,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 vnet.Subnets.Add(subnet);
             }
 
-            var putVnetResponse = await WaitForCompletionAsync(await VirtualNetworksClient.StartCreateOrUpdateAsync(rgName, vnetName, vnet));
+            var putVnetResponse = await WaitForCompletionAsync(await VirtualNetworksOperations.StartCreateOrUpdateAsync(rgName, vnetName, vnet));
             return putVnetResponse;
         }
 
@@ -438,8 +438,8 @@ namespace Azure.ResourceManager.Compute.Tests
                 Location = m_location
             };
 
-            var putNSgResponse = await WaitForCompletionAsync(await NetworkSecurityGroupsClient.StartCreateOrUpdateAsync(rgName, nsgName, nsgParameters));
-            var getNsgResponse = await NetworkSecurityGroupsClient.GetAsync(rgName, nsgName);
+            var putNSgResponse = await WaitForCompletionAsync(await NetworkSecurityGroupsOperations.StartCreateOrUpdateAsync(rgName, nsgName, nsgParameters));
+            var getNsgResponse = await NetworkSecurityGroupsOperations.GetAsync(rgName, nsgName);
 
             return getNsgResponse;
         }
@@ -474,8 +474,8 @@ namespace Azure.ResourceManager.Compute.Tests
                 nicParameters.IpConfigurations[0].PublicIPAddress = new Azure.Management.Network.Models.PublicIPAddress() { Id = publicIPaddress };
             }
 
-            var putNicResponse = await WaitForCompletionAsync(await NetworkInterfacesClient.StartCreateOrUpdateAsync(rgName, nicname, nicParameters));
-            var getNicResponse = await NetworkInterfacesClient.GetAsync(rgName, nicname);
+            var putNicResponse = await WaitForCompletionAsync(await NetworkInterfacesOperations.StartCreateOrUpdateAsync(rgName, nicname, nicParameters));
+            var getNicResponse = await NetworkInterfacesOperations.GetAsync(rgName, nicname);
             return getNicResponse;
         }
 
@@ -514,8 +514,8 @@ namespace Azure.ResourceManager.Compute.Tests
                 }
             };
 
-            var putNicResponse = await WaitForCompletionAsync(await NetworkInterfacesClient.StartCreateOrUpdateAsync(rgName, nicname, nicParameters));
-            var getNicResponse = await NetworkInterfacesClient.GetAsync(rgName, nicname);
+            var putNicResponse = await WaitForCompletionAsync(await NetworkInterfacesOperations.StartCreateOrUpdateAsync(rgName, nicname, nicParameters));
+            var getNicResponse = await NetworkInterfacesOperations.GetAsync(rgName, nicname);
             return getNicResponse;
         }
 
@@ -649,8 +649,8 @@ namespace Azure.ResourceManager.Compute.Tests
                 }
             };
 
-            var putGwResponse = await WaitForCompletionAsync(await ApplicationGatewaysClient.StartCreateOrUpdateAsync(rgName, gatewayName, appGw));
-            var getGwResponse = await ApplicationGatewaysClient.GetAsync(rgName, gatewayName);
+            var putGwResponse = await WaitForCompletionAsync(await ApplicationGatewaysOperations.StartCreateOrUpdateAsync(rgName, gatewayName, appGw));
+            var getGwResponse = await ApplicationGatewaysOperations.GetAsync(rgName, gatewayName);
             return getGwResponse;
         }
 
@@ -669,7 +669,7 @@ namespace Azure.ResourceManager.Compute.Tests
             var probeId =
                 $"/subscriptions/{m_subId}/resourceGroups/{rgName}/providers/Microsoft.Network/loadBalancers/{loadBalancerName}/probes/{loadBalancerProbeName}";
 
-            var putLBResponse = await WaitForCompletionAsync(await LoadBalancersClient.StartCreateOrUpdateAsync(rgName, loadBalancerName, new LoadBalancer
+            var putLBResponse = await WaitForCompletionAsync(await LoadBalancersOperations.StartCreateOrUpdateAsync(rgName, loadBalancerName, new LoadBalancer
             {
                 Location = m_location,
                 FrontendIPConfigurations = new List<FrontendIPConfiguration>
@@ -725,7 +725,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 }
             }));
 
-            var getLBResponse = await LoadBalancersClient.GetAsync(rgName, loadBalancerName);
+            var getLBResponse = await LoadBalancersOperations.GetAsync(rgName, loadBalancerName);
             return getLBResponse;
         }
 
@@ -753,7 +753,7 @@ namespace Azure.ResourceManager.Compute.Tests
             }
 
             // Create an Availability Set and then create a VM inside this availability set
-            var asCreateOrUpdateResponse = await AvailabilitySetsClient.CreateOrUpdateAsync(
+            var asCreateOrUpdateResponse = await AvailabilitySetsOperations.CreateOrUpdateAsync(
                 rgName,
                 asName,
                 inputAvailabilitySet
@@ -776,7 +776,7 @@ namespace Azure.ResourceManager.Compute.Tests
             };
 
             // Create a ProximityPlacementGroup and then create a VM inside this ProximityPlacementGroup
-            ProximityPlacementGroup ppgCreateOrUpdateResponse = await ProximityPlacementGroupsClient.CreateOrUpdateAsync(
+            ProximityPlacementGroup ppgCreateOrUpdateResponse = await ProximityPlacementGroupsOperations.CreateOrUpdateAsync(
                 rgName,
                 ppgName,
                 inputProximityPlacementGroup
@@ -951,7 +951,7 @@ namespace Azure.ResourceManager.Compute.Tests
 
         protected async Task<DedicatedHostGroup> CreateDedicatedHostGroup(string rgName, string dedicatedHostGroupName)
         {
-            await ResourceGroupsClient.CreateOrUpdateAsync(
+            await ResourceGroupsOperations.CreateOrUpdateAsync(
                    rgName,
                    new ResourceGroup(m_location)
                    {
@@ -963,18 +963,18 @@ namespace Azure.ResourceManager.Compute.Tests
                 Zones = new List<string> { "1" },
                 PlatformFaultDomainCount = 1
             };
-            return await DedicatedHostGroupsClient.CreateOrUpdateAsync(rgName, dedicatedHostGroupName, dedicatedHostGroup);
+            return await DedicatedHostGroupsOperations.CreateOrUpdateAsync(rgName, dedicatedHostGroupName, dedicatedHostGroup);
         }
 
         protected async Task<DedicatedHost> CreateDedicatedHost(string rgName, string dedicatedHostGroupName, string dedicatedHostName)
         {
             //Check if DedicatedHostGroup already exist and if does not exist, create one.
-            DedicatedHostGroup existingDHG = await DedicatedHostGroupsClient.GetAsync(rgName, dedicatedHostGroupName);
+            DedicatedHostGroup existingDHG = await DedicatedHostGroupsOperations.GetAsync(rgName, dedicatedHostGroupName);
             if (existingDHG == null)
             {
                 existingDHG = await CreateDedicatedHostGroup(rgName, dedicatedHostGroupName);
             }
-            var response =await DedicatedHostsClient.StartCreateOrUpdateAsync(rgName, dedicatedHostGroupName, dedicatedHostName,
+            var response =await DedicatedHostsOperations.StartCreateOrUpdateAsync(rgName, dedicatedHostGroupName, dedicatedHostName,
                 new DedicatedHost(m_location, new CM.Sku() { Name= "ESv3-Type1"})
                 {
                     Tags = new Dictionary<string, string>() { { rgName, Recording.UtcNow.ToString("u") } }

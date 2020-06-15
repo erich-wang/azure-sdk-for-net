@@ -59,7 +59,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 subnet: vmssSubnet);
             VirtualMachineScaleSet vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
             inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
-            var getGwResponse = (await ApplicationGatewaysClient.GetAsync(rgName, appgw.Name)).Value;
+            var getGwResponse = (await ApplicationGatewaysOperations.GetAsync(rgName, appgw.Name)).Value;
             Assert.True(2 == getGwResponse.BackendAddressPools[0].BackendIPConfigurations.Count);
             passed = true;
             Assert.True(passed);
@@ -102,7 +102,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 subnet: vmssSubnet);
             VirtualMachineScaleSet vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
             inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
-            var vmss = (await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName)).Value;
+            var vmss = (await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmssName)).Value;
             Assert.NotNull(vmss.VirtualMachineProfile.NetworkProfile.NetworkInterfaceConfigurations[0].DnsSettings);
             Assert.NotNull(vmss.VirtualMachineProfile.NetworkProfile.NetworkInterfaceConfigurations[0].DnsSettings.DnsServers);
             Assert.AreEqual(2, vmss.VirtualMachineProfile.NetworkProfile.NetworkInterfaceConfigurations[0].DnsSettings.DnsServers.Count);
@@ -165,7 +165,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 subnet: vmssSubnet);
             VirtualMachineScaleSet vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
             inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
-            var vmss = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName);
+            var vmss = await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmssName);
             Assert.NotNull(vmss.Value.VirtualMachineProfile.NetworkProfile.NetworkInterfaceConfigurations[0].IpConfigurations[0].PublicIPAddressConfiguration);
             Assert.AreEqual("pip1", vmss.Value.VirtualMachineProfile.NetworkProfile.NetworkInterfaceConfigurations[0].IpConfigurations[0].PublicIPAddressConfiguration.Name);
             Assert.AreEqual(10, vmss.Value.VirtualMachineProfile.NetworkProfile.NetworkInterfaceConfigurations[0].IpConfigurations[0].PublicIPAddressConfiguration.IdleTimeoutInMinutes);
@@ -229,7 +229,7 @@ namespace Azure.ResourceManager.Compute.Tests
             VirtualMachineScaleSet vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
             inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
 
-            var vmss = (await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName)).Value;
+            var vmss = (await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmssName)).Value;
             Assert.NotNull(vmss.VirtualMachineProfile.NetworkProfile.NetworkInterfaceConfigurations[0].IpConfigurations[0].PublicIPAddressConfiguration);
             Assert.AreEqual("pip1", vmss.VirtualMachineProfile.NetworkProfile.NetworkInterfaceConfigurations[0].IpConfigurations[0].PublicIPAddressConfiguration.Name);
             Assert.AreEqual(10, vmss.VirtualMachineProfile.NetworkProfile.NetworkInterfaceConfigurations[0].IpConfigurations[0].PublicIPAddressConfiguration.IdleTimeoutInMinutes);
@@ -290,7 +290,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 subnet: vmssSubnet);
             VirtualMachineScaleSet vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
             inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
-            var vmss = (await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName)).Value;
+            var vmss = (await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmssName)).Value;
             Assert.NotNull(vmss.VirtualMachineProfile.NetworkProfile.NetworkInterfaceConfigurations[0].IpConfigurations[0].PublicIPAddressConfiguration);
             Assert.AreEqual("pip1", vmss.VirtualMachineProfile.NetworkProfile.NetworkInterfaceConfigurations[0].IpConfigurations[0].PublicIPAddressConfiguration.Name);
             Assert.AreEqual(10, vmss.VirtualMachineProfile.NetworkProfile.NetworkInterfaceConfigurations[0].IpConfigurations[0].PublicIPAddressConfiguration.IdleTimeoutInMinutes);
@@ -343,11 +343,11 @@ namespace Azure.ResourceManager.Compute.Tests
                 subnet: vmssSubnet);
             VirtualMachineScaleSet vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
             inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
-            var vmss = (await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName)).Value;
+            var vmss = (await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmssName)).Value;
             Assert.NotNull(vmss.VirtualMachineProfile.NetworkProfile.NetworkInterfaceConfigurations[0].NetworkSecurityGroup);
             Assert.AreEqual(vmss.VirtualMachineProfile.NetworkProfile.NetworkInterfaceConfigurations[0].NetworkSecurityGroup.Id, nsg.Id);
 
-            var getNsgResponse = (await NetworkSecurityGroupsClient.GetAsync(rgName, nsg.Name)).Value;
+            var getNsgResponse = (await NetworkSecurityGroupsOperations.GetAsync(rgName, nsg.Name)).Value;
             Assert.AreEqual(2, getNsgResponse.NetworkInterfaces.Count);
 
             passed = true;
@@ -397,7 +397,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 subnet: vmssSubnet);
             VirtualMachineScaleSet vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
             inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
-            var vmss = (await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName)).Value;
+            var vmss = (await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmssName)).Value;
             Assert.AreEqual(2, vmss.VirtualMachineProfile.NetworkProfile.NetworkInterfaceConfigurations[0].IpConfigurations.Count);
 
             passed = true;
@@ -446,7 +446,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 subnet: vmssSubnet);
             VirtualMachineScaleSet vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
             inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
-            var vmss = (await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName)).Value;
+            var vmss = (await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmssName)).Value;
             Assert.AreEqual(2, vmss.VirtualMachineProfile.NetworkProfile.NetworkInterfaceConfigurations[0].IpConfigurations.Count);
             Assert.True(vmss.VirtualMachineProfile.NetworkProfile.NetworkInterfaceConfigurations[0].IpConfigurations.Count(ip => ip.Primary == true) == 1);
 
@@ -490,7 +490,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 subnet: vmssSubnet);
             VirtualMachineScaleSet vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
             inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
-            var vmss = (await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName)).Value;
+            var vmss = (await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmssName)).Value;
             Assert.True(vmss.VirtualMachineProfile.NetworkProfile.NetworkInterfaceConfigurations[0].EnableAcceleratedNetworking == true);
             passed = true;
             Assert.True(passed);

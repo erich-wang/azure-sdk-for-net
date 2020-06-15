@@ -105,9 +105,9 @@ namespace Azure.ResourceManager.Compute.Tests
             var returnTwovm = await CreateVM(rg1Name, as1Name, storageAccountOutput, imageRef);
             var vm1 = returnTwovm.Item1;
             inputVM1 = returnTwovm.Item2;
-            await WaitForCompletionAsync(await VirtualMachinesClient.StartStartAsync(rg1Name, vm1.Name));
-            await WaitForCompletionAsync(await VirtualMachinesClient.StartRedeployAsync(rg1Name, vm1.Name));
-            await WaitForCompletionAsync(await VirtualMachinesClient.StartRestartAsync(rg1Name, vm1.Name));
+            await WaitForCompletionAsync(await VirtualMachinesOperations.StartStartAsync(rg1Name, vm1.Name));
+            await WaitForCompletionAsync(await VirtualMachinesOperations.StartRedeployAsync(rg1Name, vm1.Name));
+            await WaitForCompletionAsync(await VirtualMachinesOperations.StartRestartAsync(rg1Name, vm1.Name));
 
             var runCommandImput = new RunCommandInput("RunPowerShellScript")
             {
@@ -124,24 +124,24 @@ namespace Azure.ResourceManager.Compute.Tests
                             new RunCommandInputParameter("arg2","value2"),
                         }
             };
-            RunCommandResult result = (await WaitForCompletionAsync(await VirtualMachinesClient.StartRunCommandAsync(rg1Name, vm1.Name, runCommandImput))).Value;
+            RunCommandResult result = (await WaitForCompletionAsync(await VirtualMachinesOperations.StartRunCommandAsync(rg1Name, vm1.Name, runCommandImput))).Value;
             Assert.NotNull(result);
             Assert.NotNull(result.Value);
             Assert.True(result.Value.Count > 0);
 
-            await WaitForCompletionAsync(await VirtualMachinesClient.StartPowerOffAsync(rg1Name, vm1.Name));
-            await WaitForCompletionAsync(await VirtualMachinesClient.StartDeallocateAsync(rg1Name, vm1.Name));
-            await VirtualMachinesClient.GeneralizeAsync(rg1Name, vm1.Name);
+            await WaitForCompletionAsync(await VirtualMachinesOperations.StartPowerOffAsync(rg1Name, vm1.Name));
+            await WaitForCompletionAsync(await VirtualMachinesOperations.StartDeallocateAsync(rg1Name, vm1.Name));
+            await VirtualMachinesOperations.GeneralizeAsync(rg1Name, vm1.Name);
 
             VirtualMachine ephemeralVM;
             string as2Name = as1Name + "_ephemeral";
             var returnTwoVM = await CreateVM(rg1Name, as2Name, storageAccountName, imageRef, hasManagedDisks: true, hasDiffDisks: true, vmSize: VirtualMachineSizeTypes.StandardDS5V2.ToString(),
                 osDiskStorageAccountType: StorageAccountTypes.StandardLRS.ToString(), dataDiskStorageAccountType: StorageAccountTypes.StandardLRS.ToString());
             ephemeralVM = returnTwoVM.Item2;
-            await WaitForCompletionAsync(await VirtualMachinesClient.StartReimageAsync(rg1Name, ephemeralVM.Name));
+            await WaitForCompletionAsync(await VirtualMachinesOperations.StartReimageAsync(rg1Name, ephemeralVM.Name));
             var captureParams = new VirtualMachineCaptureParameters(Recording.GenerateAssetName(TestPrefix), Recording.GenerateAssetName(TestPrefix), true);
 
-            var captureResponse = await WaitForCompletionAsync(await VirtualMachinesClient.StartCaptureAsync(rg1Name, vm1.Name, captureParams));
+            var captureResponse = await WaitForCompletionAsync(await VirtualMachinesOperations.StartCaptureAsync(rg1Name, vm1.Name, captureParams));
 
             Assert.NotNull(captureResponse);
             Assert.True(captureResponse.Value.Resources.Count > 0);
@@ -198,10 +198,10 @@ namespace Azure.ResourceManager.Compute.Tests
             var returnTwovm = await CreateVM(rg1Name, asName, storageAccountOutput, imageRef);
             VirtualMachine vm1 = returnTwovm.Item1;
             inputVM1 = returnTwovm.Item2;
-            var redeployOperationResponse = await WaitForCompletionAsync(await VirtualMachinesClient.StartRedeployAsync(rg1Name, vm1.Name));
+            var redeployOperationResponse = await WaitForCompletionAsync(await VirtualMachinesOperations.StartRedeployAsync(rg1Name, vm1.Name));
             //.BeginRedeployWithHttpMessagesAsync
             //Assert.Equal(HttpStatusCode.Accepted, redeployOperationResponse.Result.Response.StatusCode);
-            var lroResponse = await WaitForCompletionAsync(await VirtualMachinesClient.StartRedeployAsync(rg1Name,
+            var lroResponse = await WaitForCompletionAsync(await VirtualMachinesOperations.StartRedeployAsync(rg1Name,
                 vm1.Name));
             //var lroResponse = await VirtualMachinesClient.StartRedeployAsync(rg1Name,
             //    vm1.Name).GetAwaiter().GetResult();
@@ -230,8 +230,8 @@ namespace Azure.ResourceManager.Compute.Tests
             var returnTwovm = await CreateVM(rg1Name, asName, storageAccountOutput, imageRef);
             VirtualMachine vm1 = returnTwovm.Item1;
             inputVM1 = returnTwovm.Item2;
-            var reapplyperationResponse = await WaitForCompletionAsync(await VirtualMachinesClient.StartReapplyAsync(rg1Name, vm1.Name));
-            var lroResponse = await WaitForCompletionAsync(await VirtualMachinesClient.StartReapplyAsync(rg1Name,
+            var reapplyperationResponse = await WaitForCompletionAsync(await VirtualMachinesOperations.StartReapplyAsync(rg1Name, vm1.Name));
+            var lroResponse = await WaitForCompletionAsync(await VirtualMachinesOperations.StartReapplyAsync(rg1Name,
                 vm1.Name));
             //var lroResponse =  await VirtualMachinesClient.StartReapplyAsync(rg1Name,
             //    vm1.Name).GetAwaiter().GetResult();
@@ -268,9 +268,9 @@ namespace Azure.ResourceManager.Compute.Tests
             var returnTwovm = await CreateVM(rg1Name, asName, storageAccountOutput, imageRef);
             VirtualMachine vm1 = returnTwovm.Item1;
             inputVM1 = returnTwovm.Item2;
-            await WaitForCompletionAsync(await VirtualMachinesClient.StartStartAsync(rg1Name, vm1.Name));
+            await WaitForCompletionAsync(await VirtualMachinesOperations.StartStartAsync(rg1Name, vm1.Name));
             // Shutdown VM with SkipShutdown = true
-            await WaitForCompletionAsync(await VirtualMachinesClient.StartPowerOffAsync(rg1Name, vm1.Name, true));
+            await WaitForCompletionAsync(await VirtualMachinesOperations.StartPowerOffAsync(rg1Name, vm1.Name, true));
             passed = true;
             Assert.True(passed);
         }
@@ -306,7 +306,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 var returnTwovm = await CreateVM(rg1Name, asName, storageAccountOutput, imageRef);
                 VirtualMachine vm1 = returnTwovm.Item1;
                 inputVM1 = returnTwovm.Item2;
-                await WaitForCompletionAsync(await VirtualMachinesClient.StartPerformMaintenanceAsync(rg1Name, vm1.Name));
+                await WaitForCompletionAsync(await VirtualMachinesOperations.StartPerformMaintenanceAsync(rg1Name, vm1.Name));
                 passed = true;
 
             }
@@ -360,7 +360,7 @@ namespace Azure.ResourceManager.Compute.Tests
             inputVM1 = returnTwoVM.Item2;
 
 
-            await VirtualMachinesClient.SimulateEvictionAsync(rg1Name, vm1.Name);
+            await VirtualMachinesOperations.SimulateEvictionAsync(rg1Name, vm1.Name);
             passed = true;
             Assert.True(passed);
         }

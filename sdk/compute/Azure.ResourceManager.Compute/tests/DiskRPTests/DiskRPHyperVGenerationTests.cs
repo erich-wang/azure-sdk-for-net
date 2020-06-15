@@ -27,13 +27,13 @@ namespace Azure.ResourceManager.Compute.Tests.DiskRPTests
             Disk disk = await GenerateDefaultDisk(DiskCreateOption.Empty.ToString(), rgName, 10);
             disk.HyperVGeneration = HyperVGeneration.V1;
             disk.Location = DiskRPLocation;
-            await ResourceGroupsClient.CreateOrUpdateAsync(rgName, new ResourceGroup(DiskRPLocation));
+            await ResourceGroupsOperations.CreateOrUpdateAsync(rgName, new ResourceGroup(DiskRPLocation));
             //put disk
-            await WaitForCompletionAsync(await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk));
-            Disk diskOut = await DisksClient.GetAsync(rgName, diskName);
+            await WaitForCompletionAsync(await DisksOperations.StartCreateOrUpdateAsync(rgName, diskName, disk));
+            Disk diskOut = await DisksOperations.GetAsync(rgName, diskName);
             Validate(disk, diskOut, disk.Location);
             Assert.AreEqual(disk.HyperVGeneration, diskOut.HyperVGeneration);
-            await WaitForCompletionAsync(await DisksClient.StartDeleteAsync(rgName, diskName));
+            await WaitForCompletionAsync(await DisksOperations.StartDeleteAsync(rgName, diskName));
         }
 
         [Test]
@@ -46,14 +46,14 @@ namespace Azure.ResourceManager.Compute.Tests.DiskRPTests
             Disk disk = await GenerateDefaultDisk(DiskCreateOption.Empty.ToString(), rgName, 10);
             disk.HyperVGeneration = HyperVGeneration.V2;
             disk.Location = DiskRPLocation;
-            await ResourceGroupsClient.CreateOrUpdateAsync(rgName, new ResourceGroup(DiskRPLocation));
+            await ResourceGroupsOperations.CreateOrUpdateAsync(rgName, new ResourceGroup(DiskRPLocation));
             //put disk
-            await WaitForCompletionAsync(await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk));
-            Disk diskOut = await DisksClient.GetAsync(rgName, diskName);
+            await WaitForCompletionAsync(await DisksOperations.StartCreateOrUpdateAsync(rgName, diskName, disk));
+            Disk diskOut = await DisksOperations.GetAsync(rgName, diskName);
 
             Validate(disk, diskOut, disk.Location);
             Assert.AreEqual(disk.HyperVGeneration, diskOut.HyperVGeneration);
-            await WaitForCompletionAsync(await DisksClient.StartDeleteAsync(rgName, diskName));
+            await WaitForCompletionAsync(await DisksOperations.StartDeleteAsync(rgName, diskName));
         }
 
         [Test]
@@ -64,14 +64,14 @@ namespace Azure.ResourceManager.Compute.Tests.DiskRPTests
             var diskName = Recording.GenerateAssetName(DiskNamePrefix);
             Disk disk = await GenerateDefaultDisk(DiskCreateOption.Empty.ToString(), rgName, 10);
             disk.Location = DiskRPLocation;
-            await ResourceGroupsClient.CreateOrUpdateAsync(rgName, new ResourceGroup(DiskRPLocation));
+            await ResourceGroupsOperations.CreateOrUpdateAsync(rgName, new ResourceGroup(DiskRPLocation));
             //put disk
-            await WaitForCompletionAsync(await DisksClient.StartCreateOrUpdateAsync(rgName, diskName, disk));
-            Disk diskOut = await DisksClient.GetAsync(rgName, diskName);
+            await WaitForCompletionAsync(await DisksOperations.StartCreateOrUpdateAsync(rgName, diskName, disk));
+            Disk diskOut = await DisksOperations.GetAsync(rgName, diskName);
 
             Validate(disk, diskOut, disk.Location);
             Assert.AreEqual(disk.HyperVGeneration, diskOut.HyperVGeneration);
-            await WaitForCompletionAsync(await DisksClient.StartDeleteAsync(rgName, diskName));
+            await WaitForCompletionAsync(await DisksOperations.StartDeleteAsync(rgName, diskName));
         }
     }
 }

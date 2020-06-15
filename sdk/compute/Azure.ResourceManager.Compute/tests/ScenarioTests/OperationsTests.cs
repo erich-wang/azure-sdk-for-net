@@ -34,7 +34,7 @@ namespace Azure.ResourceManager.Compute.Tests
         public async Task TestCrpOperations()
         {
             EnsureClientsInitialized();
-            var operations =  OperationsClient.ListAsync();
+            var operations =  Operations.ListAsync();
             var operationResult = await operations.ToEnumerableAsync();
             //AzureOperationResponse<IEnumerable<ComputeOperationValue>> operations = OperationsClient.ListWithHttpMessagesAsync().GetAwaiter().GetResult();
 

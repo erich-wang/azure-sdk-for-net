@@ -277,7 +277,7 @@ namespace Azure.ResourceManager.Compute.Tests
                                                                                      diskEncryptionSetId: diskEncryptionSetId,
                                                                                      automaticRepairsPolicy: automaticRepairsPolicy);
 
-                var getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName);
+                var getResponse = await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmssName);
                 return (getResponse, createOrUpdateResponse.Item2);
             }
             catch
@@ -324,14 +324,14 @@ namespace Azure.ResourceManager.Compute.Tests
 
         protected async Task UpdateVMScaleSet(string rgName, string vmssName, VirtualMachineScaleSet inputVMScaleSet)
         {
-            var createOrUpdateResponse = await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartCreateOrUpdateAsync(rgName, vmssName, inputVMScaleSet));
+            var createOrUpdateResponse = await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartCreateOrUpdateAsync(rgName, vmssName, inputVMScaleSet));
         }
 
         // This method is used to Update VM Scale Set but it internally calls PATCH verb instead of PUT.
         // PATCH verb is more relaxed and does not puts constraint to specify full parameters.
         protected async Task PatchVMScaleSet(string rgName, string vmssName, VirtualMachineScaleSetUpdate inputVMScaleSet)
         {
-            var patchResponse = await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartUpdateAsync(rgName, vmssName, inputVMScaleSet));
+            var patchResponse = await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartUpdateAsync(rgName, vmssName, inputVMScaleSet));
         }
 
         private async Task<(VirtualMachineScaleSet, VirtualMachineScaleSet)> CreateVMScaleSetAndGetOperationResponse(
@@ -355,7 +355,7 @@ namespace Azure.ResourceManager.Compute.Tests
             AutomaticRepairsPolicy automaticRepairsPolicy = null)
         {
             // Create the resource Group, it might have been already created during StorageAccount creation.
-            var resourceGroup = await ResourceGroupsClient.CreateOrUpdateAsync(
+            var resourceGroup = await ResourceGroupsOperations.CreateOrUpdateAsync(
                 rgName,
                 new ResourceGroup(m_location));
 
@@ -405,7 +405,7 @@ namespace Azure.ResourceManager.Compute.Tests
 
             try
             {
-                createOrUpdateResponse = await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartCreateOrUpdateAsync(rgName, vmssName, inputVMScaleSet));
+                createOrUpdateResponse = await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartCreateOrUpdateAsync(rgName, vmssName, inputVMScaleSet));
 
                 Assert.True(createOrUpdateResponse.Name == vmssName);
                 Assert.True(createOrUpdateResponse.Location.ToLower() == inputVMScaleSet.Location.ToLower().Replace(" ", ""));
@@ -414,7 +414,7 @@ namespace Azure.ResourceManager.Compute.Tests
             {
                 if (e.Message.Contains("the allotted time"))
                 {
-                    createOrUpdateResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName);
+                    createOrUpdateResponse = await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmssName);
                 }
                 else
                 {

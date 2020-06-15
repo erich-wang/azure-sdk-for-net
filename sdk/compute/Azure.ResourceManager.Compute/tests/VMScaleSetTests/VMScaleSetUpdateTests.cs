@@ -40,30 +40,30 @@ namespace Azure.ResourceManager.Compute.Tests
             VirtualMachineScaleSet inputVMScaleSet;
             var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
 
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
 
 
             var getTwoVirtualMachineScaleSet = await CreateVMScaleSet_NoAsyncTracking(rgName, vmssName, storageAccountOutput, imageRef);
             VirtualMachineScaleSet vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
             inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
-            var getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmScaleSet.Name);
+            var getResponse = await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmScaleSet.Name);
             ValidateVMScaleSet(inputVMScaleSet, getResponse);
 
             // Scale Out VMScaleSet
             inputVMScaleSet.Sku.Capacity = 3;
             await UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
 
-            getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmScaleSet.Name);
+            getResponse = await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmScaleSet.Name);
             ValidateVMScaleSet(inputVMScaleSet, getResponse);
 
             // Scale In VMScaleSet
             inputVMScaleSet.Sku.Capacity = 1;
             await UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
 
-            getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmScaleSet.Name);
+            getResponse = await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmScaleSet.Name);
             ValidateVMScaleSet(inputVMScaleSet, getResponse);
 
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmScaleSet.Name));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartDeleteAsync(rgName, vmScaleSet.Name));
         }
 
         /// <summary>
@@ -90,12 +90,12 @@ namespace Azure.ResourceManager.Compute.Tests
             VirtualMachineScaleSet inputVMScaleSet;
             var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
 
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
 
             var getTwoVirtualMachineScaleSet = await CreateVMScaleSet_NoAsyncTracking(rgName, vmssName, storageAccountOutput, imageRef);
             VirtualMachineScaleSet vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
             inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
-            var getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmScaleSet.Name);
+            var getResponse = await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmScaleSet.Name);
             ValidateVMScaleSet(inputVMScaleSet, getResponse);
 
             inputVMScaleSet.Sku.Name = VirtualMachineSizeTypes.StandardA1.ToString();
@@ -110,10 +110,10 @@ namespace Azure.ResourceManager.Compute.Tests
 
             await UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
 
-            getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmScaleSet.Name);
+            getResponse = await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmScaleSet.Name);
             ValidateVMScaleSet(inputVMScaleSet, getResponse);
 
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmScaleSet.Name));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartDeleteAsync(rgName, vmScaleSet.Name));
         }
 
         /// <summary>
@@ -142,12 +142,12 @@ namespace Azure.ResourceManager.Compute.Tests
             VirtualMachineScaleSet inputVMScaleSet;
             var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
 
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
 
             var getTwoVirtualMachineScaleSet = await CreateVMScaleSet_NoAsyncTracking(rgName, vmssName, storageAccountOutput, imageRef);
             VirtualMachineScaleSet vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
             inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
-            var getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmScaleSet.Name);
+            var getResponse = await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmScaleSet.Name);
             ValidateVMScaleSet(inputVMScaleSet, getResponse);
 
             // Adding an extension to the VMScaleSet. We will use Patch to update this.
@@ -170,7 +170,7 @@ namespace Azure.ResourceManager.Compute.Tests
 
             // Update the inputVMScaleSet and then compare it with response to verify the result.
             inputVMScaleSet.VirtualMachineProfile.ExtensionProfile = extensionProfile;
-            getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmScaleSet.Name);
+            getResponse = await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmScaleSet.Name);
             ValidateVMScaleSet(inputVMScaleSet, getResponse);
 
 
@@ -186,10 +186,10 @@ namespace Azure.ResourceManager.Compute.Tests
 
             // Validate that ScaleSet Scaled to 3 instances
             inputVMScaleSet.Sku.Capacity = 3;
-            getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmScaleSet.Name);
+            getResponse = await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmScaleSet.Name);
             ValidateVMScaleSet(inputVMScaleSet, getResponse);
 
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmScaleSet.Name));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartDeleteAsync(rgName, vmScaleSet.Name));
         }
     }
 }

@@ -41,7 +41,7 @@ namespace Azure.ResourceManager.Compute.Tests
         {
             ImageReference imageRef = await FindVMImage(vmmPublisherName, vmmOfferName, vmmSku);
             // Query the image directly in order to get all the properties, including PurchasePlan
-            return await VirtualMachineImagesClient.GetAsync(m_location, vmmPublisherName, vmmOfferName, vmmSku, imageRef.Version);
+            return await VirtualMachineImagesOperations.GetAsync(m_location, vmmPublisherName, vmmOfferName, vmmSku, imageRef.Version);
         }
 
         [Test]
@@ -100,7 +100,7 @@ namespace Azure.ResourceManager.Compute.Tests
             // Validate the VMM Plan field
             ValidateMarketplaceVMPlanField(vm1, img);
 
-            await WaitForCompletionAsync(await VirtualMachinesClient.StartDeleteAsync(rgName, inputVM.Name));
+            await WaitForCompletionAsync(await VirtualMachinesOperations.StartDeleteAsync(rgName, inputVM.Name));
         }
 
         [Test]
@@ -143,12 +143,12 @@ namespace Azure.ResourceManager.Compute.Tests
                 }
                 throw;
             }
-            var getResponse = await VirtualMachinesClient.GetAsync(rgName, vm1.Name);
+            var getResponse = await VirtualMachinesOperations.GetAsync(rgName, vm1.Name);
             //var getResponse = await VirtualMachinesClient.GetAsync(rgName, vm1.Name).GetAwaiter().GetResult();
             //Assert.True(getResponse.Status == HttpStatusCode.OK);
             ValidateVM(inputVM, getResponse,
                 Helpers.GetVMReferenceId(m_subId, rgName, inputVM.Name));
-            var lroResponse = await WaitForCompletionAsync(await VirtualMachinesClient.StartDeleteAsync(rgName, inputVM.Name));
+            var lroResponse = await WaitForCompletionAsync(await VirtualMachinesOperations.StartDeleteAsync(rgName, inputVM.Name));
             //var lroResponse = await VirtualMachinesClient.DeleteWithHttpMessagesAsync(rgName, inputVM.Name).GetAwaiter().GetResult();
             /////TODO
             //Assert.True(lroResponse .StatusCode == HttpStatusCode.OK);

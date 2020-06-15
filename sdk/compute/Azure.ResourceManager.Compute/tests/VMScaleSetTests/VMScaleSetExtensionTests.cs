@@ -52,27 +52,27 @@ namespace Azure.ResourceManager.Compute.Tests
             VirtualMachineScaleSetExtension getVmssExtResponse = null;
             for (int i = 0; i < vmssExtProfile.Extensions.Count; i++)
             {
-                getVmssExtResponse = await VirtualMachineScaleSetExtensionsClient.GetAsync(rgName, vmssName, vmssExtProfile.Extensions[i].Name);
+                getVmssExtResponse = await VirtualMachineScaleSetExtensionsOperations.GetAsync(rgName, vmssName, vmssExtProfile.Extensions[i].Name);
                 ValidateVmssExtension(vmssExtProfile.Extensions[i], getVmssExtResponse);
             }
 
             // Add a new extension to the VMSS (ext3 is provisioned after ext2)
             VirtualMachineScaleSetExtension vmssExtension = GetTestVMSSVMExtension(name: "3", publisher: "Microsoft.CPlat.Core", type: "NullLinux", version: "4.0");
             vmssExtension.ProvisionAfterExtensions = new List<string> { vmssExtProfile.Extensions[1].Name };
-            var response = await WaitForCompletionAsync(await VirtualMachineScaleSetExtensionsClient.StartCreateOrUpdateAsync(rgName, vmssName, vmssExtension.Name, vmssExtension));
+            var response = await WaitForCompletionAsync(await VirtualMachineScaleSetExtensionsOperations.StartCreateOrUpdateAsync(rgName, vmssName, vmssExtension.Name, vmssExtension));
             ValidateVmssExtension(vmssExtension, response.Value);
 
             // Perform a Get operation on the extension
-            getVmssExtResponse = await VirtualMachineScaleSetExtensionsClient.GetAsync(rgName, vmssName, vmssExtension.Name);
+            getVmssExtResponse = await VirtualMachineScaleSetExtensionsOperations.GetAsync(rgName, vmssName, vmssExtension.Name);
             ValidateVmssExtension(vmssExtension, getVmssExtResponse);
 
             // Clear the sequencing in ext3
             vmssExtension.ProvisionAfterExtensions.Clear();
-            var patchVmssExtsResponse = await WaitForCompletionAsync(await VirtualMachineScaleSetExtensionsClient.StartCreateOrUpdateAsync(rgName, vmssName, vmssExtension.Name, vmssExtension));
+            var patchVmssExtsResponse = await WaitForCompletionAsync(await VirtualMachineScaleSetExtensionsOperations.StartCreateOrUpdateAsync(rgName, vmssName, vmssExtension.Name, vmssExtension));
             ValidateVmssExtension(vmssExtension, patchVmssExtsResponse.Value);
 
             // Perform a List operation on vmss extensions
-            var listVmssExts = VirtualMachineScaleSetExtensionsClient.ListAsync(rgName, vmssName);
+            var listVmssExts = VirtualMachineScaleSetExtensionsOperations.ListAsync(rgName, vmssName);
             var listVmssExtsResponse = await listVmssExts.ToEnumerableAsync();
             int installedExtensionsCount = listVmssExtsResponse.Count();
             Assert.AreEqual(3, installedExtensionsCount);
@@ -127,29 +127,29 @@ namespace Azure.ResourceManager.Compute.Tests
             inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
             VirtualMachineScaleSetExtension vmssExtension = GetTestVMSSVMExtension();
             vmssExtension.ForceUpdateTag = "RerunExtension";
-            var response = await WaitForCompletionAsync(await VirtualMachineScaleSetExtensionsClient.StartCreateOrUpdateAsync(rgName, vmssName, vmssExtension.Name, vmssExtension));
+            var response = await WaitForCompletionAsync(await VirtualMachineScaleSetExtensionsOperations.StartCreateOrUpdateAsync(rgName, vmssName, vmssExtension.Name, vmssExtension));
             ValidateVmssExtension(vmssExtension, response.Value);
 
             // Perform a Get operation on the extension
-            var getVmssExtResponse = await VirtualMachineScaleSetExtensionsClient.GetAsync(rgName, vmssName, vmssExtension.Name);
+            var getVmssExtResponse = await VirtualMachineScaleSetExtensionsOperations.GetAsync(rgName, vmssName, vmssExtension.Name);
             ValidateVmssExtension(vmssExtension, getVmssExtResponse);
 
             // Validate the extension instance view in the VMSS instance-view
-            var getVmssWithInstanceViewResponse = await VirtualMachineScaleSetsClient.GetInstanceViewAsync(rgName, vmssName);
+            var getVmssWithInstanceViewResponse = await VirtualMachineScaleSetsOperations.GetInstanceViewAsync(rgName, vmssName);
             ValidateVmssExtensionInstanceView(getVmssWithInstanceViewResponse.Value.Extensions.FirstOrDefault());
 
             // Update an extension in the VMSS
             vmssExtension.Settings = string.Empty;
-            var patchVmssExtsResponse = await WaitForCompletionAsync(await VirtualMachineScaleSetExtensionsClient.StartCreateOrUpdateAsync(rgName, vmssName, vmssExtension.Name, vmssExtension));
+            var patchVmssExtsResponse = await WaitForCompletionAsync(await VirtualMachineScaleSetExtensionsOperations.StartCreateOrUpdateAsync(rgName, vmssName, vmssExtension.Name, vmssExtension));
             ValidateVmssExtension(vmssExtension, patchVmssExtsResponse.Value);
 
             // Perform a List operation on vmss extensions
-            var listVmssExts = VirtualMachineScaleSetExtensionsClient.ListAsync(rgName, vmssName);
+            var listVmssExts = VirtualMachineScaleSetExtensionsOperations.ListAsync(rgName, vmssName);
             var listVmssExtsResponse = await listVmssExts.ToEnumerableAsync();
             ValidateVmssExtension(vmssExtension, listVmssExtsResponse.FirstOrDefault(c => c.ForceUpdateTag == "RerunExtension"));
 
             // Validate the extension delete API
-            await WaitForCompletionAsync(await VirtualMachineScaleSetExtensionsClient.StartDeleteAsync(rgName, vmssName, vmssExtension.Name));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetExtensionsOperations.StartDeleteAsync(rgName, vmssName, vmssExtension.Name));
 
             passed = true;
             Assert.True(passed);

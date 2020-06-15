@@ -48,7 +48,7 @@ namespace Azure.ResourceManager.Compute.Tests
             string storageAccountName = Recording.GenerateAssetName(TestPrefix);
             VirtualMachine inputVM;
             // Create the resource Group, it might have been already created during StorageAccount creation.
-            var resourceGroup = await ResourceGroupsClient.CreateOrUpdateAsync(
+            var resourceGroup = await ResourceGroupsOperations.CreateOrUpdateAsync(
                 rgName,
                 new ResourceGroup(m_location)
                 {
@@ -68,19 +68,19 @@ namespace Azure.ResourceManager.Compute.Tests
 
             string expectedVMReferenceId = Helpers.GetVMReferenceId(m_subId, rgName, inputVM.Name);
 
-            var createOrUpdateResponse = await WaitForCompletionAsync(await VirtualMachinesClient.StartCreateOrUpdateAsync(
+            var createOrUpdateResponse = await WaitForCompletionAsync(await VirtualMachinesOperations.StartCreateOrUpdateAsync(
                  rgName, inputVM.Name, inputVM));
 
             Assert.NotNull(createOrUpdateResponse);
 
-            var getVMResponse = await VirtualMachinesClient.GetAsync(rgName, inputVM.Name);
+            var getVMResponse = await VirtualMachinesOperations.GetAsync(rgName, inputVM.Name);
 
             //Assert.True(
             //    getVMResponse.Value.AvailabilitySet.Id
             //        .ToLowerInvariant() == asetId.ToLowerInvariant());
             ValidateVM(inputVM, getVMResponse, expectedVMReferenceId);
 
-            var getNicResponse = (await NetworkInterfacesClient.GetAsync(rgName, nicResponse.Name)).Value;
+            var getNicResponse = (await NetworkInterfacesOperations.GetAsync(rgName, nicResponse.Name)).Value;
             // TODO AutoRest: Recording Passed, but these assertions failed in Playback mode
             Assert.NotNull(getNicResponse.MacAddress);
             Assert.NotNull(getNicResponse.Primary);
@@ -100,7 +100,7 @@ namespace Azure.ResourceManager.Compute.Tests
             string storageAccountName = Recording.GenerateAssetName(TestPrefix);
             VirtualMachine inputVM;
             // Create the resource Group, it might have been already created during StorageAccount creation.
-            var resourceGroup = await ResourceGroupsClient.CreateOrUpdateAsync(
+            var resourceGroup = await ResourceGroupsOperations.CreateOrUpdateAsync(
                 rgName,
                 new ResourceGroup(m_location)
                 {
@@ -121,33 +121,33 @@ namespace Azure.ResourceManager.Compute.Tests
 
             string expectedVMReferenceId = Helpers.GetVMReferenceId(m_subId, rgName, inputVM.Name);
 
-            var createOrUpdateResponse = await WaitForCompletionAsync(await VirtualMachinesClient.StartCreateOrUpdateAsync(
+            var createOrUpdateResponse = await WaitForCompletionAsync(await VirtualMachinesOperations.StartCreateOrUpdateAsync(
                  rgName, inputVM.Name, inputVM));
 
             Assert.NotNull(createOrUpdateResponse);
 
-            var getVMResponse = (await VirtualMachinesClient.GetAsync(rgName, inputVM.Name)).Value;
+            var getVMResponse = (await VirtualMachinesOperations.GetAsync(rgName, inputVM.Name)).Value;
 
             //Assert.True(
             //    getVMResponse.AvailabilitySet.Id
             //        .ToLowerInvariant() == asetId.ToLowerInvariant());
             ValidateVM(inputVM, getVMResponse, expectedVMReferenceId);
 
-            var getNicResponse = (await NetworkInterfacesClient.GetAsync(rgName, nicResponse.Name)).Value;
+            var getNicResponse = (await NetworkInterfacesOperations.GetAsync(rgName, nicResponse.Name)).Value;
             // TODO AutoRest: Recording Passed, but these assertions failed in Playback mode
             Assert.NotNull(getNicResponse.MacAddress);
             Assert.NotNull(getNicResponse.Primary);
             Assert.True(getNicResponse.Primary != null && getNicResponse.Primary.Value);
 
             // Get Effective RouteTable
-            var getEffectiveRouteTable = (await WaitForCompletionAsync(await NetworkInterfacesClient.StartGetEffectiveRouteTableAsync(rgName, nicResponse.Name))).Value;
+            var getEffectiveRouteTable = (await WaitForCompletionAsync(await NetworkInterfacesOperations.StartGetEffectiveRouteTableAsync(rgName, nicResponse.Name))).Value;
             Assert.NotNull(getEffectiveRouteTable);
             //Assert.AreNotEqual(0, getEffectiveRouteTable.Value.Count);
             Assert.AreEqual(getEffectiveRouteTable.Value[0].Source, EffectiveRouteSource.Default);
             Assert.AreEqual(getEffectiveRouteTable.Value[0].State, EffectiveRouteState.Active);
 
             // Get Effecting NSG
-            var getEffectiveNSGresponse = (await WaitForCompletionAsync(await NetworkInterfacesClient.StartListEffectiveNetworkSecurityGroupsAsync(rgName, nicResponse.Name.ToString()))).Value;
+            var getEffectiveNSGresponse = (await WaitForCompletionAsync(await NetworkInterfacesOperations.StartListEffectiveNetworkSecurityGroupsAsync(rgName, nicResponse.Name.ToString()))).Value;
             Assert.NotNull(getEffectiveNSGresponse);
             Assert.AreNotEqual(0, getEffectiveNSGresponse.Value.Count);
             Assert.NotNull(getEffectiveNSGresponse.Value[0].Association);
@@ -180,7 +180,7 @@ namespace Azure.ResourceManager.Compute.Tests
             string storageAccountName = Recording.GenerateAssetName(TestPrefix);
             VirtualMachine inputVM;
             // Create the resource Group, it might have been already created during StorageAccount creation.
-            var resourceGroup = await ResourceGroupsClient.CreateOrUpdateAsync(
+            var resourceGroup = await ResourceGroupsOperations.CreateOrUpdateAsync(
                 rgName,
                 new ResourceGroup(m_location)
                 {
@@ -211,22 +211,22 @@ namespace Azure.ResourceManager.Compute.Tests
 
             string expectedVMReferenceId = Helpers.GetVMReferenceId(m_subId, rgName, inputVM.Name);
 
-            var createOrUpdateResponse = await WaitForCompletionAsync(await VirtualMachinesClient.StartCreateOrUpdateAsync(rgName, inputVM.Name, inputVM));
+            var createOrUpdateResponse = await WaitForCompletionAsync(await VirtualMachinesOperations.StartCreateOrUpdateAsync(rgName, inputVM.Name, inputVM));
 
-            var getVMResponse = (await VirtualMachinesClient.GetAsync(rgName, inputVM.Name)).Value;
+            var getVMResponse = (await VirtualMachinesOperations.GetAsync(rgName, inputVM.Name)).Value;
 
             //Assert.True(
             //    getVMResponse.AvailabilitySet.Id
             //        .ToLowerInvariant() == asetId.ToLowerInvariant());
             ValidateVM(inputVM, getVMResponse, expectedVMReferenceId);
 
-            var getNicResponse1 = (await NetworkInterfacesClient.GetAsync(rgName, nicResponse1.Name)).Value;
+            var getNicResponse1 = (await NetworkInterfacesOperations.GetAsync(rgName, nicResponse1.Name)).Value;
             // TODO AutoRest: Recording Passed, but these assertions failed in Playback mode
             Assert.NotNull(getNicResponse1.MacAddress);
             Assert.NotNull(getNicResponse1.Primary);
             Assert.True(getNicResponse1.Primary != null && !getNicResponse1.Primary.Value);
 
-            var getNicResponse2 = (await NetworkInterfacesClient.GetAsync(rgName, nicResponse2.Name)).Value;
+            var getNicResponse2 = (await NetworkInterfacesOperations.GetAsync(rgName, nicResponse2.Name)).Value;
             // TODO AutoRest: Recording Passed, but these assertions failed in Playback mode
             Assert.NotNull(getNicResponse2.MacAddress);
             Assert.NotNull(getNicResponse2.Primary);
@@ -245,7 +245,7 @@ namespace Azure.ResourceManager.Compute.Tests
             string storageAccountName = Recording.GenerateAssetName(TestPrefix);
             VirtualMachine inputVM;
             // Create the resource Group, it might have been already created during StorageAccount creation.
-            var resourceGroup = await ResourceGroupsClient.CreateOrUpdateAsync(
+            var resourceGroup = await ResourceGroupsOperations.CreateOrUpdateAsync(
                 rgName,
                 new ResourceGroup(m_location)
                 {
@@ -276,22 +276,22 @@ namespace Azure.ResourceManager.Compute.Tests
 
             string expectedVMReferenceId = Helpers.GetVMReferenceId(m_subId, rgName, inputVM.Name);
 
-            var createOrUpdateResponse = await WaitForCompletionAsync(await VirtualMachinesClient.StartCreateOrUpdateAsync(rgName, inputVM.Name, inputVM));
+            var createOrUpdateResponse = await WaitForCompletionAsync(await VirtualMachinesOperations.StartCreateOrUpdateAsync(rgName, inputVM.Name, inputVM));
 
-            var getVMResponse = (await VirtualMachinesClient.GetAsync(rgName, inputVM.Name)).Value;
+            var getVMResponse = (await VirtualMachinesOperations.GetAsync(rgName, inputVM.Name)).Value;
 
             //Assert.True(
             //    getVMResponse.AvailabilitySet.Id
             //        .ToLowerInvariant() == asetId.ToLowerInvariant());
             ValidateVM(inputVM, getVMResponse, expectedVMReferenceId);
 
-            var getNicResponse1 = (await NetworkInterfacesClient.GetAsync(rgName, nicResponse1.Name)).Value;
+            var getNicResponse1 = (await NetworkInterfacesOperations.GetAsync(rgName, nicResponse1.Name)).Value;
             // TODO AutoRest: Recording Passed, but these assertions failed in Playback mode
             Assert.NotNull(getNicResponse1.MacAddress);
             Assert.NotNull(getNicResponse1.Primary);
             Assert.True(getNicResponse1.Primary != null && !getNicResponse1.Primary.Value);
 
-            var getNicResponse2 = (await NetworkInterfacesClient.GetAsync(rgName, nicResponse2.Name)).Value;
+            var getNicResponse2 = (await NetworkInterfacesOperations.GetAsync(rgName, nicResponse2.Name)).Value;
             // TODO AutoRest: Recording Passed, but these assertions failed in Playback mode
             Assert.NotNull(getNicResponse2.MacAddress);
             Assert.NotNull(getNicResponse2.Primary);

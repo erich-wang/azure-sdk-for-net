@@ -38,7 +38,7 @@ namespace Azure.ResourceManager.Compute.Tests
             string documentId = "RunPowerShellScript";
 
             // Verify the List of commands
-            var runCommandList = VirtualMachineRunCommandsClient.ListAsync(location);
+            var runCommandList = VirtualMachineRunCommandsOperations.ListAsync(location);
             var runCommandListResponse = await runCommandList.ToEnumerableAsync();
             Assert.NotNull(runCommandListResponse);
             Assert.True(runCommandListResponse.Count() > 0, "ListRunCommands should return at least 1 command");
@@ -47,7 +47,7 @@ namespace Azure.ResourceManager.Compute.Tests
             Assert.NotNull(documentBase);
 
             // Verify Get a specific RunCommand
-            RunCommandDocument document = await VirtualMachineRunCommandsClient.GetAsync(location, documentId);
+            RunCommandDocument document = await VirtualMachineRunCommandsOperations.GetAsync(location, documentId);
             Assert.NotNull(document);
             Assert.NotNull(document.Script);
             Assert.True(document.Script.Count > 0, "Script should contain at least one command.");

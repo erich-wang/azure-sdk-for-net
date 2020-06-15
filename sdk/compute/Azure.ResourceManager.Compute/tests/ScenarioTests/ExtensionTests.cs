@@ -91,19 +91,19 @@ namespace Azure.ResourceManager.Compute.Tests
             var vm = returnTwovm.Item1;
             inputVM = returnTwovm.Item2;
             // Delete an extension that does not exist in the VM. A http status code of NoContent should be returned which translates to operation success.
-            var xx = await WaitForCompletionAsync(await VirtualMachineExtensionsClient.StartDeleteAsync(rgName, vm.Name, "VMExtensionDoesNotExist"));
+            var xx = await WaitForCompletionAsync(await VirtualMachineExtensionsOperations.StartDeleteAsync(rgName, vm.Name, "VMExtensionDoesNotExist"));
             // Add an extension to the VM
             var vmExtension = GetTestVMExtension();
-            var resp = await VirtualMachineExtensionsClient.StartCreateOrUpdateAsync(rgName, vm.Name, vmExtension.Name, vmExtension);
+            var resp = await VirtualMachineExtensionsOperations.StartCreateOrUpdateAsync(rgName, vm.Name, vmExtension.Name, vmExtension);
             var response = await WaitForCompletionAsync(resp);
             ValidateVMExtension(vmExtension, response);
 
             // Perform a Get operation on the extension
-            var getVMExtResponse = await VirtualMachineExtensionsClient.GetAsync(rgName, vm.Name, vmExtension.Name);
+            var getVMExtResponse = await VirtualMachineExtensionsOperations.GetAsync(rgName, vm.Name, vmExtension.Name);
             ValidateVMExtension(vmExtension, getVMExtResponse);
 
             // Perform a GetExtensions on the VM
-            var getVMExtsResponse = (await VirtualMachineExtensionsClient.ListAsync(rgName, vm.Name)).Value;
+            var getVMExtsResponse = (await VirtualMachineExtensionsOperations.ListAsync(rgName, vm.Name)).Value;
 
             Assert.True(getVMExtsResponse.Value.Count > 0);
             var vme = getVMExtsResponse.Value.Where(c => c.Name == "vmext01");
@@ -112,27 +112,27 @@ namespace Azure.ResourceManager.Compute.Tests
             ValidateVMExtension(vmExtension, vme.First());
 
             // Validate Get InstanceView for the extension
-            var getVMExtInstanceViewResponse = (await VirtualMachineExtensionsClient.GetAsync(rgName, vm.Name, vmExtension.Name, "instanceView")).Value;
+            var getVMExtInstanceViewResponse = (await VirtualMachineExtensionsOperations.GetAsync(rgName, vm.Name, vmExtension.Name, "instanceView")).Value;
             ValidateVMExtensionInstanceView(getVMExtInstanceViewResponse.InstanceView);
 
             // Update extension on the VM
             var vmExtensionUpdate = GetTestVMUpdateExtension();
-            await WaitForCompletionAsync(await VirtualMachineExtensionsClient.StartUpdateAsync(rgName, vm.Name, vmExtension.Name, vmExtensionUpdate));
+            await WaitForCompletionAsync(await VirtualMachineExtensionsOperations.StartUpdateAsync(rgName, vm.Name, vmExtension.Name, vmExtensionUpdate));
             vmExtension.Tags["extensionTag3"] = "3";
-            getVMExtResponse = await VirtualMachineExtensionsClient.GetAsync(rgName, vm.Name, vmExtension.Name);
+            getVMExtResponse = await VirtualMachineExtensionsOperations.GetAsync(rgName, vm.Name, vmExtension.Name);
             ValidateVMExtension(vmExtension, getVMExtResponse);
 
             // Validate the extension in the VM info
-            var getVMResponse = (await VirtualMachinesClient.GetAsync(rgName, vm.Name)).Value;
+            var getVMResponse = (await VirtualMachinesOperations.GetAsync(rgName, vm.Name)).Value;
             // TODO AutoRest: Recording Passed, but these assertions failed in Playback mode
             ValidateVMExtension(vmExtension, getVMResponse.Resources.FirstOrDefault(c => c.Name == vmExtension.Name));
 
             // Validate the extension instance view in the VM instance-view
-            var getVMWithInstanceViewResponse = (await VirtualMachinesClient.GetAsync(rgName, vm.Name)).Value;
+            var getVMWithInstanceViewResponse = (await VirtualMachinesOperations.GetAsync(rgName, vm.Name)).Value;
             ValidateVMExtensionInstanceView(getVMWithInstanceViewResponse.InstanceView.Extensions.FirstOrDefault());
 
             // Validate the extension delete API
-            await WaitForCompletionAsync(await VirtualMachineExtensionsClient.StartDeleteAsync(rgName, vm.Name, vmExtension.Name));
+            await WaitForCompletionAsync(await VirtualMachineExtensionsOperations.StartDeleteAsync(rgName, vm.Name, vmExtension.Name));
         }
 
         private void ValidateVMExtension(VirtualMachineExtension vmExtExpected, VirtualMachineExtension vmExtReturned)

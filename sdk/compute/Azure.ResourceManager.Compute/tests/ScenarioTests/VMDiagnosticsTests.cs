@@ -55,17 +55,17 @@ namespace Azure.ResourceManager.Compute.Tests
                     vm.DiagnosticsProfile = GetDiagnosticsProfile(storageAccountForBootDiagnosticsName);
                 });
             inputVM = returnTwoVm.Item2;
-            VirtualMachine getVMWithInstanceViewResponse = await VirtualMachinesClient.GetAsync(resourceGroupName, inputVM.Name);
+            VirtualMachine getVMWithInstanceViewResponse = await VirtualMachinesOperations.GetAsync(resourceGroupName, inputVM.Name);
             ValidateVMInstanceView(inputVM, getVMWithInstanceViewResponse);
             ValidateBootDiagnosticsInstanceView(getVMWithInstanceViewResponse.InstanceView.BootDiagnostics, hasError: false);
 
             // Make boot diagnostics encounter an error due to a missing boot diagnostics storage account
-            await WaitForCompletionAsync(await VirtualMachinesClient.StartDeallocateAsync(resourceGroupName, inputVM.Name));
-            await StorageAccountsClient.DeleteAsync(resourceGroupName, storageAccountForBootDiagnosticsName);
+            await WaitForCompletionAsync(await VirtualMachinesOperations.StartDeallocateAsync(resourceGroupName, inputVM.Name));
+            await StorageAccountsOperations.DeleteAsync(resourceGroupName, storageAccountForBootDiagnosticsName);
             //await StorageAccountsClient.DeleteWithHttpMessagesAsync(resourceGroupName, storageAccountForBootDiagnosticsName).GetAwaiter().GetResult();
-            await WaitForCompletionAsync(await VirtualMachinesClient.StartStartAsync(resourceGroupName, inputVM.Name));
+            await WaitForCompletionAsync(await VirtualMachinesOperations.StartStartAsync(resourceGroupName, inputVM.Name));
 
-            getVMWithInstanceViewResponse = await VirtualMachinesClient.GetAsync(resourceGroupName, inputVM.Name);
+            getVMWithInstanceViewResponse = await VirtualMachinesOperations.GetAsync(resourceGroupName, inputVM.Name);
             ValidateBootDiagnosticsInstanceView(getVMWithInstanceViewResponse.InstanceView.BootDiagnostics, hasError: true);
         }
     }

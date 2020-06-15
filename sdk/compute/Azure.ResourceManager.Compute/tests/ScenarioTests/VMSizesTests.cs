@@ -34,7 +34,7 @@ namespace Azure.ResourceManager.Compute.Tests
         {
             string location = DefaultLocation.Replace(" ", "");
 
-            var virtualMachineSizeListResponse = await (VirtualMachineSizesClient.ListAsync(location)).ToEnumerableAsync();
+            var virtualMachineSizeListResponse = await (VirtualMachineSizesOperations.ListAsync(location)).ToEnumerableAsync();
             Helpers.ValidateVirtualMachineSizeListResponse(virtualMachineSizeListResponse);
         }
     }

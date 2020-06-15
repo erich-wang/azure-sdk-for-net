@@ -46,7 +46,7 @@ namespace Azure.ResourceManager.Compute.Tests
 
             RequestRateByIntervalInput requestRateByIntervalInput = new RequestRateByIntervalInput(sasUri, Recording.UtcNow.AddDays(-10), Recording.UtcNow.AddDays(-8), IntervalInMins.FiveMins);
 
-            var result = await WaitForCompletionAsync(await LogAnalyticsClient.StartExportRequestRateByIntervalAsync("westcentralus", requestRateByIntervalInput));
+            var result = await WaitForCompletionAsync(await LogAnalyticsOperations.StartExportRequestRateByIntervalAsync("westcentralus", requestRateByIntervalInput));
             //BUG: LogAnalytics API does not return correct result.
             //Assert.EndsWith(".csv", result.Properties.Output);
 
@@ -55,7 +55,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 GroupByOperationName = true,
             };
 
-            var result1 = await WaitForCompletionAsync(await LogAnalyticsClient.StartExportThrottledRequestsAsync("westcentralus", throttledRequestsInput));
+            var result1 = await WaitForCompletionAsync(await LogAnalyticsOperations.StartExportThrottledRequestsAsync("westcentralus", throttledRequestsInput));
 
             //BUG: LogAnalytics API does not return correct result.
             //Assert.EndsWith(".csv", result.Properties.Output);
@@ -68,11 +68,11 @@ namespace Azure.ResourceManager.Compute.Tests
             if (Mode == RecordedTestMode.Record)
             {
                 StorageAccount storageAccountOutput = await CreateStorageAccount(rg1Name, storageAccountName);
-                var accountKeyResult = (await StorageAccountsClient.ListKeysAsync(rg1Name, storageAccountName)).Value;
+                var accountKeyResult = (await StorageAccountsOperations.ListKeysAsync(rg1Name, storageAccountName)).Value;
                 //var accountKeyResult = await StorageAccountsClient.ListKeysWithHttpMessagesAsync(rg1Name, storageAccountName).Result;
                 StorageAccount storageAccount = new StorageAccount(DefaultLocation);
 
-                BlobContainer container = await BlobContainersClient.GetAsync(rg1Name, storageAccountName, "sascontainer");
+                BlobContainer container = await BlobContainersOperations.GetAsync(rg1Name, storageAccountName, "sascontainer");
                 //container.CreateIfNotExistsAsync();
                 sasUri = GetContainerSasUri(container);
             }

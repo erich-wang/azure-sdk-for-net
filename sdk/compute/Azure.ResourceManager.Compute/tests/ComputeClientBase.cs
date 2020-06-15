@@ -11,7 +11,7 @@ using Azure.ResourceManager.Compute;
 using Azure.ResourceManager.Compute.Tests;
 using Azure.ResourceManager.TestFramework;
 using NUnit.Framework;
-using OperationsClient = Azure.ResourceManager.Compute.OperationsClient;
+using Operations = Azure.ResourceManager.Compute.Operations;
 
 namespace Azure.ResourceManager
 {
@@ -19,49 +19,49 @@ namespace Azure.ResourceManager
     [ClientTestFixture]
     public abstract class ComputeClientBase : ManagementRecordedTestBase<ComputeManagementTestEnvironment>
     {
-        public ResourceGroupsClient ResourceGroupsClient { get; set; }
-        public ProvidersClient ProvidersClient { get; set; }
-        public DeploymentsClient DeploymentsClient { get; set; }
-        public TagsClient TagsClient { get; set; }
-        public ResourcesClient ResourcesClient { get; set; }
-        public VirtualMachineImagesClient VirtualMachineImagesClient { get; set; }
-        public AvailabilitySetsClient AvailabilitySetsClient { get; set; }
-        public ContainerServicesClient ContainerServicesClient { get; set; }
-        public DedicatedHostGroupsClient DedicatedHostGroupsClient { get; set; }
-        public DedicatedHostsClient DedicatedHostsClient { get; set; }
-        public VirtualMachineExtensionImagesClient VirtualMachineExtensionImagesClient { get; set; }
-        public ResourceSkusClient ResourceSkusClient { get; set; }
-        public LogAnalyticsClient LogAnalyticsClient { get; set; }
-        public OperationsClient OperationsClient { get; set; }
-        public ProximityPlacementGroupsClient ProximityPlacementGroupsClient { get; set; }
-        public VirtualMachinesClient VirtualMachinesClient { get; set; }
-        public VirtualMachineRunCommandsClient VirtualMachineRunCommandsClient { get; set; }
-        public VirtualMachineScaleSetExtensionsClient VirtualMachineScaleSetExtensionsClient { get; set; }
-        public VirtualMachineScaleSetsClient VirtualMachineScaleSetsClient { get; set; }
-        public VirtualMachineScaleSetVMsClient VirtualMachineScaleSetVMsClient { get; set; }
-        public VirtualMachineScaleSetRollingUpgradesClient VirtualMachineScaleSetRollingUpgradesClient { get; set; }
-        public DisksClient DisksClient { get; set; }
-        public VirtualMachineSizesClient VirtualMachineSizesClient { get; set; }
-        public SnapshotsClient SnapshotsClient { get; set; }
-        public DiskEncryptionSetsClient DiskEncryptionSetsClient { get; set; }
-        public VirtualNetworksClient VirtualNetworksClient { get; set; }
-        public PublicIPAddressesClient PublicIPAddressesClient { get; set; }
-        public StorageAccountsClient StorageAccountsClient { get; set; }
-        public SubnetsClient SubnetsClient { get; set; }
-        public NetworkInterfacesClient NetworkInterfacesClient { get; set; }
-        public VirtualMachineExtensionsClient VirtualMachineExtensionsClient { get; set; }
-        public GalleriesClient GalleriesClient { get; set; }
-        public GalleryImagesClient GalleryImagesClient { get; set; }
-        public GalleryImageVersionsClient GalleryImageVersionsClient { get; set; }
-        public ImagesClient ImagesClient { get; set; }
-        public GalleryApplicationsClient GalleryApplicationsClient { get; set; }
-        public GalleryApplicationVersionsClient GalleryApplicationVersionsClient { get; set; }
-        public BlobContainersClient BlobContainersClient { get; set; }
-        public UsageClient UsageClient { get; set; }
-        public ApplicationGatewaysClient ApplicationGatewaysClient { get; set; }
-        public LoadBalancersClient LoadBalancersClient { get; set; }
-        public NetworkSecurityGroupsClient NetworkSecurityGroupsClient { get; set; }
-        public PublicIPPrefixesClient PublicIPPrefixesClient { get; set; }
+        public ResourceGroupsOperations ResourceGroupsOperations { get; set; }
+        public ProvidersOperations ProvidersOperations { get; set; }
+        public DeploymentsOperations DeploymentsOperations { get; set; }
+        public TagsOperations TagsOperations { get; set; }
+        public ResourcesOperations ResourcesOperations { get; set; }
+        public VirtualMachineImagesOperations VirtualMachineImagesOperations { get; set; }
+        public AvailabilitySetsOperations AvailabilitySetsOperations { get; set; }
+        public ContainerServicesOperations ContainerServicesOperations { get; set; }
+        public DedicatedHostGroupsOperations DedicatedHostGroupsOperations { get; set; }
+        public DedicatedHostsOperations DedicatedHostsOperations { get; set; }
+        public VirtualMachineExtensionImagesOperations VirtualMachineExtensionImagesOperations { get; set; }
+        public ResourceSkusOperations ResourceSkusOperations { get; set; }
+        public LogAnalyticsOperations LogAnalyticsOperations { get; set; }
+        public Operations Operations { get; set; }
+        public ProximityPlacementGroupsOperations ProximityPlacementGroupsOperations { get; set; }
+        public VirtualMachinesOperations VirtualMachinesOperations { get; set; }
+        public VirtualMachineRunCommandsOperations VirtualMachineRunCommandsOperations { get; set; }
+        public VirtualMachineScaleSetExtensionsOperations VirtualMachineScaleSetExtensionsOperations { get; set; }
+        public VirtualMachineScaleSetsOperations VirtualMachineScaleSetsOperations { get; set; }
+        public VirtualMachineScaleSetVMsOperations VirtualMachineScaleSetVMsOperations { get; set; }
+        public VirtualMachineScaleSetRollingUpgradesOperations VirtualMachineScaleSetRollingUpgradesOperations { get; set; }
+        public DisksOperations DisksOperations { get; set; }
+        public VirtualMachineSizesOperations VirtualMachineSizesOperations { get; set; }
+        public SnapshotsOperations SnapshotsOperations { get; set; }
+        public DiskEncryptionSetsOperations DiskEncryptionSetsOperations { get; set; }
+        public VirtualNetworksOperations VirtualNetworksOperations { get; set; }
+        public PublicIPAddressesOperations PublicIPAddressesOperations { get; set; }
+        public StorageAccountsOperations StorageAccountsOperations { get; set; }
+        public SubnetsOperations SubnetsOperations { get; set; }
+        public NetworkInterfacesOperations NetworkInterfacesOperations { get; set; }
+        public VirtualMachineExtensionsOperations VirtualMachineExtensionsOperations { get; set; }
+        public GalleriesOperations GalleriesOperations { get; set; }
+        public GalleryImagesOperations GalleryImagesOperations { get; set; }
+        public GalleryImageVersionsOperations GalleryImageVersionsOperations { get; set; }
+        public ImagesOperations ImagesOperations { get; set; }
+        public GalleryApplicationsOperations GalleryApplicationsOperations { get; set; }
+        public GalleryApplicationVersionsOperations GalleryApplicationVersionsOperations { get; set; }
+        public BlobContainersOperations BlobContainersOperations { get; set; }
+        public UsageOperations UsageClient { get; set; }
+        public ApplicationGatewaysOperations ApplicationGatewaysOperations { get; set; }
+        public LoadBalancersOperations LoadBalancersOperations { get; set; }
+        public NetworkSecurityGroupsOperations NetworkSecurityGroupsOperations { get; set; }
+        public PublicIPPrefixesOperations PublicIPPrefixesOperations { get; set; }
         public ComputeManagementClient ComputeManagementClient { get; set; }
         public string DefaultLocation { get; set; }
         protected ComputeClientBase(bool isAsync)
@@ -72,52 +72,52 @@ namespace Azure.ResourceManager
         protected void InitializeBase()
         {
             var resourceManagementClient = GetResourceManagementClient();
-            ResourceGroupsClient = resourceManagementClient.GetResourceGroupsClient();
-            ProvidersClient = resourceManagementClient.GetProvidersClient();
-            DeploymentsClient = resourceManagementClient.GetDeploymentsClient();
-            TagsClient = resourceManagementClient.GetTagsClient();
-            ResourcesClient = resourceManagementClient.GetResourcesClient();
+            ResourceGroupsOperations = resourceManagementClient.ResourceGroups;
+            ProvidersOperations = resourceManagementClient.Providers;
+            DeploymentsOperations = resourceManagementClient.Deployments;
+            TagsOperations = resourceManagementClient.Tags;
+            ResourcesOperations = resourceManagementClient.Resources;
             ComputeManagementClient = GetComputeManagementClient();
-            VirtualMachineImagesClient = ComputeManagementClient.GetVirtualMachineImagesClient();
-            AvailabilitySetsClient = ComputeManagementClient.GetAvailabilitySetsClient();
-            ContainerServicesClient = ComputeManagementClient.GetContainerServicesClient();
-            DedicatedHostGroupsClient = ComputeManagementClient.GetDedicatedHostGroupsClient();
-            DedicatedHostsClient = ComputeManagementClient.GetDedicatedHostsClient();
-            VirtualMachineExtensionImagesClient = ComputeManagementClient.GetVirtualMachineExtensionImagesClient();
-            ResourceSkusClient = ComputeManagementClient.GetResourceSkusClient();
-            LogAnalyticsClient = ComputeManagementClient.GetLogAnalyticsClient();
-            OperationsClient = ComputeManagementClient.GetOperationsClient();
-            ProximityPlacementGroupsClient = ComputeManagementClient.GetProximityPlacementGroupsClient();
-            VirtualMachinesClient = ComputeManagementClient.GetVirtualMachinesClient();
-            VirtualMachineRunCommandsClient = ComputeManagementClient.GetVirtualMachineRunCommandsClient();
-            VirtualMachineScaleSetExtensionsClient = ComputeManagementClient.GetVirtualMachineScaleSetExtensionsClient();
-            VirtualMachineScaleSetsClient = ComputeManagementClient.GetVirtualMachineScaleSetsClient();
-            VirtualMachineScaleSetVMsClient = ComputeManagementClient.GetVirtualMachineScaleSetVMsClient();
-            VirtualMachineScaleSetRollingUpgradesClient = ComputeManagementClient.GetVirtualMachineScaleSetRollingUpgradesClient();
-            DisksClient = ComputeManagementClient.GetDisksClient();
-            VirtualMachineSizesClient = ComputeManagementClient.GetVirtualMachineSizesClient();
-            SnapshotsClient = ComputeManagementClient.GetSnapshotsClient();
-            DiskEncryptionSetsClient = ComputeManagementClient.GetDiskEncryptionSetsClient();
-            VirtualMachineExtensionsClient = ComputeManagementClient.GetVirtualMachineExtensionsClient();
-            GalleriesClient = ComputeManagementClient.GetGalleriesClient();
-            GalleryImagesClient = ComputeManagementClient.GetGalleryImagesClient();
-            GalleryImageVersionsClient = ComputeManagementClient.GetGalleryImageVersionsClient();
-            ImagesClient = ComputeManagementClient.GetImagesClient();
-            GalleryApplicationsClient = ComputeManagementClient.GetGalleryApplicationsClient();
-            GalleryApplicationVersionsClient = ComputeManagementClient.GetGalleryApplicationVersionsClient();
-            UsageClient = ComputeManagementClient.GetUsageClient();
+            VirtualMachineImagesOperations = ComputeManagementClient.VirtualMachineImages;
+            AvailabilitySetsOperations = ComputeManagementClient.AvailabilitySets;
+            ContainerServicesOperations = ComputeManagementClient.ContainerServices;
+            DedicatedHostGroupsOperations = ComputeManagementClient.DedicatedHostGroups;
+            DedicatedHostsOperations = ComputeManagementClient.DedicatedHosts;
+            VirtualMachineExtensionImagesOperations = ComputeManagementClient.VirtualMachineExtensionImages;
+            ResourceSkusOperations = ComputeManagementClient.ResourceSkus;
+            LogAnalyticsOperations = ComputeManagementClient.LogAnalytics;
+            Operations = ComputeManagementClient.Operations;
+            ProximityPlacementGroupsOperations = ComputeManagementClient.ProximityPlacementGroups;
+            VirtualMachinesOperations = ComputeManagementClient.VirtualMachines;
+            VirtualMachineRunCommandsOperations = ComputeManagementClient.VirtualMachineRunCommands;
+            VirtualMachineScaleSetExtensionsOperations = ComputeManagementClient.VirtualMachineScaleSetExtensions;
+            VirtualMachineScaleSetsOperations = ComputeManagementClient.VirtualMachineScaleSets;
+            VirtualMachineScaleSetVMsOperations = ComputeManagementClient.VirtualMachineScaleSetVMs;
+            VirtualMachineScaleSetRollingUpgradesOperations = ComputeManagementClient.VirtualMachineScaleSetRollingUpgrades;
+            DisksOperations = ComputeManagementClient.Disks;
+            VirtualMachineSizesOperations = ComputeManagementClient.VirtualMachineSizes;
+            SnapshotsOperations = ComputeManagementClient.Snapshots;
+            DiskEncryptionSetsOperations = ComputeManagementClient.DiskEncryptionSets;
+            VirtualMachineExtensionsOperations = ComputeManagementClient.VirtualMachineExtensions;
+            GalleriesOperations = ComputeManagementClient.Galleries;
+            GalleryImagesOperations = ComputeManagementClient.GalleryImages;
+            GalleryImageVersionsOperations = ComputeManagementClient.GalleryImageVersions;
+            ImagesOperations = ComputeManagementClient.Images;
+            GalleryApplicationsOperations = ComputeManagementClient.GalleryApplications;
+            GalleryApplicationVersionsOperations = ComputeManagementClient.GalleryApplicationVersions;
+            UsageClient = ComputeManagementClient.Usage;
             var NetworkManagementClient = GetNetworkManagementClient();
-            PublicIPAddressesClient = NetworkManagementClient.GetPublicIPAddressesClient();
-            SubnetsClient = NetworkManagementClient.GetSubnetsClient();
-            NetworkInterfacesClient = NetworkManagementClient.GetNetworkInterfacesClient();
-            ApplicationGatewaysClient = NetworkManagementClient.GetApplicationGatewaysClient();
-            LoadBalancersClient = NetworkManagementClient.GetLoadBalancersClient();
-            NetworkSecurityGroupsClient = NetworkManagementClient.GetNetworkSecurityGroupsClient();
-            PublicIPPrefixesClient = NetworkManagementClient.GetPublicIPPrefixesClient();
-            VirtualNetworksClient = NetworkManagementClient.GetVirtualNetworksClient();
+            PublicIPAddressesOperations = NetworkManagementClient.PublicIPAddresses;
+            SubnetsOperations = NetworkManagementClient.Subnets;
+            NetworkInterfacesOperations = NetworkManagementClient.NetworkInterfaces;
+            ApplicationGatewaysOperations = NetworkManagementClient.ApplicationGateways;
+            LoadBalancersOperations = NetworkManagementClient.LoadBalancers;
+            NetworkSecurityGroupsOperations = NetworkManagementClient.NetworkSecurityGroups;
+            PublicIPPrefixesOperations = NetworkManagementClient.PublicIPPrefixes;
+            VirtualNetworksOperations = NetworkManagementClient.VirtualNetworks;
             var StorageManagementClient = GetStorageManagementClient();
-            StorageAccountsClient = StorageManagementClient.GetStorageAccountsClient();
-            BlobContainersClient = StorageManagementClient.GetBlobContainersClient();
+            StorageAccountsOperations = StorageManagementClient.StorageAccounts;
+            BlobContainersOperations = StorageManagementClient.BlobContainers;
             DefaultLocation = "southeastasia";
         }
         internal ComputeManagementClient GetComputeManagementClient()

@@ -280,17 +280,17 @@ namespace Azure.ResourceManager.Compute.Tests
             VirtualMachine vm = returnTwoVM.Item1;
             inputVM = returnTwoVM.Item2;
             //var getVMWithInstanceViewResponse = await VirtualMachinesClient.GetAsync(rgName, inputVM.Name, InstanceViewTypes.InstanceView);
-            var getVMWithInstanceViewResponse = await VirtualMachinesClient.GetAsync(rgName, inputVM.Name);
+            var getVMWithInstanceViewResponse = await VirtualMachinesOperations.GetAsync(rgName, inputVM.Name);
             ValidateVMInstanceView(inputVM, getVMWithInstanceViewResponse);
 
-            var lroResponse = await WaitForCompletionAsync(await VirtualMachinesClient.StartCreateOrUpdateAsync(rgName, vm.Name, vm));
+            var lroResponse = await WaitForCompletionAsync(await VirtualMachinesOperations.StartCreateOrUpdateAsync(rgName, vm.Name, vm));
             Assert.True(lroResponse.Value.ProvisioningState == "Succeeded");
             if (vmValidator != null)
             {
                 vmValidator(vm);
             }
 
-            await WaitForCompletionAsync(await VirtualMachinesClient.StartDeleteAsync(rgName, vm.Name));
+            await WaitForCompletionAsync(await VirtualMachinesOperations.StartDeleteAsync(rgName, vm.Name));
         }
 
 

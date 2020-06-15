@@ -57,7 +57,7 @@ namespace Azure.ResourceManager.Compute.Tests
 
             var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
 
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
 
             var getTwoVirtualMachineScaleSet = await CreateVMScaleSet_NoAsyncTracking(
                 rgName,
@@ -77,30 +77,30 @@ namespace Azure.ResourceManager.Compute.Tests
             inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
             ValidateVMScaleSet(inputVMScaleSet, getResponse, hasManagedDisks: true);
 
-            var getInstanceViewResponse = await VirtualMachineScaleSetsClient.GetInstanceViewAsync(rgName, vmssName);
+            var getInstanceViewResponse = await VirtualMachineScaleSetsOperations.GetInstanceViewAsync(rgName, vmssName);
             Assert.NotNull(getInstanceViewResponse);
             ValidateVMScaleSetInstanceView(inputVMScaleSet, getInstanceViewResponse);
 
-            var getVMInstanceViewResponse = await VirtualMachineScaleSetVMsClient.GetInstanceViewAsync(rgName, vmssName, "0");
+            var getVMInstanceViewResponse = await VirtualMachineScaleSetVMsOperations.GetInstanceViewAsync(rgName, vmssName, "0");
             Assert.NotNull(getVMInstanceViewResponse);
             Assert.NotNull(getVMInstanceViewResponse.Value.VmHealth);
             Assert.AreEqual("HealthState/healthy", getVMInstanceViewResponse.Value.VmHealth.Status.Code);
 
             // Update the VMSS by adding an extension
             WaitSeconds(600);
-            var vmssStatus = await VirtualMachineScaleSetsClient.GetInstanceViewAsync(rgName, vmssName);
+            var vmssStatus = await VirtualMachineScaleSetsOperations.GetInstanceViewAsync(rgName, vmssName);
 
             inputVMScaleSet.VirtualMachineProfile.ExtensionProfile = extensionProfile;
             await UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
 
-            getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName);
+            getResponse = await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmssName);
             ValidateVMScaleSet(inputVMScaleSet, getResponse, hasManagedDisks: true);
 
-            getInstanceViewResponse = await VirtualMachineScaleSetsClient.GetInstanceViewAsync(rgName, vmssName);
+            getInstanceViewResponse = await VirtualMachineScaleSetsOperations.GetInstanceViewAsync(rgName, vmssName);
             Assert.NotNull(getInstanceViewResponse);
             ValidateVMScaleSetInstanceView(inputVMScaleSet, getInstanceViewResponse);
 
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmssName));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartDeleteAsync(rgName, vmssName));
         }
         /// <summary>
         /// Covers following Operations:
@@ -134,7 +134,7 @@ namespace Azure.ResourceManager.Compute.Tests
 
             var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
 
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
 
             var getTwoVirtualMachineScaleSet = await CreateVMScaleSet_NoAsyncTracking(
                 rgName,
@@ -158,18 +158,18 @@ namespace Azure.ResourceManager.Compute.Tests
             inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
             ValidateVMScaleSet(inputVMScaleSet, getResponse, hasManagedDisks: true);
             WaitSeconds(600);
-            var vmssStatus = await VirtualMachineScaleSetsClient.GetInstanceViewAsync(rgName, vmssName);
+            var vmssStatus = await VirtualMachineScaleSetsOperations.GetInstanceViewAsync(rgName, vmssName);
 
-            await WaitForCompletionAsync(await VirtualMachineScaleSetRollingUpgradesClient.StartStartOSUpgradeAsync(rgName, vmssName));
-            var rollingUpgradeStatus = await VirtualMachineScaleSetRollingUpgradesClient.GetLatestAsync(rgName, vmssName);
+            await WaitForCompletionAsync(await VirtualMachineScaleSetRollingUpgradesOperations.StartStartOSUpgradeAsync(rgName, vmssName));
+            var rollingUpgradeStatus = await VirtualMachineScaleSetRollingUpgradesOperations.GetLatestAsync(rgName, vmssName);
             Assert.AreEqual(inputVMScaleSet.Sku.Capacity, rollingUpgradeStatus.Value.Progress.SuccessfulInstanceCount);
 
-            var upgradeTask = await WaitForCompletionAsync(await VirtualMachineScaleSetRollingUpgradesClient.StartStartOSUpgradeAsync(rgName, vmssName));
-            vmssStatus = await VirtualMachineScaleSetsClient.GetInstanceViewAsync(rgName, vmssName);
+            var upgradeTask = await WaitForCompletionAsync(await VirtualMachineScaleSetRollingUpgradesOperations.StartStartOSUpgradeAsync(rgName, vmssName));
+            vmssStatus = await VirtualMachineScaleSetsOperations.GetInstanceViewAsync(rgName, vmssName);
 
-            await WaitForCompletionAsync(await VirtualMachineScaleSetRollingUpgradesClient.StartCancelAsync(rgName, vmssName));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetRollingUpgradesOperations.StartCancelAsync(rgName, vmssName));
 
-            rollingUpgradeStatus = await VirtualMachineScaleSetRollingUpgradesClient.GetLatestAsync(rgName, vmssName);
+            rollingUpgradeStatus = await VirtualMachineScaleSetRollingUpgradesOperations.GetLatestAsync(rgName, vmssName);
 
             Assert.True(rollingUpgradeStatus.Value.RunningStatus.Code == RollingUpgradeStatusCode.Cancelled);
             Assert.True(rollingUpgradeStatus.Value.Progress.PendingInstanceCount >= 0);
@@ -205,7 +205,7 @@ namespace Azure.ResourceManager.Compute.Tests
 
             var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
 
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
 
             var getTwoVirtualMachineScaleSet = await CreateVMScaleSet_NoAsyncTracking(
                 rgName,
@@ -225,10 +225,10 @@ namespace Azure.ResourceManager.Compute.Tests
             inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
             ValidateVMScaleSet(inputVMScaleSet, getResponse, hasManagedDisks: true);
             WaitSeconds(600);
-            var vmssStatus = await VirtualMachineScaleSetsClient.GetInstanceViewAsync(rgName, vmssName);
+            var vmssStatus = await VirtualMachineScaleSetsOperations.GetInstanceViewAsync(rgName, vmssName);
 
-            await WaitForCompletionAsync(await VirtualMachineScaleSetRollingUpgradesClient.StartStartOSUpgradeAsync(rgName, vmssName));
-            var rollingUpgrade = VirtualMachineScaleSetsClient.GetOSUpgradeHistoryAsync(rgName, vmssName);
+            await WaitForCompletionAsync(await VirtualMachineScaleSetRollingUpgradesOperations.StartStartOSUpgradeAsync(rgName, vmssName));
+            var rollingUpgrade = VirtualMachineScaleSetsOperations.GetOSUpgradeHistoryAsync(rgName, vmssName);
             var rollingUpgradeHistory = await rollingUpgrade.ToEnumerableAsync();
             Assert.NotNull(rollingUpgradeHistory);
             Assert.True(rollingUpgradeHistory.Count() == 1);
@@ -257,7 +257,7 @@ namespace Azure.ResourceManager.Compute.Tests
             VirtualMachineScaleSet inputVMScaleSet;
             var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
 
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
 
             var getTwoVirtualMachineScaleSet = await CreateVMScaleSet_NoAsyncTracking(
                 rgName,
@@ -284,14 +284,14 @@ namespace Azure.ResourceManager.Compute.Tests
             inputVMScaleSet.UpgradePolicy.AutomaticOSUpgradePolicy.EnableAutomaticOSUpgrade = true;
             await UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
 
-            getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName);
+            getResponse = await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmssName);
             ValidateVMScaleSet(inputVMScaleSet, getResponse, hasManagedDisks: true);
 
             // with automatic OS upgrade policy as null
             inputVMScaleSet.UpgradePolicy.AutomaticOSUpgradePolicy = null;
             await UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
 
-            getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName);
+            getResponse = await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmssName);
             ValidateVMScaleSet(inputVMScaleSet, getResponse, hasManagedDisks: true);
             Assert.NotNull(getResponse.UpgradePolicy.AutomaticOSUpgradePolicy);
             Assert.True(getResponse.UpgradePolicy.AutomaticOSUpgradePolicy.DisableAutomaticRollback == false);
@@ -305,7 +305,7 @@ namespace Azure.ResourceManager.Compute.Tests
             };
             await UpdateVMScaleSet(rgName, vmssName, inputVMScaleSet);
 
-            getResponse = await VirtualMachineScaleSetsClient.GetAsync(rgName, vmssName);
+            getResponse = await VirtualMachineScaleSetsOperations.GetAsync(rgName, vmssName);
             ValidateVMScaleSet(inputVMScaleSet, getResponse, hasManagedDisks: true);
         }
 
@@ -343,7 +343,7 @@ namespace Azure.ResourceManager.Compute.Tests
             };
 
             var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartDeleteAsync(rgName, "VMScaleSetDoesNotExist"));
 
             var getTwoVirtualMachineScaleSet = await CreateVMScaleSet_NoAsyncTracking(
                 rgName,
@@ -363,8 +363,8 @@ namespace Azure.ResourceManager.Compute.Tests
             inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
             ValidateVMScaleSet(inputVMScaleSet, getResponse, hasManagedDisks: true);
 
-            await WaitForCompletionAsync(await VirtualMachineScaleSetRollingUpgradesClient.StartStartExtensionUpgradeAsync(rgName, vmssName));
-            var rollingUpgradeStatus = await VirtualMachineScaleSetRollingUpgradesClient.GetLatestAsync(rgName, vmssName);
+            await WaitForCompletionAsync(await VirtualMachineScaleSetRollingUpgradesOperations.StartStartExtensionUpgradeAsync(rgName, vmssName));
+            var rollingUpgradeStatus = await VirtualMachineScaleSetRollingUpgradesOperations.GetLatestAsync(rgName, vmssName);
             Assert.AreEqual(inputVMScaleSet.Sku.Capacity, rollingUpgradeStatus.Value.Progress.SuccessfulInstanceCount);
         }
     }

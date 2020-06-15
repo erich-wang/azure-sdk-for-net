@@ -68,7 +68,7 @@ namespace Azure.ResourceManager.Compute.Tests
             m_baseResourceGroupName = Recording.GenerateAssetName(TestPrefix);
             m_resourceGroup1Name = m_baseResourceGroupName + "_1";
 
-            m_resourceGroup1 = await ResourceGroupsClient.CreateOrUpdateAsync(
+            m_resourceGroup1 = await ResourceGroupsOperations.CreateOrUpdateAsync(
                 m_resourceGroup1Name,
                 new ResourceGroup(m_location)
                 {
@@ -128,17 +128,17 @@ namespace Azure.ResourceManager.Compute.Tests
             var proximityPlacementGroupName = Recording.GenerateAssetName("testppg");
 
             // Create and expect success.
-            ProximityPlacementGroup outProximityPlacementGroup = await ProximityPlacementGroupsClient.CreateOrUpdateAsync(m_resourceGroup1Name, proximityPlacementGroupName, inputProximityPlacementGroup);
+            ProximityPlacementGroup outProximityPlacementGroup = await ProximityPlacementGroupsOperations.CreateOrUpdateAsync(m_resourceGroup1Name, proximityPlacementGroupName, inputProximityPlacementGroup);
 
             ValidateProximityPlacementGroup(expectedProximityPlacementGroup, outProximityPlacementGroup, proximityPlacementGroupName);
 
             // Update and expect success.
             inputProximityPlacementGroup.Tags.Add("UpdateTag1", "updateValue1");
-            outProximityPlacementGroup = await ProximityPlacementGroupsClient.CreateOrUpdateAsync(m_resourceGroup1Name, proximityPlacementGroupName, inputProximityPlacementGroup);
+            outProximityPlacementGroup = await ProximityPlacementGroupsOperations.CreateOrUpdateAsync(m_resourceGroup1Name, proximityPlacementGroupName, inputProximityPlacementGroup);
             ValidateProximityPlacementGroup(expectedProximityPlacementGroup, outProximityPlacementGroup, proximityPlacementGroupName);
 
             // Get and expect success.
-            outProximityPlacementGroup = await ProximityPlacementGroupsClient.GetAsync(m_resourceGroup1Name, proximityPlacementGroupName);
+            outProximityPlacementGroup = await ProximityPlacementGroupsOperations.GetAsync(m_resourceGroup1Name, proximityPlacementGroupName);
             ValidateProximityPlacementGroup(expectedProximityPlacementGroup, outProximityPlacementGroup, proximityPlacementGroupName);
 
             // Put and expect failure
@@ -155,7 +155,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 }
 
                 outProximityPlacementGroup = null;
-                outProximityPlacementGroup = await ProximityPlacementGroupsClient.CreateOrUpdateAsync(m_resourceGroup1Name, proximityPlacementGroupName, inputProximityPlacementGroup);
+                outProximityPlacementGroup = await ProximityPlacementGroupsOperations.CreateOrUpdateAsync(m_resourceGroup1Name, proximityPlacementGroupName, inputProximityPlacementGroup);
             }
             catch (Exception ex)
             {
@@ -185,11 +185,11 @@ namespace Azure.ResourceManager.Compute.Tests
             //Note: Same Tags object is referred in proximityPlacementGroupUpdate and expectedProximityPlacementGroup,
             //hence this will also update tags in expectedProximityPlacementGroup.
             proximityPlacementGroupUpdate.Tags.Add("UpdateTag2", "updateValue2");
-            outProximityPlacementGroup = await ProximityPlacementGroupsClient.UpdateAsync(m_resourceGroup1Name, proximityPlacementGroupName, proximityPlacementGroupUpdate);
+            outProximityPlacementGroup = await ProximityPlacementGroupsOperations.UpdateAsync(m_resourceGroup1Name, proximityPlacementGroupName, proximityPlacementGroupUpdate);
             ValidateProximityPlacementGroup(expectedProximityPlacementGroup, outProximityPlacementGroup, proximityPlacementGroupName);
 
             // Clean up
-            await ProximityPlacementGroupsClient.DeleteAsync(m_resourceGroup1Name, proximityPlacementGroupName);
+            await ProximityPlacementGroupsOperations.DeleteAsync(m_resourceGroup1Name, proximityPlacementGroupName);
         }
 
         private async Task VerifyPutPatchGetAndDeleteWithInvalidValues_Failure()
@@ -211,7 +211,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 try
                 {
                     // Create and expect success.
-                    expectedProximityPlacementGroup = await ProximityPlacementGroupsClient.CreateOrUpdateAsync(
+                    expectedProximityPlacementGroup = await ProximityPlacementGroupsOperations.CreateOrUpdateAsync(
                         m_resourceGroup1Name, ProximityPlacementGroupName, inputProximityPlacementGroup);
                 }
                 catch (Exception ex)
@@ -232,17 +232,17 @@ namespace Azure.ResourceManager.Compute.Tests
 
             //Verify success when ProximityPlacementGroup is valid
             inputProximityPlacementGroup.ProximityPlacementGroupType = ProximityPlacementGroupType.Standard;
-            expectedProximityPlacementGroup = await ProximityPlacementGroupsClient.CreateOrUpdateAsync(
+            expectedProximityPlacementGroup = await ProximityPlacementGroupsOperations.CreateOrUpdateAsync(
                 m_resourceGroup1Name, ProximityPlacementGroupName, inputProximityPlacementGroup);
 
             ValidateProximityPlacementGroup(inputProximityPlacementGroup, expectedProximityPlacementGroup, ProximityPlacementGroupName);
 
             // Get and expect success.
-            expectedProximityPlacementGroup = await ProximityPlacementGroupsClient.GetAsync(m_resourceGroup1Name, ProximityPlacementGroupName);
+            expectedProximityPlacementGroup = await ProximityPlacementGroupsOperations.GetAsync(m_resourceGroup1Name, ProximityPlacementGroupName);
             ValidateProximityPlacementGroup(inputProximityPlacementGroup, expectedProximityPlacementGroup, ProximityPlacementGroupName);
 
             // Clean up
-            await ProximityPlacementGroupsClient.DeleteAsync(m_resourceGroup1Name, ProximityPlacementGroupName);
+            await ProximityPlacementGroupsOperations.DeleteAsync(m_resourceGroup1Name, ProximityPlacementGroupName);
         }
 
         private async Task VerifyProximityPlacementGroupColocationStatusView()
@@ -274,7 +274,7 @@ namespace Azure.ResourceManager.Compute.Tests
             };
 
             // Create and expect success.
-            ProximityPlacementGroup outProximityPlacementGroup = await ProximityPlacementGroupsClient.CreateOrUpdateAsync(m_resourceGroup1Name, ppgName, inputProximityPlacementGroup);
+            ProximityPlacementGroup outProximityPlacementGroup = await ProximityPlacementGroupsOperations.CreateOrUpdateAsync(m_resourceGroup1Name, ppgName, inputProximityPlacementGroup);
 
             ValidateProximityPlacementGroup(expectedProximityPlacementGroup, outProximityPlacementGroup, ppgName);
 
@@ -284,7 +284,7 @@ namespace Azure.ResourceManager.Compute.Tests
             VirtualMachine outVM = returnTwoVM.Item1;
             inputVM = returnTwoVM.Item2;
             // Get and expect success.
-            outProximityPlacementGroup = await ProximityPlacementGroupsClient.GetAsync(m_resourceGroup1Name, ppgName, includeColocationStatus: "true");
+            outProximityPlacementGroup = await ProximityPlacementGroupsOperations.GetAsync(m_resourceGroup1Name, ppgName, includeColocationStatus: "true");
             InstanceViewStatus expectedInstanceViewStatus = new InstanceViewStatus
             {
                 Code = "ColocationStatus/Aligned",
@@ -325,12 +325,12 @@ namespace Azure.ResourceManager.Compute.Tests
                         {"testTag", "1"},
                     },
             };
-            ProximityPlacementGroup outputProximityPlacementGroup1 = await ProximityPlacementGroupsClient.CreateOrUpdateAsync(
+            ProximityPlacementGroup outputProximityPlacementGroup1 = await ProximityPlacementGroupsOperations.CreateOrUpdateAsync(
                 m_resourceGroup1Name,
                 proximityPlacementGroup1Name,
                 inputProximityPlacementGroup1);
 
-            await ResourceGroupsClient.CreateOrUpdateAsync(
+            await ResourceGroupsOperations.CreateOrUpdateAsync(
                 resourceGroup2Name,
                 new ResourceGroup(m_location)
                 {
@@ -345,14 +345,14 @@ namespace Azure.ResourceManager.Compute.Tests
                         {"testTag", "2"},
                     },
             };
-            ProximityPlacementGroup outputProximityPlacementGroup2 = await ProximityPlacementGroupsClient.CreateOrUpdateAsync(
+            ProximityPlacementGroup outputProximityPlacementGroup2 = await ProximityPlacementGroupsOperations.CreateOrUpdateAsync(
                 resourceGroup2Name,
                 proximityPlacementGroup2Name,
                 inputProximityPlacementGroup2);
 
             //verify proximityPlacementGroup across resource groups are listed successfully
             //IPage<ProximityPlacementGroup> response = await ProximityPlacementGroupsClient.ListBySubscription();
-            IList<ProximityPlacementGroup> response = await (ProximityPlacementGroupsClient.ListBySubscriptionAsync()).ToEnumerableAsync();
+            IList<ProximityPlacementGroup> response = await (ProximityPlacementGroupsOperations.ListBySubscriptionAsync()).ToEnumerableAsync();
             //Assert.True(response.NextPageLink == null, "NextPageLink should be null in response.");
 
             int validationCount = 0;
@@ -378,10 +378,10 @@ namespace Azure.ResourceManager.Compute.Tests
             Assert.True(validationCount == 2, "Not all ProximityPlacementGroups are returned in response.");
 
             //verify proximityPlacementGroups in a resource groups are listed successfully
-            response = await (ProximityPlacementGroupsClient.ListByResourceGroupAsync(m_resourceGroup1Name)).ToEnumerableAsync();
+            response = await (ProximityPlacementGroupsOperations.ListByResourceGroupAsync(m_resourceGroup1Name)).ToEnumerableAsync();
             ValidateResults(outputProximityPlacementGroup1, inputProximityPlacementGroup1, m_resourceGroup1Name, proximityPlacementGroup1Name);
 
-            response = await (ProximityPlacementGroupsClient.ListByResourceGroupAsync(resourceGroup2Name)).ToEnumerableAsync();
+            response = await (ProximityPlacementGroupsOperations.ListByResourceGroupAsync(resourceGroup2Name)).ToEnumerableAsync();
             ValidateResults(outputProximityPlacementGroup2, inputProximityPlacementGroup2, resourceGroup2Name, proximityPlacementGroup2Name);
         }
 
@@ -398,7 +398,7 @@ namespace Azure.ResourceManager.Compute.Tests
             ValidateProximityPlacementGroup(inputProximityPlacementGroup, outputProximityPlacementGroup, inputProximityPlacementGroupName);
 
             // GET ProximityPlacementGroup
-            var getResponse = (await ProximityPlacementGroupsClient.GetAsync(resourceGroupName, inputProximityPlacementGroupName)).Value;
+            var getResponse = (await ProximityPlacementGroupsOperations.GetAsync(resourceGroupName, inputProximityPlacementGroupName)).Value;
             ValidateProximityPlacementGroup(inputProximityPlacementGroup, getResponse, inputProximityPlacementGroupName);
         }
 

@@ -85,7 +85,7 @@ namespace Azure.ResourceManager.Compute.Tests
                     containerServiceCustomizer);
                 var createOrUpdateResponse = getTwoServiceOpera.Item1;
                 var inputContainerService = getTwoServiceOpera.Item2;
-                var getResponse = await ContainerServicesClient.GetAsync(rgName, csName);
+                var getResponse = await ContainerServicesOperations.GetAsync(rgName, csName);
                 ValidateContainerService(createOrUpdateResponse, getResponse);
                 return (getResponse, inputContainerService);
             }
@@ -97,7 +97,7 @@ namespace Azure.ResourceManager.Compute.Tests
 
         protected async void UpdateContainerService(string rgName, string vmssName, ContainerService inputContainerService)
         {
-            var createOrUpdateResponse = await WaitForCompletionAsync(await ContainerServicesClient.StartCreateOrUpdateAsync(rgName, vmssName, inputContainerService));
+            var createOrUpdateResponse = await WaitForCompletionAsync(await ContainerServicesOperations.StartCreateOrUpdateAsync(rgName, vmssName, inputContainerService));
         }
 
         private async Task<(ContainerService, ContainerService)> CreateContainerServiceAndGetOperationResponse(
@@ -108,7 +108,7 @@ namespace Azure.ResourceManager.Compute.Tests
             //out ContainerService inputContainerService,
             Action<ContainerService> containerServiceCustomizer = null)
         {
-            var resourceGroup = await ResourceGroupsClient.CreateOrUpdateAsync(
+            var resourceGroup = await ResourceGroupsOperations.CreateOrUpdateAsync(
                 rgName,
                 new ResourceGroup(m_location));
             var inputContainerService = CreateDefaultContainerServiceInput(rgName, masterDnsPrefix, agentPoolDnsPrefix);
@@ -116,7 +116,7 @@ namespace Azure.ResourceManager.Compute.Tests
             {
                 containerServiceCustomizer(inputContainerService);
             }
-            var createOrUpdateResponse = await WaitForCompletionAsync(await ContainerServicesClient.StartCreateOrUpdateAsync(rgName, csName, inputContainerService));
+            var createOrUpdateResponse = await WaitForCompletionAsync(await ContainerServicesOperations.StartCreateOrUpdateAsync(rgName, csName, inputContainerService));
             Assert.AreEqual(csName, createOrUpdateResponse.Value.Name);
             Assert.AreEqual(inputContainerService.Location.ToLower().Replace(" ", ""), createOrUpdateResponse.Value.Location.ToLower());
             Assert.AreEqual(ContainerServiceType, createOrUpdateResponse.Value.Type);

@@ -38,18 +38,18 @@ namespace Azure.ResourceManager.Compute.Tests.DiskRPTests
             var returnTwovm = await CreateVM(rgName, avSet, storageAccountOutput, imageRef, hasManagedDisks: true);
             var createdVM = returnTwovm.Item1;
             inputVM = returnTwovm.Item2;
-            var listResponse = (await VirtualMachinesClient.ListAllAsync().ToEnumerableAsync());
+            var listResponse = (await VirtualMachinesOperations.ListAllAsync().ToEnumerableAsync());
             Assert.True(listResponse.Count() >= 1);
             var vmName = createdVM.Name;
             var vmDiskName = createdVM.StorageProfile.OsDisk.Name;
             //get disk from VM
-            Disk diskFromVM = await DisksClient.GetAsync(rgName, vmDiskName);
+            Disk diskFromVM = await DisksOperations.GetAsync(rgName, vmDiskName);
             //managedby should have format: "/subscriptions/{subId}/resourceGroups/{rg}/Microsoft.Compute/virtualMachines/vm1"
             //Assert.Contains(vmName, diskFromVM.ManagedBy);
             Assert.True(diskFromVM.ManagedBy.Contains(vmName));
-            await WaitForCompletionAsync(await VirtualMachinesClient.StartDeleteAsync(rgName, inputVM.Name));
-            await WaitForCompletionAsync(await VirtualMachinesClient.StartDeleteAsync(rgName, createdVM.Name));
-            await WaitForCompletionAsync(await DisksClient.StartDeleteAsync(rgName, diskName));
+            await WaitForCompletionAsync(await VirtualMachinesOperations.StartDeleteAsync(rgName, inputVM.Name));
+            await WaitForCompletionAsync(await VirtualMachinesOperations.StartDeleteAsync(rgName, createdVM.Name));
+            await WaitForCompletionAsync(await DisksOperations.StartDeleteAsync(rgName, diskName));
         }
     }
 }

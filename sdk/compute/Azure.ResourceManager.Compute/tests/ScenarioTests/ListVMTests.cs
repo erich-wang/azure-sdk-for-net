@@ -55,7 +55,7 @@ namespace Azure.ResourceManager.Compute.Tests
             returnTwovm = await CreateVM(rg2Name, asName, storageAccountOutput, imageRef);
             var vm2 = returnTwovm.Item1;
             inputVM2 = returnTwovm.Item2;
-            var listResponse = await (VirtualMachinesClient.ListAllAsync()).ToEnumerableAsync();
+            var listResponse = await (VirtualMachinesOperations.ListAllAsync()).ToEnumerableAsync();
             Assert.True(listResponse.Count() >= 2);
             //Assert.Null(listResponse.NextPageLink);
             int vmsValidatedCount = 0;
@@ -95,7 +95,7 @@ namespace Azure.ResourceManager.Compute.Tests
             returnTwovm = await CreateVM(resourceGroup2Name, availabilitySetName, storageAccountOutput, imageRef);
             var vm2 = returnTwovm.Item1;
             inputVM2 = returnTwovm.Item2;
-            var listResponse = await (VirtualMachinesClient.ListByLocationAsync(DefaultLocation)).ToEnumerableAsync();
+            var listResponse = await (VirtualMachinesOperations.ListByLocationAsync(DefaultLocation)).ToEnumerableAsync();
             Assert.True(listResponse.Count() >= 2);
             //Assert.Null(listResponse.NextPageLink);
             int vmsValidatedCount = 0;

@@ -59,7 +59,7 @@ namespace Azure.ResourceManager.Compute.Tests
 
                 ValidateListUsageResponse(luResponse);
 
-                await WaitForCompletionAsync(await VirtualMachinesClient.StartDeleteAsync(rgName, inputVM.Name));
+                await WaitForCompletionAsync(await VirtualMachinesOperations.StartDeleteAsync(rgName, inputVM.Name));
             }
             catch (Exception e)
             {

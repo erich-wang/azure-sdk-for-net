@@ -37,7 +37,7 @@ namespace Azure.ResourceManager.Compute.Tests
             EnsureClientsInitialized();
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
-            var image = await VirtualMachineImagesClient.GetAsync(
+            var image = await VirtualMachineImagesOperations.GetAsync(
                 this.m_location, imageRef.Publisher, imageRef.Offer, imageRef.Sku, imageRef.Version);
             Assert.True(image != null);
 
@@ -54,7 +54,7 @@ namespace Azure.ResourceManager.Compute.Tests
              });
             var vm1 = returnTwoVM.Item1;
             inputVM = returnTwoVM.Item2;
-            var getVMResponse = await VirtualMachinesClient.GetAsync(rgName, inputVM.Name);
+            var getVMResponse = await VirtualMachinesOperations.GetAsync(rgName, inputVM.Name);
             ValidateVM(inputVM, getVMResponse, Helpers.GetVMReferenceId(m_subId, rgName, inputVM.Name));
         }
     }

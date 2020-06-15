@@ -77,8 +77,8 @@ namespace Azure.ResourceManager.Compute.Tests
                     vm.HardwareProfile.VmSize = VirtualMachineSizeTypes.StandardD1;
                 }, waitForCompletion: false);
             inputVM2 = returnTwoVm.Item2;
-            await WaitForCompletionAsync(await VirtualMachinesClient.StartDeleteAsync(rgName, inputVM1.Name));
-            await WaitForCompletionAsync(await VirtualMachinesClient.StartDeleteAsync(rgName, inputVM2.Name));
+            await WaitForCompletionAsync(await VirtualMachinesOperations.StartDeleteAsync(rgName, inputVM1.Name));
+            await WaitForCompletionAsync(await VirtualMachinesOperations.StartDeleteAsync(rgName, inputVM2.Name));
         }
     }
 }

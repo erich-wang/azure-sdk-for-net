@@ -95,7 +95,7 @@ namespace Azure.ResourceManager.Compute.Tests
             AvailabilitySet createOrUpdateResponse = null;
             try
             {
-                createOrUpdateResponse = await AvailabilitySetsClient.CreateOrUpdateAsync(
+                createOrUpdateResponse = await AvailabilitySetsOperations.CreateOrUpdateAsync(
                     resourceGroup1Name,
                     inputAvailabilitySetName,
                     inputAvailabilitySet);
@@ -111,7 +111,7 @@ namespace Azure.ResourceManager.Compute.Tests
             inputAvailabilitySet.PlatformFaultDomainCount = FDTooHi;
             try
             {
-                createOrUpdateResponse = await AvailabilitySetsClient.CreateOrUpdateAsync(
+                createOrUpdateResponse = await AvailabilitySetsOperations.CreateOrUpdateAsync(
                     resourceGroup1Name,
                     inputAvailabilitySetName,
                     inputAvailabilitySet);
@@ -127,7 +127,7 @@ namespace Azure.ResourceManager.Compute.Tests
             inputAvailabilitySet.PlatformUpdateDomainCount = UDTooLow;
             try
             {
-                createOrUpdateResponse = await AvailabilitySetsClient.CreateOrUpdateAsync(
+                createOrUpdateResponse = await AvailabilitySetsOperations.CreateOrUpdateAsync(
                     resourceGroup1Name,
                     inputAvailabilitySetName,
                     inputAvailabilitySet);
@@ -143,7 +143,7 @@ namespace Azure.ResourceManager.Compute.Tests
             inputAvailabilitySet.PlatformUpdateDomainCount = UDTooHi;
             try
             {
-                createOrUpdateResponse =await  AvailabilitySetsClient.CreateOrUpdateAsync(
+                createOrUpdateResponse =await  AvailabilitySetsOperations.CreateOrUpdateAsync(
                 resourceGroup1Name,
                 inputAvailabilitySetName,
                 inputAvailabilitySet);
@@ -169,14 +169,14 @@ namespace Azure.ResourceManager.Compute.Tests
                     },
             };
 
-            var createOrUpdateResponse = await AvailabilitySetsClient.CreateOrUpdateAsync(
+            var createOrUpdateResponse = await AvailabilitySetsOperations.CreateOrUpdateAsync(
                 resourceGroup1Name,
                 inputAvailabilitySetName,
                 inputAvailabilitySet);
 
             // List AvailabilitySets
             string expectedAvailabilitySetId = Helpers.GetAvailabilitySetRef(subId, resourceGroup1Name, inputAvailabilitySetName);
-            var listResponse = AvailabilitySetsClient.ListAsync(resourceGroup1Name);
+            var listResponse = AvailabilitySetsOperations.ListAsync(resourceGroup1Name);
             var listResponseList = await listResponse.ToEnumerableAsync();
             ValidateAvailabilitySet(inputAvailabilitySet, listResponseList.FirstOrDefault(x => x.Name == inputAvailabilitySetName),
                 inputAvailabilitySetName, expectedAvailabilitySetId, defaultFD, defaultUD);
@@ -188,7 +188,7 @@ namespace Azure.ResourceManager.Compute.Tests
 
             string updateKey = "UpdateTag";
             updateParams.Tags.Add(updateKey, "updateValue");
-            createOrUpdateResponse = await AvailabilitySetsClient.UpdateAsync(resourceGroup1Name, inputAvailabilitySetName, updateParams);
+            createOrUpdateResponse = await AvailabilitySetsOperations.UpdateAsync(resourceGroup1Name, inputAvailabilitySetName, updateParams);
 
             Assert.True(createOrUpdateResponse.Value.Tags.ContainsKey(updateKey));
 
@@ -218,7 +218,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 PlatformUpdateDomainCount = nonDefaultUD
             };
 
-            var createOrUpdateResponse = (await AvailabilitySetsClient.CreateOrUpdateAsync(
+            var createOrUpdateResponse = (await AvailabilitySetsOperations.CreateOrUpdateAsync(
                 resourceGroup1Name,
                 inputAvailabilitySetName,
                 inputAvailabilitySet)).Value;
@@ -237,16 +237,16 @@ namespace Azure.ResourceManager.Compute.Tests
             ValidateAvailabilitySet(inputAvailabilitySet, outputAvailabilitySet, inputAvailabilitySetName, expectedAvailabilitySetId, expectedFD, expectedUD);
 
             // GET AvailabilitySet
-            var getResponse = await AvailabilitySetsClient.GetAsync(resourceGroupName, inputAvailabilitySetName);
+            var getResponse = await AvailabilitySetsOperations.GetAsync(resourceGroupName, inputAvailabilitySetName);
             ValidateAvailabilitySet(inputAvailabilitySet, getResponse, inputAvailabilitySetName, expectedAvailabilitySetId, expectedFD, expectedUD);
 
             // List VM Sizes
-            var listVMSizesResponse = AvailabilitySetsClient.ListAvailableSizesAsync(resourceGroupName, inputAvailabilitySetName);
+            var listVMSizesResponse = AvailabilitySetsOperations.ListAvailableSizesAsync(resourceGroupName, inputAvailabilitySetName);
             var listVMSizesResp = await listVMSizesResponse.ToEnumerableAsync();
             Helpers.ValidateVirtualMachineSizeListResponse(listVMSizesResp);
 
             // Delete AvailabilitySet
-            await AvailabilitySetsClient.DeleteAsync(resourceGroupName, inputAvailabilitySetName);
+            await AvailabilitySetsOperations.DeleteAsync(resourceGroupName, inputAvailabilitySetName);
         }
 
         private void ValidateAvailabilitySet(AvailabilitySet inputAvailabilitySet, AvailabilitySet outputAvailabilitySet, string inputAvailabilitySetName, string expectedAvailabilitySetId, int expectedFD, int expectedUD)
@@ -289,12 +289,12 @@ namespace Azure.ResourceManager.Compute.Tests
                         {"testTag", "1"},
                     },
                 };
-                AvailabilitySet outputAvailabilitySet1 = await AvailabilitySetsClient.CreateOrUpdateAsync(
+                AvailabilitySet outputAvailabilitySet1 = await AvailabilitySetsOperations.CreateOrUpdateAsync(
                     resourceGroup1Name,
                     availabilitySet1Name,
                     inputAvailabilitySet1);
 
-                resourceGroup2 = (await ResourceGroupsClient.CreateOrUpdateAsync(
+                resourceGroup2 = (await ResourceGroupsOperations.CreateOrUpdateAsync(
                     resourceGroup2Name,
                     new ResourceGroup(TestEnvironment.Location)
                     {
@@ -309,11 +309,11 @@ namespace Azure.ResourceManager.Compute.Tests
                         {"testTag", "2"},
                     },
                 };
-                AvailabilitySet outputAvailabilitySet2 = (await AvailabilitySetsClient.CreateOrUpdateAsync(
+                AvailabilitySet outputAvailabilitySet2 = (await AvailabilitySetsOperations.CreateOrUpdateAsync(
                     resourceGroup2Name,
                     availabilitySet2Name,
                     inputAvailabilitySet2)).Value;
-                var response = AvailabilitySetsClient.ListBySubscriptionAsync();
+                var response = AvailabilitySetsOperations.ListBySubscriptionAsync();
                 var resp = await response.ToEnumerableAsync();
                 //Assert.Null(resp.NextPageLink);
 
@@ -331,7 +331,7 @@ namespace Azure.ResourceManager.Compute.Tests
                     }
                 }
 
-                response = AvailabilitySetsClient.ListBySubscriptionAsync("virtualMachines/$ref");
+                response = AvailabilitySetsOperations.ListBySubscriptionAsync("virtualMachines/$ref");
                 resp = await response.ToEnumerableAsync();
                 int validationCount = 0;
 
@@ -363,7 +363,7 @@ namespace Azure.ResourceManager.Compute.Tests
             baseResourceGroupName = Recording.GenerateAssetName(TestPrefix);
             resourceGroup1Name = baseResourceGroupName + "_1";
 
-            resourceGroup1 = await ResourceGroupsClient.CreateOrUpdateAsync(
+            resourceGroup1 = await ResourceGroupsOperations.CreateOrUpdateAsync(
                 resourceGroup1Name,
                 new ResourceGroup(TestEnvironment.Location)
                 {

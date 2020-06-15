@@ -79,16 +79,16 @@ namespace Azure.ResourceManager.Compute.Tests
             VirtualMachineScaleSet vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
             inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
             // TODO: AutoRest skips the following methods - Start, Restart, PowerOff, Deallocate
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartStartAsync(rgName, vmScaleSet.Name));
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartReimageAsync(rgName, vmScaleSet.Name));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartStartAsync(rgName, vmScaleSet.Name));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartReimageAsync(rgName, vmScaleSet.Name));
             if (hasManagedDisks)
             {
-                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartReimageAllAsync(rgName, vmScaleSet.Name));
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartReimageAllAsync(rgName, vmScaleSet.Name));
             }
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartRestartAsync(rgName, vmScaleSet.Name));
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartPowerOffAsync(rgName, vmScaleSet.Name));
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeallocateAsync(rgName, vmScaleSet.Name));
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmScaleSet.Name));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartRestartAsync(rgName, vmScaleSet.Name));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartPowerOffAsync(rgName, vmScaleSet.Name));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartDeallocateAsync(rgName, vmScaleSet.Name));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartDeleteAsync(rgName, vmScaleSet.Name));
             passed = true;
 
             Assert.True(passed);
@@ -115,7 +115,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 storageAccountOutput, imageRef, createWithManagedDisks: true);
             VirtualMachineScaleSet vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
             inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartRedeployAsync(rgName, vmScaleSet.Name));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartRedeployAsync(rgName, vmScaleSet.Name));
 
             passed = true;
             Assert.True(passed);
@@ -148,9 +148,9 @@ namespace Azure.ResourceManager.Compute.Tests
                 storageAccountOutput, imageRef, createWithManagedDisks: true);
             VirtualMachineScaleSet vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
             inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartStartAsync(rgName, vmScaleSet.Name));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartStartAsync(rgName, vmScaleSet.Name));
             // Shutdown VM with SkipShutdown = true
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartPowerOffAsync(rgName, vmScaleSet.Name, true));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartPowerOffAsync(rgName, vmScaleSet.Name, true));
             passed = true;
             Assert.True(passed);
         }
@@ -180,7 +180,7 @@ namespace Azure.ResourceManager.Compute.Tests
                     createWithManagedDisks: true);
                 vmScaleSet = getTwoVirtualMachineScaleSet.Item1;
                 inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
-                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartPerformMaintenanceAsync(rgName, vmScaleSet.Name));
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartPerformMaintenanceAsync(rgName, vmScaleSet.Name));
 
                 passed = true;
             }
@@ -241,20 +241,20 @@ namespace Azure.ResourceManager.Compute.Tests
             var virtualMachineScaleSetInstanceIDs = new VirtualMachineScaleSetVMInstanceIDs(new List<string>() { "0", "1" });
             var virtualMachineScaleSetInstanceID = new List<string>() { "0", "1" };
             var virtualMachineScaleSetRequ = new VirtualMachineScaleSetVMInstanceRequiredIDs(new List<string>() { "0", "1" });
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartStartAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetInstanceIDs));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartStartAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetInstanceIDs));
             virtualMachineScaleSetInstanceIDs = new VirtualMachineScaleSetVMInstanceIDs(new List<string>() { "0" });
             VirtualMachineScaleSetReimageParameters virtualMachineScaleSetReimageParameters = new VirtualMachineScaleSetReimageParameters
             {
                 InstanceIds = virtualMachineScaleSetInstanceID
             };
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartReimageAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetReimageParameters));
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartReimageAllAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetInstanceIDs));
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartPowerOffAsync(rgName, vmScaleSet.Name, null, virtualMachineScaleSetInstanceIDs));
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartUpdateInstancesAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetRequ));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartReimageAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetReimageParameters));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartReimageAllAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetInstanceIDs));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartPowerOffAsync(rgName, vmScaleSet.Name, null, virtualMachineScaleSetInstanceIDs));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartUpdateInstancesAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetRequ));
             virtualMachineScaleSetInstanceID = new List<string>() { "1" };
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartRestartAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetInstanceIDs));
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeallocateAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetInstanceIDs));
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteInstancesAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetRequ));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartRestartAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetInstanceIDs));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartDeallocateAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetInstanceIDs));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartDeleteInstancesAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetRequ));
             passed = true;
             Assert.True(passed);
         }
@@ -284,7 +284,7 @@ namespace Azure.ResourceManager.Compute.Tests
             inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
             List<string> virtualMachineScaleSetInstanceIDs = new List<string> { "0", "1" };
             var virtualMachineScaleSetInstanceID = new VirtualMachineScaleSetVMInstanceIDs(new List<string>() { "0", "1" });
-            await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartRedeployAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetInstanceID));
+            await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartRedeployAsync(rgName, vmScaleSet.Name, virtualMachineScaleSetInstanceID));
             passed = true;
             Assert.True(passed);
         }
@@ -317,7 +317,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 inputVMScaleSet = getTwoVirtualMachineScaleSet.Item2;
                 List<string> virtualMachineScaleSetInstanceIDs = new List<string> { "0", "1" };
                 var virtualMachineScaleSetInstanceID = new VirtualMachineScaleSetVMInstanceIDs(new List<string>() { "0", "1" });
-                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartPerformMaintenanceAsync(rgName, vmScaleSet.Name,
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartPerformMaintenanceAsync(rgName, vmScaleSet.Name,
                     virtualMachineScaleSetInstanceID));
 
                 passed = true;

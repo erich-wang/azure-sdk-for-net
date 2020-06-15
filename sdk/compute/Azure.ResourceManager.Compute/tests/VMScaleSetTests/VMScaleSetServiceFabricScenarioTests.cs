@@ -36,23 +36,23 @@ namespace Azure.ResourceManager.Compute.Tests
             string rgName = "crptestrgr97ryo0ni";
             string vmssName = "crptesthtn39hve";
 
-            var response = (await VirtualMachineScaleSetsClient.ForceRecoveryServiceFabricPlatformUpdateDomainWalkAsync(rgName, vmssName, 0)).Value;
+            var response = (await VirtualMachineScaleSetsOperations.ForceRecoveryServiceFabricPlatformUpdateDomainWalkAsync(rgName, vmssName, 0)).Value;
 
             Assert.True(response.WalkPerformed);
             Assert.AreEqual(1, response.NextPlatformUpdateDomain);
-            response = (await VirtualMachineScaleSetsClient.ForceRecoveryServiceFabricPlatformUpdateDomainWalkAsync(rgName, vmssName, 1)).Value;
+            response = (await VirtualMachineScaleSetsOperations.ForceRecoveryServiceFabricPlatformUpdateDomainWalkAsync(rgName, vmssName, 1)).Value;
             Assert.True(response.WalkPerformed);
             Assert.AreEqual(2, response.NextPlatformUpdateDomain);
-            response = (await VirtualMachineScaleSetsClient.ForceRecoveryServiceFabricPlatformUpdateDomainWalkAsync(rgName, vmssName, 2)).Value;
+            response = (await VirtualMachineScaleSetsOperations.ForceRecoveryServiceFabricPlatformUpdateDomainWalkAsync(rgName, vmssName, 2)).Value;
             Assert.True(response.WalkPerformed);
             Assert.AreEqual(3, response.NextPlatformUpdateDomain);
-            response = (await VirtualMachineScaleSetsClient.ForceRecoveryServiceFabricPlatformUpdateDomainWalkAsync(rgName, vmssName, 3)).Value;
+            response = (await VirtualMachineScaleSetsOperations.ForceRecoveryServiceFabricPlatformUpdateDomainWalkAsync(rgName, vmssName, 3)).Value;
             Assert.True(response.WalkPerformed);
             Assert.AreEqual(4, response.NextPlatformUpdateDomain);
-            response = (await VirtualMachineScaleSetsClient.ForceRecoveryServiceFabricPlatformUpdateDomainWalkAsync(rgName, vmssName, 4)).Value;
+            response = (await VirtualMachineScaleSetsOperations.ForceRecoveryServiceFabricPlatformUpdateDomainWalkAsync(rgName, vmssName, 4)).Value;
             Assert.True(response.WalkPerformed);
             Assert.AreEqual(5, response.NextPlatformUpdateDomain);
-            response = (await VirtualMachineScaleSetsClient.ForceRecoveryServiceFabricPlatformUpdateDomainWalkAsync(rgName, vmssName, 5)).Value;
+            response = (await VirtualMachineScaleSetsOperations.ForceRecoveryServiceFabricPlatformUpdateDomainWalkAsync(rgName, vmssName, 5)).Value;
             Assert.True(response.WalkPerformed);
             Assert.Null(response.NextPlatformUpdateDomain);
         }

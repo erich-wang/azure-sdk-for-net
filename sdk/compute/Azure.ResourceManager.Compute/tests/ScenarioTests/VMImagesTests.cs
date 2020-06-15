@@ -34,13 +34,13 @@ namespace Azure.ResourceManager.Compute.Tests
         [Test]
         public async Task TestVMImageGet()
         {
-            string[] availableWindowsServerImageVersions = (await VirtualMachineImagesClient.ListAsync(
+            string[] availableWindowsServerImageVersions = (await VirtualMachineImagesOperations.ListAsync(
                 DefaultLocation,
                 "MicrosoftWindowsServer",
                 "WindowsServer",
                 "2012-R2-Datacenter")).Value.Select(t => t.Name).ToArray();
 
-            var vmimage = await VirtualMachineImagesClient.GetAsync(
+            var vmimage = await VirtualMachineImagesOperations.GetAsync(
                 DefaultLocation,
                 "MicrosoftWindowsServer",
                 "WindowsServer",
@@ -70,7 +70,7 @@ namespace Azure.ResourceManager.Compute.Tests
             string imagePublisher = "MicrosoftWindowsServer";
             string imageOffer = "WindowsServer";
             string imageSku = "2016-Datacenter";
-            string[] availableWindowsServerImageVersions = (await VirtualMachineImagesClient.ListAsync(
+            string[] availableWindowsServerImageVersions = (await VirtualMachineImagesOperations.ListAsync(
                 DefaultLocation, imagePublisher, imageOffer, imageSku)).Value.Select(t => t.Name).ToArray();
 
             string firstVersion = availableWindowsServerImageVersions.First();
@@ -80,13 +80,13 @@ namespace Azure.ResourceManager.Compute.Tests
                 lastVersion = availableWindowsServerImageVersions.Last();
             }
 
-            var vmimage = await VirtualMachineImagesClient.GetAsync(
+            var vmimage = await VirtualMachineImagesOperations.GetAsync(
                 DefaultLocation, imagePublisher, imageOffer, imageSku, firstVersion);
             Assert.True(vmimage.Value.AutomaticOSUpgradeProperties.AutomaticOSUpgradeSupported);
 
             if (!string.IsNullOrEmpty(lastVersion))
             {
-                vmimage = await VirtualMachineImagesClient.GetAsync(
+                vmimage = await VirtualMachineImagesOperations.GetAsync(
                     DefaultLocation, imagePublisher, imageOffer, imageSku, lastVersion);
                 Assert.True(vmimage.Value.AutomaticOSUpgradeProperties.AutomaticOSUpgradeSupported);
             }
@@ -95,8 +95,8 @@ namespace Azure.ResourceManager.Compute.Tests
             // AutomaticOSUpgradeProperties.AutomaticOSUpgradeSupported = false in GET VMImageVesion call
             imagePublisher = "Canonical";
             imageOffer = "UbuntuServer";
-            imageSku = (await VirtualMachineImagesClient.ListSkusAsync(DefaultLocation, imagePublisher, imageOffer)).Value.FirstOrDefault().Name;
-            string[] availableUbuntuImageVersions = (await VirtualMachineImagesClient.ListAsync(
+            imageSku = (await VirtualMachineImagesOperations.ListSkusAsync(DefaultLocation, imagePublisher, imageOffer)).Value.FirstOrDefault().Name;
+            string[] availableUbuntuImageVersions = (await VirtualMachineImagesOperations.ListAsync(
                 DefaultLocation, imagePublisher, imageOffer, imageSku)).Value.Select(t => t.Name).ToArray();
 
             firstVersion = availableUbuntuImageVersions.First();
@@ -106,13 +106,13 @@ namespace Azure.ResourceManager.Compute.Tests
                 lastVersion = availableUbuntuImageVersions.Last();
             }
 
-            vmimage = await VirtualMachineImagesClient.GetAsync(
+            vmimage = await VirtualMachineImagesOperations.GetAsync(
                 DefaultLocation, imagePublisher, imageOffer, imageSku, firstVersion);
             Assert.False(vmimage.Value.AutomaticOSUpgradeProperties.AutomaticOSUpgradeSupported);
 
             if (!string.IsNullOrEmpty(lastVersion))
             {
-                vmimage = await VirtualMachineImagesClient.GetAsync(
+                vmimage = await VirtualMachineImagesOperations.GetAsync(
                     DefaultLocation, imagePublisher, imageOffer, imageSku, lastVersion);
                 Assert.False(vmimage.Value.AutomaticOSUpgradeProperties.AutomaticOSUpgradeSupported);
             }
@@ -121,7 +121,7 @@ namespace Azure.ResourceManager.Compute.Tests
         [Test]
         public async Task TestVMImageListNoFilter()
         {
-            var vmimages = await VirtualMachineImagesClient.ListAsync(
+            var vmimages = await VirtualMachineImagesOperations.ListAsync(
                 DefaultLocation,
                 "MicrosoftWindowsServer",
                 "WindowsServer",
@@ -136,7 +136,7 @@ namespace Azure.ResourceManager.Compute.Tests
         public async Task TestVMImageListFilters()
         {
             // Filter: top - Negative Test
-            var vmimages = await VirtualMachineImagesClient.ListAsync(
+            var vmimages = await VirtualMachineImagesOperations.ListAsync(
                 DefaultLocation,
                 "MicrosoftWindowsServer",
                 "WindowsServer",
@@ -145,7 +145,7 @@ namespace Azure.ResourceManager.Compute.Tests
             Assert.True(vmimages.Value.Count == 0);
 
             // Filter: top - Positive Test
-            vmimages = await VirtualMachineImagesClient.ListAsync(
+            vmimages = await VirtualMachineImagesOperations.ListAsync(
                 DefaultLocation,
                 "MicrosoftWindowsServer",
                 "WindowsServer",
@@ -154,7 +154,7 @@ namespace Azure.ResourceManager.Compute.Tests
             Assert.True(vmimages.Value.Count == 1);
 
             // Filter: top - Positive Test
-            vmimages = await VirtualMachineImagesClient.ListAsync(
+            vmimages = await VirtualMachineImagesOperations.ListAsync(
                 DefaultLocation,
                 "MicrosoftWindowsServer",
                 "WindowsServer",
@@ -163,7 +163,7 @@ namespace Azure.ResourceManager.Compute.Tests
             Assert.True(vmimages.Value.Count == 2);
 
             // Filter: orderby - Positive Test
-            vmimages = await VirtualMachineImagesClient.ListAsync(
+            vmimages = await VirtualMachineImagesOperations.ListAsync(
                 DefaultLocation,
                 "MicrosoftWindowsServer",
                 "WindowsServer",
@@ -171,7 +171,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 orderby: "name desc");
 
             // Filter: orderby - Positive Test
-            vmimages = await VirtualMachineImagesClient.ListAsync(
+            vmimages = await VirtualMachineImagesOperations.ListAsync(
                 DefaultLocation,
                 "MicrosoftWindowsServer",
                 "WindowsServer",
@@ -181,7 +181,7 @@ namespace Azure.ResourceManager.Compute.Tests
             Assert.True(vmimages.Value.Count == 2);
 
             // Filter: top orderby - Positive Test
-            vmimages = await VirtualMachineImagesClient.ListAsync(
+            vmimages = await VirtualMachineImagesOperations.ListAsync(
                 DefaultLocation,
                 "MicrosoftWindowsServer",
                 "WindowsServer",
@@ -191,7 +191,7 @@ namespace Azure.ResourceManager.Compute.Tests
             Assert.True(vmimages.Value.Count == 1);
 
             // Filter: top orderby - Positive Test
-            vmimages = await VirtualMachineImagesClient.ListAsync(
+            vmimages = await VirtualMachineImagesOperations.ListAsync(
                 DefaultLocation,
                 "MicrosoftWindowsServer",
                 "WindowsServer",
@@ -204,7 +204,7 @@ namespace Azure.ResourceManager.Compute.Tests
         [Test]
         public async Task TestVMImageListPublishers()
         {
-            var publishers = await VirtualMachineImagesClient.ListPublishersAsync(
+            var publishers = await VirtualMachineImagesOperations.ListPublishersAsync(
                 DefaultLocation);
 
             Assert.True(publishers.Value.Count > 0);
@@ -214,7 +214,7 @@ namespace Azure.ResourceManager.Compute.Tests
         [Test]
         public async Task TestVMImageListOffers()
         {
-            var offers = await VirtualMachineImagesClient.ListOffersAsync(
+            var offers = await VirtualMachineImagesOperations.ListOffersAsync(
                 DefaultLocation,
                 "MicrosoftWindowsServer");
 
@@ -225,7 +225,7 @@ namespace Azure.ResourceManager.Compute.Tests
         [Test]
         public async Task TestVMImageListSkus()
         {
-            var skus = await VirtualMachineImagesClient.ListSkusAsync(
+            var skus = await VirtualMachineImagesOperations.ListSkusAsync(
                 DefaultLocation,
                 "MicrosoftWindowsServer",
                 "WindowsServer");

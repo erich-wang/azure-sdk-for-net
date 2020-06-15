@@ -44,7 +44,7 @@ namespace Azure.ResourceManager.Compute.Tests
         [Test]
         public async Task TestExtImgGet()
         {
-            var vmimageext = await VirtualMachineExtensionImagesClient.GetAsync(
+            var vmimageext = await VirtualMachineExtensionImagesOperations.GetAsync(
                 parameters.Location,
                 parameters.PublisherName,
                 parameters.Type,
@@ -63,7 +63,7 @@ namespace Azure.ResourceManager.Compute.Tests
         [Test]
         public async Task TestExtImgListTypes()
         {
-            var vmextimg =await VirtualMachineExtensionImagesClient.ListTypesAsync(
+            var vmextimg =await VirtualMachineExtensionImagesOperations.ListTypesAsync(
                 parameters.Location,
                 parameters.PublisherName);
             Assert.True(vmextimg.Value.Count > 0);
@@ -73,7 +73,7 @@ namespace Azure.ResourceManager.Compute.Tests
         [Test]
         public async Task TestExtImgListVersionsNoFilter()
         {
-            var vmextimg = await VirtualMachineExtensionImagesClient.ListVersionsAsync(
+            var vmextimg = await VirtualMachineExtensionImagesOperations.ListVersionsAsync(
                 parameters.Location,
                 parameters.PublisherName,
                 parameters.Type);
@@ -89,7 +89,7 @@ namespace Azure.ResourceManager.Compute.Tests
             string existingVersionPrefix = existingVersion.Substring(0, existingVersion.LastIndexOf('.'));
 
             parameters.FilterExpression = null;
-            var extImages = await VirtualMachineExtensionImagesClient.ListVersionsAsync(
+            var extImages = await VirtualMachineExtensionImagesOperations.ListVersionsAsync(
                 parameters.Location,
                 parameters.PublisherName,
                 parameters.Type);
@@ -97,7 +97,7 @@ namespace Azure.ResourceManager.Compute.Tests
 
             string ver = extImages.Value.First().Name;
             string query = "startswith(name,'" + ver + "')";
-            var vmextimg = await VirtualMachineExtensionImagesClient.ListVersionsAsync(
+            var vmextimg = await VirtualMachineExtensionImagesOperations.ListVersionsAsync(
                 parameters.Location,
                 parameters.PublisherName,
                 parameters.Type,
@@ -107,7 +107,7 @@ namespace Azure.ResourceManager.Compute.Tests
 
             query = "startswith(name,'" + existingVersionPrefix + "')";
             parameters.FilterExpression = string.Format("$filter=startswith(name,'{0}')", existingVersionPrefix);
-            vmextimg = await VirtualMachineExtensionImagesClient.ListVersionsAsync(
+            vmextimg = await VirtualMachineExtensionImagesOperations.ListVersionsAsync(
                 parameters.Location,
                 parameters.PublisherName,
                 parameters.Type,
@@ -116,7 +116,7 @@ namespace Azure.ResourceManager.Compute.Tests
             Assert.True(vmextimg.Value.Count(vmi => vmi.Name == existingVersionPrefix) == 0);
 
             parameters.FilterExpression = "$top=1";
-            vmextimg = await VirtualMachineExtensionImagesClient.ListVersionsAsync(
+            vmextimg = await VirtualMachineExtensionImagesOperations.ListVersionsAsync(
                 parameters.Location,
                 parameters.PublisherName,
                 parameters.Type,
@@ -126,7 +126,7 @@ namespace Azure.ResourceManager.Compute.Tests
             Assert.True(vmextimg.Value.Count(vmi => vmi.Name == existingVersion) != 0);
 
             parameters.FilterExpression = "$top=0";
-            vmextimg = await VirtualMachineExtensionImagesClient.ListVersionsAsync(
+            vmextimg = await VirtualMachineExtensionImagesOperations.ListVersionsAsync(
                 parameters.Location,
                 parameters.PublisherName,
                 parameters.Type,

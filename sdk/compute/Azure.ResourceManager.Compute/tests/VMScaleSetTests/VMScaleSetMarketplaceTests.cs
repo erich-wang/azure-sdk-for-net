@@ -23,7 +23,7 @@ namespace Azure.ResourceManager.Compute.Tests
             ImageReference imageRef = await FindVMImage(vmmPublisherName, vmmOfferName, vmmSku);
             // Query the image directly in order to get all the properties, including PurchasePlan
 
-            return await VirtualMachineImagesClient.GetAsync(m_location, vmmPublisherName, vmmOfferName, vmmSku, imageRef.Version);
+            return await VirtualMachineImagesOperations.GetAsync(m_location, vmmPublisherName, vmmOfferName, vmmSku, imageRef.Version);
         }
         [Test]
         public async Task TestVMScaleSetMarketplace()
@@ -67,7 +67,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 // Validate the VMM Plan field
                 ValidateMarketplaceVMScaleSetPlanField(vmScaleSet, img);
 
-                await WaitForCompletionAsync(await VirtualMachineScaleSetsClient.StartDeleteAsync(rgName, vmssName));
+                await WaitForCompletionAsync(await VirtualMachineScaleSetsOperations.StartDeleteAsync(rgName, vmssName));
             }
             catch (Exception ex)
             {

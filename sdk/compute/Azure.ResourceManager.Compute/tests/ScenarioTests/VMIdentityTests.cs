@@ -72,7 +72,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 Assert.NotNull(vmResult.Identity.UserAssignedIdentities[identity].PrincipalId);
                 Assert.NotNull(vmResult.Identity.UserAssignedIdentities[identity].ClientId);
 
-                var getVM = (await VirtualMachinesClient.GetAsync(rgName, inputVM.Name)).Value;
+                var getVM = (await VirtualMachinesOperations.GetAsync(rgName, inputVM.Name)).Value;
                 Assert.AreEqual(ResourceIdentityType.SystemAssignedUserAssigned, getVM.Identity.Type);
                 Assert.NotNull(getVM.Identity.PrincipalId);
                 Assert.NotNull(getVM.Identity.TenantId);
@@ -80,7 +80,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 Assert.NotNull(getVM.Identity.UserAssignedIdentities[identity].PrincipalId);
                 Assert.NotNull(getVM.Identity.UserAssignedIdentities[identity].ClientId);
 
-                await WaitForCompletionAsync(await VirtualMachinesClient.StartDeleteAsync(rgName, inputVM.Name));
+                await WaitForCompletionAsync(await VirtualMachinesOperations.StartDeleteAsync(rgName, inputVM.Name));
                 passed = true;
             }
             catch (Exception e)

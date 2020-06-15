@@ -56,7 +56,7 @@ namespace Azure.ResourceManager.Compute.Tests
                     cs => cs.OrchestratorProfile.OrchestratorType = ContainerServiceOrchestratorTypes.Dcos);
             var containerService = getTwocontainerService.Item1;
             inputContainerService = getTwocontainerService.Item2;
-            await WaitForCompletionAsync(await ContainerServicesClient.StartDeleteAsync(rgName, containerService.Name));
+            await WaitForCompletionAsync(await ContainerServicesOperations.StartDeleteAsync(rgName, containerService.Name));
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace Azure.ResourceManager.Compute.Tests
                 cs => cs.OrchestratorProfile.OrchestratorType = ContainerServiceOrchestratorTypes.Swarm);
             var containerService = getTwocontainerService.Item1;
             inputContainerService = getTwocontainerService.Item2;
-            await WaitForCompletionAsync(await ContainerServicesClient.StartDeleteAsync(rgName, containerService.Name));
+            await WaitForCompletionAsync(await ContainerServicesOperations.StartDeleteAsync(rgName, containerService.Name));
         }
     }
 }
