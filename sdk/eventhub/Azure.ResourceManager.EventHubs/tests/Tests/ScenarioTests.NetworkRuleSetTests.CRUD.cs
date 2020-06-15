@@ -17,10 +17,10 @@ namespace Azure.Management.EventHub.Tests
         {
             var location = GetLocation();
             var resourceGroup = Recording.GenerateAssetName(Helper.ResourceGroupPrefix);
-            await Helper.TryRegisterResourceGroupAsync(ResourceGroupsClient, location.Result, resourceGroup);
+            await Helper.TryRegisterResourceGroupAsync(ResourceGroupsOperations, location.Result, resourceGroup);
             //Create a namespace
             var namespaceName = Recording.GenerateAssetName(Helper.NamespacePrefix);
-            var createNamespaceResponse = await NamespacesClient.StartCreateOrUpdateAsync(resourceGroup, namespaceName,
+            var createNamespaceResponse = await NamespacesOperations.StartCreateOrUpdateAsync(resourceGroup, namespaceName,
                 new EHNamespace()
                 {
                     Location = location.Result,
@@ -36,10 +36,10 @@ namespace Azure.Management.EventHub.Tests
             Assert.AreEqual(np.Name, namespaceName);
             IsDelay(5);
             //get the created namespace
-            var getNamespaceResponse = await NamespacesClient.GetAsync(resourceGroup, namespaceName);
+            var getNamespaceResponse = await NamespacesOperations.GetAsync(resourceGroup, namespaceName);
             if (string.Compare(getNamespaceResponse.Value.ProvisioningState, "Succeeded", true) != 0)
                 IsDelay(5);
-            getNamespaceResponse = await NamespacesClient.GetAsync(resourceGroup, namespaceName);
+            getNamespaceResponse = await NamespacesOperations.GetAsync(resourceGroup, namespaceName);
             Assert.NotNull(getNamespaceResponse);
             Assert.AreEqual("Succeeded", getNamespaceResponse.Value.ProvisioningState,StringComparer.CurrentCultureIgnoreCase.ToString());
             Assert.AreEqual(location.Result, getNamespaceResponse.Value.Location, StringComparer.CurrentCultureIgnoreCase.ToString());
@@ -56,13 +56,13 @@ namespace Azure.Management.EventHub.Tests
             VNetRules.Add(new NWRuleSetVirtualNetworkRules() { Subnet = new Subnet("/subscriptions/" + SubscriptionId + "/resourcegroups/"+ resourceGroup + "/providers/Microsoft.Network/virtualNetworks/sbehvnettest1/subnets/default") });
             VNetRules.Add(new NWRuleSetVirtualNetworkRules() { Subnet = new Subnet("/subscriptions/" + SubscriptionId + "/resourcegroups/"+ resourceGroup + "/providers/Microsoft.Network/virtualNetworks/sbehvnettest1/subnets/sbdefault") });
             VNetRules.Add(new NWRuleSetVirtualNetworkRules() { Subnet = new Subnet("/subscriptions/" + SubscriptionId + "/resourcegroups/"+ resourceGroup + "/providers/Microsoft.Network/virtualNetworks/sbehvnettest1/subnets/sbdefault01") });
-            var netWorkRuleSet =await NamespacesClient.CreateOrUpdateNetworkRuleSetAsync(resourceGroup, namespaceName, new NetworkRuleSet() { DefaultAction = DefaultAction.Deny, VirtualNetworkRules = VNetRules, IpRules = IPRules });
-            var getNetworkRuleSet = await NamespacesClient.GetNetworkRuleSetAsync(resourceGroup, namespaceName);
-            var netWorkRuleSet1 = await NamespacesClient.CreateOrUpdateNetworkRuleSetAsync(resourceGroup, namespaceName, new NetworkRuleSet() { DefaultAction = "Allow" });
-            var getNetworkRuleSet1 = await NamespacesClient.GetNetworkRuleSetAsync(resourceGroup, namespaceName);
+            var netWorkRuleSet =await NamespacesOperations.CreateOrUpdateNetworkRuleSetAsync(resourceGroup, namespaceName, new NetworkRuleSet() { DefaultAction = DefaultAction.Deny, VirtualNetworkRules = VNetRules, IpRules = IPRules });
+            var getNetworkRuleSet = await NamespacesOperations.GetNetworkRuleSetAsync(resourceGroup, namespaceName);
+            var netWorkRuleSet1 = await NamespacesOperations.CreateOrUpdateNetworkRuleSetAsync(resourceGroup, namespaceName, new NetworkRuleSet() { DefaultAction = "Allow" });
+            var getNetworkRuleSet1 = await NamespacesOperations.GetNetworkRuleSetAsync(resourceGroup, namespaceName);
             IsDelay(60);
             //Delete namespace
-            await WaitForCompletionAsync(await NamespacesClient.StartDeleteAsync(resourceGroup, namespaceName));
+            await WaitForCompletionAsync(await NamespacesOperations.StartDeleteAsync(resourceGroup, namespaceName));
         }
     }
 }

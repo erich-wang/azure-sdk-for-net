@@ -37,9 +37,9 @@ namespace Azure.Management.EventHub.Tests
         {
             var location = GetLocation();
             var resourceGroup = Recording.GenerateAssetName(Helper.ResourceGroupPrefix);
-            await Helper.TryRegisterResourceGroupAsync(ResourceGroupsClient,location.Result, resourceGroup);
+            await Helper.TryRegisterResourceGroupAsync(ResourceGroupsOperations,location.Result, resourceGroup);
             var namespaceName = Recording.GenerateAssetName(Helper.NamespacePrefix);
-            var createNamespaceResponse = await NamespacesClient.StartCreateOrUpdateAsync(resourceGroup, namespaceName,
+            var createNamespaceResponse = await NamespacesOperations.StartCreateOrUpdateAsync(resourceGroup, namespaceName,
                 new EHNamespace()
                 {
                     Location = location.Result
@@ -52,7 +52,7 @@ namespace Azure.Management.EventHub.Tests
             // Create Eventhub
             var eventhubName = Recording.GenerateAssetName(Helper.EventHubPrefix);
             //You Need to create a storage account first --Youri 8.5.2020
-            var createEventhubResponse = await EventHubsClient.CreateOrUpdateAsync(resourceGroup, namespaceName, eventhubName,
+            var createEventhubResponse = await EventHubsOperations.CreateOrUpdateAsync(resourceGroup, namespaceName, eventhubName,
                 new Eventhub()
                 {
                     MessageRetentionInDays = 4,
@@ -78,12 +78,12 @@ namespace Azure.Management.EventHub.Tests
             Assert.AreEqual(createEventhubResponse.Value.Name, eventhubName);
             Assert.True(createEventhubResponse.Value.CaptureDescription.SkipEmptyArchives);
             //Get the created EventHub
-            var getEventHubResponse = await EventHubsClient.GetAsync(resourceGroup, namespaceName, eventhubName);
+            var getEventHubResponse = await EventHubsOperations.GetAsync(resourceGroup, namespaceName, eventhubName);
             Assert.NotNull(getEventHubResponse.Value);
             Assert.AreEqual(EntityStatus.Active,getEventHubResponse.Value.Status);
             Assert.AreEqual(getEventHubResponse.Value.Name, eventhubName);
             //Get all Event Hubs for a given NameSpace
-            var getListEventHubResponse = EventHubsClient.ListByNamespaceAsync(resourceGroup, namespaceName);
+            var getListEventHubResponse = EventHubsOperations.ListByNamespaceAsync(resourceGroup, namespaceName);
             var list = await getListEventHubResponse.ToEnumerableAsync();
             Assert.NotNull(getListEventHubResponse);
             Assert.True(list.Count()>=1);
@@ -92,17 +92,17 @@ namespace Azure.Management.EventHub.Tests
             getEventHubResponse.Value.CaptureDescription.SizeLimitInBytes = 10485900;
             getEventHubResponse.Value.MessageRetentionInDays = 5;
             //TODO time exception
-            var UpdateEventHubResponse = (await EventHubsClient.CreateOrUpdateAsync(resourceGroup, namespaceName, eventhubName, getEventHubResponse.Value)).Value;
+            var UpdateEventHubResponse = (await EventHubsOperations.CreateOrUpdateAsync(resourceGroup, namespaceName, eventhubName, getEventHubResponse.Value)).Value;
             Assert.NotNull(UpdateEventHubResponse);
             // Get the updated EventHub and verify the properties
-            var getEventResponse = await EventHubsClient.GetAsync(resourceGroup, namespaceName, eventhubName);
+            var getEventResponse = await EventHubsOperations.GetAsync(resourceGroup, namespaceName, eventhubName);
             Assert.NotNull(getEventResponse);
             Assert.AreEqual(EntityStatus.Active, getEventResponse.Value.Status);
             Assert.AreEqual(5, getEventResponse.Value.MessageRetentionInDays);
             // Delete the Evnet Hub
-            var deleteEventResponse = await EventHubsClient.DeleteAsync(resourceGroup, namespaceName, eventhubName);
+            var deleteEventResponse = await EventHubsOperations.DeleteAsync(resourceGroup, namespaceName, eventhubName);
             // Delete namespace and check for the NotFound exception
-            var deleteNamespaceResponse = await WaitForCompletionAsync(await NamespacesClient.StartDeleteAsync(resourceGroup, namespaceName));
+            var deleteNamespaceResponse = await WaitForCompletionAsync(await NamespacesOperations.StartDeleteAsync(resourceGroup, namespaceName));
         }
     }
 }

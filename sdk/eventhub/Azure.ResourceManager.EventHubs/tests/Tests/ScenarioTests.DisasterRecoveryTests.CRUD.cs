@@ -15,10 +15,10 @@ namespace Azure.Management.EventHub.Tests
             var location = "South Central US";
             var location2 = "North Central US";
             var resourceGroup = Recording.GenerateAssetName(Helper.ResourceGroupPrefix);
-            await Helper.TryRegisterResourceGroupAsync(ResourceGroupsClient,location, resourceGroup);
+            await Helper.TryRegisterResourceGroupAsync(ResourceGroupsOperations,location, resourceGroup);
             var namespaceName = Recording.GenerateAssetName(Helper.NamespacePrefix);
             // Create namespace 1
-            var createNamespaceResponse = await NamespacesClient.StartCreateOrUpdateAsync(resourceGroup, namespaceName,
+            var createNamespaceResponse = await NamespacesOperations.StartCreateOrUpdateAsync(resourceGroup, namespaceName,
                 new EHNamespace()
                 {
                     Location = location,
@@ -41,7 +41,7 @@ namespace Azure.Management.EventHub.Tests
 
             // Create namespace 2
             var namespaceName2 = Recording.GenerateAssetName(Helper.NamespacePrefix);
-            var createNamespaceResponse2 = await NamespacesClient.StartCreateOrUpdateAsync(resourceGroup, namespaceName2,
+            var createNamespaceResponse2 = await NamespacesOperations.StartCreateOrUpdateAsync(resourceGroup, namespaceName2,
                new EHNamespace()
                {
                    Location = location2,
@@ -70,26 +70,26 @@ namespace Azure.Management.EventHub.Tests
                 Rights = new List<AccessRights>() { AccessRights.Listen, AccessRights.Send }
             };
 
-            var createNamespaceAuthorizationRuleResponse = await NamespacesClient.CreateOrUpdateAuthorizationRuleAsync(resourceGroup, namespaceName,
+            var createNamespaceAuthorizationRuleResponse = await NamespacesOperations.CreateOrUpdateAuthorizationRuleAsync(resourceGroup, namespaceName,
                 authorizationRuleName, createAutorizationRuleParameter);
             Assert.NotNull(createNamespaceAuthorizationRuleResponse);
             Assert.True(createNamespaceAuthorizationRuleResponse.Value.Rights.Count == createAutorizationRuleParameter.Rights.Count);
             Assert.True(isContains(createAutorizationRuleParameter.Rights, createNamespaceAuthorizationRuleResponse.Value.Rights));
             // Get created namespace AuthorizationRules
-            var getNamespaceAuthorizationRulesResponse = await NamespacesClient.GetAuthorizationRuleAsync(resourceGroup, namespaceName, authorizationRuleName);
+            var getNamespaceAuthorizationRulesResponse = await NamespacesOperations.GetAuthorizationRuleAsync(resourceGroup, namespaceName, authorizationRuleName);
             Assert.NotNull(getNamespaceAuthorizationRulesResponse);
             Assert.True(getNamespaceAuthorizationRulesResponse.Value.Rights.Count == createAutorizationRuleParameter.Rights.Count);
             Assert.True(isContains(createAutorizationRuleParameter.Rights, getNamespaceAuthorizationRulesResponse.Value.Rights));
-            var getNamespaceAuthorizationRulesListKeysResponse = NamespacesClient.ListKeysAsync(resourceGroup, namespaceName, authorizationRuleName);
+            var getNamespaceAuthorizationRulesListKeysResponse = NamespacesOperations.ListKeysAsync(resourceGroup, namespaceName, authorizationRuleName);
             // Create a Disaster Recovery -
             var disasterRecoveryName = Recording.GenerateAssetName(Helper.DisasterRecoveryPrefix);
             //CheckNameavaliability for Alias
-            var checknameAlias = await DisasterRecoveryConfigsClient.CheckNameAvailabilityAsync(resourceGroup, namespaceName, new CheckNameAvailabilityParameter(disasterRecoveryName));
+            var checknameAlias = await DisasterRecoveryConfigsOperations.CheckNameAvailabilityAsync(resourceGroup, namespaceName, new CheckNameAvailabilityParameter(disasterRecoveryName));
             Assert.True(checknameAlias.Value.NameAvailable, "The Alias Name: '" + disasterRecoveryName + "' is not avilable");
             //CheckNameAvaliability for Alias with same as namespace name (alternateName will be used in this case)
-            var checknameAliasSame =await DisasterRecoveryConfigsClient.CheckNameAvailabilityAsync(resourceGroup, namespaceName, new CheckNameAvailabilityParameter(namespaceName));
+            var checknameAliasSame =await DisasterRecoveryConfigsOperations.CheckNameAvailabilityAsync(resourceGroup, namespaceName, new CheckNameAvailabilityParameter(namespaceName));
             // Assert.True(checknameAliasSame.NameAvailable, "The Alias Name: '" + namespaceName + "' is not avilable");
-            var DisasterRecoveryResponse = await DisasterRecoveryConfigsClient.CreateOrUpdateAsync(resourceGroup, namespaceName, disasterRecoveryName, new ArmDisasterRecovery()
+            var DisasterRecoveryResponse = await DisasterRecoveryConfigsOperations.CreateOrUpdateAsync(resourceGroup, namespaceName, disasterRecoveryName, new ArmDisasterRecovery()
             {
                 PartnerNamespace = np2.Id
             });
@@ -97,7 +97,7 @@ namespace Azure.Management.EventHub.Tests
             IsDelay(30);
 
             //// Get the created DisasterRecovery config - Primary
-            var disasterRecoveryGetResponse = await DisasterRecoveryConfigsClient.GetAsync(resourceGroup, namespaceName, disasterRecoveryName);
+            var disasterRecoveryGetResponse = await DisasterRecoveryConfigsOperations.GetAsync(resourceGroup, namespaceName, disasterRecoveryName);
             Assert.NotNull(disasterRecoveryGetResponse);
             if (disasterRecoveryGetResponse.Value.PendingReplicationOperationsCount.HasValue)
                 Assert.True(disasterRecoveryGetResponse.Value.PendingReplicationOperationsCount >= 0);
@@ -105,63 +105,63 @@ namespace Azure.Management.EventHub.Tests
                 Assert.False(disasterRecoveryGetResponse.Value.PendingReplicationOperationsCount.HasValue);
             Assert.AreEqual(RoleDisasterRecovery.Primary, disasterRecoveryGetResponse.Value.Role);
             //// Get the created DisasterRecovery config - Secondary
-            var disasterRecoveryGetResponse_Sec = await DisasterRecoveryConfigsClient.GetAsync(resourceGroup, namespaceName2, disasterRecoveryName);
+            var disasterRecoveryGetResponse_Sec = await DisasterRecoveryConfigsOperations.GetAsync(resourceGroup, namespaceName2, disasterRecoveryName);
             Assert.AreEqual(RoleDisasterRecovery.Secondary, disasterRecoveryGetResponse_Sec.Value.Role);
             //Get authorization rule thorugh Alias
-            var getAuthoRuleAliasResponse = await DisasterRecoveryConfigsClient.GetAuthorizationRuleAsync(resourceGroup, namespaceName, disasterRecoveryName, authorizationRuleName);
+            var getAuthoRuleAliasResponse = await DisasterRecoveryConfigsOperations.GetAuthorizationRuleAsync(resourceGroup, namespaceName, disasterRecoveryName, authorizationRuleName);
             Assert.AreEqual(getAuthoRuleAliasResponse.Value.Name, getNamespaceAuthorizationRulesResponse.Value.Name);
-            var getAuthoruleListKeysResponse = await DisasterRecoveryConfigsClient.ListKeysAsync(resourceGroup, namespaceName, disasterRecoveryName, authorizationRuleName);
+            var getAuthoruleListKeysResponse = await DisasterRecoveryConfigsOperations.ListKeysAsync(resourceGroup, namespaceName, disasterRecoveryName, authorizationRuleName);
             Assert.True(string.IsNullOrEmpty(getAuthoruleListKeysResponse.Value.PrimaryConnectionString));
             Assert.True(string.IsNullOrEmpty(getAuthoruleListKeysResponse.Value.SecondaryConnectionString));
-            while (DisasterRecoveryConfigsClient.GetAsync(resourceGroup, namespaceName, disasterRecoveryName).Result.Value.ProvisioningState != ProvisioningStateDR.Succeeded)
+            while (DisasterRecoveryConfigsOperations.GetAsync(resourceGroup, namespaceName, disasterRecoveryName).Result.Value.ProvisioningState != ProvisioningStateDR.Succeeded)
             {
                 IsDelay(10);
             }
-            disasterRecoveryGetResponse = await DisasterRecoveryConfigsClient.GetAsync(resourceGroup, namespaceName, disasterRecoveryName);
+            disasterRecoveryGetResponse = await DisasterRecoveryConfigsOperations.GetAsync(resourceGroup, namespaceName, disasterRecoveryName);
             if (disasterRecoveryGetResponse.Value.PendingReplicationOperationsCount.HasValue)
                 Assert.True(disasterRecoveryGetResponse.Value.PendingReplicationOperationsCount >= 0);
             else
                 Assert.False(disasterRecoveryGetResponse.Value.PendingReplicationOperationsCount.HasValue);
             //// Break Pairing
-            await DisasterRecoveryConfigsClient.BreakPairingAsync(resourceGroup, namespaceName, disasterRecoveryName);
+            await DisasterRecoveryConfigsOperations.BreakPairingAsync(resourceGroup, namespaceName, disasterRecoveryName);
             IsDelay(10);
-            while (DisasterRecoveryConfigsClient.GetAsync(resourceGroup, namespaceName, disasterRecoveryName).Result.Value.ProvisioningState != ProvisioningStateDR.Succeeded)
+            while (DisasterRecoveryConfigsOperations.GetAsync(resourceGroup, namespaceName, disasterRecoveryName).Result.Value.ProvisioningState != ProvisioningStateDR.Succeeded)
             {
                 IsDelay(10);
             }
-            var DisasterRecoveryResponse_update = await DisasterRecoveryConfigsClient.CreateOrUpdateAsync(resourceGroup, namespaceName, disasterRecoveryName, new ArmDisasterRecovery()
+            var DisasterRecoveryResponse_update = await DisasterRecoveryConfigsOperations.CreateOrUpdateAsync(resourceGroup, namespaceName, disasterRecoveryName, new ArmDisasterRecovery()
             {
                 PartnerNamespace = np2.Id
             });
             Assert.NotNull(DisasterRecoveryResponse_update);
             IsDelay(10);
-            var getGeoDRResponse = await DisasterRecoveryConfigsClient.GetAsync(resourceGroup, namespaceName, disasterRecoveryName);
+            var getGeoDRResponse = await DisasterRecoveryConfigsOperations.GetAsync(resourceGroup, namespaceName, disasterRecoveryName);
             while (getGeoDRResponse.Value.ProvisioningState != ProvisioningStateDR.Succeeded)
             {
-                getGeoDRResponse = await DisasterRecoveryConfigsClient.GetAsync(resourceGroup, namespaceName, disasterRecoveryName);
+                getGeoDRResponse = await DisasterRecoveryConfigsOperations.GetAsync(resourceGroup, namespaceName, disasterRecoveryName);
                 IsDelay(10);
             }
-            getGeoDRResponse = await DisasterRecoveryConfigsClient.GetAsync(resourceGroup, namespaceName, disasterRecoveryName);
+            getGeoDRResponse = await DisasterRecoveryConfigsOperations.GetAsync(resourceGroup, namespaceName, disasterRecoveryName);
             if (getGeoDRResponse.Value.PendingReplicationOperationsCount.HasValue)
                 Assert.True(getGeoDRResponse.Value.PendingReplicationOperationsCount >= 0);
             else
                 Assert.False(getGeoDRResponse.Value.PendingReplicationOperationsCount.HasValue);
             // Fail over
-            await DisasterRecoveryConfigsClient.FailOverAsync(resourceGroup, namespaceName2, disasterRecoveryName);
+            await DisasterRecoveryConfigsOperations.FailOverAsync(resourceGroup, namespaceName2, disasterRecoveryName);
             IsDelay(10);
-            while (DisasterRecoveryConfigsClient.GetAsync(resourceGroup, namespaceName2, disasterRecoveryName).Result.Value.ProvisioningState != ProvisioningStateDR.Succeeded)
+            while (DisasterRecoveryConfigsOperations.GetAsync(resourceGroup, namespaceName2, disasterRecoveryName).Result.Value.ProvisioningState != ProvisioningStateDR.Succeeded)
             {
                 IsDelay(10);
             }
             // Get all Disaster Recovery for a given NameSpace
-            var getListisasterRecoveryResponse = DisasterRecoveryConfigsClient.ListAsync(resourceGroup, namespaceName2);
+            var getListisasterRecoveryResponse = DisasterRecoveryConfigsOperations.ListAsync(resourceGroup, namespaceName2);
             Assert.NotNull(getListisasterRecoveryResponse);
             //Assert.True(getListisasterRecoveryResponse.AsPages.Count<ArmDisasterRecovery>() >= 1);
             // Delete the DisasterRecovery
-            await DisasterRecoveryConfigsClient.DeleteAsync(resourceGroup, namespaceName2, disasterRecoveryName);
+            await DisasterRecoveryConfigsOperations.DeleteAsync(resourceGroup, namespaceName2, disasterRecoveryName);
             // Delete Namespace using Async
-            await WaitForCompletionAsync(await NamespacesClient.StartDeleteAsync(resourceGroup, namespaceName));
-            await WaitForCompletionAsync(await NamespacesClient.StartDeleteAsync(resourceGroup, namespaceName2));
+            await WaitForCompletionAsync(await NamespacesOperations.StartDeleteAsync(resourceGroup, namespaceName));
+            await WaitForCompletionAsync(await NamespacesOperations.StartDeleteAsync(resourceGroup, namespaceName2));
         }
     }
 }

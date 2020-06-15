@@ -28,9 +28,9 @@ namespace Azure.Management.EventHub.Tests
 
             return Convert.ToBase64String(key256);
         }
-        public static async Task TryRegisterResourceGroupAsync(ResourceGroupsClient resourceGroupsClient, string location, string resourceGroupName)
+        public static async Task TryRegisterResourceGroupAsync(ResourceGroupsOperations resourceGroupsOperations, string location, string resourceGroupName)
         {
-            await resourceGroupsClient.CreateOrUpdateAsync(resourceGroupName, new ResourceGroup(location));
+            await resourceGroupsOperations.CreateOrUpdateAsync(resourceGroupName, new ResourceGroup(location));
         }
     }
 }

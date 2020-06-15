@@ -24,14 +24,14 @@ namespace Azure.ResourceManager.EventHubs.Tests
         public string SubscriptionId { get; set; }
         public ResourcesManagementClient ResourcesManagementClient { get; set; }
         public EventHubsManagementClient EventHubsManagementClient { get; set; }
-        public OperationsClient OperationsClient { get; set; }
-        public ResourcesClient ResourcesClient { get; set; }
-        public ProvidersClient ResourceProvidersClient { get; set; }
-        public EventHubsClient EventHubsClient { get; set; }
-        public NamespacesClient NamespacesClient { get; set; }
-        public ConsumerGroupsClient ConsumerGroupsClient { get; set; }
-        public DisasterRecoveryConfigsClient DisasterRecoveryConfigsClient { get; set; }
-        public ResourceGroupsClient ResourceGroupsClient { get; set; }
+        public Operations Operations { get; set; }
+        public ResourcesOperations ResourcesOperations { get; set; }
+        public ProvidersOperations ResourceProvidersOperations { get; set; }
+        public EventHubsOperations EventHubsOperations { get; set; }
+        public NamespacesOperations NamespacesOperations { get; set; }
+        public ConsumerGroupsOperations ConsumerGroupsOperations { get; set; }
+        public DisasterRecoveryConfigsOperations DisasterRecoveryConfigsOperations { get; set; }
+        public ResourceGroupsOperations ResourceGroupsOperations { get; set; }
         protected EventHubsManagementClientBase(bool isAsync)
              : base(isAsync)
         {
@@ -42,16 +42,16 @@ namespace Azure.ResourceManager.EventHubs.Tests
             this.TenantId = TestEnvironment.TenantId;
             this.SubscriptionId = TestEnvironment.SubscriptionId;
             ResourcesManagementClient = GetResourceManagementClient();
-            ResourcesClient = ResourcesManagementClient.GetResourcesClient();
-            ResourceProvidersClient = ResourcesManagementClient.GetProvidersClient();
-            ResourceGroupsClient = ResourcesManagementClient.GetResourceGroupsClient();
+            ResourcesOperations = ResourcesManagementClient.Resources;
+            ResourceProvidersOperations = ResourcesManagementClient.Providers;
+            ResourceGroupsOperations = ResourcesManagementClient.ResourceGroups;
 
             EventHubsManagementClient = GetEventHubManagementClient();
-            EventHubsClient = EventHubsManagementClient.GetEventHubsClient();
-            NamespacesClient = EventHubsManagementClient.GetNamespacesClient();
-            ConsumerGroupsClient = EventHubsManagementClient.GetConsumerGroupsClient();
-            DisasterRecoveryConfigsClient = EventHubsManagementClient.GetDisasterRecoveryConfigsClient();
-            OperationsClient = EventHubsManagementClient.GetOperationsClient();
+            EventHubsOperations = EventHubsManagementClient.EventHubs;
+            NamespacesOperations = EventHubsManagementClient.Namespaces;
+            ConsumerGroupsOperations = EventHubsManagementClient.ConsumerGroups;
+            DisasterRecoveryConfigsOperations = EventHubsManagementClient.DisasterRecoveryConfigs;
+            Operations = EventHubsManagementClient.Operations;
         }
 
         internal EventHubsManagementClient GetEventHubManagementClient()
@@ -63,7 +63,7 @@ namespace Azure.ResourceManager.EventHubs.Tests
 
         public async Task<string> GetLocation()
         {
-            var provider = (await ResourceProvidersClient.GetAsync("Microsoft.EventHub")).Value;
+            var provider = (await ResourceProvidersOperations.GetAsync("Microsoft.EventHub")).Value;
             this.Location = provider.ResourceTypes.Where(
                 (resType) =>
                 {
