@@ -42,13 +42,13 @@ namespace ResourceGroups.Tests
         public async Task CreateListAndDeleteSubscriptionTag()
         {
             string tagName = Recording.GenerateAssetName("csmtg");
-            var createResult = (await TagsClient.CreateOrUpdateAsync(tagName)).Value;
+            var createResult = (await TagsOperations.CreateOrUpdateAsync(tagName)).Value;
             Assert.AreEqual(tagName, createResult.TagName);
 
-            var listResult =await TagsClient.ListAsync().ToEnumerableAsync();
+            var listResult =await TagsOperations.ListAsync().ToEnumerableAsync();
             Assert.True(listResult.Count() > 0);
 
-            await TagsClient.DeleteAsync(tagName);
+            await TagsOperations.DeleteAsync(tagName);
         }
 
         [Test]
@@ -57,16 +57,16 @@ namespace ResourceGroups.Tests
             string tagName = Recording.GenerateAssetName("csmtg");
             string tagValue = Recording.GenerateAssetName("csmtgv");
 
-            var createNameResult = await TagsClient.CreateOrUpdateAsync(tagName);
-            var createValueResult = await TagsClient.CreateOrUpdateValueAsync(tagName, tagValue);
+            var createNameResult = await TagsOperations.CreateOrUpdateAsync(tagName);
+            var createValueResult = await TagsOperations.CreateOrUpdateValueAsync(tagName, tagValue);
             Assert.AreEqual(tagName, createNameResult.Value.TagName);
             Assert.AreEqual(tagValue, createValueResult.Value.TagValueValue);
 
-            var listResult =await TagsClient.ListAsync().ToEnumerableAsync();
+            var listResult =await TagsOperations.ListAsync().ToEnumerableAsync();
             Assert.True(listResult.Count() > 0);
 
-            await TagsClient.DeleteValueAsync(tagName, tagValue);
-            await TagsClient.DeleteAsync(tagName);
+            await TagsOperations.DeleteValueAsync(tagName, tagValue);
+            await TagsOperations.DeleteAsync(tagName);
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace ResourceGroups.Tests
             string tagValue = Recording.GenerateAssetName("csmtgv");
             try
             {
-                await TagsClient.CreateOrUpdateValueAsync(tagName, tagValue);
+                await TagsOperations.CreateOrUpdateValueAsync(tagName, tagValue);
             }
             catch (Exception ex)
             {
@@ -102,7 +102,7 @@ namespace ResourceGroups.Tests
             resourceScope = subscriptionScope + resourceScope;
 
             // test creating tags for resources
-            var putResponse =(await TagsClient.CreateOrUpdateAtScopeAsync(resourceScope, tagsResource)).Value;
+            var putResponse =(await TagsOperations.CreateOrUpdateAtScopeAsync(resourceScope, tagsResource)).Value;
             Assert.AreEqual(putResponse.Properties.TagsValue.Count(), tagsResource.Properties.TagsValue.Count());
             Assert.IsTrue(CompareTagsResource(tagsResource, putResponse));
         }
@@ -145,7 +145,7 @@ namespace ResourceGroups.Tests
                 }
             }
             );
-            await TagsClient.CreateOrUpdateAtScopeAsync(resourceScope, tagsResource);
+            await TagsOperations.CreateOrUpdateAtScopeAsync(resourceScope, tagsResource);
             Thread.Sleep(3*1000);
 
             var putTags = new Tags()
@@ -158,7 +158,7 @@ namespace ResourceGroups.Tests
 
             { // test for Merge operation
                 var tagPatchRequest = new TagsPatchResource() { Operation = TagsPatchResourceOperation.Merge, Properties = putTags };
-                var patchResponse =(await TagsClient.UpdateAtScopeAsync(resourceScope, tagPatchRequest)).Value;
+                var patchResponse =(await TagsOperations.UpdateAtScopeAsync(resourceScope, tagPatchRequest)).Value;
 
                 var expectedResponse = new TagsResource(new Tags()
                 {
@@ -175,7 +175,7 @@ namespace ResourceGroups.Tests
 
             { // test for Replace operation
                 var tagPatchRequest = new TagsPatchResource() { Operation = TagsPatchResourceOperation.Replace, Properties = putTags };
-                var patchResponse = (await TagsClient.UpdateAtScopeAsync(resourceScope, tagPatchRequest)).Value;
+                var patchResponse = (await TagsOperations.UpdateAtScopeAsync(resourceScope, tagPatchRequest)).Value;
 
                 var expectedResponse = new TagsResource(putTags);
                 Assert.AreEqual(patchResponse.Properties.TagsValue.Count(), expectedResponse.Properties.TagsValue.Count());
@@ -184,7 +184,7 @@ namespace ResourceGroups.Tests
 
             { // test for Delete operation
                 var tagPatchRequest = new TagsPatchResource() { Operation = TagsPatchResourceOperation.Delete, Properties = putTags };
-                var patchResponse = (await TagsClient.UpdateAtScopeAsync(resourceScope, tagPatchRequest)).Value;
+                var patchResponse = (await TagsOperations.UpdateAtScopeAsync(resourceScope, tagPatchRequest)).Value;
                 Assert.IsEmpty(patchResponse.Properties.TagsValue);
             }
         }
@@ -226,12 +226,12 @@ namespace ResourceGroups.Tests
                     { "tagKey2", "tagValue2" }
                 }
             });
-            await TagsClient.CreateOrUpdateAtScopeAsync(resourceScope, tagsResource);
+            await TagsOperations.CreateOrUpdateAtScopeAsync(resourceScope, tagsResource);
             if (Mode == RecordedTestMode.Record)
                 Thread.Sleep(3*1000);
 
             // get request should return created TagsResource
-            var getResponse = (await TagsClient.GetAtScopeAsync(resourceScope)).Value;
+            var getResponse = (await TagsOperations.GetAtScopeAsync(resourceScope)).Value;
             Assert.AreEqual(getResponse.Properties.TagsValue.Count(), tagsResource.Properties.TagsValue.Count());
             Assert.IsTrue(this.CompareTagsResource(tagsResource, getResponse));
         }
@@ -273,17 +273,17 @@ namespace ResourceGroups.Tests
                     { "tagKey2", "tagValue2" }
                 }
             });
-            await TagsClient.CreateOrUpdateAtScopeAsync(resourceScope, tagsResource);
+            await TagsOperations.CreateOrUpdateAtScopeAsync(resourceScope, tagsResource);
             if (Mode == RecordedTestMode.Record)
                 Thread.Sleep(3*1000);
 
             // try to delete existing tags
-            await TagsClient.DeleteAtScopeAsync(resourceScope);
+            await TagsOperations.DeleteAtScopeAsync(resourceScope);
             if (Mode == RecordedTestMode.Record)
                 Thread.Sleep(15*1000);
 
             // after deletion, Get request should get 0 tags back
-            var result = (await TagsClient.GetAtScopeAsync(resourceScope)).Value; ;
+            var result = (await TagsOperations.GetAtScopeAsync(resourceScope)).Value; ;
             return result;
         }
 

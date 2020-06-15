@@ -37,7 +37,7 @@ namespace ResourceGroups.Tests
         [Test]
         public async Task ListSubscriptions()
         {
-            var subscriptions = await SubscriptionsClient.ListAsync().ToEnumerableAsync();
+            var subscriptions = await SubscriptionsOperations.ListAsync().ToEnumerableAsync();
 
             Assert.NotNull(subscriptions);
             Assert.IsNotEmpty(subscriptions);
@@ -50,7 +50,7 @@ namespace ResourceGroups.Tests
         [Test]
         public async Task GetSubscriptionDetails()
         {
-            var subscriptionDetails = (await SubscriptionsClient.GetAsync(TestEnvironment.SubscriptionId)).Value;
+            var subscriptionDetails = (await SubscriptionsOperations.GetAsync(TestEnvironment.SubscriptionId)).Value;
 
             Assert.NotNull(subscriptionDetails);
             Assert.NotNull(subscriptionDetails.Id);

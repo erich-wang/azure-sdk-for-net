@@ -56,7 +56,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var result = (await client.GetResourceGroupsClient().CreateOrUpdateAsync("foo", new ResourceGroup("WestEurope")
+            var result = (await client.ResourceGroups.CreateOrUpdateAsync("foo", new ResourceGroup("WestEurope")
             {
                 Tags = new Dictionary<string, string>() { { "department", "finance" }, { "tagname", "tagvalue" } }
             })).Value;
@@ -98,7 +98,7 @@ namespace ResourceGroups.Tests
 
             try
             {
-                await client.GetResourceGroupsClient().CreateOrUpdateAsync(null, new ResourceGroup("westus"));
+                await client.ResourceGroups.CreateOrUpdateAsync(null, new ResourceGroup("westus"));
             }
             catch (Exception ex)
             {
@@ -107,7 +107,7 @@ namespace ResourceGroups.Tests
 
             try
             {
-                await client.GetResourceGroupsClient().CreateOrUpdateAsync("foo", null);
+                await client.ResourceGroups.CreateOrUpdateAsync("foo", null);
             }
             catch (Exception ex)
             {
@@ -124,7 +124,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var result = await client.GetResourceGroupsClient().CheckExistenceAsync("foo");
+            var result = await client.ResourceGroups.CheckExistenceAsync("foo");
 
             // Validate payload
             var request = mockTransport.Requests[0];
@@ -142,7 +142,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var result = await client.GetResourceGroupsClient().CheckExistenceAsync(Guid.NewGuid().ToString());
+            var result = await client.ResourceGroups.CheckExistenceAsync(Guid.NewGuid().ToString());
 
             // Validate payload
             var request = mockTransport.Requests[0];
@@ -160,7 +160,7 @@ namespace ResourceGroups.Tests
             var client = GetResourceManagementClient(mockTransport);
             try
             {
-                await client.GetResourceGroupsClient().CheckExistenceAsync("foo");
+                await client.ResourceGroups.CheckExistenceAsync("foo");
             }
             catch (Exception ex)
             {
@@ -186,7 +186,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var result = (await client.GetResourceGroupsClient().UpdateAsync("foo", new ResourceGroupPatchable
+            var result = (await client.ResourceGroups.UpdateAsync("foo", new ResourceGroupPatchable
             {
                 Name = "foo",
             })).Value;
@@ -232,7 +232,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var result = (await client.GetResourceGroupsClient().GetAsync("foo")).Value;
+            var result = (await client.ResourceGroups.GetAsync("foo")).Value;
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -266,7 +266,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            await client.GetResourceGroupsClient().GetAsync("foo-123_(bar)");
+            await client.ResourceGroups.GetAsync("foo-123_(bar)");
         }
 
         [Test]
@@ -298,7 +298,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var result = await client.GetResourceGroupsClient().ListAsync(null).ToEnumerableAsync();
+            var result = await client.ResourceGroups.ListAsync(null).ToEnumerableAsync();
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -324,7 +324,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var result = await client.GetResourceGroupsClient().ListAsync(null).ToEnumerableAsync();
+            var result = await client.ResourceGroups.ListAsync(null).ToEnumerableAsync();
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -358,7 +358,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var result = await client.GetResourceGroupsClient().ListAsync(top:5).ToEnumerableAsync();
+            var result = await client.ResourceGroups.ListAsync(top:5).ToEnumerableAsync();
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -381,7 +381,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            await client.GetResourceGroupsClient().StartDeleteAsync("foo");
+            await client.ResourceGroups.StartDeleteAsync("foo");
         }
 
         [Test]
@@ -395,7 +395,7 @@ namespace ResourceGroups.Tests
 
             try
             {
-                var raw = await client.GetResourceGroupsClient().StartDeleteAsync(null);
+                var raw = await client.ResourceGroups.StartDeleteAsync(null);
                 await WaitForCompletionAsync(raw);
             }
             catch (Exception ex)
@@ -405,7 +405,7 @@ namespace ResourceGroups.Tests
             // No use since We don't check parameter value any more
             //try
             //{
-            //    var raw = await client.GetResourceGroupsClient().StartDeleteAsync("~`123");
+            //    var raw = await client.ResourceGroups.StartDeleteAsync("~`123");
             //    await WaitForCompletionAsync(raw);
             //}
             //catch (Exception ex)

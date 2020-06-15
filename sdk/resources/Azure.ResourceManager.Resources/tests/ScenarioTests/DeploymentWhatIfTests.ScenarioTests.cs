@@ -66,10 +66,10 @@ namespace ResourceGroups.Tests
             string resourceGroupName = NewResourceGroupName();
             string deploymentName = NewDeploymentName();
 
-            var resourcegroup = (await ResourceGroupsClient.CreateOrUpdateAsync(resourceGroupName, ResourceGroup)).Value;
+            var resourcegroup = (await ResourceGroupsOperations.CreateOrUpdateAsync(resourceGroupName, ResourceGroup)).Value;
 
             // Act.
-            var rawResult = await DeploymentsClient.StartWhatIfAsync(resourceGroupName, deploymentName, deploymentWhatIf);
+            var rawResult = await DeploymentsOperations.StartWhatIfAsync(resourceGroupName, deploymentName, deploymentWhatIf);
             var result = (await WaitForCompletionAsync(rawResult)).Value;
 
             // Assert.
@@ -103,10 +103,10 @@ namespace ResourceGroups.Tests
             string resourceGroupName = NewResourceGroupName();
             string deploymentName = NewDeploymentName();
 
-            var resourcegroup = (await ResourceGroupsClient.CreateOrUpdateAsync(resourceGroupName, ResourceGroup)).Value;
+            var resourcegroup = (await ResourceGroupsOperations.CreateOrUpdateAsync(resourceGroupName, ResourceGroup)).Value;
 
             // Act.
-            var rawResult = await DeploymentsClient.StartWhatIfAsync(resourceGroupName, deploymentName, deploymentWhatIf);
+            var rawResult = await DeploymentsOperations.StartWhatIfAsync(resourceGroupName, deploymentName, deploymentWhatIf);
             var result = (await WaitForCompletionAsync(rawResult)).Value;
 
             // Assert.
@@ -149,10 +149,10 @@ namespace ResourceGroups.Tests
             string resourceGroupName = NewResourceGroupName();
             string deploymentName = NewDeploymentName();
 
-            var resourcegroup = (await ResourceGroupsClient.CreateOrUpdateAsync(resourceGroupName, ResourceGroup)).Value;
+            var resourcegroup = (await ResourceGroupsOperations.CreateOrUpdateAsync(resourceGroupName, ResourceGroup)).Value;
 
             // Act.
-            var rawResult = await DeploymentsClient.StartWhatIfAsync(resourceGroupName, deploymentName, deploymentWhatIf);
+            var rawResult = await DeploymentsOperations.StartWhatIfAsync(resourceGroupName, deploymentName, deploymentWhatIf);
             var result = (await WaitForCompletionAsync(rawResult)).Value;
 
             // Assert.
@@ -196,12 +196,12 @@ namespace ResourceGroups.Tests
 
             string resourceGroupName = NewResourceGroupName();
 
-            var resourcegroup = (await ResourceGroupsClient.CreateOrUpdateAsync(resourceGroupName, ResourceGroup)).Value;
-            var deploy = await DeploymentsClient.StartCreateOrUpdateAsync(resourceGroupName, NewDeploymentName(), deployment);
+            var resourcegroup = (await ResourceGroupsOperations.CreateOrUpdateAsync(resourceGroupName, ResourceGroup)).Value;
+            var deploy = await DeploymentsOperations.StartCreateOrUpdateAsync(resourceGroupName, NewDeploymentName(), deployment);
             await WaitForCompletionAsync(deploy);
 
             // Act.
-            var rawResult = await DeploymentsClient.StartWhatIfAsync(resourceGroupName, NewDeploymentName(), deploymentWhatIf);
+            var rawResult = await DeploymentsOperations.StartWhatIfAsync(resourceGroupName, NewDeploymentName(), deploymentWhatIf);
             var result = (await WaitForCompletionAsync(rawResult)).Value;
 
             // Assert.
@@ -254,12 +254,12 @@ namespace ResourceGroups.Tests
 
             string resourceGroupName = NewResourceGroupName();
 
-            var resourcegroup = (await ResourceGroupsClient.CreateOrUpdateAsync(resourceGroupName, ResourceGroup)).Value;
-            var deploy = await DeploymentsClient.StartCreateOrUpdateAsync(resourceGroupName, NewDeploymentName(), deployment);
+            var resourcegroup = (await ResourceGroupsOperations.CreateOrUpdateAsync(resourceGroupName, ResourceGroup)).Value;
+            var deploy = await DeploymentsOperations.StartCreateOrUpdateAsync(resourceGroupName, NewDeploymentName(), deployment);
             await WaitForCompletionAsync(deploy);
 
             // Act.
-            var rawResult = await DeploymentsClient.StartWhatIfAsync(resourceGroupName, NewDeploymentName(), deploymentWhatIf);
+            var rawResult = await DeploymentsOperations.StartWhatIfAsync(resourceGroupName, NewDeploymentName(), deploymentWhatIf);
             var result = (await WaitForCompletionAsync(rawResult)).Value;
 
             // Assert.
@@ -288,7 +288,7 @@ namespace ResourceGroups.Tests
                 )
             { Location = "westus" };
             // Act.
-            var rawResult = await DeploymentsClient.StartWhatIfAtSubscriptionScopeAsync(NewDeploymentName(), deploymentWhatIf);
+            var rawResult = await DeploymentsOperations.StartWhatIfAtSubscriptionScopeAsync(NewDeploymentName(), deploymentWhatIf);
             var result = (await WaitForCompletionAsync(rawResult)).Value;
 
             // Assert.
@@ -314,7 +314,7 @@ namespace ResourceGroups.Tests
             { Location = "westus" };
 
             // Act.
-            var rawResult = await DeploymentsClient.StartWhatIfAtSubscriptionScopeAsync(NewDeploymentName(), deploymentWhatIf);
+            var rawResult = await DeploymentsOperations.StartWhatIfAtSubscriptionScopeAsync(NewDeploymentName(), deploymentWhatIf);
             var result = (await WaitForCompletionAsync(rawResult)).Value;
 
             // Assert.
@@ -350,10 +350,10 @@ namespace ResourceGroups.Tests
             { Location = "westus2" };
 
             // Use resource group name from the template.
-            var resourcegroup = (await ResourceGroupsClient.CreateOrUpdateAsync("SDK-test", ResourceGroup)).Value;
+            var resourcegroup = (await ResourceGroupsOperations.CreateOrUpdateAsync("SDK-test", ResourceGroup)).Value;
 
             // Act.
-            var rawResult = await DeploymentsClient.StartWhatIfAtSubscriptionScopeAsync(NewDeploymentName(), deploymentWhatIf);
+            var rawResult = await DeploymentsOperations.StartWhatIfAtSubscriptionScopeAsync(NewDeploymentName(), deploymentWhatIf);
             var result = (await WaitForCompletionAsync(rawResult)).Value;
 
             // Assert.
@@ -399,12 +399,12 @@ namespace ResourceGroups.Tests
                 )
             { Location = "westus2" };
 
-            var resourcegroup = (await ResourceGroupsClient.CreateOrUpdateAsync("SDK-test", ResourceGroup)).Value;
-            var deploy = await DeploymentsClient.StartCreateOrUpdateAtSubscriptionScopeAsync(NewDeploymentName(), deployment);
+            var resourcegroup = (await ResourceGroupsOperations.CreateOrUpdateAsync("SDK-test", ResourceGroup)).Value;
+            var deploy = await DeploymentsOperations.StartCreateOrUpdateAtSubscriptionScopeAsync(NewDeploymentName(), deployment);
             await WaitForCompletionAsync(deploy);
 
             // Act.
-            var rawResult = await DeploymentsClient.StartWhatIfAtSubscriptionScopeAsync(NewDeploymentName(), deploymentWhatIf);
+            var rawResult = await DeploymentsOperations.StartWhatIfAtSubscriptionScopeAsync(NewDeploymentName(), deploymentWhatIf);
             var result = (await WaitForCompletionAsync(rawResult)).Value;
 
             // Assert.

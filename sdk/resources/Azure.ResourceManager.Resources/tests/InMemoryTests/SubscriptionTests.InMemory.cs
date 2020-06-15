@@ -63,7 +63,7 @@ namespace ResourceGroups.Tests
 
             string subscriptionId = "9167af2d-c13e-4d34-9a57-8f37dba6ff31";
 
-            var listLocationsResult = await client.GetSubscriptionsClient().ListLocationsAsync(subscriptionId).ToEnumerableAsync();
+            var listLocationsResult = await client.Subscriptions.ListLocationsAsync(subscriptionId).ToEnumerableAsync();
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -122,7 +122,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var listSubscriptionsResult = await client.GetSubscriptionsClient().ListAsync().ToEnumerableAsync();
+            var listSubscriptionsResult = await client.Subscriptions.ListAsync().ToEnumerableAsync();
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -166,7 +166,7 @@ namespace ResourceGroups.Tests
 
             string subscriptionId = "9167af2d-c13e-4d34-9a57-8f37dba6ff31";
 
-            var getSubscriptionResult = (await client.GetSubscriptionsClient().GetAsync(subscriptionId)).Value;
+            var getSubscriptionResult = (await client.Subscriptions.GetAsync(subscriptionId)).Value;
 
             // Validate headers
             var request = mockTransport.Requests[0];

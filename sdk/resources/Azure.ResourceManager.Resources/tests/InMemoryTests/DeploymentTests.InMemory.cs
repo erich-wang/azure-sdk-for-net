@@ -108,7 +108,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            DeploymentsCreateOrUpdateOperation raw = await client.GetDeploymentsClient().StartCreateOrUpdateAsync("foo", "myrealease-3.14", parameters);
+            DeploymentsCreateOrUpdateOperation raw = await client.Deployments.StartCreateOrUpdateAsync("foo", "myrealease-3.14", parameters);
 
             DeploymentExtended result = (await WaitForCompletionAsync(raw)).Value;
 
@@ -218,7 +218,7 @@ namespace ResourceGroups.Tests
                     }
                  );
 
-                var raw = await client.GetDeploymentsClient().StartCreateOrUpdateAsync("foo", "myrealease-3.14", parameters);
+                var raw = await client.Deployments.StartCreateOrUpdateAsync("foo", "myrealease-3.14", parameters);
                 var result = (await WaitForCompletionAsync(raw)).Value;
 
                 // Validate headers
@@ -276,7 +276,7 @@ namespace ResourceGroups.Tests
 
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
-            var result = await client.GetDeploymentClient().ListAsync("foo", "bar", null).ToEnumerableAsync();
+            var result = await client.Deployment.ListAsync("foo", "bar", null).ToEnumerableAsync();
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -304,7 +304,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var result = await client.GetDeploymentClient().ListAsync("foo", "bar", null).ToEnumerableAsync();
+            var result = await client.Deployment.ListAsync("foo", "bar", null).ToEnumerableAsync();
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -398,7 +398,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var result = await client.GetDeploymentClient().ListAsync("foo", "bar", null).ToEnumerableAsync();
+            var result = await client.Deployment.ListAsync("foo", "bar", null).ToEnumerableAsync();
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -435,7 +435,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var result = (await client.GetDeploymentClient().GetAsync("foo", "bar", "123")).Value;
+            var result = (await client.Deployment.GetAsync("foo", "bar", "123")).Value;
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -489,7 +489,7 @@ namespace ResourceGroups.Tests
 
             try
             {
-                var raw = await client.GetDeploymentsClient().StartValidateAsync("foo", "bar", parameters);
+                var raw = await client.Deployments.StartValidateAsync("foo", "bar", parameters);
                 var result = (await WaitForCompletionAsync(raw)).Value;
             }
             catch (RequestFailedException)
@@ -545,7 +545,7 @@ namespace ResourceGroups.Tests
 
             try
             {
-                var raw = await client.GetDeploymentsClient().StartValidateAsync("foo", "bar", parameters);
+                var raw = await client.Deployments.StartValidateAsync("foo", "bar", parameters);
                 var result = (await WaitForCompletionAsync(raw)).Value;
             }
             catch (RequestFailedException ex)
@@ -595,7 +595,7 @@ namespace ResourceGroups.Tests
 
             try
             {
-                var raw = await client.GetDeploymentsClient().StartValidateAsync("foo", "bar", parameters);
+                var raw = await client.Deployments.StartValidateAsync("foo", "bar", parameters);
                 var result = (await WaitForCompletionAsync(raw)).Value;
             }
             catch (RequestFailedException ex)
@@ -626,7 +626,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var raw = await client.GetDeploymentsClient().StartValidateAsync("foo", "bar", parameters);
+            var raw = await client.Deployments.StartValidateAsync("foo", "bar", parameters);
             var result = (await WaitForCompletionAsync(raw)).Value;
 
             // Validate headers
@@ -649,7 +649,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            await client.GetDeploymentsClient().CancelAsync("foo", "bar");
+            await client.Deployments.CancelAsync("foo", "bar");
         }
 
         [Test]
@@ -661,7 +661,7 @@ namespace ResourceGroups.Tests
 
             try
             {
-                await client.GetDeploymentsClient().CancelAsync(null, "bar");
+                await client.Deployments.CancelAsync(null, "bar");
             }
             catch (Exception ex)
             {
@@ -670,7 +670,7 @@ namespace ResourceGroups.Tests
             }
             try
             {
-                await client.GetDeploymentsClient().CancelAsync("foo", null);
+                await client.Deployments.CancelAsync("foo", null);
             }
             catch (Exception ex)
             {
@@ -729,7 +729,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var result = (await client.GetDeploymentsClient().GetAsync("foo", "bar")).Value;
+            var result = (await client.Deployments.GetAsync("foo", "bar")).Value;
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -838,7 +838,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var result = await client.GetDeploymentsClient().ListByResourceGroupAsync("foo").ToEnumerableAsync();
+            var result = await client.Deployments.ListByResourceGroupAsync("foo").ToEnumerableAsync();
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -943,7 +943,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var result = await client.GetDeploymentsClient().ListByResourceGroupAsync("foo", "provisioningState eq 'Succeeded'", 10).ToEnumerableAsync();
+            var result = await client.Deployments.ListByResourceGroupAsync("foo", "provisioningState eq 'Succeeded'", 10).ToEnumerableAsync();
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -973,7 +973,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var result = await client.GetDeploymentsClient().ListByResourceGroupAsync("foo").ToEnumerableAsync();
+            var result = await client.Deployments.ListByResourceGroupAsync("foo").ToEnumerableAsync();
             Assert.IsEmpty(result);
         }
     }

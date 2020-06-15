@@ -52,25 +52,25 @@ namespace Policy.Tests
             var thisTestName = "CanCrudPolicyDefinition";
             var policyDefinition = this.CreatePolicyDefinition($"{thisTestName} Policy Definition ${LivePolicyTests.NameTag}");
 
-            var result = (await PolicyDefinitionsClient.CreateOrUpdateAsync(policyDefinitionName: policyName, parameters: policyDefinition)).Value;
+            var result = (await PolicyDefinitionsOperations.CreateOrUpdateAsync(policyDefinitionName: policyName, parameters: policyDefinition)).Value;
             Assert.NotNull(result);
 
             // Validate result
-            var getResult = (await PolicyDefinitionsClient.GetAsync(policyName)).Value;
+            var getResult = (await PolicyDefinitionsOperations.GetAsync(policyName)).Value;
             this.AssertValid(policyName, policyDefinition, getResult, false);
             this.AssertMinimal(getResult);
 
-            var listResult = await PolicyDefinitionsClient.ListAsync().ToEnumerableAsync();
+            var listResult = await PolicyDefinitionsOperations.ListAsync().ToEnumerableAsync();
             this.AssertInList(policyName, policyDefinition, listResult);
 
             // Update with all properties
             this.UpdatePolicyDefinition(policyDefinition);
 
-            result = (await PolicyDefinitionsClient.CreateOrUpdateAsync(policyDefinitionName: policyName, parameters: policyDefinition)).Value;
+            result = (await PolicyDefinitionsOperations.CreateOrUpdateAsync(policyDefinitionName: policyName, parameters: policyDefinition)).Value;
             Assert.NotNull(result);
 
             // Validate result
-            getResult = (await PolicyDefinitionsClient.GetAsync(policyName)).Value;
+            getResult = (await PolicyDefinitionsOperations.GetAsync(policyName)).Value;
             this.AssertValid(policyName, policyDefinition, getResult, false);
 
             Assert.AreEqual("All", getResult.Mode);
@@ -82,11 +82,11 @@ namespace Policy.Tests
             // Create definition with parameters
             policyDefinition = this.CreatePolicyDefinitionWithParameters(policyName);
 
-            result = (await PolicyDefinitionsClient.CreateOrUpdateAsync(policyDefinitionName: policyName, parameters: policyDefinition)).Value;
+            result = (await PolicyDefinitionsOperations.CreateOrUpdateAsync(policyDefinitionName: policyName, parameters: policyDefinition)).Value;
             Assert.NotNull(result);
 
             // Validate result
-            getResult = (await PolicyDefinitionsClient.GetAsync(policyName)).Value;
+            getResult = (await PolicyDefinitionsOperations.GetAsync(policyName)).Value;
             this.AssertValid(policyName, policyDefinition, getResult, false);
 
             // Delete definition and validate
@@ -101,28 +101,28 @@ namespace Policy.Tests
             var thisTestName = "CanCrudDataPlanePolicyDefinition";
             var policyDefinition = this.CreateDataPlanePolicyDefinition($"{thisTestName} Policy Definition ${LivePolicyTests.NameTag}");
 
-            var result = (await PolicyDefinitionsClient.CreateOrUpdateAsync(policyDefinitionName: policyName, parameters: policyDefinition)).Value;
+            var result = (await PolicyDefinitionsOperations.CreateOrUpdateAsync(policyDefinitionName: policyName, parameters: policyDefinition)).Value;
             Assert.NotNull(result);
 
             // Validate result
-            var getResult = (await PolicyDefinitionsClient.GetAsync(policyName)).Value;
+            var getResult = (await PolicyDefinitionsOperations.GetAsync(policyName)).Value;
             Assert.NotNull(policyDefinition);
             Assert.NotNull(policyDefinition.Mode);
             Assert.Null(policyDefinition.Description);
             Assert.Null(policyDefinition.Parameters);
             this.AssertValid(policyName, policyDefinition, getResult, false);
 
-            var listResult = await PolicyDefinitionsClient.ListAsync().ToEnumerableAsync();
+            var listResult = await PolicyDefinitionsOperations.ListAsync().ToEnumerableAsync();
             this.AssertInList(policyName, policyDefinition, listResult);
 
             // Update definition
             policyDefinition.DisplayName = "Audit certificates that are not protected by RSA - v2";
 
-            result = (await PolicyDefinitionsClient.CreateOrUpdateAsync(policyDefinitionName: policyName, parameters: policyDefinition)).Value;
+            result = (await PolicyDefinitionsOperations.CreateOrUpdateAsync(policyDefinitionName: policyName, parameters: policyDefinition)).Value;
             Assert.NotNull(result);
 
             // Validate result
-            getResult = (await PolicyDefinitionsClient.GetAsync(policyName)).Value;
+            getResult = (await PolicyDefinitionsOperations.GetAsync(policyName)).Value;
             this.AssertValid(policyName, policyDefinition, getResult, false);
 
             Assert.AreEqual("Microsoft.DataCatalog.Data", getResult.Mode);
@@ -140,7 +140,7 @@ namespace Policy.Tests
             var thisTestName = "CanCrudPolicySetDefinition";
             var policyDefinition = this.CreatePolicyDefinition($"{thisTestName} Policy Definition ${LivePolicyTests.NameTag}");
 
-            var definitionResult = (await PolicyDefinitionsClient.CreateOrUpdateAsync(policyDefinitionName: definitionName, parameters: policyDefinition)).Value;
+            var definitionResult = (await PolicyDefinitionsOperations.CreateOrUpdateAsync(policyDefinitionName: definitionName, parameters: policyDefinition)).Value;
             Assert.NotNull(definitionResult);
 
             // First, create with minimal properties
@@ -151,11 +151,11 @@ namespace Policy.Tests
                 PolicyDefinitions = new[] { new PolicyDefinitionReference(policyDefinitionId: definitionResult.Id) }
             };
 
-            var result = (await PolicySetDefinitionsClient.CreateOrUpdateAsync(setName, policySet)).Value;
+            var result = (await PolicySetDefinitionsOperations.CreateOrUpdateAsync(setName, policySet)).Value;
             Assert.NotNull(result);
 
             // Validate result
-            var getResult = (await PolicySetDefinitionsClient.GetAsync(setName)).Value;
+            var getResult = (await PolicySetDefinitionsOperations.GetAsync(setName)).Value;
             this.AssertValid(setName, policySet, getResult, false);
             Has.One.EqualTo(getResult.PolicyDefinitions);
             Assert.Null(getResult.Description);
@@ -163,7 +163,7 @@ namespace Policy.Tests
             Assert.Null(getResult.Parameters);
             Assert.AreEqual("Custom", getResult.PolicyType.ToString());
 
-            var listResult = await PolicySetDefinitionsClient.ListAsync().ToEnumerableAsync();
+            var listResult = await PolicySetDefinitionsOperations.ListAsync().ToEnumerableAsync();
             this.AssertInList(setName, policySet, listResult);
             Has.One.EqualTo(getResult.PolicyDefinitions);
 
@@ -175,18 +175,18 @@ namespace Policy.Tests
             // Add another definition that can be referenced (must be distinct from the first one to pass validation)
             const string refId = "refId2";
             var definitionName2 = Recording.GenerateAssetName("");
-            var definitionResult2 = (await PolicyDefinitionsClient.CreateOrUpdateAsync(policyDefinitionName: definitionName2, parameters: policyDefinition)).Value;
+            var definitionResult2 = (await PolicyDefinitionsOperations.CreateOrUpdateAsync(policyDefinitionName: definitionName2, parameters: policyDefinition)).Value;
             policySet.PolicyDefinitions = new[]
             {
                     new PolicyDefinitionReference(policyDefinitionId: definitionResult.Id),
                     new PolicyDefinitionReference(policyDefinitionId: definitionResult2.Id){ PolicyDefinitionReferenceId = refId }
                 };
 
-            result = (await PolicySetDefinitionsClient.CreateOrUpdateAsync(setName, policySet)).Value;
+            result = (await PolicySetDefinitionsOperations.CreateOrUpdateAsync(setName, policySet)).Value;
             Assert.NotNull(result);
 
             // validate result
-            getResult = (await PolicySetDefinitionsClient.GetAsync(setName)).Value;
+            getResult = (await PolicySetDefinitionsOperations.GetAsync(setName)).Value;
             this.AssertValid(setName, policySet, getResult, false);
             Assert.AreEqual(2, getResult.PolicyDefinitions.Count);
             Assert.Null(getResult.Parameters);
@@ -202,11 +202,11 @@ namespace Policy.Tests
             policySet.PolicyDefinitionGroups = new List<PolicyDefinitionGroup> { new PolicyDefinitionGroup(groupNameOne), new PolicyDefinitionGroup(groupNameTwo) };
             policySet.PolicyDefinitions[0].GroupNames = new[] { groupNameOne, groupNameTwo };
             policySet.PolicyDefinitions[1].GroupNames = new[] { groupNameTwo };
-            result = (await PolicySetDefinitionsClient.CreateOrUpdateAsync(setName, policySet)).Value;
+            result = (await PolicySetDefinitionsOperations.CreateOrUpdateAsync(setName, policySet)).Value;
             Assert.NotNull(result);
             this.AssertValid(setName, policySet, result, false);
 
-            getResult = (await PolicySetDefinitionsClient.GetAsync(setName)).Value;
+            getResult = (await PolicySetDefinitionsOperations.GetAsync(setName)).Value;
             this.AssertValid(setName, policySet, getResult, false);
 
             // Delete and validate everything
@@ -216,7 +216,7 @@ namespace Policy.Tests
 
             // create set definition with parameters
             policyDefinition = this.CreatePolicyDefinitionWithParameters(definitionName);
-            definitionResult = (await PolicyDefinitionsClient.CreateOrUpdateAsync(policyDefinitionName: definitionName, parameters: policyDefinition)).Value;
+            definitionResult = (await PolicyDefinitionsOperations.CreateOrUpdateAsync(policyDefinitionName: definitionName, parameters: policyDefinition)).Value;
             Assert.NotNull(definitionResult);
 
             var referenceParameters = new Dictionary<string, ParameterValuesValue> { { "foo", new ParameterValuesValue() { Value = "[parameters('fooSet')]" } } };
@@ -232,11 +232,11 @@ namespace Policy.Tests
                 Parameters = policySetParameters
             };
 
-            result = (await PolicySetDefinitionsClient.CreateOrUpdateAsync(setName, policySet)).Value;
+            result = (await PolicySetDefinitionsOperations.CreateOrUpdateAsync(setName, policySet)).Value;
             Assert.NotNull(result);
 
             // validate result
-            getResult = (await PolicySetDefinitionsClient.GetAsync(setName)).Value;
+            getResult = (await PolicySetDefinitionsOperations.GetAsync(setName)).Value;
             this.AssertValid(setName, policySet, getResult, false);
             Has.One.EqualTo(getResult.PolicyDefinitions);
 
@@ -253,7 +253,7 @@ namespace Policy.Tests
             var thisTestName = "CanCrudPolicyAssignment";
             var policyDefinition = this.CreatePolicyDefinition($"{thisTestName} Policy Definition ${LivePolicyTests.NameTag}");
 
-            var definitionResult = (await PolicyDefinitionsClient.CreateOrUpdateAsync(policyDefinitionName: definitionName, parameters: policyDefinition)).Value;
+            var definitionResult = (await PolicyDefinitionsOperations.CreateOrUpdateAsync(policyDefinitionName: definitionName, parameters: policyDefinition)).Value;
             Assert.NotNull(definitionResult);
 
             // First, create with minimal properties
@@ -266,11 +266,11 @@ namespace Policy.Tests
                 Sku = LivePolicyTests.A0Free
             };
 
-            var result = (await PolicyAssignmentsClient.CreateAsync(assignmentScope, assignmentName, policyAssignment)).Value;
+            var result = (await PolicyAssignmentsOperations.CreateAsync(assignmentScope, assignmentName, policyAssignment)).Value;
             Assert.NotNull(result);
 
             // validate results
-            var getResult = (await PolicyAssignmentsClient.GetAsync(assignmentScope, assignmentName)).Value;
+            var getResult = (await PolicyAssignmentsOperations.GetAsync(assignmentScope, assignmentName)).Value;
 
             // Default enforcement should be set even if not provided as input in PUT request.
             policyAssignment.EnforcementMode = EnforcementMode.Default;
@@ -281,7 +281,7 @@ namespace Policy.Tests
             Assert.Null(getResult.Parameters);
             Assert.AreEqual(EnforcementMode.Default, getResult.EnforcementMode);
 
-            var listResult = await PolicyAssignmentsClient.ListAsync().ToEnumerableAsync();
+            var listResult = await PolicyAssignmentsOperations.ListAsync().ToEnumerableAsync();
             this.AssertInList(assignmentName, policyAssignment, listResult);
 
             // Update with extra properties
@@ -293,48 +293,48 @@ namespace Policy.Tests
             policyAssignment.Identity = new IdentityAutoGenerated() { Type = ResourceIdentityType.SystemAssigned };
             policyAssignment.EnforcementMode = EnforcementMode.DoNotEnforce;
 
-            result = (await PolicyAssignmentsClient.CreateAsync(assignmentScope, assignmentName, policyAssignment)).Value;
+            result = (await PolicyAssignmentsOperations.CreateAsync(assignmentScope, assignmentName, policyAssignment)).Value;
             Assert.NotNull(result);
 
             // validate results
-            getResult = (await PolicyAssignmentsClient.GetByIdAsync("/" + result.Id)).Value;
+            getResult = (await PolicyAssignmentsOperations.GetByIdAsync("/" + result.Id)).Value;
             this.AssertValid(assignmentName, policyAssignment, getResult);
 
             // Delete policy assignment and validate
-            await PolicyAssignmentsClient.DeleteAsync(assignmentScope, assignmentName);
+            await PolicyAssignmentsOperations.DeleteAsync(assignmentScope, assignmentName);
             try
             {
-                await PolicyAssignmentsClient.GetAsync(assignmentScope, assignmentName);
+                await PolicyAssignmentsOperations.GetAsync(assignmentScope, assignmentName);
             }
             catch (Exception ex)
             {
 
                 Assert.NotNull(ex);
             }
-            listResult = await PolicyAssignmentsClient.ListAsync().ToEnumerableAsync();
+            listResult = await PolicyAssignmentsOperations.ListAsync().ToEnumerableAsync();
             Assert.IsEmpty(listResult.Where(p => p.Name.Equals(assignmentName)));
 
             // Create brand new assignment with identity
             assignmentName = Recording.GenerateAssetName("");
-            result = (await PolicyAssignmentsClient.CreateAsync(assignmentScope, assignmentName, policyAssignment)).Value;
+            result = (await PolicyAssignmentsOperations.CreateAsync(assignmentScope, assignmentName, policyAssignment)).Value;
             Assert.NotNull(result);
 
             // validate results
-            getResult = (await PolicyAssignmentsClient.GetByIdAsync("/" + result.Id)).Value;
+            getResult = (await PolicyAssignmentsOperations.GetByIdAsync("/" + result.Id)).Value;
             this.AssertValid(assignmentName, policyAssignment, getResult);
 
             // Delete policy assignment and validate
-            await PolicyAssignmentsClient.DeleteAsync(assignmentScope, assignmentName);
+            await PolicyAssignmentsOperations.DeleteAsync(assignmentScope, assignmentName);
             try
             {
-                await PolicyAssignmentsClient.GetAsync(assignmentScope, assignmentName);
+                await PolicyAssignmentsOperations.GetAsync(assignmentScope, assignmentName);
             }
             catch (Exception ex)
             {
 
                 Assert.NotNull(ex);
             }
-            listResult = await PolicyAssignmentsClient.ListAsync().ToEnumerableAsync();
+            listResult = await PolicyAssignmentsOperations.ListAsync().ToEnumerableAsync();
             Assert.IsEmpty(listResult.Where(p => p.Name.Equals(assignmentName)));
 
             // Delete policy definition and validate
@@ -346,13 +346,13 @@ namespace Policy.Tests
         {
             // make a test resource group
             var resourceGroupName = Recording.GenerateAssetName("");
-            var resourceGroup = (await ResourceGroupsClient.CreateOrUpdateAsync(resourceGroupName, new ResourceGroup("westus2"))).Value;
+            var resourceGroup = (await ResourceGroupsOperations.CreateOrUpdateAsync(resourceGroupName, new ResourceGroup("westus2"))).Value;
 
             // make a test policy definition
             var policyDefinitionName = Recording.GenerateAssetName("");
             var thisTestName = GetCurrentMethodName();
             var policyDefinitionModel = this.CreatePolicyDefinition($"{thisTestName} Policy Definition");
-            var policyDefinition = (await PolicyDefinitionsClient.CreateOrUpdateAsync(policyDefinitionName, policyDefinitionModel)).Value;
+            var policyDefinition = (await PolicyDefinitionsOperations.CreateOrUpdateAsync(policyDefinitionName, policyDefinitionModel)).Value;
 
             // assign the test policy definition to the test resource group
             var policyAssignmentName = Recording.GenerateAssetName("");
@@ -365,20 +365,20 @@ namespace Policy.Tests
                 Sku = LivePolicyTests.A0Free
             };
 
-            var assignment = (await PolicyAssignmentsClient.CreateAsync("/" + assignmentScope, policyAssignmentName, policyAssignment)).Value;
+            var assignment = (await PolicyAssignmentsOperations.CreateAsync("/" + assignmentScope, policyAssignmentName, policyAssignment)).Value;
 
             // retrieve list of policies that apply to this resource group, validate exactly one matches the one we just created
-            var assignments = await PolicyAssignmentsClient.ListForResourceGroupAsync(resourceGroupName).ToEnumerableAsync();
+            var assignments = await PolicyAssignmentsOperations.ListForResourceGroupAsync(resourceGroupName).ToEnumerableAsync();
             Has.One.EqualTo(assignments.Where(assign => assign.Name.Equals(assignment.Name)));
 
             // get the same item at scope and ensure it matches
-            var getAssignment = (await PolicyAssignmentsClient.GetAsync("/" + assignmentScope, assignment.Name)).Value;
+            var getAssignment = (await PolicyAssignmentsOperations.GetAsync("/" + assignmentScope, assignment.Name)).Value;
             this.AssertEqual(assignment, getAssignment);
 
             // clean up everything
-            await PolicyAssignmentsClient.DeleteAsync("/" + assignmentScope, assignment.Name);
-            await PolicyDefinitionsClient.DeleteAsync(policyDefinition.Name);
-            await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(resourceGroupName));
+            await PolicyAssignmentsOperations.DeleteAsync("/" + assignmentScope, assignment.Name);
+            await PolicyDefinitionsOperations.DeleteAsync(policyDefinition.Name);
+            await WaitForCompletionAsync(await ResourceGroupsOperations.StartDeleteAsync(resourceGroupName));
         }
 
         [Test]
@@ -386,7 +386,7 @@ namespace Policy.Tests
         {
             // make a test resource group
             var resourceGroupName = Recording.GenerateAssetName("");
-            var resourceGroup = (await ResourceGroupsClient.CreateOrUpdateAsync(resourceGroupName, new ResourceGroup("eastus2"))).Value;
+            var resourceGroup = (await ResourceGroupsOperations.CreateOrUpdateAsync(resourceGroupName, new ResourceGroup("eastus2"))).Value;
 
             // make a resource in the resource group
             var resourceName = Recording.GenerateAssetName("");
@@ -396,7 +396,7 @@ namespace Policy.Tests
             var policyDefinitionName = Recording.GenerateAssetName("");
             var thisTestName = GetCurrentMethodName();
             var policyDefinitionModel = this.CreatePolicyDefinition($"{thisTestName} Policy Definition");
-            var policyDefinition = (await PolicyDefinitionsClient.CreateOrUpdateAsync(policyDefinitionName, policyDefinitionModel)).Value;
+            var policyDefinition = (await PolicyDefinitionsOperations.CreateOrUpdateAsync(policyDefinitionName, policyDefinitionModel)).Value;
 
             // assign the test policy definition to the test resource
             var policyAssignmentName = Recording.GenerateAssetName("");
@@ -409,20 +409,20 @@ namespace Policy.Tests
                 Sku = LivePolicyTests.A0Free
             };
 
-            var assignment = (await PolicyAssignmentsClient.CreateAsync(assignmentScope, policyAssignmentName, policyAssignment)).Value;
+            var assignment = (await PolicyAssignmentsOperations.CreateAsync(assignmentScope, policyAssignmentName, policyAssignment)).Value;
 
             // retrieve list of policies that apply to this resource, validate exactly one matches the one we just created
-            var assignments = await PolicyAssignmentsClient.ListForResourceAsync(resourceGroup.Name, "", "", resource.Type, resource.Name).ToEnumerableAsync();
+            var assignments = await PolicyAssignmentsOperations.ListForResourceAsync(resourceGroup.Name, "", "", resource.Type, resource.Name).ToEnumerableAsync();
             Has.One.EqualTo(assignments.Where(assign => assign.Name.Equals(assignment.Name)));
 
             // get the same item at scope and ensure it matches
-            var getAssignment = (await PolicyAssignmentsClient.GetAsync(assignmentScope, assignment.Name)).Value;
+            var getAssignment = (await PolicyAssignmentsOperations.GetAsync(assignmentScope, assignment.Name)).Value;
             this.AssertEqual(assignment, getAssignment);
 
             // clean up everything
-            await PolicyAssignmentsClient.DeleteAsync(assignmentScope, assignment.Name);
-            await PolicyDefinitionsClient.DeleteAsync(policyDefinition.Name);
-            await WaitForCompletionAsync(await ResourceGroupsClient.StartDeleteAsync(resourceGroupName));
+            await PolicyAssignmentsOperations.DeleteAsync(assignmentScope, assignment.Name);
+            await PolicyDefinitionsOperations.DeleteAsync(policyDefinition.Name);
+            await WaitForCompletionAsync(await ResourceGroupsOperations.StartDeleteAsync(resourceGroupName));
         }
 
         //No Track2 ManagementGroup
@@ -622,7 +622,7 @@ namespace Policy.Tests
             var definitionName = Recording.GenerateAssetName("");
             var thisTestName = "ValidatePolicyAssignmentErrorHandling";
             var policyDefinition = this.CreatePolicyDefinition($"{thisTestName} Policy Definition ${LivePolicyTests.NameTag}");
-            var definitionResult = (await PolicyDefinitionsClient.CreateOrUpdateAsync(policyDefinitionName: definitionName, parameters: policyDefinition)).Value;
+            var definitionResult = (await PolicyDefinitionsOperations.CreateOrUpdateAsync(policyDefinitionName: definitionName, parameters: policyDefinition)).Value;
             Assert.NotNull(definitionResult);
 
             // Missing policy definition id
@@ -636,7 +636,7 @@ namespace Policy.Tests
 
             try
             {
-                await PolicyAssignmentsClient.CreateAsync(assignmentScope, assignmentName, policyAssignment);
+                await PolicyAssignmentsOperations.CreateAsync(assignmentScope, assignmentName, policyAssignment);
             }
             catch (Exception ex)
             {
@@ -655,7 +655,7 @@ namespace Policy.Tests
 
             try
             {
-                await PolicyAssignmentsClient.CreateAsync(assignmentScope, assignmentName, policyAssignment);
+                await PolicyAssignmentsOperations.CreateAsync(assignmentScope, assignmentName, policyAssignment);
             }
             catch (Exception ex)
             {
@@ -674,7 +674,7 @@ namespace Policy.Tests
 
             try
             {
-                await PolicyAssignmentsClient.CreateAsync(assignmentScope, assignmentName, policyAssignment);
+                await PolicyAssignmentsOperations.CreateAsync(assignmentScope, assignmentName, policyAssignment);
             }
 
             catch (Exception ex)
@@ -701,7 +701,7 @@ namespace Policy.Tests
 
             try
             {
-                await PolicyDefinitionsClient.CreateOrUpdateAsync(definitionName, policyDefinition);
+                await PolicyDefinitionsOperations.CreateOrUpdateAsync(definitionName, policyDefinition);
             }
 
             catch (Exception ex)
@@ -717,7 +717,7 @@ namespace Policy.Tests
 
             try
             {
-                await PolicyDefinitionsClient.CreateOrUpdateAsync(definitionName, policyDefinition);
+                await PolicyDefinitionsOperations.CreateOrUpdateAsync(definitionName, policyDefinition);
             }
 
             catch (Exception ex)
@@ -733,7 +733,7 @@ namespace Policy.Tests
 
             try
             {
-                await PolicyDefinitionsClient.CreateOrUpdateAsync(definitionName, policyDefinition);
+                await PolicyDefinitionsOperations.CreateOrUpdateAsync(definitionName, policyDefinition);
             }
 
             catch (Exception ex)
@@ -749,7 +749,7 @@ namespace Policy.Tests
 
             try
             {
-                await PolicyDefinitionsClient.CreateOrUpdateAsync(definitionName, policyDefinition);
+                await PolicyDefinitionsOperations.CreateOrUpdateAsync(definitionName, policyDefinition);
             }
 
             catch (Exception ex)
@@ -768,7 +768,7 @@ namespace Policy.Tests
             var thisTestName = "ValidatePolicySetDefinitionErrorHandling";
             var policyDefinition = this.CreatePolicyDefinition($"{thisTestName} Policy Definition ${LivePolicyTests.NameTag}");
 
-            var definitionResult = (await PolicyDefinitionsClient.CreateOrUpdateAsync(definitionName, policyDefinition)).Value;
+            var definitionResult = (await PolicyDefinitionsOperations.CreateOrUpdateAsync(definitionName, policyDefinition)).Value;
             Assert.NotNull(definitionResult);
 
             // Missing policy definition references
@@ -780,7 +780,7 @@ namespace Policy.Tests
 
             try
             {
-                await PolicySetDefinitionsClient.CreateOrUpdateAsync(setName, policySetDefinition);
+                await PolicySetDefinitionsOperations.CreateOrUpdateAsync(setName, policySetDefinition);
             }
 
             catch (Exception ex)
@@ -802,7 +802,7 @@ namespace Policy.Tests
 
             try
             {
-                await PolicySetDefinitionsClient.CreateOrUpdateAsync(setName, policySetDefinition);
+                await PolicySetDefinitionsOperations.CreateOrUpdateAsync(setName, policySetDefinition);
             }
 
             catch (Exception ex)
@@ -825,7 +825,7 @@ namespace Policy.Tests
 
             try
             {
-                await PolicySetDefinitionsClient.CreateOrUpdateAsync(setName, policySetDefinition);
+                await PolicySetDefinitionsOperations.CreateOrUpdateAsync(setName, policySetDefinition);
             }
 
             catch (Exception ex)
@@ -849,7 +849,7 @@ namespace Policy.Tests
 
             try
             {
-                await PolicySetDefinitionsClient.CreateOrUpdateAsync(setName, policySetDefinition);
+                await PolicySetDefinitionsOperations.CreateOrUpdateAsync(setName, policySetDefinition);
             }
 
             catch (Exception ex)
@@ -867,7 +867,7 @@ namespace Policy.Tests
         public async Task CanListAndGetBuiltinPolicyDefinitions()
         {
             // list all builtin policy definitions
-            var allBuiltIn = await PolicyDefinitionsClient.ListBuiltInAsync().ToEnumerableAsync();
+            var allBuiltIn = await PolicyDefinitionsOperations.ListBuiltInAsync().ToEnumerableAsync();
 
             // validate list results
             foreach (var builtIn in allBuiltIn)
@@ -876,7 +876,7 @@ namespace Policy.Tests
                 this.AssertValid(builtIn, true);
 
                 // validate that individual get matches list results
-                var getBuiltIn = (await PolicyDefinitionsClient.GetBuiltInAsync(builtIn.Name)).Value;
+                var getBuiltIn = (await PolicyDefinitionsOperations.GetBuiltInAsync(builtIn.Name)).Value;
                 this.AssertEqual(builtIn, getBuiltIn, true);
             }
         }
@@ -885,16 +885,16 @@ namespace Policy.Tests
         public async Task CannotDeleteBuiltInPolicyDefinitions()
         {
             // list all builtin policy definitions
-            var allBuiltIns = await PolicyDefinitionsClient.ListBuiltInAsync().ToEnumerableAsync();
+            var allBuiltIns = await PolicyDefinitionsOperations.ListBuiltInAsync().ToEnumerableAsync();
 
             // try to delete the first 50
             foreach (var builtIn in allBuiltIns.Take(50))
             {
-                await PolicyDefinitionsClient.DeleteAsync(builtIn.Name);
+                await PolicyDefinitionsOperations.DeleteAsync(builtIn.Name);
             }
 
             // get the list again, verify it hasn't changed
-            var allBuiltIn2 = await PolicyDefinitionsClient.ListBuiltInAsync().ToEnumerableAsync();
+            var allBuiltIn2 = await PolicyDefinitionsOperations.ListBuiltInAsync().ToEnumerableAsync();
 
             Assert.AreEqual(allBuiltIns.Count(), allBuiltIn2.Count());
             foreach (var builtIn in allBuiltIns)
@@ -907,7 +907,7 @@ namespace Policy.Tests
         public async Task CanListAndGetBuiltinPolicySetDefinitions()
         {
             // list all builtin policy definitions
-            var allBuiltIn = await PolicySetDefinitionsClient.ListBuiltInAsync().ToEnumerableAsync();
+            var allBuiltIn = await PolicySetDefinitionsOperations.ListBuiltInAsync().ToEnumerableAsync();
 
             // validate list results
             foreach (var builtIn in allBuiltIn)
@@ -916,7 +916,7 @@ namespace Policy.Tests
                 this.AssertValid(builtIn, true);
 
                 // validate that individual get is valid and matches list results
-                var getBuiltIn = (await PolicySetDefinitionsClient.GetBuiltInAsync(builtIn.Name)).Value;
+                var getBuiltIn = (await PolicySetDefinitionsOperations.GetBuiltInAsync(builtIn.Name)).Value;
                 this.AssertValid(getBuiltIn, true);
                 this.AssertEqual(builtIn, getBuiltIn, true);
 
@@ -925,7 +925,7 @@ namespace Policy.Tests
                 {
                     var parts = policyReference.PolicyDefinitionId.Split('/');
                     var name = parts.Last();
-                    var policyDefinition = (await PolicyDefinitionsClient.GetBuiltInAsync(name)).Value;
+                    var policyDefinition = (await PolicyDefinitionsOperations.GetBuiltInAsync(name)).Value;
                     this.AssertValid(policyDefinition, true);
                 }
             }
@@ -935,16 +935,16 @@ namespace Policy.Tests
         public async Task CannotDeleteBuiltInPolicySetDefinitions()
         {
             // list all builtin policy definitions
-            var allBuiltIn = await PolicySetDefinitionsClient.ListBuiltInAsync().ToEnumerableAsync();
+            var allBuiltIn = await PolicySetDefinitionsOperations.ListBuiltInAsync().ToEnumerableAsync();
 
             // try to delete them all
             foreach (var builtIn in allBuiltIn)
             {
-                await PolicySetDefinitionsClient.DeleteAsync(builtIn.Name);
+                await PolicySetDefinitionsOperations.DeleteAsync(builtIn.Name);
             }
 
             // get the list again, verify it hasn't changed
-            var allBuiltIn2 = await PolicySetDefinitionsClient.ListBuiltInAsync().ToEnumerableAsync();
+            var allBuiltIn2 = await PolicySetDefinitionsOperations.ListBuiltInAsync().ToEnumerableAsync();
 
             Assert.AreEqual(allBuiltIn.Count(), allBuiltIn2.Count());
             foreach (var builtIn in allBuiltIn)
@@ -1039,7 +1039,7 @@ namespace Policy.Tests
         // create a resource in the given resource group
         private async Task<Resource> CreateResource(ResourceGroup resourceGroup, string resourceName)
         {
-            var result = await ResourcesClient.StartCreateOrUpdateAsync(
+            var result = await ResourcesOperations.StartCreateOrUpdateAsync(
                 resourceGroup.Name,
                 "Microsoft.Web",
                 string.Empty,
@@ -1184,30 +1184,30 @@ namespace Policy.Tests
         {
             if (managementGroupName == null)
             {
-                await PolicyDefinitionsClient.DeleteAsync(policyName);
+                await PolicyDefinitionsOperations.DeleteAsync(policyName);
                 try
                 {
-                    await PolicyDefinitionsClient.GetAsync(policyName);
+                    await PolicyDefinitionsOperations.GetAsync(policyName);
                 }
                 catch (Exception ex)
                 {
                     Assert.NotNull(ex);
                 }
-                var listResult = await PolicyDefinitionsClient.ListAsync().ToEnumerableAsync();
+                var listResult = await PolicyDefinitionsOperations.ListAsync().ToEnumerableAsync();
                 Assert.IsEmpty(listResult.Where(p => p.Name.Equals(policyName)));
             }
             else
             {
-                await PolicyDefinitionsClient.DeleteAtManagementGroupAsync(policyName, managementGroupName);
+                await PolicyDefinitionsOperations.DeleteAtManagementGroupAsync(policyName, managementGroupName);
                 try
                 {
-                    await PolicyDefinitionsClient.GetAtManagementGroupAsync(policyName, managementGroupName);
+                    await PolicyDefinitionsOperations.GetAtManagementGroupAsync(policyName, managementGroupName);
                 }
                 catch (Exception ex)
                 {
                     Assert.NotNull(ex);
                 }
-                var listResult = await PolicyDefinitionsClient.ListByManagementGroupAsync(managementGroupName).ToEnumerableAsync();
+                var listResult = await PolicyDefinitionsOperations.ListByManagementGroupAsync(managementGroupName).ToEnumerableAsync();
                 Assert.IsEmpty(listResult.Where(p => p.Name.Equals(policyName)));
             }
         }
@@ -1309,30 +1309,30 @@ namespace Policy.Tests
         {
             if (managementGroupName == null)
             {
-                await PolicySetDefinitionsClient.DeleteAsync(policySetName);
+                await PolicySetDefinitionsOperations.DeleteAsync(policySetName);
                 try
                 {
-                    await PolicySetDefinitionsClient.GetAsync(policySetName);
+                    await PolicySetDefinitionsOperations.GetAsync(policySetName);
                 }
                 catch (Exception ex)
                 {
                     Assert.NotNull(ex);
                 }
-                var listResult = await PolicySetDefinitionsClient.ListAsync().ToEnumerableAsync();
+                var listResult = await PolicySetDefinitionsOperations.ListAsync().ToEnumerableAsync();
                 Assert.IsEmpty(listResult.Where(p => p.Name.Equals(policySetName)));
             }
             else
             {
-                await PolicySetDefinitionsClient.DeleteAtManagementGroupAsync(policySetName, managementGroupName);
+                await PolicySetDefinitionsOperations.DeleteAtManagementGroupAsync(policySetName, managementGroupName);
                 try
                 {
-                    await PolicySetDefinitionsClient.GetAtManagementGroupAsync(policySetName, managementGroupName);
+                    await PolicySetDefinitionsOperations.GetAtManagementGroupAsync(policySetName, managementGroupName);
                 }
                 catch (Exception ex)
                 {
                     Assert.NotNull(ex);
                 }
-                var listResult = await PolicySetDefinitionsClient.ListByManagementGroupAsync(managementGroupName).ToEnumerableAsync();
+                var listResult = await PolicySetDefinitionsOperations.ListByManagementGroupAsync(managementGroupName).ToEnumerableAsync();
                 Assert.IsEmpty(listResult.Where(p => p.Name.Equals(policySetName)));
             }
         }

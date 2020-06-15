@@ -46,7 +46,7 @@ namespace ResourceGroups.Tests
             var client = GetResourceManagementClient(mockTransport);
 
             // Act.
-            await client.GetDeploymentsClient().StartWhatIfAsync("test-rg", "test-deploy", deploymentWhatIf);
+            await client.Deployments.StartWhatIfAsync("test-rg", "test-deploy", deploymentWhatIf);
 
             // Assert.
             var request = mockTransport.Requests[0];
@@ -89,7 +89,7 @@ namespace ResourceGroups.Tests
             var client = GetResourceManagementClient(mockTransport);
 
             // Act.
-            await client.GetDeploymentsClient().StartWhatIfAsync("test-rg", "test-deploy", deploymentWhatIf);
+            await client.Deployments.StartWhatIfAsync("test-rg", "test-deploy", deploymentWhatIf);
 
             // Assert.
             var request = mockTransport.Requests[0];
@@ -165,7 +165,7 @@ namespace ResourceGroups.Tests
                 var client = GetResourceManagementClient(mockTransport);
 
                 // Act.
-                await client.GetDeploymentsClient().StartWhatIfAsync("test-rg", "test-deploy", deploymentWhatIf);
+                await client.Deployments.StartWhatIfAsync("test-rg", "test-deploy", deploymentWhatIf);
 
                 // Assert.
                 var request = mockTransport.Requests[0];
@@ -227,7 +227,7 @@ namespace ResourceGroups.Tests
             var client = GetResourceManagementClient(mockTransport);
 
             // Act.
-            var raw = await client.GetDeploymentsClient().StartWhatIfAsync("test-rg", "test-deploy", deploymentWhatIf);
+            var raw = await client.Deployments.StartWhatIfAsync("test-rg", "test-deploy", deploymentWhatIf);
             var result = (await WaitForCompletionAsync(raw)).Value;
 
             // Assert.
@@ -262,7 +262,7 @@ namespace ResourceGroups.Tests
             var client = GetResourceManagementClient(mockTransport);
 
             // Act.
-            await client.GetDeploymentsClient().StartWhatIfAtSubscriptionScopeAsync("test-subscription-deploy", deploymentWhatIf);
+            await client.Deployments.StartWhatIfAtSubscriptionScopeAsync("test-subscription-deploy", deploymentWhatIf);
 
             // Assert.
             var request = mockTransport.Requests[0];
@@ -306,7 +306,7 @@ namespace ResourceGroups.Tests
             var client = GetResourceManagementClient(mockTransport);
 
             // Act.
-            await client.GetDeploymentsClient().StartWhatIfAtSubscriptionScopeAsync("test-subscription-deploy", deploymentWhatIf);
+            await client.Deployments.StartWhatIfAtSubscriptionScopeAsync("test-subscription-deploy", deploymentWhatIf);
 
             // Assert.
             var request = mockTransport.Requests[0];
@@ -383,7 +383,7 @@ namespace ResourceGroups.Tests
                 var client = GetResourceManagementClient(mockTransport);
 
                 // Act.
-                await client.GetDeploymentsClient().StartWhatIfAtSubscriptionScopeAsync("test-subscription-deploy", deploymentWhatIf);
+                await client.Deployments.StartWhatIfAtSubscriptionScopeAsync("test-subscription-deploy", deploymentWhatIf);
 
                 // Assert.
                 var request = mockTransport.Requests[0];
@@ -428,7 +428,7 @@ namespace ResourceGroups.Tests
             var client = GetResourceManagementClient(mockTransport);
 
             // Act.
-            var raw = await client.GetDeploymentsClient().StartWhatIfAtSubscriptionScopeAsync("test-subscription-deploy", deploymentWhatIf);
+            var raw = await client.Deployments.StartWhatIfAtSubscriptionScopeAsync("test-subscription-deploy", deploymentWhatIf);
             var result = (await WaitForCompletionAsync(raw)).Value;
 
             // Assert.

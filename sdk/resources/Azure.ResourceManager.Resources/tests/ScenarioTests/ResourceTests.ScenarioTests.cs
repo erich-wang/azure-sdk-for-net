@@ -51,8 +51,8 @@ namespace ResourceGroups.Tests
             string resourceProviderNamespace = "Sendgrid.Email";
             string resourceType = "accounts";
 
-            await ResourceGroupsClient.CreateOrUpdateAsync(groupName, new ResourceGroup("centralus"));
-            var rawCreateOrUpdateResult = await ResourcesClient.StartCreateOrUpdateAsync(
+            await ResourceGroupsOperations.CreateOrUpdateAsync(groupName, new ResourceGroup("centralus"));
+            var rawCreateOrUpdateResult = await ResourcesOperations.StartCreateOrUpdateAsync(
                 groupName,
                 resourceProviderNamespace,
                 "",
@@ -85,7 +85,7 @@ namespace ResourceGroups.Tests
             Assert.NotNull(createOrUpdateResult.Plan);
             Assert.AreEqual("free", createOrUpdateResult.Plan.Name);
 
-            var getResult = await ResourcesClient.GetAsync(groupName, resourceProviderNamespace,
+            var getResult = await ResourcesOperations.GetAsync(groupName, resourceProviderNamespace,
                 "", resourceType, resourceName, SendGridResourceProviderVersion);
 
             Assert.AreEqual(resourceName, getResult.Value.Name);
@@ -102,8 +102,8 @@ namespace ResourceGroups.Tests
             string resourceName = Recording.GenerateAssetName("csmr");
             string location = GetWebsiteLocation();
 
-            await ResourceGroupsClient.CreateOrUpdateAsync(groupName, new ResourceGroup(this.ResourceGroupLocation));
-            var rawCreateOrUpdateResult = await ResourcesClient.StartCreateOrUpdateAsync(groupName, "Microsoft.Web", "", "serverFarms", resourceName, WebResourceProviderVersion,
+            await ResourceGroupsOperations.CreateOrUpdateAsync(groupName, new ResourceGroup(this.ResourceGroupLocation));
+            var rawCreateOrUpdateResult = await ResourcesOperations.StartCreateOrUpdateAsync(groupName, "Microsoft.Web", "", "serverFarms", resourceName, WebResourceProviderVersion,
                 new GenericResource()
                 {
                     Location = location,
@@ -124,7 +124,7 @@ namespace ResourceGroups.Tests
                 string.Format("Resource location for website '{0}' does not match expected location '{1}'", createOrUpdateResult.Location, location));
             ;
 
-            var listResult = await ResourcesClient.ListByResourceGroupAsync(groupName).ToEnumerableAsync();
+            var listResult = await ResourcesOperations.ListByResourceGroupAsync(groupName).ToEnumerableAsync();
 
             Assert.IsTrue(listResult.Count() == 1);
             Assert.AreEqual(resourceName, listResult.First().Name);
@@ -132,7 +132,7 @@ namespace ResourceGroups.Tests
             Assert.True(Utilities.LocationsAreEqual(location, listResult.First().Location),
                 string.Format("Resource list location for website '{0}' does not match expected location '{1}'", listResult.First().Location, location));
 
-            var listResult2 = ResourcesClient.ListByResourceGroupAsync(groupName, null, null, 10).ToEnumerableAsync();
+            var listResult2 = ResourcesOperations.ListByResourceGroupAsync(groupName, null, null, 10).ToEnumerableAsync();
 
             Assert.IsTrue(listResult.Count() == 1);
             Assert.AreEqual(resourceName, listResult2.Result.First().Name);
@@ -151,8 +151,8 @@ namespace ResourceGroups.Tests
             string location = GetWebsiteLocation();
             string filter = "tagName eq '" + tagName + "'";
 
-            await ResourceGroupsClient.CreateOrUpdateAsync(groupName, new ResourceGroup(this.ResourceGroupLocation));
-            await ResourcesClient.StartCreateOrUpdateAsync(
+            await ResourceGroupsOperations.CreateOrUpdateAsync(groupName, new ResourceGroup(this.ResourceGroupLocation));
+            await ResourcesOperations.StartCreateOrUpdateAsync(
                 groupName,
                 "Microsoft.Web",
                 string.Empty,
@@ -172,7 +172,7 @@ namespace ResourceGroups.Tests
             if (Mode == RecordedTestMode.Record)
                 Thread.Sleep(15 * 1000);
 
-            await ResourcesClient.StartCreateOrUpdateAsync(
+            await ResourcesOperations.StartCreateOrUpdateAsync(
                     groupName,
                     "Microsoft.Web",
                     string.Empty,
@@ -191,12 +191,12 @@ namespace ResourceGroups.Tests
             if (Mode == RecordedTestMode.Record)
                 Thread.Sleep(15 * 1000);
 
-            var listResult = await ResourcesClient.ListByResourceGroupAsync(groupName, filter, null, null).ToEnumerableAsync();
+            var listResult = await ResourcesOperations.ListByResourceGroupAsync(groupName, filter, null, null).ToEnumerableAsync();
 
             Assert.IsTrue(listResult.Count() == 1);
             Assert.AreEqual(resourceName, listResult.First().Name);
 
-            var getResult = await ResourcesClient.GetAsync(
+            var getResult = await ResourcesOperations.GetAsync(
                 groupName,
                 "Microsoft.Web",
                 string.Empty,
@@ -219,8 +219,8 @@ namespace ResourceGroups.Tests
             string location = GetWebsiteLocation();
             string filter = "tagName eq '" + tagName + "' and tagValue eq '" + tagValue + "'";
 
-            await ResourceGroupsClient.CreateOrUpdateAsync(groupName, new ResourceGroup(this.ResourceGroupLocation));
-            await ResourcesClient.StartCreateOrUpdateAsync(
+            await ResourceGroupsOperations.CreateOrUpdateAsync(groupName, new ResourceGroup(this.ResourceGroupLocation));
+            await ResourcesOperations.StartCreateOrUpdateAsync(
                 groupName,
                 "Microsoft.Web",
                 "",
@@ -241,7 +241,7 @@ namespace ResourceGroups.Tests
             if (Mode == RecordedTestMode.Record)
                 Thread.Sleep(15 * 1000);
 
-            await ResourcesClient.StartCreateOrUpdateAsync(
+            await ResourcesOperations.StartCreateOrUpdateAsync(
                 groupName,
                 "Microsoft.Web",
                 "",
@@ -261,12 +261,12 @@ namespace ResourceGroups.Tests
             if (Mode == RecordedTestMode.Record)
                 Thread.Sleep(15 * 1000);
 
-            var listResult = await ResourcesClient.ListByResourceGroupAsync(groupName, filter, null, null).ToEnumerableAsync();
+            var listResult = await ResourcesOperations.ListByResourceGroupAsync(groupName, filter, null, null).ToEnumerableAsync();
 
             Assert.IsTrue(listResult.Count() == 1);
             Assert.AreEqual(resourceName, listResult.First().Name);
 
-            var getResult = await ResourcesClient.GetAsync(
+            var getResult = await ResourcesOperations.GetAsync(
                 groupName,
                 "Microsoft.Web",
                 "",
@@ -285,8 +285,8 @@ namespace ResourceGroups.Tests
             string resourceName = Recording.GenerateAssetName("csmr");
 
             string location = this.GetWebsiteLocation();
-            await ResourceGroupsClient.CreateOrUpdateAsync(groupName, new ResourceGroup(location));
-            var createOrUpdateResult = await ResourcesClient.StartCreateOrUpdateAsync(
+            await ResourceGroupsOperations.CreateOrUpdateAsync(groupName, new ResourceGroup(location));
+            var createOrUpdateResult = await ResourcesOperations.StartCreateOrUpdateAsync(
                 groupName,
                 "Microsoft.Web",
                 "",
@@ -304,11 +304,11 @@ namespace ResourceGroups.Tests
                 }
             );
 
-            var listResult = await ResourcesClient.ListByResourceGroupAsync(groupName).ToEnumerableAsync();
+            var listResult = await ResourcesOperations.ListByResourceGroupAsync(groupName).ToEnumerableAsync();
 
             Assert.AreEqual(resourceName, listResult.First().Name);
 
-            await ResourcesClient.StartDeleteAsync(
+            await ResourcesOperations.StartDeleteAsync(
                 groupName,
                 "Microsoft.Web",
                 "",
@@ -327,8 +327,8 @@ namespace ResourceGroups.Tests
             string location = this.GetWebsiteLocation();
 
             string resourceId = string.Format("/subscriptions/{0}/resourceGroups/{1}/providers/Microsoft.Web/serverFarms/{2}", subscriptionId, groupName, resourceName);
-            await ResourceGroupsClient.CreateOrUpdateAsync(groupName, new ResourceGroup(location));
-            var createOrUpdateResult = await ResourcesClient.StartCreateOrUpdateByIdAsync(
+            await ResourceGroupsOperations.CreateOrUpdateAsync(groupName, new ResourceGroup(location));
+            var createOrUpdateResult = await ResourcesOperations.StartCreateOrUpdateByIdAsync(
                 resourceId,
                 WebResourceProviderVersion,
                 new GenericResource
@@ -342,11 +342,11 @@ namespace ResourceGroups.Tests
                 }
             );
 
-            var listResult = await ResourcesClient.ListByResourceGroupAsync(groupName).ToEnumerableAsync();
+            var listResult = await ResourcesOperations.ListByResourceGroupAsync(groupName).ToEnumerableAsync();
 
             Assert.AreEqual(resourceName, listResult.First().Name);
 
-            await ResourcesClient.StartDeleteByIdAsync(
+            await ResourcesOperations.StartDeleteByIdAsync(
                 resourceId, WebResourceProviderVersion);
         }
 
@@ -356,8 +356,8 @@ namespace ResourceGroups.Tests
             string groupName = Recording.GenerateAssetName("csmrg");
             string resourceName = Recording.GenerateAssetName("csmr");
             string location = this.GetWebsiteLocation();
-            await ResourceGroupsClient.CreateOrUpdateAsync(groupName, new ResourceGroup(location));
-            var createOrUpdateResult = await ResourcesClient.StartCreateOrUpdateAsync(
+            await ResourceGroupsOperations.CreateOrUpdateAsync(groupName, new ResourceGroup(location));
+            var createOrUpdateResult = await ResourcesOperations.StartCreateOrUpdateAsync(
                 groupName,
                 "Microsoft.Web",
                 "",
@@ -379,7 +379,7 @@ namespace ResourceGroups.Tests
             if (Mode == RecordedTestMode.Record)
                 Thread.Sleep(20 * 1000);
 
-            var listResult = await ResourcesClient.ListAsync().ToEnumerableAsync();
+            var listResult = await ResourcesOperations.ListAsync().ToEnumerableAsync();
             var filter = listResult.Find(item => item.Name == resourceName);
             Assert.AreEqual(2, filter.Tags.Count);
         }

@@ -13,19 +13,18 @@ namespace Azure.ResourceManager.Resources.Tests
     {
         public static TimeSpan ZeroPollingInterval { get; } = TimeSpan.FromSeconds(0);
         public ResourcesManagementClient ResourcesManagementClient { get; set; }
-        public ResourceGroupsClient ResourceGroupsClient { get; set; }
-        public DeploymentsClient DeploymentsClient { get; set; }
-        public DeploymentScriptsClient DeploymentScriptsClient { get; set; }
-        public DeploymentClient DeploymentClient { get; set; }
-        public OperationsClient OperationsClient { get; set; }
-        public ProvidersClient ProvidersClient { get; set; }
-        public ResourcesClient ResourcesClient { get; set; }
-        public TagsClient TagsClient { get; set; }
-        public SubscriptionsClient SubscriptionsClient { get; set; }
-        public TenantsClient TenantsClient { get; set; }
-        public PolicyAssignmentsClient PolicyAssignmentsClient { get; set; }
-        public PolicyDefinitionsClient PolicyDefinitionsClient { get; set; }
-        public PolicySetDefinitionsClient PolicySetDefinitionsClient { get; set; }
+        public ResourceGroupsOperations ResourceGroupsOperations { get; set; }
+        public DeploymentsOperations DeploymentsOperations { get; set; }
+        public DeploymentScriptsOperations DeploymentScriptsOperations { get; set; }
+        public DeploymentOperations DeploymentOperations { get; set; }
+        public ProvidersOperations ProvidersOperations { get; set; }
+        public ResourcesOperations ResourcesOperations { get; set; }
+        public TagsOperations TagsOperations { get; set; }
+        public SubscriptionsOperations SubscriptionsOperations { get; set; }
+        public TenantsOperations TenantsOperations { get; set; }
+        public PolicyAssignmentsOperations PolicyAssignmentsOperations { get; set; }
+        public PolicyDefinitionsOperations PolicyDefinitionsOperations { get; set; }
+        public PolicySetDefinitionsOperations PolicySetDefinitionsOperations { get; set; }
 
         protected ResourceOperationsTestsBase(bool isAsync)
             : base(isAsync)
@@ -35,19 +34,18 @@ namespace Azure.ResourceManager.Resources.Tests
         protected void Initialize()
         {
             ResourcesManagementClient = GetResourceManagementClient();
-            ResourceGroupsClient = ResourcesManagementClient.GetResourceGroupsClient();
-            DeploymentsClient = ResourcesManagementClient.GetDeploymentsClient();
-            DeploymentScriptsClient = ResourcesManagementClient.GetDeploymentScriptsClient();
-            DeploymentClient = ResourcesManagementClient.GetDeploymentClient();
-            OperationsClient = ResourcesManagementClient.GetOperationsClient();
-            ProvidersClient = ResourcesManagementClient.GetProvidersClient();
-            ResourcesClient = ResourcesManagementClient.GetResourcesClient();
-            TagsClient = ResourcesManagementClient.GetTagsClient();
-            SubscriptionsClient = ResourcesManagementClient.GetSubscriptionsClient();
-            TenantsClient = ResourcesManagementClient.GetTenantsClient();
-            PolicyAssignmentsClient = ResourcesManagementClient.GetPolicyAssignmentsClient();
-            PolicyDefinitionsClient = ResourcesManagementClient.GetPolicyDefinitionsClient();
-            PolicySetDefinitionsClient = ResourcesManagementClient.GetPolicySetDefinitionsClient();
+            ResourceGroupsOperations = ResourcesManagementClient.ResourceGroups;
+            DeploymentsOperations = ResourcesManagementClient.Deployments;
+            DeploymentScriptsOperations = ResourcesManagementClient.DeploymentScripts;
+            DeploymentOperations = ResourcesManagementClient.Deployment;
+            ProvidersOperations = ResourcesManagementClient.Providers;
+            ResourcesOperations = ResourcesManagementClient.Resources;
+            TagsOperations = ResourcesManagementClient.Tags;
+            SubscriptionsOperations = ResourcesManagementClient.Subscriptions;
+            TenantsOperations = ResourcesManagementClient.Tenants;
+            PolicyAssignmentsOperations = ResourcesManagementClient.PolicyAssignments;
+            PolicyDefinitionsOperations = ResourcesManagementClient.PolicyDefinitions;
+            PolicySetDefinitionsOperations = ResourcesManagementClient.PolicySetDefinitions;
         }
     }
 }

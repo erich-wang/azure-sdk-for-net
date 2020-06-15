@@ -74,13 +74,13 @@ namespace DeploymentScripts.Tests
                 Arguments = ScriptArguments
             };
 
-            var rawCreateDeploymentScriptResult = await DeploymentScriptsClient.StartCreateAsync(ResourceGroupName, deploymentScriptName, deploymentScript);
+            var rawCreateDeploymentScriptResult = await DeploymentScriptsOperations.StartCreateAsync(ResourceGroupName, deploymentScriptName, deploymentScript);
             var createDeploymentScriptResult = (await WaitForCompletionAsync(rawCreateDeploymentScriptResult)).Value as AzurePowerShellScript;
 
             Assert.NotNull(createDeploymentScriptResult);
             Assert.AreEqual(ScriptProvisioningState.Succeeded, createDeploymentScriptResult.ProvisioningState);
 
-            AzurePowerShellScript getDeploymentScript = (await DeploymentScriptsClient.GetAsync(ResourceGroupName, deploymentScriptName)).Value as AzurePowerShellScript;
+            AzurePowerShellScript getDeploymentScript = (await DeploymentScriptsOperations.GetAsync(ResourceGroupName, deploymentScriptName)).Value as AzurePowerShellScript;
 
             // Validate result
             Assert.NotNull(getDeploymentScript);
@@ -114,7 +114,7 @@ namespace DeploymentScripts.Tests
             Assert.IsNotEmpty(getDeploymentScript.Outputs);
 
             // List at resource group level and validate
-            var listAtResourceGroupResult = await DeploymentScriptsClient.ListByResourceGroupAsync(ResourceGroupName).ToEnumerableAsync();
+            var listAtResourceGroupResult = await DeploymentScriptsOperations.ListByResourceGroupAsync(ResourceGroupName).ToEnumerableAsync();
             Assert.IsNotEmpty(listAtResourceGroupResult);
             Assert.NotNull(listAtResourceGroupResult.FirstOrDefault(p => p.Name.Equals(deploymentScriptName)));
             Assert.AreEqual(deploymentScript.AzPowerShellVersion,
@@ -122,7 +122,7 @@ namespace DeploymentScripts.Tests
             Assert.NotNull((listAtResourceGroupResult.First() as AzurePowerShellScript).ProvisioningState);
 
             // List at subscription level and validate
-            var listAtSubscriptionResult = await DeploymentScriptsClient.ListBySubscriptionAsync().ToEnumerableAsync();
+            var listAtSubscriptionResult = await DeploymentScriptsOperations.ListBySubscriptionAsync().ToEnumerableAsync();
             Assert.IsNotEmpty(listAtSubscriptionResult);
             Assert.NotNull(listAtSubscriptionResult.FirstOrDefault(p => p.Name.Equals(deploymentScriptName)));
             Assert.AreEqual(AzurePowerShellVersion,
@@ -130,10 +130,10 @@ namespace DeploymentScripts.Tests
             Assert.NotNull((listAtSubscriptionResult.First() as AzurePowerShellScript).ProvisioningState);
 
             // Delete deployments script and validate
-            await DeploymentScriptsClient.DeleteAsync(ResourceGroupName, deploymentScriptName);
-            var list = await DeploymentScriptsClient.ListByResourceGroupAsync(ResourceGroupName).ToEnumerableAsync();
+            await DeploymentScriptsOperations.DeleteAsync(ResourceGroupName, deploymentScriptName);
+            var list = await DeploymentScriptsOperations.ListByResourceGroupAsync(ResourceGroupName).ToEnumerableAsync();
             Assert.IsEmpty(list.Where(p => p.Name.Equals(deploymentScriptName)));
-            list = await DeploymentScriptsClient.ListBySubscriptionAsync().ToEnumerableAsync();
+            list = await DeploymentScriptsOperations.ListBySubscriptionAsync().ToEnumerableAsync();
             Assert.IsEmpty(list.Where(p => p.Name.Equals(deploymentScriptName)));
         }
 
@@ -164,22 +164,22 @@ namespace DeploymentScripts.Tests
                 Arguments = ScriptArguments
             };
 
-            var rawcreateDeploymentScriptResult = await DeploymentScriptsClient.StartCreateAsync(ResourceGroupName, deploymentScriptName, deploymentScript);
+            var rawcreateDeploymentScriptResult = await DeploymentScriptsOperations.StartCreateAsync(ResourceGroupName, deploymentScriptName, deploymentScript);
             var createDeploymentScriptResult = (await WaitForCompletionAsync(rawcreateDeploymentScriptResult)).Value as AzurePowerShellScript;
 
             Assert.NotNull(createDeploymentScriptResult);
             Assert.AreEqual(ScriptProvisioningState.Succeeded, createDeploymentScriptResult.ProvisioningState);
 
-            AzurePowerShellScript getDeploymentScript = (await DeploymentScriptsClient.GetAsync(ResourceGroupName, deploymentScriptName)).Value as AzurePowerShellScript;
+            AzurePowerShellScript getDeploymentScript = (await DeploymentScriptsOperations.GetAsync(ResourceGroupName, deploymentScriptName)).Value as AzurePowerShellScript;
             Assert.NotNull(getDeploymentScript);
 
             // Validate getlogs result
-            var getLogsResult = DeploymentScriptsClient.GetLogsDefaultAsync(ResourceGroupName, deploymentScriptName);
+            var getLogsResult = DeploymentScriptsOperations.GetLogsDefaultAsync(ResourceGroupName, deploymentScriptName);
             Assert.NotNull(getLogsResult);
 
             // Delete deployments script
-            await DeploymentScriptsClient.DeleteAsync(ResourceGroupName, deploymentScriptName);
-            var list = await DeploymentScriptsClient.ListByResourceGroupAsync(ResourceGroupName).ToEnumerableAsync();
+            await DeploymentScriptsOperations.DeleteAsync(ResourceGroupName, deploymentScriptName);
+            var list = await DeploymentScriptsOperations.ListByResourceGroupAsync(ResourceGroupName).ToEnumerableAsync();
             Assert.IsEmpty(list.Where(p => p.Name.Equals(deploymentScriptName)));
         }
 
@@ -208,8 +208,8 @@ namespace DeploymentScripts.Tests
                 ScriptContent = MalformedScriptContent
             };
 
-            var rawcreateDeploymentScriptResult = await DeploymentScriptsClient.StartCreateAsync(ResourceGroupName, deploymentScriptName, deploymentScript);
-            var createDeploymentScriptResult = (await DeploymentScriptsClient.GetAsync(ResourceGroupName, deploymentScriptName)).Value as AzurePowerShellScript;
+            var rawcreateDeploymentScriptResult = await DeploymentScriptsOperations.StartCreateAsync(ResourceGroupName, deploymentScriptName, deploymentScript);
+            var createDeploymentScriptResult = (await DeploymentScriptsOperations.GetAsync(ResourceGroupName, deploymentScriptName)).Value as AzurePowerShellScript;
 
             Assert.NotNull(createDeploymentScriptResult);
             if (this.IsAsync)
@@ -232,7 +232,7 @@ namespace DeploymentScripts.Tests
                 Assert.True(pollCount < MaxPoll);
 
                 getDeploymentScript =
-                   (await DeploymentScriptsClient.GetAsync(ResourceGroupName, deploymentScriptName)).Value as AzurePowerShellScript;
+                   (await DeploymentScriptsOperations.GetAsync(ResourceGroupName, deploymentScriptName)).Value as AzurePowerShellScript;
 
                 if (Mode == RecordedTestMode.Record) Thread.Sleep(10*1000);
 
@@ -246,8 +246,8 @@ namespace DeploymentScripts.Tests
             Assert.AreEqual(typeof(ErrorResponse), getDeploymentScript.Status.Error.GetType());
 
             // Delete deployment script
-            await DeploymentScriptsClient.DeleteAsync(ResourceGroupName, deploymentScriptName);
-            var list = await DeploymentScriptsClient.ListByResourceGroupAsync(ResourceGroupName).ToEnumerableAsync();
+            await DeploymentScriptsOperations.DeleteAsync(ResourceGroupName, deploymentScriptName);
+            var list = await DeploymentScriptsOperations.ListByResourceGroupAsync(ResourceGroupName).ToEnumerableAsync();
             Assert.IsEmpty(list.Where(p => p.Name.Equals(deploymentScriptName)));
         }
 

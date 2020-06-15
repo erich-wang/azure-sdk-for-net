@@ -56,7 +56,7 @@ namespace ResourceGroups.Tests
 
             string featureName = "DONOTDELETEBETA";
 
-            var registerResult = await client.GetFeaturesClient().RegisterAsync(resourceProviderNamespace, featureName);
+            var registerResult = await client.Features.RegisterAsync(resourceProviderNamespace, featureName);
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -107,7 +107,7 @@ namespace ResourceGroups.Tests
             string featureName = "DONOTDELETEBETA";
 
             // ----Verify API calls for get all features under current subid----
-            var getResult = (await client.GetFeaturesClient().GetAsync(resourceProviderNamespace, featureName)).Value;
+            var getResult = (await client.Features.GetAsync(resourceProviderNamespace, featureName)).Value;
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -160,7 +160,7 @@ namespace ResourceGroups.Tests
 
 
             //-------------Verify get all features within a resource provider
-            var getResult = await client.GetFeaturesClient().ListAsync(resourceProviderNamespace).ToEnumerableAsync();
+            var getResult = await client.Features.ListAsync(resourceProviderNamespace).ToEnumerableAsync();
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -210,7 +210,7 @@ namespace ResourceGroups.Tests
             var client = GetResourceManagementClient(mockTransport);
 
             //-------------Verify get all features within a resource provider
-            var getResult = await client.GetFeaturesClient().ListAllAsync().ToEnumerableAsync();
+            var getResult = await client.Features.ListAllAsync().ToEnumerableAsync();
 
             // Validate headers
             var request = mockTransport.Requests[0];

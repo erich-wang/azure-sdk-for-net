@@ -84,7 +84,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var result = (await client.GetProvidersClient().GetAsync("Microsoft.Websites", expand: "resourceTypes/aliases")).Value;
+            var result = (await client.Providers.GetAsync("Microsoft.Websites", expand: "resourceTypes/aliases")).Value;
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -114,7 +114,7 @@ namespace ResourceGroups.Tests
 
             try
             {
-                await client.GetProvidersClient().GetAsync(null);
+                await client.Providers.GetAsync(null);
             }
             catch (Exception ex)
             {
@@ -152,7 +152,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var result = await client.GetProvidersClient().ListAsync(null).ToEnumerableAsync();
+            var result = await client.Providers.ListAsync(null).ToEnumerableAsync();
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -178,7 +178,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var result = (await client.GetProvidersClient().RegisterAsync("Microsoft.Websites")).Value;
+            var result = (await client.Providers.RegisterAsync("Microsoft.Websites")).Value;
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -195,7 +195,7 @@ namespace ResourceGroups.Tests
 
             try
             {
-                await client.GetProvidersClient().RegisterAsync(null);
+                await client.Providers.RegisterAsync(null);
             }
             catch (Exception ex)
             {
@@ -212,7 +212,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var result = (await client.GetProvidersClient().UnregisterAsync("Microsoft.Websites")).Value;
+            var result = (await client.Providers.UnregisterAsync("Microsoft.Websites")).Value;
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -229,7 +229,7 @@ namespace ResourceGroups.Tests
 
             try
             {
-                await client.GetProvidersClient().UnregisterAsync(null);
+                await client.Providers.UnregisterAsync(null);
             }
             catch (Exception ex)
             {

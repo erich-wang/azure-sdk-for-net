@@ -52,7 +52,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var result = (await client.GetResourceLinksClient().CreateOrUpdateAsync(
+            var result = (await client.ResourceLinks.CreateOrUpdateAsync(
                 linkId: "/subscriptions/abc123/resourcegroups/myGroup/providers/Microsoft.Web/serverFarms/myFarm/providers/Microsoft.Resources/links/myLink",
                 parameters: new ResourceLink
                 {
@@ -101,7 +101,7 @@ namespace ResourceGroups.Tests
             mockTransport = new MockTransport(mockResponse);
             client = GetResourceManagementClient(mockTransport);
 
-            var getResult = (await client.GetResourceLinksClient().GetAsync("/subscriptions/abc123/resourcegroups/myGroup/providers/Microsoft.Web/serverFarms/myFarm/providers/Microsoft.Resources/links/myLink")).Value;
+            var getResult = (await client.ResourceLinks.GetAsync("/subscriptions/abc123/resourcegroups/myGroup/providers/Microsoft.Web/serverFarms/myFarm/providers/Microsoft.Resources/links/myLink")).Value;
 
             // Validate response
             Assert.AreEqual("/subscriptions/abc123/resourcegroups/myGroup/providers/Microsoft.Web/serverFarms/myFarm/providers/Microsoft.Resources/links/myLink", getResult.Id);
@@ -120,7 +120,7 @@ namespace ResourceGroups.Tests
             mockTransport = new MockTransport(mockResponse);
             client = GetResourceManagementClient(mockTransport);
 
-            await client.GetResourceLinksClient().DeleteAsync("/subscriptions/abc123/resourcegroups/myGroup/providers/Microsoft.Web/serverFarms/myFarm/providers/Microsoft.Resources/links/myLink");
+            await client.ResourceLinks.DeleteAsync("/subscriptions/abc123/resourcegroups/myGroup/providers/Microsoft.Web/serverFarms/myFarm/providers/Microsoft.Resources/links/myLink");
 
             // Validate headers
             request = mockTransport.Requests[0];
@@ -128,7 +128,7 @@ namespace ResourceGroups.Tests
 
             try
             {
-                await client.GetResourceLinksClient().GetAsync("/subscriptions/abc123/resourcegroups/myGroup/providers/Microsoft.Web/serverFarms/myFarm/providers/Microsoft.Resources/links/myLink");
+                await client.ResourceLinks.GetAsync("/subscriptions/abc123/resourcegroups/myGroup/providers/Microsoft.Web/serverFarms/myFarm/providers/Microsoft.Resources/links/myLink");
             }
             catch (Exception ex)
             {
@@ -165,7 +165,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var result = await client.GetResourceLinksClient().ListAtSubscriptionAsync().ToEnumerableAsync();
+            var result = await client.ResourceLinks.ListAtSubscriptionAsync().ToEnumerableAsync();
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -196,7 +196,7 @@ namespace ResourceGroups.Tests
 
             mockTransport = new MockTransport(mockResponse);
             client = GetResourceManagementClient(mockTransport);
-            var filteredResult = await client.GetResourceLinksClient().ListAtSubscriptionAsync("$filter=targetId eq '/subscriptions/abc123/resourcegroups/myGroup/providers/Microsoft.Web/serverFarms/myFarm2'").ToEnumerableAsync();
+            var filteredResult = await client.ResourceLinks.ListAtSubscriptionAsync("$filter=targetId eq '/subscriptions/abc123/resourcegroups/myGroup/providers/Microsoft.Web/serverFarms/myFarm2'").ToEnumerableAsync();
 
             // Validate result
             Has.One.EqualTo(filteredResult);
@@ -227,7 +227,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var result = await client.GetResourceLinksClient().ListAtSourceScopeAsync("/subscriptions/abc123/resourcegroups/myGroup/providers/Microsoft.Web/serverFarms/myFarm").ToEnumerableAsync();
+            var result = await client.ResourceLinks.ListAtSourceScopeAsync("/subscriptions/abc123/resourcegroups/myGroup/providers/Microsoft.Web/serverFarms/myFarm").ToEnumerableAsync();
 
             // Validate headers
             var request = mockTransport.Requests[0];

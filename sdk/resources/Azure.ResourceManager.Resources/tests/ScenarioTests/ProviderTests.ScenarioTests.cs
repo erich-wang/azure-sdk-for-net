@@ -41,10 +41,10 @@ namespace ResourceGroups.Tests
         [Test]
         public async Task ProviderGetValidateMessage()
         {
-            var reg = await ProvidersClient.RegisterAsync(ProviderName);
+            var reg = await ProvidersOperations.RegisterAsync(ProviderName);
             Assert.NotNull(reg);
 
-            var result = (await ProvidersClient.GetAsync(ProviderName)).Value;
+            var result = (await ProvidersOperations.GetAsync(ProviderName)).Value;
 
             // Validate result
             Assert.NotNull(result);
@@ -60,10 +60,10 @@ namespace ResourceGroups.Tests
         [Test]
         public async Task ProviderListValidateMessage()
         {
-            var reg = await ProvidersClient.RegisterAsync(ProviderName);
+            var reg = await ProvidersOperations.RegisterAsync(ProviderName);
             Assert.NotNull(reg);
 
-            var result = await ProvidersClient.ListAsync(null).ToEnumerableAsync();
+            var result = await ProvidersOperations.ListAsync(null).ToEnumerableAsync();
 
             // Validate result
             Assert.True(result.Any());
@@ -83,10 +83,10 @@ namespace ResourceGroups.Tests
         {
             var computeNamespace = "Microsoft.Compute";
 
-            var reg = await ProvidersClient.RegisterAsync(computeNamespace);
+            var reg = await ProvidersOperations.RegisterAsync(computeNamespace);
             Assert.NotNull(reg);
 
-            var result = await ProvidersClient.ListAsync(expand: "resourceTypes/aliases").ToEnumerableAsync();
+            var result = await ProvidersOperations.ListAsync(expand: "resourceTypes/aliases").ToEnumerableAsync();
 
             // Validate result
             Assert.True(result.Any());
@@ -101,7 +101,7 @@ namespace ResourceGroups.Tests
             Assert.AreEqual("Microsoft.Compute/licenseType", virtualMachinesType.Aliases[0].Name);
             Assert.AreEqual("properties.licenseType", virtualMachinesType.Aliases[0].Paths[0].Path);
 
-            computeProvider = (await ProvidersClient.GetAsync(resourceProviderNamespace: computeNamespace, expand: "resourceTypes/aliases")).Value;
+            computeProvider = (await ProvidersOperations.GetAsync(resourceProviderNamespace: computeNamespace, expand: "resourceTypes/aliases")).Value;
 
             Assert.IsNotEmpty(computeProvider.ResourceTypes);
             virtualMachinesType = computeProvider.ResourceTypes.First(
@@ -115,9 +115,9 @@ namespace ResourceGroups.Tests
         [Test]
         public async Task VerifyProviderRegister()
         {
-            await ProvidersClient.RegisterAsync(ProviderName);
+            await ProvidersOperations.RegisterAsync(ProviderName);
 
-            var provider = (await ProvidersClient.GetAsync(ProviderName)).Value;
+            var provider = (await ProvidersOperations.GetAsync(ProviderName)).Value;
             Assert.True(provider.RegistrationState == "Registered" ||
                         provider.RegistrationState == "Registering");
         }
@@ -125,15 +125,15 @@ namespace ResourceGroups.Tests
         [Test]
         public async Task VerifyProviderUnregister()
         {
-            var registerResult = await ProvidersClient.RegisterAsync(ProviderName);
+            var registerResult = await ProvidersOperations.RegisterAsync(ProviderName);
 
-            var provider = (await ProvidersClient.GetAsync(ProviderName)).Value;
+            var provider = (await ProvidersOperations.GetAsync(ProviderName)).Value;
             Assert.True(provider.RegistrationState == "Registered" ||
                         provider.RegistrationState == "Registering");
 
-            var unregisterResult = await ProvidersClient.UnregisterAsync(ProviderName);
+            var unregisterResult = await ProvidersOperations.UnregisterAsync(ProviderName);
 
-            provider = (await ProvidersClient.GetAsync(ProviderName)).Value;
+            provider = (await ProvidersOperations.GetAsync(ProviderName)).Value;
             Assert.True(provider.RegistrationState == "NotRegistered" ||
                         provider.RegistrationState == "Unregistering",
                         "RegistrationState is expected NotRegistered or Unregistering. Actual value " +

@@ -43,19 +43,19 @@ namespace ResourceGroups.Tests
         public async Task CanCreateResourceGroup()
         {
             string groupName = Recording.GenerateAssetName("csmrg");
-            var result = await ResourceGroupsClient.CreateOrUpdateAsync(groupName,
+            var result = await ResourceGroupsOperations.CreateOrUpdateAsync(groupName,
                 new ResourceGroup(DefaultLocation)
                 {
                     Tags = new Dictionary<string, string>() { { "department", "finance" }, { "tagname", "tagvalue" } },
                 });
-            var listResult = await ResourceGroupsClient.ListAsync().ToEnumerableAsync();
+            var listResult = await ResourceGroupsOperations.ListAsync().ToEnumerableAsync();
             var listedGroup = listResult.FirstOrDefault((g) => string.Equals(g.Name, groupName, StringComparison.Ordinal));
             Assert.NotNull(listedGroup);
             Assert.AreEqual("finance", listedGroup.Tags["department"]);
             Assert.AreEqual("tagvalue", listedGroup.Tags["tagname"]);
             Assert.True(Utilities.LocationsAreEqual(DefaultLocation, listedGroup.Location),
                string.Format("Expected location '{0}' did not match actual location '{1}'", DefaultLocation, listedGroup.Location));
-            var gottenGroup = (await ResourceGroupsClient.GetAsync(groupName)).Value;
+            var gottenGroup = (await ResourceGroupsOperations.GetAsync(groupName)).Value;
             Assert.NotNull(gottenGroup);
             Assert.AreEqual(groupName, gottenGroup.Name);
             Assert.True(Utilities.LocationsAreEqual(DefaultLocation, gottenGroup.Location),
@@ -67,12 +67,12 @@ namespace ResourceGroups.Tests
         {
             string groupName = Recording.GenerateAssetName("csmrg");;
 
-            var checkExistenceFirst = await ResourceGroupsClient.CheckExistenceAsync(groupName);
+            var checkExistenceFirst = await ResourceGroupsOperations.CheckExistenceAsync(groupName);
             Assert.AreEqual(404, checkExistenceFirst.Status);
 
-            await ResourceGroupsClient.CreateOrUpdateAsync(groupName, new ResourceGroup(DefaultLocation));
+            await ResourceGroupsOperations.CreateOrUpdateAsync(groupName, new ResourceGroup(DefaultLocation));
 
-            var checkExistenceSecond = await ResourceGroupsClient.CheckExistenceAsync(groupName);
+            var checkExistenceSecond = await ResourceGroupsOperations.CheckExistenceAsync(groupName);
 
             Assert.AreEqual(204, checkExistenceSecond.Status);
         }
@@ -81,11 +81,11 @@ namespace ResourceGroups.Tests
         public async Task DeleteResourceGroupRemovesGroup()
         {
             var resourceGroupName = Recording.GenerateAssetName("csmrg");
-            var createResult = await ResourceGroupsClient.CreateOrUpdateAsync(resourceGroupName, new ResourceGroup(DefaultLocation));
-            var getResult = await ResourceGroupsClient.GetAsync(resourceGroupName);
-            var rawDeleteResult = await ResourceGroupsClient.StartDeleteAsync(resourceGroupName);
+            var createResult = await ResourceGroupsOperations.CreateOrUpdateAsync(resourceGroupName, new ResourceGroup(DefaultLocation));
+            var getResult = await ResourceGroupsOperations.GetAsync(resourceGroupName);
+            var rawDeleteResult = await ResourceGroupsOperations.StartDeleteAsync(resourceGroupName);
             var deleteResult = (await WaitForCompletionAsync(rawDeleteResult)).Value;
-            var listResult = await ResourceGroupsClient.ListAsync(null).ToEnumerableAsync();
+            var listResult = await ResourceGroupsOperations.ListAsync(null).ToEnumerableAsync();
 
             Assert.AreEqual(200, deleteResult.Status);
             foreach (var rg in listResult)

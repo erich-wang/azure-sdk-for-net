@@ -64,7 +64,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var result = (await client.GetResourcesClient().GetAsync("foo", "Microsoft.Web", string.Empty, "Sites", "site1", "2014-01-04")).Value;
+            var result = (await client.Resources.GetAsync("foo", "Microsoft.Web", string.Empty, "Sites", "site1", "2014-01-04")).Value;
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -113,7 +113,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var result = (await client.GetResourcesClient().GetByIdAsync("/subscriptions/12345/resourceGroups/foo/providers/Microsoft.Web/Sites/site1", "2014-01-04")).Value;
+            var result = (await client.Resources.GetByIdAsync("/subscriptions/12345/resourceGroups/foo/providers/Microsoft.Web/Sites/site1", "2014-01-04")).Value;
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -159,7 +159,7 @@ namespace ResourceGroups.Tests
             string resourceProviderNamespace = "Microsoft.Web";
             string resourceProviderApiVersion = "2014-01-04";
             string resourceType = "Sites";
-            var result = (await client.GetResourcesClient().GetAsync(
+            var result = (await client.Resources.GetAsync(
                 "foo",
                 resourceProviderNamespace,
                 "",
@@ -218,7 +218,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var result = await client.GetResourcesClient().ListByResourceGroupAsync("foo", "$filter=resourceType eq 'Sites'").ToEnumerableAsync();
+            var result = await client.Resources.ListByResourceGroupAsync("foo", "$filter=resourceType eq 'Sites'").ToEnumerableAsync();
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -259,7 +259,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var result = await client.GetResourcesClient().ListByResourceGroupAsync("foo", "$filter=resourceType eq 'Sites'").ToEnumerableAsync();
+            var result = await client.Resources.ListByResourceGroupAsync("foo", "$filter=resourceType eq 'Sites'").ToEnumerableAsync();
 
 
             // Validate headers
@@ -288,7 +288,7 @@ namespace ResourceGroups.Tests
 
             try
             {
-                await client.GetResourcesClient().GetAsync(null, null, null, null, null, null);
+                await client.Resources.GetAsync(null, null, null, null, null, null);
             }
             catch (Exception ex)
             {
@@ -320,7 +320,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var raw = await client.GetResourcesClient().StartCreateOrUpdateAsync(
+            var raw = await client.Resources.StartCreateOrUpdateAsync(
                 "foo",
                 "Microsoft.Web",
                 string.Empty,
@@ -391,7 +391,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var raw = await client.GetResourcesClient().StartCreateOrUpdateAsync(
+            var raw = await client.Resources.StartCreateOrUpdateAsync(
                 "foo",
                 "Microsoft.Web",
                 string.Empty,
@@ -449,7 +449,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var raw = await client.GetResourcesClient().StartCreateOrUpdateAsync(
+            var raw = await client.Resources.StartCreateOrUpdateAsync(
                 "foo",
                 "Microsoft.Web",
                 string.Empty,
@@ -484,7 +484,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            var raw = await client.GetResourcesClient().StartCreateOrUpdateByIdAsync(
+            var raw = await client.Resources.StartCreateOrUpdateByIdAsync(
                 "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myGroup/Microsoft.Web/sites/mySite",
                 "2014-01-04",
                 new GenericResource
@@ -531,7 +531,7 @@ namespace ResourceGroups.Tests
 
             try
             {
-                await client.GetResourcesClient().GetAsync(
+                await client.Resources.GetAsync(
                 "foo",
                 resourceProviderNamespace,
                 parentResourse,
@@ -546,7 +546,7 @@ namespace ResourceGroups.Tests
 
             try
             {
-                await client.GetResourcesClient().CheckExistenceAsync(
+                await client.Resources.CheckExistenceAsync(
                 "foo",
                 resourceProviderNamespace,
                 parentResourse,
@@ -560,7 +560,7 @@ namespace ResourceGroups.Tests
             }
             try
             {
-                await client.GetResourcesClient().StartCreateOrUpdateAsync(
+                await client.Resources.StartCreateOrUpdateAsync(
                 "foo",
                 resourceProviderNamespace,
                 parentResourse,
@@ -575,7 +575,7 @@ namespace ResourceGroups.Tests
             }
             try
             {
-                await client.GetResourcesClient().StartDeleteAsync(
+                await client.Resources.StartDeleteAsync(
                 "foo",
                 resourceProviderNamespace,
                 parentResourse,
@@ -606,7 +606,7 @@ namespace ResourceGroups.Tests
             string resourceProviderNamespace = "Microsoft.Web";
             string resourceProviderApiVersion = "2014-01-04";
             string resourceType = "sites";
-            var result = await client.GetResourcesClient().CheckExistenceAsync(
+            var result = await client.Resources.CheckExistenceAsync(
                 "foo",
                 resourceProviderNamespace,
                 "",
@@ -638,7 +638,7 @@ namespace ResourceGroups.Tests
             string resourceProviderApiVersion = "2014-01-04";
             string resourceType = "sites";
 
-            var result = await client.GetResourcesClient().CheckExistenceAsync(
+            var result = await client.Resources.CheckExistenceAsync(
                 "foo",
                 resourceProviderNamespace,
                 "",
@@ -666,7 +666,7 @@ namespace ResourceGroups.Tests
             string resourceProviderNamespace = "Microsoft.Web";
             string resourceProviderApiVersion = "2014-01-04";
             string resourceType = "sites";
-            await client.GetResourcesClient().CheckExistenceAsync("foo",
+            await client.Resources.CheckExistenceAsync("foo",
                 resourceProviderNamespace,
                 "",
                 resourceType,
@@ -694,7 +694,7 @@ namespace ResourceGroups.Tests
             string resourceProviderNamespace = "Microsoft.Web";
             string resourceProviderApiVersion = "2014-01-04";
             string resourceType = "sites";
-            await client.GetResourcesClient().StartDeleteAsync("foo",
+            await client.Resources.StartDeleteAsync("foo",
                 resourceProviderNamespace,
                 "",
                 resourceType,
@@ -720,7 +720,7 @@ namespace ResourceGroups.Tests
             var mockTransport = new MockTransport(mockResponse);
             var client = GetResourceManagementClient(mockTransport);
 
-            await client.GetResourcesClient().StartDeleteByIdAsync("/subscriptions/12345/resourceGroups/myGroup/Microsoft.Web/sites/mySite", "2014-01-04");
+            await client.Resources.StartDeleteByIdAsync("/subscriptions/12345/resourceGroups/myGroup/Microsoft.Web/sites/mySite", "2014-01-04");
 
             // Validate headers
             var request = mockTransport.Requests[0];
@@ -747,7 +747,7 @@ namespace ResourceGroups.Tests
 
             try
             {
-                await client.GetResourcesClient().StartDeleteAsync("foo",
+                await client.Resources.StartDeleteAsync("foo",
                 resourceProviderNamespace,
                 "",
                 resourceType,

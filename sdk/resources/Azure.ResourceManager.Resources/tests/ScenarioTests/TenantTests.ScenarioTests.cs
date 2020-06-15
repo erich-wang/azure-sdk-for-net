@@ -37,7 +37,7 @@ namespace ResourceGroups.Tests
         [Test]
         public async Task ListTenants()
         {
-            var tenants = await TenantsClient.ListAsync().ToEnumerableAsync();
+            var tenants = await TenantsOperations.ListAsync().ToEnumerableAsync();
 
             Assert.NotNull(tenants);
             Assert.NotNull(tenants.First().Id);
