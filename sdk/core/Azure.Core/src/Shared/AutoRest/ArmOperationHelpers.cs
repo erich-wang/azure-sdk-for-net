@@ -4,6 +4,7 @@
 #nullable enable
 
 using System;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading;
@@ -109,6 +110,9 @@ namespace Azure.Core
             if (_hasCompleted)
             {
                 Response finalResponse = GetRawResponse();
+                var s = finalResponse.ContentStream;
+                var resquestContent = new StreamReader(s).ReadToEnd();
+
                 if (s_failureStates.Contains(state))
                 {
                     throw _clientDiagnostics.CreateRequestFailedException(finalResponse);

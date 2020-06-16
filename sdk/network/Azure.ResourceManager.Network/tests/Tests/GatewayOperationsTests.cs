@@ -136,7 +136,7 @@ namespace Azure.ResourceManager.Network.Tests.Tests
 
             // 4A. ResetVirtualNetworkGateway API
             VirtualNetworkGatewaysResetOperation resetVirtualNetworkGatewayResponseOperation = await NetworkManagementClient.VirtualNetworkGateways.StartResetAsync(resourceGroupName, virtualNetworkGatewayName);
-            await WaitForCompletionAsync(resetVirtualNetworkGatewayResponseOperation);
+            var resetVirtualNetworkGatewayResponse = await WaitForCompletionAsync(resetVirtualNetworkGatewayResponseOperation);
 
             // 4B. GetVirtualNetworkgateway API after ResetVirtualNetworkGateway API was called
             getVirtualNetworkGatewayResponse = await NetworkManagementClient.VirtualNetworkGateways.GetAsync(resourceGroupName, virtualNetworkGatewayName);
