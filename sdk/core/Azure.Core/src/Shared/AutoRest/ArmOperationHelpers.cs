@@ -110,8 +110,6 @@ namespace Azure.Core
             if (_hasCompleted)
             {
                 Response finalResponse = GetRawResponse();
-                var s = finalResponse.ContentStream;
-                var resquestContent = new StreamReader(s).ReadToEnd();
 
                 if (s_failureStates.Contains(state))
                 {
