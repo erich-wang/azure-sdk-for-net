@@ -11,6 +11,10 @@ using NUnit.Framework;
 
 namespace Azure.ResourceManager.Compute.Tests
 {
+<<<<<<< HEAD
+=======
+    [AsyncOnly]
+>>>>>>> erichmaster/track2/compute.tests
     public class ListVMTests : VMTestBase
     {
         public ListVMTests(bool isAsync)
@@ -36,7 +40,11 @@ namespace Azure.ResourceManager.Compute.Tests
         [Test]
         public async Task TestListVMInSubscription()
         {
+<<<<<<< HEAD
             EnsureClientsInitialized();
+=======
+            EnsureClientsInitialized(true);
+>>>>>>> erichmaster/track2/compute.tests
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
 
@@ -78,7 +86,11 @@ namespace Azure.ResourceManager.Compute.Tests
         [Test]
         public async Task TestListVMsInSubscriptionByLocation()
         {
+<<<<<<< HEAD
             EnsureClientsInitialized();
+=======
+            EnsureClientsInitialized(true);
+>>>>>>> erichmaster/track2/compute.tests
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
             string baseResourceGroupName = Recording.GenerateAssetName(TestPrefix);
             string resourceGroup1Name = baseResourceGroupName + "a";

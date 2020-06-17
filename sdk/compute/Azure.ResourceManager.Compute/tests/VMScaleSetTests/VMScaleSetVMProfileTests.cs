@@ -21,7 +21,11 @@ namespace Azure.ResourceManager.Compute.Tests.VMScaleSetTests
         [Test]
         public async Task TestVMScaleSetWithLicenseType()
         {
+<<<<<<< HEAD
             EnsureClientsInitialized();
+=======
+            EnsureClientsInitialized(true);
+>>>>>>> erichmaster/track2/compute.tests
 
             // Create resource group
             string rgName = Recording.GenerateAssetName(TestPrefix) + 1;
@@ -70,7 +74,11 @@ namespace Azure.ResourceManager.Compute.Tests.VMScaleSetTests
         [Test]
         public async Task TestVMScaleSetDiagnosticsProfile()
         {
+<<<<<<< HEAD
             EnsureClientsInitialized();
+=======
+            EnsureClientsInitialized(true);
+>>>>>>> erichmaster/track2/compute.tests
             // Create resource group
             string rgName = Recording.GenerateAssetName(TestPrefix) + 1;
             var vmssName = Recording.GenerateAssetName("vmss");

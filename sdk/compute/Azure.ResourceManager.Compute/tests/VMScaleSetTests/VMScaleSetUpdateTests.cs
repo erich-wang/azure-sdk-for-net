@@ -30,7 +30,11 @@ namespace Azure.ResourceManager.Compute.Tests
         [Test]
         public async Task TestVMScaleSetScalingOperations()
         {
+<<<<<<< HEAD
             EnsureClientsInitialized();
+=======
+            EnsureClientsInitialized(false);
+>>>>>>> erichmaster/track2/compute.tests
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
             // Create resource group
@@ -80,7 +84,11 @@ namespace Azure.ResourceManager.Compute.Tests
         [Ignore("this case need to be tested by compute team")]
         public async Task TestVMScaleSetUpdateOperations()
         {
+<<<<<<< HEAD
             EnsureClientsInitialized();
+=======
+            EnsureClientsInitialized(false);
+>>>>>>> erichmaster/track2/compute.tests
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
             // Create resource group
@@ -132,7 +140,11 @@ namespace Azure.ResourceManager.Compute.Tests
         [Ignore ("this case need to be tested by compute team")]
         public async Task TestVMScaleSetPatchOperations()
         {
+<<<<<<< HEAD
             EnsureClientsInitialized();
+=======
+            EnsureClientsInitialized(false);
+>>>>>>> erichmaster/track2/compute.tests
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
             // Create resource group

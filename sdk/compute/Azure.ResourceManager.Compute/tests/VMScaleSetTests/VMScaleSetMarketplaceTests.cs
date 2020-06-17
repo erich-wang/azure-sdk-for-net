@@ -28,7 +28,11 @@ namespace Azure.ResourceManager.Compute.Tests
         [Test]
         public async Task TestVMScaleSetMarketplace()
         {
+<<<<<<< HEAD
             EnsureClientsInitialized();
+=======
+            EnsureClientsInitialized(true);
+>>>>>>> erichmaster/track2/compute.tests
 
             ImageReference dummyImageRef = await GetPlatformVMImage(useWindowsImage: true);
             // Create resource group

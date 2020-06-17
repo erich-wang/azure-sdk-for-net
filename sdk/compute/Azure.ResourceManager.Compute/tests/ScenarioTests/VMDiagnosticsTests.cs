@@ -10,6 +10,10 @@ using NUnit.Framework;
 
 namespace Azure.ResourceManager.Compute.Tests
 {
+<<<<<<< HEAD
+=======
+    [AsyncOnly]
+>>>>>>> erichmaster/track2/compute.tests
     public class VMDiagnosticsTests : VMTestBase
     {
         public VMDiagnosticsTests(bool isAsync)
@@ -37,7 +41,11 @@ namespace Azure.ResourceManager.Compute.Tests
         public async Task TestVMBootDiagnostics()
         {
 
+<<<<<<< HEAD
             EnsureClientsInitialized();
+=======
+            EnsureClientsInitialized(true);
+>>>>>>> erichmaster/track2/compute.tests
 
             ImageReference imageReference = await GetPlatformVMImage(useWindowsImage: true);
             string resourceGroupName = Recording.GenerateAssetName(TestPrefix);

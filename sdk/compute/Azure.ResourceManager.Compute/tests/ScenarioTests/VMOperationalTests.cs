@@ -12,6 +12,10 @@ using NUnit.Framework;
 
 namespace Azure.ResourceManager.Compute.Tests
 {
+<<<<<<< HEAD
+=======
+    [AsyncOnly]
+>>>>>>> erichmaster/track2/compute.tests
     public class VMOperationalTests : VMTestBase
     {
         public VMOperationalTests(bool isAsync)
@@ -90,7 +94,11 @@ namespace Azure.ResourceManager.Compute.Tests
         [Ignore("need to be tested by compute team")]
         public async Task TestVMOperations()
         {
+<<<<<<< HEAD
             EnsureClientsInitialized();
+=======
+            EnsureClientsInitialized(true);
+>>>>>>> erichmaster/track2/compute.tests
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
 
@@ -181,7 +189,11 @@ namespace Azure.ResourceManager.Compute.Tests
         [Test]
         public async Task TestVMOperations_Redeploy()
         {
+<<<<<<< HEAD
             EnsureClientsInitialized();
+=======
+            EnsureClientsInitialized(true);
+>>>>>>> erichmaster/track2/compute.tests
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
 
@@ -213,7 +225,11 @@ namespace Azure.ResourceManager.Compute.Tests
         [Test]
         public async Task TestVMOperations_Reapply()
         {
+<<<<<<< HEAD
             EnsureClientsInitialized();
+=======
+            EnsureClientsInitialized(true);
+>>>>>>> erichmaster/track2/compute.tests
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
 
@@ -251,7 +267,11 @@ namespace Azure.ResourceManager.Compute.Tests
         [Test]
         public async Task TestVMOperations_PowerOffWithSkipShutdown()
         {
+<<<<<<< HEAD
             EnsureClientsInitialized();
+=======
+            EnsureClientsInitialized(true);
+>>>>>>> erichmaster/track2/compute.tests
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
 
@@ -287,7 +307,11 @@ namespace Azure.ResourceManager.Compute.Tests
         [Test]
         public async Task TestVMOperations_PerformMaintenance()
         {
+<<<<<<< HEAD
             EnsureClientsInitialized();
+=======
+            EnsureClientsInitialized(true);
+>>>>>>> erichmaster/track2/compute.tests
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
 
@@ -331,7 +355,11 @@ namespace Azure.ResourceManager.Compute.Tests
         [Test]
         public async Task TestVMOperations_SimulateEviction()
         {
+<<<<<<< HEAD
             EnsureClientsInitialized();
+=======
+            EnsureClientsInitialized(true);
+>>>>>>> erichmaster/track2/compute.tests
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
 

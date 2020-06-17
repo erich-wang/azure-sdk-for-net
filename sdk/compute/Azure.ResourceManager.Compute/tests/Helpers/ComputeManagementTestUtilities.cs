@@ -3,6 +3,7 @@
 
 namespace Azure.ResourceManager.Compute.Tests
 {
+<<<<<<< HEAD
     public class ComputeManagementTestUtilities : ComputeClientBase
     {
         public ComputeManagementTestUtilities(bool isAsync)
@@ -18,5 +19,10 @@ namespace Azure.ResourceManager.Compute.Tests
         {
             return Recording.GetVariable(methodName, prefix);
         }
+=======
+    public class ComputeManagementTestUtilities
+    {
+        public static string DefaultLocations = "southeastasia";
+>>>>>>> erichmaster/track2/compute.tests
     }
 }

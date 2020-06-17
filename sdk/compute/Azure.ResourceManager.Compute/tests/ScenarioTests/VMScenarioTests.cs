@@ -12,6 +12,10 @@ using NUnit.Framework;
 
 namespace Azure.ResourceManager.Compute.Tests
 {
+<<<<<<< HEAD
+=======
+    [AsyncOnly]
+>>>>>>> erichmaster/track2/compute.tests
     public class VMScenarioTests : VMTestBase
     {
         public VMScenarioTests(bool isAsync)
@@ -201,7 +205,11 @@ namespace Azure.ResourceManager.Compute.Tests
             string osDiskStorageAccountType = "Standard_LRS", string dataDiskStorageAccountType = "Standard_LRS", bool? writeAcceleratorEnabled = null,
             bool hasDiffDisks = false, bool callUpdateVM = false, bool isPpgScenario = false, string diskEncryptionSetId = null)
         {
+<<<<<<< HEAD
             EnsureClientsInitialized();
+=======
+            EnsureClientsInitialized(false);
+>>>>>>> erichmaster/track2/compute.tests
 
             var imageRef = await GetPlatformVMImage(useWindowsImage: true);
             const string expectedOSName = "Windows Server 2012 R2 Datacenter", expectedOSVersion = "Microsoft Windows NT 6.3.9600.0", expectedComputerName = ComputerName;

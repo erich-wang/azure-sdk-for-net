@@ -20,6 +20,10 @@ namespace Azure.ResourceManager.Compute.Tests
         //[Test(Skip = "ReRecord due to CR change")]
         public void TestVMScaleSetServiceFabric()
         {
+<<<<<<< HEAD
+=======
+            EnsureClientsInitialized(true);
+>>>>>>> erichmaster/track2/compute.tests
             TestVMScaleSetServiceFabricImpl();
         }
 
@@ -31,7 +35,10 @@ namespace Azure.ResourceManager.Compute.Tests
              * calls are made. This has been done to ensure tests work correctly. The SF-specific scaffolding will
              * be added in a future PR.
              */
+<<<<<<< HEAD
             EnsureClientsInitialized();
+=======
+>>>>>>> erichmaster/track2/compute.tests
 
             string rgName = "crptestrgr97ryo0ni";
             string vmssName = "crptesthtn39hve";

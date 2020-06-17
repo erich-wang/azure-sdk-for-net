@@ -24,7 +24,11 @@ namespace Azure.ResourceManager.Compute.Tests.DiskRPTests
         [Test]
         public async Task DiskManagedByTest()
         {
+<<<<<<< HEAD
             EnsureClientsInitialized();
+=======
+            EnsureClientsInitialized(true);
+>>>>>>> erichmaster/track2/compute.tests
             var rgName = Recording.GenerateAssetName(TestPrefix);
             var diskName = Recording.GenerateAssetName(DiskNamePrefix);
             // Create a VM, so we can use its OS disk for testing managedby

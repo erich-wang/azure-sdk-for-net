@@ -22,6 +22,10 @@ namespace Azure.ResourceManager.Compute.Tests
         [Ignore("this case should be tested by compute team")]
         public async Task TestVMScaleSetExtensions()
         {
+<<<<<<< HEAD
+=======
+            EnsureClientsInitialized(true);
+>>>>>>> erichmaster/track2/compute.tests
             await TestVMScaleSetExtensionsImpl();
         }
 
@@ -32,7 +36,11 @@ namespace Azure.ResourceManager.Compute.Tests
             string rgName = Recording.GenerateAssetName(TestPrefix) + 1;
             var vmssName = Recording.GenerateAssetName("vmss");
             VirtualMachineScaleSet inputVMScaleSet;
+<<<<<<< HEAD
             EnsureClientsInitialized();
+=======
+            EnsureClientsInitialized(true);
+>>>>>>> erichmaster/track2/compute.tests
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: false);
             VirtualMachineScaleSetExtensionProfile vmssExtProfile = GetTestVmssExtensionProfile();
 
@@ -112,7 +120,10 @@ namespace Azure.ResourceManager.Compute.Tests
             string storageAccountName = Recording.GenerateAssetName(TestPrefix);
             VirtualMachineScaleSet inputVMScaleSet;
             bool passed = false;
+<<<<<<< HEAD
             EnsureClientsInitialized();
+=======
+>>>>>>> erichmaster/track2/compute.tests
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
             var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);

@@ -17,8 +17,19 @@ namespace Azure.ResourceManager
 {
     [RunFrequency(RunTestFrequency.Manually)]
     [ClientTestFixture]
+<<<<<<< HEAD
     public abstract class ComputeClientBase : ManagementRecordedTestBase<ComputeManagementTestEnvironment>
     {
+=======
+    [NonParallelizable]
+    public abstract class ComputeClientBase : ManagementRecordedTestBase<ComputeManagementTestEnvironment>
+    {
+        protected string LocationEastUs2 = "EastUS2";
+        protected string LocationSouthAsia = "southeastasia";
+        protected string LocationWestCentralUs = "westcentralus";
+        protected string LocationAustraliaSouthEast = "australiasoutheast";
+
+>>>>>>> erichmaster/track2/compute.tests
         public ResourceGroupsOperations ResourceGroupsOperations { get; set; }
         public ProvidersOperations ProvidersOperations { get; set; }
         public DeploymentsOperations DeploymentsOperations { get; set; }
@@ -63,7 +74,11 @@ namespace Azure.ResourceManager
         public NetworkSecurityGroupsOperations NetworkSecurityGroupsOperations { get; set; }
         public PublicIPPrefixesOperations PublicIPPrefixesOperations { get; set; }
         public ComputeManagementClient ComputeManagementClient { get; set; }
+<<<<<<< HEAD
         public string DefaultLocation { get; set; }
+=======
+        public string DefaultLocation { get; private set; }
+>>>>>>> erichmaster/track2/compute.tests
         protected ComputeClientBase(bool isAsync)
             : base(isAsync)
         {
