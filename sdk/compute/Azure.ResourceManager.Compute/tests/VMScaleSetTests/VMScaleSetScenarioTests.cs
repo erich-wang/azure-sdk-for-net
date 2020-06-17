@@ -57,11 +57,7 @@ namespace Azure.ResourceManager.Compute.Tests
         //[Trait("Name", "TestVMScaleSetScenarioOperations_ManagedDisks")]
         public async Task TestVMScaleSetScenarioOperations_ManagedDisks_PirImage()
         {
-<<<<<<< HEAD
             await TestScaleSetOperationsInternal(hasManagedDisks: true, useVmssExtension: false);
-=======
-            await TestScaleSetOperationsInternal(hasManagedDisks: true, useVmssExtension: false, useDefaultLocation: true);
->>>>>>> erichmaster/track2/compute.tests
         }
 
         /// <summary>
@@ -230,11 +226,7 @@ namespace Azure.ResourceManager.Compute.Tests
             try
             {
                 Environment.SetEnvironmentVariable(environmentVariable, region);
-<<<<<<< HEAD
                 EnsureClientsInitialized();
-=======
-                EnsureClientsInitialized(false);
->>>>>>> erichmaster/track2/compute.tests
 
                 ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
 
@@ -327,11 +319,7 @@ namespace Azure.ResourceManager.Compute.Tests
             try
             {
                 Environment.SetEnvironmentVariable(environmentVariable, region);
-<<<<<<< HEAD
                 EnsureClientsInitialized();
-=======
-                EnsureClientsInitialized(false);
->>>>>>> erichmaster/track2/compute.tests
 
                 ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
 
@@ -396,16 +384,9 @@ namespace Azure.ResourceManager.Compute.Tests
 
         private async Task TestScaleSetOperationsInternal(string vmSize = null, bool hasManagedDisks = false, bool useVmssExtension = true,
             bool hasDiffDisks = false, IList<string> zones = null, int? osDiskSizeInGB = null, bool isPpgScenario = false, bool? enableUltraSSD = false,
-<<<<<<< HEAD
             Action<VirtualMachineScaleSet> vmScaleSetCustomizer = null, Action<VirtualMachineScaleSet> vmScaleSetValidator = null, string diskEncryptionSetId = null)
         {
             EnsureClientsInitialized();
-=======
-            Action<VirtualMachineScaleSet> vmScaleSetCustomizer = null, Action<VirtualMachineScaleSet> vmScaleSetValidator = null, string diskEncryptionSetId = null,
-            bool useDefaultLocation = false)
-        {
-            EnsureClientsInitialized(useDefaultLocation);
->>>>>>> erichmaster/track2/compute.tests
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
             // Create resource group

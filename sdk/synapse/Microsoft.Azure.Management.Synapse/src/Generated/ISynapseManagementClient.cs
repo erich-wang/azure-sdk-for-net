@@ -254,10 +254,5 @@ namespace Microsoft.Azure.Management.Synapse
         /// </summary>
         IPrivateEndpointConnectionsOperations PrivateEndpointConnections { get; }
 
-        /// <summary>
-        /// Gets the IPrivateLinkHubsOperations.
-        /// </summary>
-        IPrivateLinkHubsOperations PrivateLinkHubs { get; }
-
     }
 }

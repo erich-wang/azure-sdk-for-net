@@ -40,11 +40,7 @@ namespace Azure.ResourceManager.Compute.Tests.DiskRPTests
         #region Execution
         protected async Task Disk_CRUD_Execute(string diskCreateOption, string methodName, int? diskSizeGB = null, string location = null, IList<string> zones = null)
         {
-<<<<<<< HEAD
             EnsureClientsInitialized();
-=======
-            EnsureClientsInitialized(true);
->>>>>>> erichmaster/track2/compute.tests
             DiskRPLocation = location ?? DiskRPLocation;
 
             // Data
@@ -115,11 +111,7 @@ namespace Azure.ResourceManager.Compute.Tests.DiskRPTests
         }
         protected async Task Snapshot_CRUD_Execute(string diskCreateOption, string methodName, int? diskSizeGB = null, string location = null, bool incremental = false)
         {
-<<<<<<< HEAD
             EnsureClientsInitialized();
-=======
-            EnsureClientsInitialized(true);
->>>>>>> erichmaster/track2/compute.tests
             DiskRPLocation = location ?? DiskRPLocation;
 
             // Data
@@ -191,11 +183,7 @@ namespace Azure.ResourceManager.Compute.Tests.DiskRPTests
 
         protected async Task DiskEncryptionSet_CRUD_Execute(string methodName, string location = null)
         {
-<<<<<<< HEAD
             EnsureClientsInitialized();
-=======
-            EnsureClientsInitialized(true);
->>>>>>> erichmaster/track2/compute.tests
             DiskRPLocation = location ?? DiskRPLocation;
 
             // Data
@@ -238,11 +226,7 @@ namespace Azure.ResourceManager.Compute.Tests.DiskRPTests
 
         protected async Task Disk_List_Execute(string diskCreateOption, string methodName, int? diskSizeGB = null, string location = null)
         {
-<<<<<<< HEAD
             EnsureClientsInitialized();
-=======
-            EnsureClientsInitialized(true);
->>>>>>> erichmaster/track2/compute.tests
             DiskRPLocation = location ?? DiskRPLocation;
 
             // Data
@@ -294,11 +278,7 @@ namespace Azure.ResourceManager.Compute.Tests.DiskRPTests
 
         protected async Task Snapshot_List_Execute(string diskCreateOption, string methodName, int? diskSizeGB = null)
         {
-<<<<<<< HEAD
             EnsureClientsInitialized();
-=======
-            EnsureClientsInitialized(true);
->>>>>>> erichmaster/track2/compute.tests
 
             // Data
             var rgName1 = Recording.GenerateAssetName(TestPrefix);
@@ -360,11 +340,7 @@ namespace Azure.ResourceManager.Compute.Tests.DiskRPTests
 
         protected async Task DiskEncryptionSet_List_Execute(string methodName, string location = null)
         {
-<<<<<<< HEAD
             EnsureClientsInitialized();
-=======
-            EnsureClientsInitialized(true);
->>>>>>> erichmaster/track2/compute.tests
             DiskRPLocation = location ?? DiskRPLocation;
 
             // Data
@@ -419,11 +395,7 @@ namespace Azure.ResourceManager.Compute.Tests.DiskRPTests
 
         protected async Task DiskEncryptionSet_CreateDisk_Execute(string methodName, string location = null)
         {
-<<<<<<< HEAD
             EnsureClientsInitialized();
-=======
-            EnsureClientsInitialized(true);
->>>>>>> erichmaster/track2/compute.tests
             var rgName = Recording.GenerateAssetName(TestPrefix);
             var diskName = Recording.GenerateAssetName(DiskNamePrefix);
             var desName = "longlivedSwaggerDES";
@@ -452,11 +424,7 @@ namespace Azure.ResourceManager.Compute.Tests.DiskRPTests
 
         protected async Task DiskEncryptionSet_UpdateDisk_Execute(string methodName, string location = null)
         {
-<<<<<<< HEAD
             EnsureClientsInitialized();
-=======
-            EnsureClientsInitialized(true);
->>>>>>> erichmaster/track2/compute.tests
             var rgName = Recording.GenerateAssetName(TestPrefix);
             var diskName = Recording.GenerateAssetName(DiskNamePrefix);
             var desName = "longlivedSwaggerDES";

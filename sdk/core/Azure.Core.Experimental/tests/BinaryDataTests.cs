@@ -30,41 +30,18 @@ namespace Azure.Core.Tests
         public void CanCreateBinaryDataFromString()
         {
             var payload = "some data";
-            var data = new BinaryData(payload);
-            Assert.AreEqual(payload, data.ToString());
+            var data = BinaryData.Create(payload);
+            Assert.AreEqual(payload, data.AsString());
         }
 
         [Test]
-        public void ToStringThrowsOnNullEncoding()
+        public void AsStringThrowsOnNullEncoding()
         {
             var payload = "some data";
-            var data = new BinaryData(payload);
+            var data = BinaryData.Create(payload);
             Assert.That(
-                () => data.ToString(null),
+                () => data.AsString(null),
                 Throws.InstanceOf<ArgumentException>());
-        }
-
-        [Test]
-        public void ToStringRespectsArraySegmentBoundaries()
-        {
-            var payload = "pre payload post";
-            var bytes = Encoding.UTF8.GetBytes(payload);
-            var segment = new ArraySegment<byte>(bytes, 4, 7);
-            var data = new BinaryData(segment);
-            Assert.AreEqual("payload", data.ToString());
-        }
-
-        [Test]
-        public async Task ToStreamRespectsArraySegmentBoundaries()
-        {
-            var payload = "pre payload post";
-            var bytes = Encoding.UTF8.GetBytes(payload);
-            var segment = new ArraySegment<byte>(bytes, 4, 7);
-            var data = new BinaryData(segment);
-            var stream = data.ToStream();
-            var sr = new StreamReader(stream);
-            Assert.AreEqual("payload", await sr.ReadToEndAsync());
-
         }
 
         [Test]
@@ -72,14 +49,14 @@ namespace Azure.Core.Tests
         {
             var buffer = Encoding.UTF8.GetBytes("some data");
             var payload = new MemoryStream(buffer);
-            var data = BinaryData.FromStream(payload);
+            var data = BinaryData.Create(payload);
             Assert.AreEqual(buffer, data.AsBytes().ToArray());
-            Assert.AreEqual(payload, data.ToStream());
+            Assert.AreEqual(payload, data.AsStream());
 
             payload.Position = 0;
-            data = await BinaryData.FromStreamAsync(payload);
+            data = await BinaryData.CreateAsync(payload);
             Assert.AreEqual(buffer, data.AsBytes().ToArray());
-            Assert.AreEqual(payload, data.ToStream());
+            Assert.AreEqual(payload, data.AsStream());
         }
 
         [Test]
@@ -89,7 +66,7 @@ namespace Azure.Core.Tests
             mockStream.Setup(s => s.CanSeek).Returns(true);
             mockStream.Setup(s => s.Length).Returns((long)int.MaxValue + 1);
             Assert.That(
-                () => BinaryData.FromStream(mockStream.Object),
+                () => BinaryData.Create(mockStream.Object),
                 Throws.InstanceOf<ArgumentOutOfRangeException>());
         }
 
@@ -98,29 +75,29 @@ namespace Azure.Core.Tests
         {
             var payload = new TestModel { A = "value", B = 5, C = true};
             var serializer = new JsonObjectSerializer();
-            await AssertData(BinaryData.FromSerializable(payload, serializer));
-            await AssertData(await BinaryData.FromSerializableAsync(payload, serializer));
+            await AssertData(BinaryData.Create(payload, serializer));
+            await AssertData(await BinaryData.CreateAsync(payload, serializer));
 
             async Task AssertData(BinaryData data)
             {
-                Assert.AreEqual(payload.A, data.Deserialize<TestModel>(serializer).A);
-                Assert.AreEqual(payload.B, data.Deserialize<TestModel>(serializer).B);
-                Assert.AreEqual(payload.C, data.Deserialize<TestModel>(serializer).C);
-                Assert.AreEqual(payload.A, (await data.DeserializeAsync<TestModel>(serializer)).A);
-                Assert.AreEqual(payload.B, (await data.DeserializeAsync<TestModel>(serializer)).B);
-                Assert.AreEqual(payload.C, (await data.DeserializeAsync<TestModel>(serializer)).C);
+                Assert.AreEqual(payload.A, data.As<TestModel>(serializer).A);
+                Assert.AreEqual(payload.B, data.As<TestModel>(serializer).B);
+                Assert.AreEqual(payload.C, data.As<TestModel>(serializer).C);
+                Assert.AreEqual(payload.A, (await data.AsAsync<TestModel>(serializer)).A);
+                Assert.AreEqual(payload.B, (await data.AsAsync<TestModel>(serializer)).B);
+                Assert.AreEqual(payload.C, (await data.AsAsync<TestModel>(serializer)).C);
             }
         }
 
         [Test]
-        public void FromSerializableThrowsOnNullSerializer()
+        public void GenericCreateThrowsOnNullSerializer()
         {
             var payload = new TestModel { A = "value", B = 5, C = true };
             Assert.That(
-                () => BinaryData.FromSerializable(payload, null),
+                () => BinaryData.Create(payload, null),
                 Throws.InstanceOf<ArgumentNullException>());
             Assert.That(
-                async () => await BinaryData.FromSerializableAsync(payload, null),
+                async () => await BinaryData.CreateAsync(payload, null),
                 Throws.InstanceOf<ArgumentNullException>());
         }
 
@@ -128,44 +105,44 @@ namespace Azure.Core.Tests
         public void CreateThrowsOnNullStream()
         {
             Assert.That(
-                () => BinaryData.FromStream(null),
+                () => BinaryData.Create(stream: null),
                 Throws.InstanceOf<ArgumentNullException>());
 
             Assert.That(
-                async () => await BinaryData.FromStreamAsync(null),
+                async () => await BinaryData.CreateAsync(stream: null),
                 Throws.InstanceOf<ArgumentNullException>());
         }
 
         [Test]
-        public async Task DeserializeThrowsExceptionOnIncompatibleType()
+        public async Task AsThrowsExceptionOnIncompatibleType()
         {
             var payload = new TestModel { A = "value", B = 5, C = true };
             var serializer = new JsonObjectSerializer();
-            AssertData(BinaryData.FromSerializable(payload, serializer));
-            AssertData(await BinaryData.FromSerializableAsync(payload, serializer));
+            AssertData(BinaryData.Create(payload, serializer));
+            AssertData(await BinaryData.CreateAsync(payload, serializer));
 
             void AssertData(BinaryData data)
             {
                 Assert.That(
-                    () => data.Deserialize<string>(serializer),
+                    () => data.As<string>(serializer),
                     Throws.InstanceOf<Exception>());
                 Assert.That(
-                    async () => await data.DeserializeAsync<string>(serializer),
+                    async () => await data.AsAsync<string>(serializer),
                     Throws.InstanceOf<Exception>());
             }
         }
 
         [Test]
-        public void DeserializeThrowsOnNullSerializer()
+        public void AsThrowsOnNullSerializer ()
         {
             var payload = new TestModel { A = "value", B = 5, C = true };
             var serializer = new JsonObjectSerializer();
-            var data = BinaryData.FromSerializable(payload, serializer);
+            var data = BinaryData.Create(payload, serializer);
             Assert.That(
-                () => data.Deserialize<TestModel>(null),
+                () => data.As<TestModel>(null),
                 Throws.InstanceOf<ArgumentNullException>());
             Assert.That(
-                async () => await data.DeserializeAsync<TestModel>(null),
+                async () => await data.AsAsync<TestModel>(null),
                 Throws.InstanceOf<ArgumentNullException>());
         }
 

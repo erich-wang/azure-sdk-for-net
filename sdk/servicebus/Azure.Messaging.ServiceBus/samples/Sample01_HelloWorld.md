@@ -29,7 +29,7 @@ ServiceBusReceiver receiver = client.CreateReceiver(queueName);
 ServiceBusReceivedMessage receivedMessage = await receiver.ReceiveAsync();
 
 // get the message body as a string
-string body = receivedMessage.Body.ToString();
+string body = receivedMessage.Body.AsString();
 Console.WriteLine(body);
 ```
 

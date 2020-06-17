@@ -16,8 +16,15 @@ namespace Azure.Search.Documents
         void IUtf8JsonSerializable.Write(Utf8JsonWriter writer)
         {
             writer.WriteStartObject();
-            writer.WritePropertyName("search");
-            writer.WriteStringValue(SearchText);
+            if (SearchText != null)
+            {
+                writer.WritePropertyName("search");
+                writer.WriteStringValue(SearchText);
+            }
+            else
+            {
+                writer.WriteNull("search");
+            }
             if (Mode != null)
             {
                 writer.WritePropertyName("autocompleteMode");
@@ -53,8 +60,15 @@ namespace Azure.Search.Documents
                 writer.WritePropertyName("searchFields");
                 writer.WriteStringValue(SearchFieldsRaw);
             }
-            writer.WritePropertyName("suggesterName");
-            writer.WriteStringValue(SuggesterName);
+            if (SuggesterName != null)
+            {
+                writer.WritePropertyName("suggesterName");
+                writer.WriteStringValue(SuggesterName);
+            }
+            else
+            {
+                writer.WriteNull("suggesterName");
+            }
             if (Size != null)
             {
                 writer.WritePropertyName("top");

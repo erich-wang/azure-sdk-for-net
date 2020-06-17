@@ -7,7 +7,7 @@ namespace Microsoft.Azure.HDInsight.Job
     using Microsoft.Rest;
     using System;
 
-    public partial class HDInsightJobClient : ServiceClient<HDInsightJobClient>, IHDInsightJobClient
+    public partial class HDInsightJobManagementClient : ServiceClient<HDInsightJobManagementClient>, IHDInsightJobManagementClient
     {
         private static readonly TimeSpan MinBackOff = TimeSpan.FromMinutes(0);
         private static readonly TimeSpan MaxBackOff = TimeSpan.FromMinutes(8);

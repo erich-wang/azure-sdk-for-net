@@ -10,10 +10,10 @@ namespace Azure.Management.Resources.Models
     public partial class DeploymentProperties
     {
         [CodeGenMember("Template")]
-        internal JsonElement TemplateJson { get; set; } = JsonDocument.Parse("null").RootElement;
+        internal JsonElement TemplateJson { get; set; }
 
         [CodeGenMember("Parameters")]
-        internal JsonElement ParametersJson { get; set; } = JsonDocument.Parse("null").RootElement;
+        internal JsonElement ParametersJson { get; set; }
 
         /// <summary>
         /// Template

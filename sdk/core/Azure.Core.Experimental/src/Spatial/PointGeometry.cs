@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System.Collections.Generic;
-
 namespace Azure.Core.Spatial
 {
     /// <summary>
@@ -14,7 +12,7 @@ namespace Azure.Core.Spatial
         /// Initializes new instance of <see cref="PointGeometry"/>.
         /// </summary>
         /// <param name="position">The position of the point.</param>
-        public PointGeometry(GeometryPosition position): this(position, null, DefaultProperties)
+        public PointGeometry(GeometryPosition position): this(position, DefaultProperties)
         {
         }
 
@@ -22,9 +20,8 @@ namespace Azure.Core.Spatial
         /// Initializes new instance of <see cref="PointGeometry"/>.
         /// </summary>
         /// <param name="position">The position of the point.</param>
-        /// <param name="boundingBox">The <see cref="GeometryBoundingBox"/> to use.</param>
-        /// <param name="additionalProperties">The set of additional properties associated with the <see cref="Geometry"/>.</param>
-        public PointGeometry(GeometryPosition position, GeometryBoundingBox? boundingBox, IReadOnlyDictionary<string, object?> additionalProperties): base(boundingBox, additionalProperties)
+        /// <param name="properties">The <see cref="GeometryProperties"/> associated with the geometry.</param>
+        public PointGeometry(GeometryPosition position, GeometryProperties properties): base(properties)
         {
             Position = position;
         }

@@ -2356,7 +2356,7 @@ namespace Azure.ResourceManager.Resources
         /// <param name="deploymentName"> The name of the deployment. </param>
         /// <param name="parameters"> Parameters to What If. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async Task<ResponseWithHeaders<DeploymentsWhatIfAtSubscriptionScopeHeaders>> WhatIfAtSubscriptionScopeAsync(string deploymentName, DeploymentWhatIf parameters, CancellationToken cancellationToken = default)
+        public async Task<Response> WhatIfAtSubscriptionScopeAsync(string deploymentName, DeploymentWhatIf parameters, CancellationToken cancellationToken = default)
         {
             if (deploymentName == null)
             {
@@ -2369,12 +2369,11 @@ namespace Azure.ResourceManager.Resources
 
             using var message = CreateWhatIfAtSubscriptionScopeRequest(deploymentName, parameters);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
-            var headers = new DeploymentsWhatIfAtSubscriptionScopeHeaders(message.Response);
             switch (message.Response.Status)
             {
                 case 200:
                 case 202:
-                    return ResponseWithHeaders.FromValue(headers, message.Response);
+                    return message.Response;
                 default:
                     throw await _clientDiagnostics.CreateRequestFailedExceptionAsync(message.Response).ConfigureAwait(false);
             }
@@ -2384,7 +2383,7 @@ namespace Azure.ResourceManager.Resources
         /// <param name="deploymentName"> The name of the deployment. </param>
         /// <param name="parameters"> Parameters to What If. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public ResponseWithHeaders<DeploymentsWhatIfAtSubscriptionScopeHeaders> WhatIfAtSubscriptionScope(string deploymentName, DeploymentWhatIf parameters, CancellationToken cancellationToken = default)
+        public Response WhatIfAtSubscriptionScope(string deploymentName, DeploymentWhatIf parameters, CancellationToken cancellationToken = default)
         {
             if (deploymentName == null)
             {
@@ -2397,12 +2396,11 @@ namespace Azure.ResourceManager.Resources
 
             using var message = CreateWhatIfAtSubscriptionScopeRequest(deploymentName, parameters);
             _pipeline.Send(message, cancellationToken);
-            var headers = new DeploymentsWhatIfAtSubscriptionScopeHeaders(message.Response);
             switch (message.Response.Status)
             {
                 case 200:
                 case 202:
-                    return ResponseWithHeaders.FromValue(headers, message.Response);
+                    return message.Response;
                 default:
                     throw _clientDiagnostics.CreateRequestFailedException(message.Response);
             }
@@ -3084,7 +3082,7 @@ namespace Azure.ResourceManager.Resources
         /// <param name="deploymentName"> The name of the deployment. </param>
         /// <param name="parameters"> Parameters to validate. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public async Task<ResponseWithHeaders<DeploymentsWhatIfHeaders>> WhatIfAsync(string resourceGroupName, string deploymentName, DeploymentWhatIf parameters, CancellationToken cancellationToken = default)
+        public async Task<Response> WhatIfAsync(string resourceGroupName, string deploymentName, DeploymentWhatIf parameters, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -3101,12 +3099,11 @@ namespace Azure.ResourceManager.Resources
 
             using var message = CreateWhatIfRequest(resourceGroupName, deploymentName, parameters);
             await _pipeline.SendAsync(message, cancellationToken).ConfigureAwait(false);
-            var headers = new DeploymentsWhatIfHeaders(message.Response);
             switch (message.Response.Status)
             {
                 case 200:
                 case 202:
-                    return ResponseWithHeaders.FromValue(headers, message.Response);
+                    return message.Response;
                 default:
                     throw await _clientDiagnostics.CreateRequestFailedExceptionAsync(message.Response).ConfigureAwait(false);
             }
@@ -3117,7 +3114,7 @@ namespace Azure.ResourceManager.Resources
         /// <param name="deploymentName"> The name of the deployment. </param>
         /// <param name="parameters"> Parameters to validate. </param>
         /// <param name="cancellationToken"> The cancellation token to use. </param>
-        public ResponseWithHeaders<DeploymentsWhatIfHeaders> WhatIf(string resourceGroupName, string deploymentName, DeploymentWhatIf parameters, CancellationToken cancellationToken = default)
+        public Response WhatIf(string resourceGroupName, string deploymentName, DeploymentWhatIf parameters, CancellationToken cancellationToken = default)
         {
             if (resourceGroupName == null)
             {
@@ -3134,12 +3131,11 @@ namespace Azure.ResourceManager.Resources
 
             using var message = CreateWhatIfRequest(resourceGroupName, deploymentName, parameters);
             _pipeline.Send(message, cancellationToken);
-            var headers = new DeploymentsWhatIfHeaders(message.Response);
             switch (message.Response.Status)
             {
                 case 200:
                 case 202:
-                    return ResponseWithHeaders.FromValue(headers, message.Response);
+                    return message.Response;
                 default:
                     throw _clientDiagnostics.CreateRequestFailedException(message.Response);
             }

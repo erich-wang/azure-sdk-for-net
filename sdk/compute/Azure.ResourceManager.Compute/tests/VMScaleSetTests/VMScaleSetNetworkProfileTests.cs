@@ -24,11 +24,7 @@ namespace Azure.ResourceManager.Compute.Tests
         [Test]
         public async Task TestVMScaleSetWithApplciationGateway()
         {
-<<<<<<< HEAD
             EnsureClientsInitialized();
-=======
-            EnsureClientsInitialized(LocationSouthAsia);
->>>>>>> erichmaster/track2/compute.tests
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
 
@@ -75,11 +71,7 @@ namespace Azure.ResourceManager.Compute.Tests
         [Test]
         public async Task TestVMScaleSetWithDnsSettings()
         {
-<<<<<<< HEAD
             EnsureClientsInitialized();
-=======
-            EnsureClientsInitialized(LocationSouthAsia);
->>>>>>> erichmaster/track2/compute.tests
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
 
@@ -134,11 +126,8 @@ namespace Azure.ResourceManager.Compute.Tests
         [Test]
         public async Task TestVMScaleSetWithPublicIP()
         {
-<<<<<<< HEAD
             string originalTestLocation = Environment.GetEnvironmentVariable("AZURE_VM_TEST_LOCATION");
 
-=======
->>>>>>> erichmaster/track2/compute.tests
             // Create resource group
             string rgName = Recording.GenerateAssetName(TestPrefix) + 1;
             var vmssName = Recording.GenerateAssetName("vmss");
@@ -151,12 +140,8 @@ namespace Azure.ResourceManager.Compute.Tests
             // This is because NRP is still deploying to other regions and is not available worldwide.
             // Before changing the default location, we have to save it to be reset it at the end of the test.
             // Since ComputeManagementTestUtilities.DefaultLocation is a static variable and can affect other tests if it is not reset.
-<<<<<<< HEAD
             Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "westcentralus");
             EnsureClientsInitialized();
-=======
-            EnsureClientsInitialized(LocationWestCentralUs);
->>>>>>> erichmaster/track2/compute.tests
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
             var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
@@ -197,11 +182,8 @@ namespace Azure.ResourceManager.Compute.Tests
         [Ignore("this case should be tested by compute team because of ex '[4:46 PM] Lipeng You (Wicresoft North America Ltd)'message': 'Subscription /subscriptions/c9cbd920-c00c-427c-852b-8aaf38badaeb/resourceGroups//providers/Microsoft.Network/subscriptions/ is not registered for feature Microsoft.Network/AllowBringYourOwnPublicIpAddress required to carry out the requested operation.'")]
         public async Task TestVMScaleSetWithPublicIPAndIPTags()
         {
-<<<<<<< HEAD
             string originalTestLocation = Environment.GetEnvironmentVariable("AZURE_VM_TEST_LOCATION");
 
-=======
->>>>>>> erichmaster/track2/compute.tests
             // Create resource group
             string rgName = Recording.GenerateAssetName(TestPrefix) + 1;
             var vmssName = Recording.GenerateAssetName("vmss");
@@ -213,12 +195,8 @@ namespace Azure.ResourceManager.Compute.Tests
             // This is because NRP is still deploying to other regions and is not available worldwide.
             // Before changing the default location, we have to save it to be reset it at the end of the test.
             // Since ComputeManagementTestUtilities.DefaultLocation is a static variable and can affect other tests if it is not reset.
-<<<<<<< HEAD
             Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "westcentralus");
             EnsureClientsInitialized();
-=======
-            EnsureClientsInitialized(LocationWestCentralUs);
->>>>>>> erichmaster/track2/compute.tests
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
             var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
@@ -271,15 +249,12 @@ namespace Azure.ResourceManager.Compute.Tests
         [Test]
         public async Task TestVMScaleSetWithPublicIPAndPublicIPPrefix()
         {
-<<<<<<< HEAD
             string originalTestLocation = Environment.GetEnvironmentVariable("AZURE_VM_TEST_LOCATION");
             if (originalTestLocation == null)
             {
                 originalTestLocation = String.Empty;
             }
 
-=======
->>>>>>> erichmaster/track2/compute.tests
             // Create resource group
             string rgName = Recording.GenerateAssetName(TestPrefix) + 1;
             var vmssName = Recording.GenerateAssetName("vmss");
@@ -288,11 +263,7 @@ namespace Azure.ResourceManager.Compute.Tests
             VirtualMachineScaleSet inputVMScaleSet;
 
             bool passed = false;
-<<<<<<< HEAD
             EnsureClientsInitialized();
-=======
-            EnsureClientsInitialized(LocationWestCentralUs);
->>>>>>> erichmaster/track2/compute.tests
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
             var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
@@ -336,11 +307,7 @@ namespace Azure.ResourceManager.Compute.Tests
         [Test]
         public async Task TestVMScaleSetWithnNsg()
         {
-<<<<<<< HEAD
             EnsureClientsInitialized();
-=======
-            EnsureClientsInitialized(LocationSouthAsia);
->>>>>>> erichmaster/track2/compute.tests
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
 
@@ -393,11 +360,7 @@ namespace Azure.ResourceManager.Compute.Tests
         [Test]
         public async Task TestVMScaleSetWithnIpv6()
         {
-<<<<<<< HEAD
             EnsureClientsInitialized();
-=======
-            EnsureClientsInitialized(LocationSouthAsia);
->>>>>>> erichmaster/track2/compute.tests
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
 
@@ -447,11 +410,7 @@ namespace Azure.ResourceManager.Compute.Tests
         [Test]
         public async Task TestVMSSWithMultiCA()
         {
-<<<<<<< HEAD
             EnsureClientsInitialized();
-=======
-            EnsureClientsInitialized(LocationWestCentralUs);
->>>>>>> erichmaster/track2/compute.tests
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
 
@@ -502,11 +461,7 @@ namespace Azure.ResourceManager.Compute.Tests
         [Test]
         public async Task TestVMSSAccelNtwkng()
         {
-<<<<<<< HEAD
             EnsureClientsInitialized();
-=======
-            EnsureClientsInitialized(LocationWestCentralUs);
->>>>>>> erichmaster/track2/compute.tests
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
 

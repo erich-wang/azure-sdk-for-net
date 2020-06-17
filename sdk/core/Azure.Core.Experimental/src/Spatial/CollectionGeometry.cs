@@ -15,7 +15,7 @@ namespace Azure.Core.Spatial
         /// Initializes new instance of <see cref="CollectionGeometry"/>.
         /// </summary>
         /// <param name="geometries">The collection of inner geometries.</param>
-        public CollectionGeometry(IEnumerable<Geometry> geometries): this(geometries, null, DefaultProperties)
+        public CollectionGeometry(IEnumerable<Geometry> geometries): this(geometries, DefaultProperties)
         {
         }
 
@@ -23,9 +23,8 @@ namespace Azure.Core.Spatial
         /// Initializes new instance of <see cref="CollectionGeometry"/>.
         /// </summary>
         /// <param name="geometries">The collection of inner geometries.</param>
-        /// <param name="boundingBox">The <see cref="GeometryBoundingBox"/> to use.</param>
-        /// <param name="additionalProperties">The set of additional properties associated with the <see cref="Geometry"/>.</param>
-        public CollectionGeometry(IEnumerable<Geometry> geometries, GeometryBoundingBox? boundingBox, IReadOnlyDictionary<string, object?> additionalProperties): base(boundingBox, additionalProperties)
+        /// <param name="properties">The <see cref="GeometryProperties"/> associated with the geometry.</param>
+        public CollectionGeometry(IEnumerable<Geometry> geometries, GeometryProperties properties): base(properties)
         {
             Argument.AssertNotNull(geometries, nameof(geometries));
 

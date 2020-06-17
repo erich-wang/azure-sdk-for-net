@@ -26,10 +26,7 @@ namespace Azure.ResourceManager.Compute.Tests
         public VMTestBase(bool isAsync)
            : base(isAsync)
         {
-<<<<<<< HEAD
             computeManagementTestUtilities = new ComputeManagementTestUtilities(isAsync);
-=======
->>>>>>> erichmaster/track2/compute.tests
         }
         protected const string TestPrefix = "crptestar";
         protected const string PLACEHOLDER = "[PLACEHOLDEr1]";
@@ -41,7 +38,6 @@ namespace Azure.ResourceManager.Compute.Tests
         protected ImageReference m_windowsImageReference, m_linuxImageReference;
         protected ComputeManagementTestUtilities computeManagementTestUtilities;
 
-<<<<<<< HEAD
         protected void EnsureClientsInitialized()
         {
             if (!m_initialized)
@@ -60,32 +56,6 @@ namespace Azure.ResourceManager.Compute.Tests
                             m_location = Environment.GetEnvironmentVariable("AZURE_VM_TEST_LOCATION").Replace(" ", "");
                         }
                     }
-=======
-        protected void EnsureClientsInitialized(string location)
-        {
-            m_subId = TestEnvironment.SubscriptionId;
-
-            m_location = location;
-        }
-
-        protected void EnsureClientsInitialized(bool useDefaultLocation = false)
-        {
-            m_subId = TestEnvironment.SubscriptionId;
-
-            if (useDefaultLocation)
-            {
-                m_location = DefaultLocation;
-            }
-            else
-            {
-                if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("AZURE_VM_TEST_LOCATION")))
-                {
-                    m_location = DefaultLocation;
-                }
-                else
-                {
-                    m_location = Environment.GetEnvironmentVariable("AZURE_VM_TEST_LOCATION").Replace(" ", "");
->>>>>>> erichmaster/track2/compute.tests
                 }
             }
         }

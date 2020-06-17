@@ -27,6 +27,11 @@ namespace Azure.DigitalTwins.Core.Tests
         {
         }
 
+        public E2eTestBase(bool isAsync, RecordedTestMode testMode)
+           : base(isAsync, testMode)
+        {
+        }
+
         [SetUp]
         public virtual void SetupE2eTestBase()
         {

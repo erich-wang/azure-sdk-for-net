@@ -9,10 +9,6 @@ using NUnit.Framework;
 
 namespace Azure.ResourceManager.Compute.Tests
 {
-<<<<<<< HEAD
-=======
-    [AsyncOnly]
->>>>>>> erichmaster/track2/compute.tests
     public class VMRunCommandsTests : ComputeClientBase
     {
         public VMRunCommandsTests(bool isAsync)

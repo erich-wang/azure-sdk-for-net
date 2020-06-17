@@ -158,11 +158,7 @@ namespace Azure.ResourceManager.Compute.Tests
             VirtualMachineScaleSet inputVMScaleSet;
 
             //Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "centraluseuap");
-<<<<<<< HEAD
             EnsureClientsInitialized();
-=======
-            EnsureClientsInitialized(true);
->>>>>>> erichmaster/track2/compute.tests
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
 
             var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);

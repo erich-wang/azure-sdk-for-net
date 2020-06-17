@@ -42,7 +42,7 @@ namespace Azure.AI.FormRecognizer.Tests
 
             // Sanity check to make sure we got an actual response back from the service.
 
-            CustomFormModel model = await operation.WaitForCompletionAsync(PollingInterval);
+            CustomFormModel model = await operation.WaitForCompletionAsync();
 
             Assert.IsNotNull(model.ModelId);
             Assert.AreEqual(CustomFormModelStatus.Ready, model.Status);
@@ -65,7 +65,7 @@ namespace Azure.AI.FormRecognizer.Tests
                 operation = await client.StartTrainingAsync(trainingFilesUri, labeled);
             }
 
-            await operation.WaitForCompletionAsync(PollingInterval);
+            await operation.WaitForCompletionAsync();
 
             Assert.IsTrue(operation.HasValue);
 
@@ -109,7 +109,7 @@ namespace Azure.AI.FormRecognizer.Tests
             var containerUrl = new Uri("https://someUrl");
 
             TrainingOperation operation = await client.StartTrainingAsync(containerUrl, useTrainingLabels: false);
-            Assert.ThrowsAsync<RequestFailedException>(async () => await operation.WaitForCompletionAsync(PollingInterval));
+            Assert.ThrowsAsync<RequestFailedException>(async () => await operation.WaitForCompletionAsync());
 
             Assert.False(operation.HasValue);
             Assert.Throws<RequestFailedException>(() => operation.Value.GetType());
@@ -130,7 +130,7 @@ namespace Azure.AI.FormRecognizer.Tests
                 operation = await client.StartTrainingAsync(trainingFilesUri, labeled);
             }
 
-            await operation.WaitForCompletionAsync(PollingInterval);
+            await operation.WaitForCompletionAsync();
 
             Assert.IsTrue(operation.HasValue);
 
@@ -189,6 +189,7 @@ namespace Azure.AI.FormRecognizer.Tests
         }
 
         [Test]
+        [Ignore("Tracked by issue: https://github.com/Azure/azure-sdk-for-net/issues/12193")]
         public async Task CopyModel()
         {
             var sourceClient = CreateInstrumentedFormTrainingClient();
@@ -207,7 +208,7 @@ namespace Azure.AI.FormRecognizer.Tests
                 operation = await sourceClient.StartCopyModelAsync(trainedModel.ModelId, targetAuth);
             }
 
-            await operation.WaitForCompletionAsync(PollingInterval);
+            await operation.WaitForCompletionAsync();
             Assert.IsTrue(operation.HasValue);
 
             CustomFormModelInfo modelCopied = operation.Value;

@@ -24,8 +24,15 @@ namespace Azure.Search.Documents.Indexes.Models
             }
             writer.WritePropertyName("type");
             writer.WriteStringValue(Type.ToString());
-            writer.WritePropertyName("credentials");
-            writer.WriteObjectValue(CredentialsInternal);
+            if (CredentialsInternal != null)
+            {
+                writer.WritePropertyName("credentials");
+                writer.WriteObjectValue(CredentialsInternal);
+            }
+            else
+            {
+                writer.WriteNull("credentials");
+            }
             writer.WritePropertyName("container");
             writer.WriteObjectValue(Container);
             if (DataChangeDetectionPolicy != null)
@@ -79,6 +86,10 @@ namespace Azure.Search.Documents.Indexes.Models
                 }
                 if (property.NameEquals("credentials"))
                 {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
                     credentials = DataSourceCredentials.DeserializeDataSourceCredentials(property.Value);
                     continue;
                 }

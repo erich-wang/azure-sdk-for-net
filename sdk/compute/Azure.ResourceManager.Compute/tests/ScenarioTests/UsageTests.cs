@@ -12,10 +12,6 @@ using NUnit.Framework;
 
 namespace Azure.ResourceManager.Compute.Tests
 {
-<<<<<<< HEAD
-=======
-    [AsyncOnly]
->>>>>>> erichmaster/track2/compute.tests
     public class UsageTests : VMTestBase
     {
         public UsageTests(bool isAsync)
@@ -41,11 +37,7 @@ namespace Azure.ResourceManager.Compute.Tests
         [Test]
         public async Task TestListUsages()
         {
-<<<<<<< HEAD
             EnsureClientsInitialized();
-=======
-            EnsureClientsInitialized(true);
->>>>>>> erichmaster/track2/compute.tests
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
             // Create resource group

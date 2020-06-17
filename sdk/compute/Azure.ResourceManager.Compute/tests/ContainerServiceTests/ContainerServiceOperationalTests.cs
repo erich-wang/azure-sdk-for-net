@@ -44,11 +44,7 @@ namespace Azure.ResourceManager.Compute.Tests
             var masterDnsPrefixName = Recording.GenerateAssetName(MasterProfileDnsPrefix);
             var agentPoolDnsPrefixName = Recording.GenerateAssetName(AgentPoolProfileDnsPrefix);
             Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "australiasoutheast");
-<<<<<<< HEAD
             EnsureClientsInitialized();
-=======
-            EnsureClientsInitialized(false);
->>>>>>> erichmaster/track2/compute.tests
 
             ContainerService inputContainerService;
             var getTwocontainerService = await CreateContainerService_NoAsyncTracking(
@@ -82,11 +78,7 @@ namespace Azure.ResourceManager.Compute.Tests
             var masterDnsPrefixName = Recording.GenerateAssetName(MasterProfileDnsPrefix);
             var agentPoolDnsPrefixName = Recording.GenerateAssetName(AgentPoolProfileDnsPrefix);
             Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "australiasoutheast");
-<<<<<<< HEAD
             EnsureClientsInitialized();
-=======
-            EnsureClientsInitialized(false);
->>>>>>> erichmaster/track2/compute.tests
             ContainerService inputContainerService;
             var getTwocontainerService = await CreateContainerService_NoAsyncTracking(
                 rgName,

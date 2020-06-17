@@ -24,7 +24,7 @@ namespace Azure.Search.Documents.Indexes.Models
                 writer.WritePropertyName("description");
                 writer.WriteStringValue(Description);
             }
-            if (Skills.Any())
+            if (Skills != null && Skills.Any())
             {
                 writer.WritePropertyName("skills");
                 writer.WriteStartArray();
@@ -76,6 +76,10 @@ namespace Azure.Search.Documents.Indexes.Models
                 }
                 if (property.NameEquals("skills"))
                 {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
                     List<SearchIndexerSkill> array = new List<SearchIndexerSkill>();
                     foreach (var item in property.Value.EnumerateArray())
                     {

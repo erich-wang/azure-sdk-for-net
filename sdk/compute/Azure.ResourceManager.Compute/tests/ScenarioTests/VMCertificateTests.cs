@@ -11,10 +11,6 @@ using NUnit.Framework;
 
 namespace Azure.ResourceManager.Compute.Tests
 {
-<<<<<<< HEAD
-=======
-    [AsyncOnly]
->>>>>>> erichmaster/track2/compute.tests
     public class VMCertificateTests : VMTestBase
     {
 
@@ -53,11 +49,7 @@ namespace Azure.ResourceManager.Compute.Tests
         //[Test(Skip = "TODO: Wait for KMS Client")]
         public async Task TestVMCertificatesOperations()
         {
-<<<<<<< HEAD
             EnsureClientsInitialized();
-=======
-            EnsureClientsInitialized(true);
->>>>>>> erichmaster/track2/compute.tests
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
             // Create resource group

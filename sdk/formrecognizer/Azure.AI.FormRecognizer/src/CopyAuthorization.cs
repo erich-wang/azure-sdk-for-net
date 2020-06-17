@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System;
 using System.Text.Json;
 
 namespace Azure.AI.FormRecognizer.Training
@@ -14,7 +13,8 @@ namespace Azure.AI.FormRecognizer.Training
         /// <summary>Model identifier in the target Form Recognizer Resource. </summary>
         public string ModelId { get; }
         /// <summary> The time when the access token expires. The date is represented as the number of seconds from 1970-01-01T0:0:0Z UTC until the expiration time. </summary>
-        public DateTimeOffset ExpiresOn { get; }
+        //public DateTimeOffset ExpiresOn { get; set; }
+        public long ExpiresOn { get; }
         /// <summary> Token claim used to authorize the request. </summary>
         internal string AccessToken { get; }
         /// <summary> Azure Resource Id of the target Form Recognizer resource where the model is copied to. </summary>
@@ -26,7 +26,8 @@ namespace Azure.AI.FormRecognizer.Training
         {
             ModelId = modelId;
             AccessToken = accessToken;
-            ExpiresOn = DateTimeOffset.FromUnixTimeSeconds(expirationDateTimeTicks);
+            //ExpiresOn = DateTimeOffset.FromUnixTimeSeconds(expirationDateTimeTicks);
+            ExpiresOn = expirationDateTimeTicks;
             ResourceId = resourceId;
             Region = region;
         }
@@ -44,6 +45,7 @@ namespace Azure.AI.FormRecognizer.Training
             return new CopyAuthorization(
                 parse.modelId,
                 parse.accessToken,
+                //DateTimeOffset.FromUnixTimeSeconds(parse.expirationDateTimeTicks),
                 parse.expirationDateTimeTicks,
                 parse.resourceId,
                 parse.resourceRegion);
@@ -72,7 +74,8 @@ namespace Azure.AI.FormRecognizer.Training
             {
                 modelId = target.ModelId;
                 accessToken = target.AccessToken;
-                expirationDateTimeTicks = target.ExpiresOn.ToUnixTimeSeconds();
+                //expirationDateTimeTicks = target.ExpiresOn.ToUnixTimeSeconds();
+                expirationDateTimeTicks = target.ExpiresOn;
                 resourceId = target.ResourceId;
                 resourceRegion = target.Region;
             }

@@ -61,7 +61,7 @@ namespace Azure.Messaging.ServiceBus.Tests.Samples
 
                 async Task MessageHandler(ProcessMessageEventArgs args)
                 {
-                    string body = args.Message.Body.ToString();
+                    string body = args.Message.Body.AsString();
                     Console.WriteLine(body);
 
                     // we can evaluate application logic and use that to determine how to settle the message.

@@ -13,7 +13,7 @@ namespace Microsoft.Azure.HDInsight.Job
     /// <summary>
     /// The HDInsight job client manages jobs against HDInsight clusters.
     /// </summary>
-    public partial class HDInsightJobClient : ServiceClient<HDInsightJobClient>, IHDInsightJobClient
+    public partial class HDInsightJobManagementClient : ServiceClient<HDInsightJobManagementClient>, IHDInsightJobManagementClient
     {
         /// <summary>
         /// Gets the recommended Retry Policy for the HDInsight Job Management Client.
@@ -29,7 +29,7 @@ namespace Microsoft.Azure.HDInsight.Job
         }
 
         /// <summary>
-        /// Initializes a new instance of the HDInsightJobClient
+        /// Initializes a new instance of the HDInsightJobManagementClient
         /// class.
         /// <param name='credentials'>
         /// Required. Basic authentication credentials for job submission.
@@ -45,22 +45,22 @@ namespace Microsoft.Azure.HDInsight.Job
         /// <param name='retryPolicy'>
         /// Optional. Retry Policy for Http Transient errors.
         /// </param>
-        public HDInsightJobClient(string endpoint, BasicAuthenticationCredentials credentials, RetryPolicy retryPolicy = null)
+        public HDInsightJobManagementClient(string clusterDnsName, BasicAuthenticationCredentials credentials, RetryPolicy retryPolicy = null)
             : this(credentials)
         {
             if (retryPolicy == null)
             {
                 // If No retry policy is provided then use default retry policy
-                retryPolicy = HDInsightJobClient.HDInsightRetryPolicy;
+                retryPolicy = HDInsightJobManagementClient.HDInsightRetryPolicy;
             }
 
-            this.Endpoint = endpoint ?? throw new ArgumentNullException("endpoint");
+            this.ClusterDnsName = clusterDnsName ?? throw new ArgumentNullException("clusterDnsName");
             this.Username = CultureInfo.CurrentCulture.TextInfo.ToLower(credentials.UserName);
             this.SetRetryPolicy(retryPolicy);
         }
 
         /// <summary>
-        /// Initializes a new instance of the HDInsightJobClient
+        /// Initializes a new instance of the HDInsightJobManagementClient
         /// class.
         /// </summary>
         /// <param name='clusterDnsName'>
@@ -73,10 +73,10 @@ namespace Microsoft.Azure.HDInsight.Job
         /// <param name='httpClient'>
         /// The Http client
         /// </param>
-        public HDInsightJobClient(string endpoint, BasicAuthenticationCredentials credentials, HttpClient httpClient, bool disposeHttpClient = true) 
+        public HDInsightJobManagementClient(string clusterDnsName, BasicAuthenticationCredentials credentials, HttpClient httpClient, bool disposeHttpClient = true) 
             : this(httpClient, disposeHttpClient)
         {
-            this.Endpoint = endpoint ?? throw new ArgumentNullException("endpoint");
+            this.ClusterDnsName = clusterDnsName ?? throw new ArgumentNullException("clusterDnsName");
             this.Credentials = credentials ?? throw new ArgumentNullException("credentials");
             
             this.Credentials.InitializeServiceClient(this);

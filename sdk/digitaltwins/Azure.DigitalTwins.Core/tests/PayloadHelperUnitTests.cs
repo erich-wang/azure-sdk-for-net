@@ -19,10 +19,10 @@ namespace Azure.DigitalTwins.Core.Tests
         {
             // arrange
             string floorJson = TestAssetsHelper.GetFloorModelPayload(
-                TestAssetDefaults.FloorModelId,
-                TestAssetDefaults.RoomModelId,
-                TestAssetDefaults.HvacModelId);
-            string roomJson = TestAssetsHelper.GetRoomModelPayload(TestAssetDefaults.RoomModelId, TestAssetDefaults.FloorModelId);
+                TestAssetSettings.Instance.FloorModelId,
+                TestAssetSettings.Instance.RoomModelId,
+                TestAssetSettings.Instance.HvacModelId);
+            string roomJson = TestAssetsHelper.GetRoomModelPayload(TestAssetSettings.Instance.RoomModelId, TestAssetSettings.Instance.FloorModelId);
             var models = new List<string> { floorJson, roomJson };
 
             // act

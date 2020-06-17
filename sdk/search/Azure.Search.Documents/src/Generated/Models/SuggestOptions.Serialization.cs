@@ -45,8 +45,15 @@ namespace Azure.Search.Documents
                 writer.WritePropertyName("orderby");
                 writer.WriteStringValue(OrderByRaw);
             }
-            writer.WritePropertyName("search");
-            writer.WriteStringValue(SearchText);
+            if (SearchText != null)
+            {
+                writer.WritePropertyName("search");
+                writer.WriteStringValue(SearchText);
+            }
+            else
+            {
+                writer.WriteNull("search");
+            }
             if (SearchFieldsRaw != null)
             {
                 writer.WritePropertyName("searchFields");
@@ -57,8 +64,15 @@ namespace Azure.Search.Documents
                 writer.WritePropertyName("select");
                 writer.WriteStringValue(SelectRaw);
             }
-            writer.WritePropertyName("suggesterName");
-            writer.WriteStringValue(SuggesterName);
+            if (SuggesterName != null)
+            {
+                writer.WritePropertyName("suggesterName");
+                writer.WriteStringValue(SuggesterName);
+            }
+            else
+            {
+                writer.WriteNull("suggesterName");
+            }
             if (Size != null)
             {
                 writer.WritePropertyName("top");

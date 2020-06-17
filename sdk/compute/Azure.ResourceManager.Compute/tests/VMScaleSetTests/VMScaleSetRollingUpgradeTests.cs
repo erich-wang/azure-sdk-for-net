@@ -44,11 +44,7 @@ namespace Azure.ResourceManager.Compute.Tests
             string storageAccountName = Recording.GenerateAssetName(TestPrefix);
             VirtualMachineScaleSet inputVMScaleSet;
             Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "southcentralus");
-<<<<<<< HEAD
             EnsureClientsInitialized();
-=======
-            EnsureClientsInitialized(false);
->>>>>>> erichmaster/track2/compute.tests
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
 
             VirtualMachineScaleSetExtensionProfile extensionProfile = new VirtualMachineScaleSetExtensionProfile()
@@ -131,11 +127,7 @@ namespace Azure.ResourceManager.Compute.Tests
             string storageAccountName = Recording.GenerateAssetName(TestPrefix);
             VirtualMachineScaleSet inputVMScaleSet;
             Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "southcentralus");
-<<<<<<< HEAD
             EnsureClientsInitialized();
-=======
-            EnsureClientsInitialized(false);
->>>>>>> erichmaster/track2/compute.tests
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
             imageRef.Version = "latest";
@@ -206,11 +198,7 @@ namespace Azure.ResourceManager.Compute.Tests
             VirtualMachineScaleSet inputVMScaleSet;
 
             Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "southcentralus");
-<<<<<<< HEAD
             EnsureClientsInitialized();
-=======
-            EnsureClientsInitialized(false);
->>>>>>> erichmaster/track2/compute.tests
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
             imageRef.Version = "latest";
@@ -257,11 +245,7 @@ namespace Azure.ResourceManager.Compute.Tests
         {
             string originalTestLocation = Environment.GetEnvironmentVariable("AZURE_VM_TEST_LOCATION");
             Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "westcentralus");
-<<<<<<< HEAD
             EnsureClientsInitialized();
-=======
-            EnsureClientsInitialized(false);
->>>>>>> erichmaster/track2/compute.tests
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
             imageRef.Version = "latest";
@@ -344,11 +328,7 @@ namespace Azure.ResourceManager.Compute.Tests
             VirtualMachineScaleSet inputVMScaleSet;
 
             Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "eastus2");
-<<<<<<< HEAD
             EnsureClientsInitialized();
-=======
-            EnsureClientsInitialized(false);
->>>>>>> erichmaster/track2/compute.tests
 
             // Windows VM image
             ImageReference imageRef = await GetPlatformVMImage(true);
