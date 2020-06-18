@@ -32,19 +32,17 @@ namespace Azure.ResourceManager.Compute.Tests
         /// Delete RG
         /// </summary>
         [Test]
-        [Ignore("This test need to be tested by compute team")]
+        [Ignore("TRACK2: compute team will help to record")]
         //[Trait("Name", "TestVMScaleSetRollingUpgrade")]
         public async Task TestVMScaleSetRollingUpgrade()
         {
-            string originalTestLocation = Environment.GetEnvironmentVariable("AZURE_VM_TEST_LOCATION");
+            EnsureClientsInitialized(LocationSouthCentralUs);
 
             // Create resource group
             var rgName = Recording.GenerateAssetName(TestPrefix);
             var vmssName = Recording.GenerateAssetName("vmss");
             string storageAccountName = Recording.GenerateAssetName(TestPrefix);
             VirtualMachineScaleSet inputVMScaleSet;
-            Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "southcentralus");
-            EnsureClientsInitialized(false);
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
 
             VirtualMachineScaleSetExtensionProfile extensionProfile = new VirtualMachineScaleSetExtensionProfile()
@@ -115,19 +113,17 @@ namespace Azure.ResourceManager.Compute.Tests
         /// Delete RG
         /// </summary>
         [Test]
-        [Ignore("This test need to be tested by compute team")]
+        [Ignore("TRACK2: compute team will help to record")]
         //[Trait("Name", "TestVMScaleSetRollingUpgradeAPIs")]
         public async Task TestVMScaleSetRollingUpgradeAPIs()
         {
-            string originalTestLocation = Environment.GetEnvironmentVariable("AZURE_VM_TEST_LOCATION");
+            EnsureClientsInitialized(LocationSouthCentralUs);
 
             // Create resource group
             var rgName = Recording.GenerateAssetName(TestPrefix);
             var vmssName = Recording.GenerateAssetName("vmss");
             string storageAccountName = Recording.GenerateAssetName(TestPrefix);
             VirtualMachineScaleSet inputVMScaleSet;
-            Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "southcentralus");
-            EnsureClientsInitialized(false);
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
             imageRef.Version = "latest";
@@ -185,20 +181,17 @@ namespace Azure.ResourceManager.Compute.Tests
         /// Delete RG
         /// </summary>
         [Test]
-        [Ignore("This test need to be tested by compute team")]
+        [Ignore("TRACK2: compute team will help to record")]
         //[Trait("Name", "TestVMScaleSetRollingUpgradeHistory")]
         public async Task TestVMScaleSetRollingUpgradeHistory()
         {
-            string originalTestLocation = Environment.GetEnvironmentVariable("AZURE_VM_TEST_LOCATION");
+            EnsureClientsInitialized(LocationSouthCentralUs);
 
             // Create resource group
             var rgName = Recording.GenerateAssetName(TestPrefix);
             var vmssName = Recording.GenerateAssetName("vmss");
             string storageAccountName = Recording.GenerateAssetName(TestPrefix);
             VirtualMachineScaleSet inputVMScaleSet;
-
-            Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "southcentralus");
-            EnsureClientsInitialized(false);
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
             imageRef.Version = "latest";
@@ -239,13 +232,11 @@ namespace Azure.ResourceManager.Compute.Tests
         /// Testing Automatic OS Upgrade Policy
         /// </summary>
         [Test]
-        [Ignore("This test need to be tested by compute team")]
+        [Ignore("TRACK2: compute team will help to record")]
         //[Trait("Name", "TestVMScaleSetAutomaticOSUpgradePolicies")]
         public async Task TestVMScaleSetAutomaticOSUpgradePolicies()
         {
-            string originalTestLocation = Environment.GetEnvironmentVariable("AZURE_VM_TEST_LOCATION");
-            Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "westcentralus");
-            EnsureClientsInitialized(false);
+            EnsureClientsInitialized(LocationWestCentralUs);
 
             ImageReference imageRef = await GetPlatformVMImage(useWindowsImage: true);
             imageRef.Version = "latest";
@@ -316,19 +307,16 @@ namespace Azure.ResourceManager.Compute.Tests
         // Perform an extension rolling upgrade
         // Delete ResourceGroup
         [Test]
-        [Ignore("This test need to be tested by compute team")]
+        [Ignore("TRACK2: compute team will help to record")]
         //[Trait("Name", "TestVMScaleSetExtensionUpgradeAPIs")]
         public async Task TestVMScaleSetExtensionUpgradeAPIs()
         {
-            string originalTestLocation = Environment.GetEnvironmentVariable("AZURE_VM_TEST_LOCATION");
+            EnsureClientsInitialized(LocationEastUs2);
 
             string rgName = Recording.GenerateAssetName(TestPrefix);
             string vmssName = Recording.GenerateAssetName("vmss");
             string storageAccountName = Recording.GenerateAssetName(TestPrefix);
             VirtualMachineScaleSet inputVMScaleSet;
-
-            Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "eastus2");
-            EnsureClientsInitialized(false);
 
             // Windows VM image
             ImageReference imageRef = await GetPlatformVMImage(true);

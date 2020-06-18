@@ -15,6 +15,8 @@ namespace Azure.ResourceManager.Compute.Tests
     [AsyncOnly]
     public class ImageTests : VMTestBase
     {
+        protected string LocationCentralUSEUAP = "centraluseuap";
+
         public ImageTests(bool isAsync)
            : base(isAsync)
         {
@@ -35,27 +37,23 @@ namespace Azure.ResourceManager.Compute.Tests
         }
 
         [Test]
-        [Ignore("this should be tested by generate team")]
+        [Ignore("TRACK2: compute team will help to record")]
         //[Trait("Name", "TestCreateImage_with_DiskEncryptionSet")]
         public async Task TestCreateImage_with_DiskEncryptionSet()
         {
-            string originalTestLocation = Environment.GetEnvironmentVariable("AZURE_VM_TEST_LOCATION");
-            Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "eastus2");
-            EnsureClientsInitialized(false);
+            EnsureClientsInitialized(LocationCentralUSEUAP);
 
             string diskEncryptionSetId = getDefaultDiskEncryptionSetId();
 
-            await CreateImageTestHelper(originalTestLocation, diskEncryptionSetId);
+            await CreateImageTestHelper(DefaultLocation, diskEncryptionSetId);
         }
 
         [Test]
         //[Trait("Name", "TestCreateImage_without_DiskEncryptionSet")]
         public async Task TestCreateImage_without_DiskEncryptionSet()
         {
-            string originalTestLocation = Environment.GetEnvironmentVariable("AZURE_VM_TEST_LOCATION");
-            Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "eastus2");
-            EnsureClientsInitialized(false);
-            await CreateImageTestHelper(originalTestLocation, diskEncryptionSetId: null);
+            EnsureClientsInitialized(LocationEastUs2UpperCase.ToLower());
+            await CreateImageTestHelper(DefaultLocation, diskEncryptionSetId: null);
         }
 
         private async Task CreateImageTestHelper(string originalTestLocation, string diskEncryptionSetId)

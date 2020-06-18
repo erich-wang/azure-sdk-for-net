@@ -35,13 +35,13 @@ namespace Azure.ResourceManager.Compute.Tests
         }
 
         [Test]
-        [Ignore("this should be tested by generate team")]
+        [Ignore("TRACK2: compute team will help to record")]
         public async Task TestExportingThrottlingLogs()
         {
             string rg1Name = Recording.GenerateAssetName(TestPrefix);
 
             string storageAccountName = Recording.GenerateAssetName(TestPrefix);
-            EnsureClientsInitialized(true);
+            EnsureClientsInitialized(DefaultLocation);
 
             string sasUri = await GetBlobContainerSasUri(rg1Name, storageAccountName);
 

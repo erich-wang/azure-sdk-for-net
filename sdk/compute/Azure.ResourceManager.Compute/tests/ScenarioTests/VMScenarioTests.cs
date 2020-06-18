@@ -38,6 +38,7 @@ namespace Azure.ResourceManager.Compute.Tests
         //[Trait("Name", "TestVMScenarioOperations")]
         public async Task TestVMScenarioOperations()
         {
+            EnsureClientsInitialized(DefaultLocation);
             await TestVMScenarioOperationsInternal("TestVMScenarioOperations");
         }
         /// <summary>
@@ -55,21 +56,13 @@ namespace Azure.ResourceManager.Compute.Tests
         /// To record this test case, you need to run it in region which support XMF VMSizeFamily like eastus2.
         /// </summary>
         [Test]
-        [Ignore("this should be tested by generate team")]
+        [Ignore("TRACK2: compute team will help to record")]
         //[Trait("Name", "TestVMScenarioOperations_ManagedDisks")]
         public async Task TestVMScenarioOperations_ManagedDisks()
         {
-            string originalTestLocation = Environment.GetEnvironmentVariable("AZURE_VM_TEST_LOCATION");
-            try
-            {
-                Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "eastus2");
-                await TestVMScenarioOperationsInternal("TestVMScenarioOperations_ManagedDisks", vmSize: VirtualMachineSizeTypes.StandardM64S.ToString(), hasManagedDisks: true,
-                    osDiskStorageAccountType: StorageAccountTypes.PremiumLRS.ToString(), dataDiskStorageAccountType: StorageAccountTypes.PremiumLRS.ToString(), writeAcceleratorEnabled: true);
-            }
-            finally
-            {
-                Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", originalTestLocation);
-            }
+            EnsureClientsInitialized(LocationEastUs2UpperCase);
+            await TestVMScenarioOperationsInternal("TestVMScenarioOperations_ManagedDisks", vmSize: VirtualMachineSizeTypes.StandardM64S.ToString(), hasManagedDisks: true,
+                osDiskStorageAccountType: StorageAccountTypes.PremiumLRS.ToString(), dataDiskStorageAccountType: StorageAccountTypes.PremiumLRS.ToString(), writeAcceleratorEnabled: true);
         }
 
         /// <summary>
@@ -79,41 +72,23 @@ namespace Azure.ResourceManager.Compute.Tests
         //[Trait("Name", "TestVMScenarioOperations_DiffDisks")]
         public async Task TestVMScenarioOperations_DiffDisks()
         {
-            string originalTestLocation = Environment.GetEnvironmentVariable("AZURE_VM_TEST_LOCATION");
-            try
-            {
-                Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "northeurope");
-                await TestVMScenarioOperationsInternal("TestVMScenarioOperations_DiffDisks", vmSize: VirtualMachineSizeTypes.StandardDS148V2.ToString(), hasManagedDisks: true,
-                   hasDiffDisks: true, osDiskStorageAccountType: StorageAccountTypes.StandardLRS.ToString());
-            }
-            finally
-            {
-                Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", originalTestLocation);
-            }
+            EnsureClientsInitialized(LocationNorthEurope);
+            await TestVMScenarioOperationsInternal("TestVMScenarioOperations_DiffDisks", vmSize: VirtualMachineSizeTypes.StandardDS148V2.ToString(), hasManagedDisks: true,
+               hasDiffDisks: true, osDiskStorageAccountType: StorageAccountTypes.StandardLRS.ToString());
         }
 
         /// <summary>
         /// To record this test case, you need to run it in region which support DiskEncryptionSet resource for the Disks
         /// </summary>
         [Test]
-        [Ignore("this should be tested by generate team")]
+        [Ignore("TRACK2: compute team will help to record")]
         //[Trait("Name", "TestVMScenarioOperations_ManagedDisks_DiskEncryptionSet")]
         public async Task TestVMScenarioOperations_ManagedDisks_DiskEncryptionSet()
         {
-            string originalTestLocation = Environment.GetEnvironmentVariable("AZURE_VM_TEST_LOCATION");
-
+            EnsureClientsInitialized(DefaultLocation);
             string diskEncryptionSetId = getDefaultDiskEncryptionSetId();
-            try
-            {
-                //change location centraluseuap to southeastasia
-                Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "southeastasia");
-                await TestVMScenarioOperationsInternal("TestVMScenarioOperations_ManagedDisks_DiskEncryptionSet", vmSize: VirtualMachineSizeTypes.StandardA1V2.ToString(), hasManagedDisks: true,
-                   osDiskStorageAccountType: StorageAccountTypes.StandardLRS.ToString(), diskEncryptionSetId: diskEncryptionSetId);
-            }
-            finally
-            {
-                Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", originalTestLocation);
-            }
+            await TestVMScenarioOperationsInternal("TestVMScenarioOperations_ManagedDisks_DiskEncryptionSet", vmSize: VirtualMachineSizeTypes.StandardA1V2.ToString(), hasManagedDisks: true,
+               osDiskStorageAccountType: StorageAccountTypes.StandardLRS.ToString(), diskEncryptionSetId: diskEncryptionSetId);
         }
 
         /// <summary>
@@ -124,37 +99,21 @@ namespace Azure.ResourceManager.Compute.Tests
         ////[Trait("Name", "TestVMScenarioOperations_ManagedDisks_StandardSSD")]
         public async Task TestVMScenarioOperations_ManagedDisks_StandardSSD()
         {
-            string originalTestLocation = Environment.GetEnvironmentVariable("AZURE_VM_TEST_LOCATION");
-            try
-            {
-                Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "northeurope");
-                await TestVMScenarioOperationsInternal("TestVMScenarioOperations_ManagedDisks_StandardSSD", hasManagedDisks: true,
-                    osDiskStorageAccountType: StorageAccountTypes.StandardSSDLRS.ToString(), dataDiskStorageAccountType: StorageAccountTypes.StandardSSDLRS.ToString());
-            }
-            finally
-            {
-                Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", originalTestLocation);
-            }
+            EnsureClientsInitialized(LocationNorthEurope);
+            await TestVMScenarioOperationsInternal("TestVMScenarioOperations_ManagedDisks_StandardSSD", hasManagedDisks: true,
+                osDiskStorageAccountType: StorageAccountTypes.StandardSSDLRS.ToString(), dataDiskStorageAccountType: StorageAccountTypes.StandardSSDLRS.ToString());
         }
 
         /// <summary>
         /// To record this test case, you need to run it in zone supported regions like eastus2.
         /// </summary>
         [Test]
-        [Ignore("This case should be tested by compute team because of the incorrect subscriptionid")]
+        [Ignore("TRACK2: compute team will help to record because of the incorrect subscriptionid")]
         //[Trait("Name", "TestVMScenarioOperations_ManagedDisks_PirImage_Zones")]
         public async Task TestVMScenarioOperations_ManagedDisks_PirImage_Zones()
         {
-            string originalTestLocation = Environment.GetEnvironmentVariable("AZURE_VM_TEST_LOCATION");
-            try
-            {
-                Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "centralus");
-                await TestVMScenarioOperationsInternal("TestVMScenarioOperations_ManagedDisks_PirImage_Zones", hasManagedDisks: true, zones: new List<string> { "1" }, callUpdateVM: true);
-            }
-            finally
-            {
-                Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", originalTestLocation);
-            }
+            EnsureClientsInitialized(LocationCentralUs);
+            await TestVMScenarioOperationsInternal("TestVMScenarioOperations_ManagedDisks_PirImage_Zones", hasManagedDisks: true, zones: new List<string> { "1" }, callUpdateVM: true);
         }
 
         /// <summary>
@@ -164,46 +123,28 @@ namespace Azure.ResourceManager.Compute.Tests
         //[Trait("Name", "TestVMScenarioOperations_ManagedDisks_UltraSSD")]
         public async Task TestVMScenarioOperations_ManagedDisks_UltraSSD()
         {
-            string originalTestLocation = Environment.GetEnvironmentVariable("AZURE_VM_TEST_LOCATION");
-            try
-            {
-                Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "eastus2");
-                await TestVMScenarioOperationsInternal("TestVMScenarioOperations_ManagedDisks_UltraSSD", hasManagedDisks: true, zones: new List<string> { "1" },
-                    vmSize: VirtualMachineSizeTypes.StandardE16SV3.ToString(), osDiskStorageAccountType: StorageAccountTypes.PremiumLRS.ToString(),
-                    dataDiskStorageAccountType: StorageAccountTypes.UltraSSDLRS.ToString(), callUpdateVM: true);
-            }
-            finally
-            {
-                Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", originalTestLocation);
-            }
+            EnsureClientsInitialized(LocationEastUs2);
+            await TestVMScenarioOperationsInternal("TestVMScenarioOperations_ManagedDisks_UltraSSD", hasManagedDisks: true, zones: new List<string> { "1" },
+                vmSize: VirtualMachineSizeTypes.StandardE16SV3.ToString(), osDiskStorageAccountType: StorageAccountTypes.PremiumLRS.ToString(),
+                dataDiskStorageAccountType: StorageAccountTypes.UltraSSDLRS.ToString(), callUpdateVM: true);
         }
 
         /// <summary>
         /// To record this test case, you need to run it in zone supported regions like eastus2euap.
         /// </summary>
         [Test]
-        [Ignore("This case should be tested by compute team because of the incorrect subscriptionid")]
+        [Ignore("TRACK2: compute team will help to record because of the incorrect subscriptionid")]
         //[Trait("Name", "TestVMScenarioOperations_PpgScenario")]
         public async Task TestVMScenarioOperations_PpgScenario()
         {
-            string originalTestLocation = Environment.GetEnvironmentVariable("AZURE_VM_TEST_LOCATION");
-            try
-            {
-                Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", "eastus2");
-                await TestVMScenarioOperationsInternal("TestVMScenarioOperations_PpgScenario", hasManagedDisks: true, isPpgScenario: true);
-            }
-            finally
-            {
-                Environment.SetEnvironmentVariable("AZURE_VM_TEST_LOCATION", originalTestLocation);
-            }
+            EnsureClientsInitialized(LocationEastUs2UpperCase);
+            await TestVMScenarioOperationsInternal("TestVMScenarioOperations_PpgScenario", hasManagedDisks: true, isPpgScenario: true);
         }
 
         private async Task TestVMScenarioOperationsInternal(string methodName, bool hasManagedDisks = false, IList<string> zones = null, string vmSize = "Standard_A0",
             string osDiskStorageAccountType = "Standard_LRS", string dataDiskStorageAccountType = "Standard_LRS", bool? writeAcceleratorEnabled = null,
             bool hasDiffDisks = false, bool callUpdateVM = false, bool isPpgScenario = false, string diskEncryptionSetId = null)
         {
-            EnsureClientsInitialized(false);
-
             var imageRef = await GetPlatformVMImage(useWindowsImage: true);
             const string expectedOSName = "Windows Server 2012 R2 Datacenter", expectedOSVersion = "Microsoft Windows NT 6.3.9600.0", expectedComputerName = ComputerName;
             // Create resource group
