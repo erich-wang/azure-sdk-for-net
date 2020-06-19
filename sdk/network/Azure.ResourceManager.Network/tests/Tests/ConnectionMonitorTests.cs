@@ -454,8 +454,8 @@ namespace Azure.ResourceManager.Network.Tests.Tests
             await WaitForCompletionAsync(connectionMonitor2Operation);
 
             AsyncPageable<ConnectionMonitorResult> getConnectionMonitors1AP = NetworkManagementClient.ConnectionMonitors.ListAsync("NetworkWatcherRG", "NetworkWatcher_westus2");
-            Task<List<ConnectionMonitorResult>> getConnectionMonitors1 = getConnectionMonitors1AP.ToEnumerableAsync();
-            Assert.AreEqual(2, getConnectionMonitors1.Result.Count);
+            List<ConnectionMonitorResult> getConnectionMonitors1 = await getConnectionMonitors1AP.ToEnumerableAsync();
+            Assert.AreEqual(2, getConnectionMonitors1.Count);
 
             ConnectionMonitorsDeleteOperation connectionMonitorsDeleteOperation = await NetworkManagementClient.ConnectionMonitors.StartDeleteAsync("NetworkWatcherRG", "NetworkWatcher_westus2", connectionMonitorName2);
             await WaitForCompletionAsync(connectionMonitorsDeleteOperation);

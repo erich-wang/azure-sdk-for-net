@@ -59,9 +59,9 @@ namespace Azure.ResourceManager.Network.Tests.Tests
         {
             _ = await NetworkManagementTestUtilities.GetResourceLocation(ResourceManagementClient, "Microsoft.Network/routefilters");
             AsyncPageable<Models.BgpServiceCommunity> communitiesAsync = NetworkManagementClient.BgpServiceCommunities.ListAsync();
-            Task<List<Models.BgpServiceCommunity>> communities = communitiesAsync.ToEnumerableAsync();
+            List<Models.BgpServiceCommunity> communities = await communitiesAsync.ToEnumerableAsync();
             Assert.NotNull(communities);
-            Assert.True(communities.Result.First().BgpCommunities.First().IsAuthorizedToUse);
+            Assert.True(communities.First().BgpCommunities.First().IsAuthorizedToUse);
         }
 
         [Test]
