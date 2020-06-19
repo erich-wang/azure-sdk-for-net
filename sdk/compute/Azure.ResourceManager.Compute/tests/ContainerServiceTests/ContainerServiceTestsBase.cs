@@ -95,7 +95,7 @@ namespace Azure.ResourceManager.Compute.Tests
             }
         }
 
-        protected async void UpdateContainerService(string rgName, string vmssName, ContainerService inputContainerService)
+        protected async Task UpdateContainerService(string rgName, string vmssName, ContainerService inputContainerService)
         {
             var createOrUpdateResponse = await WaitForCompletionAsync(await ContainerServicesOperations.StartCreateOrUpdateAsync(rgName, vmssName, inputContainerService));
         }
