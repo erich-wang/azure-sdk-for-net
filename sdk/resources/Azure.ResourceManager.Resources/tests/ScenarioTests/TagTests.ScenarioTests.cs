@@ -88,7 +88,7 @@ namespace ResourceGroups.Tests
         /// <summary>
         /// Utility method to test Put request for Tags Operation within tracked resources and proxy resources
         /// </summary>
-        private async void CreateOrUpdateTagsTest(string resourceScope = "")
+        private async Task CreateOrUpdateTagsTest(string resourceScope = "")
         {
             var tagsResource = new TagsResource(new Tags()
             {
@@ -111,27 +111,27 @@ namespace ResourceGroups.Tests
         /// Put request for Tags Operation within tracked resources
         /// </summary>
         [Test]
-        public void  CreateTagsWithTrackedResourcesTest()
+        public async Task CreateTagsWithTrackedResourcesTest()
         {
             // test tags for tracked resources
             string resourceScope = "/resourcegroups/TagsApiSDK/providers/Microsoft.Compute/virtualMachines/TagTestVM";
-            CreateOrUpdateTagsTest(resourceScope: resourceScope);
+            await CreateOrUpdateTagsTest(resourceScope: resourceScope);
         }
 
         /// <summary>
         /// Put request for Tags Operation within subscription test
         /// </summary>
         [Test]
-        public void CreateTagsWithSubscriptionTest()
+        public async Task CreateTagsWithSubscriptionTest()
         {
             // test tags for subscription
-            CreateOrUpdateTagsTest();
+            await CreateOrUpdateTagsTest();
         }
 
         /// <summary>
         /// Utility method to test Patch request for Tags Operation within tracked resources and proxy resources, including Replace|Merge|Delete operations
         /// </summary>
-        private async void UpdateTagsTest(string resourceScope = "")
+        private async Task UpdateTagsTest(string resourceScope = "")
         {
             var subscriptionScope = "/subscriptions/" + TestEnvironment.SubscriptionId;
             resourceScope = subscriptionScope + resourceScope;
@@ -194,27 +194,27 @@ namespace ResourceGroups.Tests
         /// Patch request for Tags Operation within tracked resources test, including Replace|Merge|Delete operations
         /// </summary>
         [Test]
-        public void UpdateTagsWithTrackedResourcesTest()
+        public async Task UpdateTagsWithTrackedResourcesTest()
         {
             // test tags for tracked resources
             string resourceScope = "/resourcegroups/TagsApiSDK/providers/Microsoft.Compute/virtualMachines/TagTestVM";
-            UpdateTagsTest(resourceScope: resourceScope);
+            await UpdateTagsTest(resourceScope: resourceScope);
         }
 
         /// <summary>
         /// Patch request for Tags Operation within subscription test, including Replace|Merge|Delete operations
         /// </summary>
         [Test]
-        public void UpdateTagsWithSubscriptionTest()
+        public async Task UpdateTagsWithSubscriptionTest()
         {
             // test tags for subscription
-            UpdateTagsTest();
+            await UpdateTagsTest();
         }
 
         /// <summary>
         /// Utility method to test Get request for Tags Operation within tracked resources and proxy resources
         /// </summary>
-        private async void GetTagsTest(string resourceScope = "")
+        private async Task GetTagsTest(string resourceScope = "")
         {
             var subscriptionScope = "/subscriptions/" + TestEnvironment.SubscriptionId;
             resourceScope = subscriptionScope + resourceScope;
@@ -241,21 +241,21 @@ namespace ResourceGroups.Tests
         /// Get request for Tags Operation within tracked resources test
         /// </summary>
         [Test]
-        public void GetTagsWithTrackedResourcesTest()
+        public async Task GetTagsWithTrackedResourcesTest()
         {
              // test tags for tracked resources
              string resourceScope = "/resourcegroups/TagsApiSDK/providers/Microsoft.Compute/virtualMachines/TagTestVM";
-             GetTagsTest(resourceScope: resourceScope);
+             await GetTagsTest(resourceScope: resourceScope);
         }
 
         /// <summary>
         /// Get request for Tags Operation within subscription test
         /// </summary>
         [Test]
-        public void GetTagsWithSubscriptionTest()
+        public async Task GetTagsWithSubscriptionTest()
         {
             // test tags for subscription
-            GetTagsTest();
+            await GetTagsTest();
         }
 
         /// <summary>
@@ -292,21 +292,21 @@ namespace ResourceGroups.Tests
         /// Get request for Tags Operation within tracked resources test
         /// </summary>
         [Test]
-        public void DeleteTagsWithTrackedResourcesTest()
+        public async Task DeleteTagsWithTrackedResourcesTest()
         {
             // test tags for tracked resources
             string resourceScope = "/resourcegroups/TagsApiSDK/providers/Microsoft.Compute/virtualMachines/TagTestVM";
-            Assert.AreEqual(0, DeleteTagsTest(resourceScope: resourceScope).Result.Properties.TagsValue.Count);
+            Assert.AreEqual(0, (await DeleteTagsTest(resourceScope: resourceScope)).Properties.TagsValue.Count);
         }
 
         /// <summary>
         /// Get request for Tags Operation within subscription test
         /// </summary>
         [Test]
-        public void DeleteTagsWithSubscriptionTest()
+        public async Task DeleteTagsWithSubscriptionTest()
         {
             // test tags for subscription
-            Assert.IsNull(DeleteTagsTest().Result.Properties.TagsValue);
+            Assert.IsNull((await DeleteTagsTest()).Properties.TagsValue);
         }
 
         /// <summary>
