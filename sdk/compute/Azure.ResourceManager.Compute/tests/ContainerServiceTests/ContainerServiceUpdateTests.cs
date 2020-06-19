@@ -58,7 +58,7 @@ namespace Azure.ResourceManager.Compute.Tests
             inputContainerService = getTwocontainerService.Item2;
             // Update Container Service with increased AgentPoolProfiles Count
             containerService.AgentPoolProfiles[0].Count = 2;
-            await UpdateContainerService(rgName, csName, containerService);
+            UpdateContainerService(rgName, csName, containerService);
 
             containerService = await ContainerServicesOperations.GetAsync(rgName, containerService.Name);
             ValidateContainerService(containerService, containerService);
