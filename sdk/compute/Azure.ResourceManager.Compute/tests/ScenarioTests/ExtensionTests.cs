@@ -92,7 +92,7 @@ namespace Azure.ResourceManager.Compute.Tests
             var vm = returnTwovm.Item1;
             inputVM = returnTwovm.Item2;
             // Delete an extension that does not exist in the VM. A http status code of NoContent should be returned which translates to operation success.
-            var xx = await WaitForCompletionAsync(await VirtualMachineExtensionsOperations.StartDeleteAsync(rgName, vm.Name, "VMExtensionDoesNotExist"));
+            var vmExtensionsOperationsDeleteResponse = await WaitForCompletionAsync(await VirtualMachineExtensionsOperations.StartDeleteAsync(rgName, vm.Name, "VMExtensionDoesNotExist"));
             // Add an extension to the VM
             var vmExtension = GetTestVMExtension();
             var resp = await VirtualMachineExtensionsOperations.StartCreateOrUpdateAsync(rgName, vm.Name, vmExtension.Name, vmExtension);

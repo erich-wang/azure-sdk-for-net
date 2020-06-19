@@ -22,7 +22,7 @@ namespace Azure.ResourceManager.Compute.Tests
         private ImageReference imageRef;
         private VirtualMachineScaleSet inputVMScaleSet;
 
-        private async void InitializeCommon()
+        private async Task InitializeCommon()
         {
             imageRef = await GetPlatformVMImage(useWindowsImage: true);
             rgName = Recording.GenerateAssetName(TestPrefix) + 1;
@@ -82,7 +82,7 @@ namespace Azure.ResourceManager.Compute.Tests
 
         private async Task TestVMScaleSetVMOperationsInternal(bool hasManagedDisks = false)
         {
-            InitializeCommon();
+            await InitializeCommon();
             instanceId = "0";
 
             bool passed = false;
@@ -151,7 +151,7 @@ namespace Azure.ResourceManager.Compute.Tests
         public async Task TestVMScaleSetVMOperations_RunCommand()
         {
             EnsureClientsInitialized(DefaultLocation);
-            InitializeCommon();
+            await InitializeCommon();
             instanceId = "0";
             bool passed = false;
             var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
@@ -188,7 +188,7 @@ namespace Azure.ResourceManager.Compute.Tests
         {
             bool passed = false;
             EnsureClientsInitialized("westus2");
-            InitializeCommon();
+            await InitializeCommon();
             instanceId = "0";
 
             var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
@@ -222,7 +222,7 @@ namespace Azure.ResourceManager.Compute.Tests
             instanceId = "0";
             bool passed = false;
 
-            InitializeCommon();
+            await InitializeCommon();
 
             var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
             var getTwoVirtualMachineScaleSet = await CreateVMScaleSet_NoAsyncTracking(rgName, vmssName,
@@ -253,7 +253,7 @@ namespace Azure.ResourceManager.Compute.Tests
 
             try
             {
-                InitializeCommon();
+                await InitializeCommon();
 
                 var storageAccountOutput = await CreateStorageAccount(rgName, storageAccountName);
                 var getTwoVirtualMachineScaleSet = await CreateVMScaleSet_NoAsyncTracking(rgName, vmssName, storageAccountOutput, imageRef,
