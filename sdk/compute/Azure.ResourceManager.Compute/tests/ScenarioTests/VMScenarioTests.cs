@@ -85,7 +85,7 @@ namespace Azure.ResourceManager.Compute.Tests
         //[Trait("Name", "TestVMScenarioOperations_ManagedDisks_DiskEncryptionSet")]
         public async Task TestVMScenarioOperations_ManagedDisks_DiskEncryptionSet()
         {
-            EnsureClientsInitialized(DefaultLocation);
+            EnsureClientsInitialized(LocationCentralUsEuap);
             string diskEncryptionSetId = getDefaultDiskEncryptionSetId();
             await TestVMScenarioOperationsInternal("TestVMScenarioOperations_ManagedDisks_DiskEncryptionSet", vmSize: VirtualMachineSizeTypes.StandardA1V2.ToString(), hasManagedDisks: true,
                osDiskStorageAccountType: StorageAccountTypes.StandardLRS.ToString(), diskEncryptionSetId: diskEncryptionSetId);
