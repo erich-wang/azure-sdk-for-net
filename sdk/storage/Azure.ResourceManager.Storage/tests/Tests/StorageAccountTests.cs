@@ -319,7 +319,7 @@ namespace Azure.ResourceManager.Storage.Tests.Tests
             string accountName2 = await CreateStorageAccount(AccountsClient, rgname2, Recording);
 
             AsyncPageable<StorageAccount> accountlist = AccountsClient.ListAsync();
-            List<StorageAccount> accountlists = accountlist.ToEnumerableAsync().Result;
+            List<StorageAccount> accountlists = await accountlist.ToEnumerableAsync();
 
             StorageAccount account1 = accountlists.First(
                     t => StringComparer.OrdinalIgnoreCase.Equals(t.Name, accountName1));
@@ -1219,21 +1219,21 @@ namespace Azure.ResourceManager.Storage.Tests.Tests
         }
 
         [Test]
-        public void StorageSKUListTest()
+        public async Task StorageSKUListTest()
         {
             AsyncPageable<SkuInformation> skulist = SkusClient.ListAsync();
             Assert.NotNull(skulist);
-            Task<List<SkuInformation>> skuListTask = skulist.ToEnumerableAsync();
-            Assert.AreEqual(@"storageAccounts", skuListTask.Result.ElementAt(0).ResourceType);
-            Assert.NotNull(skuListTask.Result.ElementAt(0).Name);
-            Assert.True(skuListTask.Result.ElementAt(0).Name.GetType() == SkuName.PremiumLRS.GetType());
-            Assert.True(skuListTask.Result.ElementAt(0).Name.Equals(SkuName.PremiumLRS)
-                || skuListTask.Result.ElementAt(0).Name.Equals(SkuName.StandardGRS)
-                || skuListTask.Result.ElementAt(0).Name.Equals(SkuName.StandardLRS)
-                || skuListTask.Result.ElementAt(0).Name.Equals(SkuName.StandardRagrs)
-                || skuListTask.Result.ElementAt(0).Name.Equals(SkuName.StandardZRS));
-            Assert.NotNull(skuListTask.Result.ElementAt(0).Kind);
-            Assert.True(skuListTask.Result.ElementAt(0).Kind.Equals(Kind.BlobStorage) || skuListTask.Result.ElementAt(0).Kind.Equals(Kind.Storage) || skuListTask.Result.ElementAt(0).Kind.Equals(Kind.StorageV2));
+            List<SkuInformation> skuListTask = await skulist.ToEnumerableAsync();
+            Assert.AreEqual(@"storageAccounts", skuListTask.ElementAt(0).ResourceType);
+            Assert.NotNull(skuListTask.ElementAt(0).Name);
+            Assert.True(skuListTask.ElementAt(0).Name.GetType() == SkuName.PremiumLRS.GetType());
+            Assert.True(skuListTask.ElementAt(0).Name.Equals(SkuName.PremiumLRS)
+                || skuListTask.ElementAt(0).Name.Equals(SkuName.StandardGRS)
+                || skuListTask.ElementAt(0).Name.Equals(SkuName.StandardLRS)
+                || skuListTask.ElementAt(0).Name.Equals(SkuName.StandardRagrs)
+                || skuListTask.ElementAt(0).Name.Equals(SkuName.StandardZRS));
+            Assert.NotNull(skuListTask.ElementAt(0).Kind);
+            Assert.True(skuListTask.ElementAt(0).Kind.Equals(Kind.BlobStorage) || skuListTask.ElementAt(0).Kind.Equals(Kind.Storage) || skuListTask.ElementAt(0).Kind.Equals(Kind.StorageV2));
         }
 
         [Test]
@@ -1775,8 +1775,8 @@ namespace Azure.ResourceManager.Storage.Tests.Tests
 
             //List EcryptionScope
             AsyncPageable<EncryptionScope> ess = EncryptionScopesClient.ListAsync(rgname, accountName);
-            Task<List<EncryptionScope>> essList = ess.ToEnumerableAsync();
-            es = essList.Result.First();
+            List<EncryptionScope> essList = await ess.ToEnumerableAsync();
+            es = essList.First();
             Assert.AreEqual("testscope", es.Name);
             Assert.AreEqual(EncryptionScopeState.Enabled, es.State);
             Assert.AreEqual(EncryptionScopeSource.MicrosoftStorage, es.Source);

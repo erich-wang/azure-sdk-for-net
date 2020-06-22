@@ -7,8 +7,6 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Azure.Core.TestFramework;
-using Azure.Management.Compute;
-using Azure.Management.Compute.Models;
 using Azure.Management.Resources;
 using Azure.Management.Resources.Models;
 using Azure.ResourceManager.Network.Models;

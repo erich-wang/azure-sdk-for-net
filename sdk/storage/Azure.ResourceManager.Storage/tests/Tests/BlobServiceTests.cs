@@ -64,8 +64,8 @@ namespace Azure.ResourceManager.Storage.Tests.Tests
             //Delete container, then no container in the storage account
             await BlobContainersClient.DeleteAsync(rgName, accountName, containerName);
             AsyncPageable<ListContainerItem> blobContainers = BlobContainersClient.ListAsync(rgName, accountName);
-            Task<List<ListContainerItem>> blobContainersList = blobContainers.ToEnumerableAsync();
-            Assert.IsEmpty(blobContainersList.Result);
+            List<ListContainerItem> blobContainersList = await blobContainers.ToEnumerableAsync();
+            Assert.IsEmpty(blobContainersList);
 
             //Delete not exist container, won't fail (return 204)
             await BlobContainersClient.DeleteAsync(rgName, accountName, containerName);
@@ -211,9 +211,9 @@ namespace Azure.ResourceManager.Storage.Tests.Tests
 
             //List container
             AsyncPageable<ListContainerItem> containerList = BlobContainersClient.ListAsync(rgName, accountName);
-            Task<List<ListContainerItem>> containerLists = containerList.ToEnumerableAsync();
-            Assert.AreEqual(3, containerLists.Result.Count());
-            foreach (ListContainerItem blobContainerList in containerLists.Result)
+            List<ListContainerItem> containerLists = await containerList.ToEnumerableAsync();
+            Assert.AreEqual(3, containerLists.Count());
+            foreach (ListContainerItem blobContainerList in containerLists)
             {
                 Assert.NotNull(blobContainerList.Name);
                 Assert.NotNull(blobContainerList.PublicAccess);
@@ -223,8 +223,8 @@ namespace Azure.ResourceManager.Storage.Tests.Tests
 
             //List container with next link
             containerList = BlobContainersClient.ListAsync(rgName, accountName, "2");
-            Task<List<Page<ListContainerItem>>> pages = containerList.AsPages().ToEnumerableAsync();
-            Assert.AreEqual(2, pages.Result.Count());
+            List<Page<ListContainerItem>> pages = await containerList.AsPages().ToEnumerableAsync();
+            Assert.AreEqual(2, pages.Count());
         }
 
         [Test]
@@ -712,9 +712,9 @@ namespace Azure.ResourceManager.Storage.Tests.Tests
 
             // implement case
             AsyncPageable<BlobServiceProperties> properties = BlobServicesClient.ListAsync(rgName, accountName);
-            Task<List<BlobServiceProperties>> propertiesList = properties.ToEnumerableAsync();
-            Assert.AreEqual(1, propertiesList.Result.Count);
-            Assert.AreEqual("default", propertiesList.Result[0].Name);
+            List<BlobServiceProperties> propertiesList = await properties.ToEnumerableAsync();
+            Assert.AreEqual(1, propertiesList.Count);
+            Assert.AreEqual("default", propertiesList[0].Name);
         }
 
         // Point In Time Restore test

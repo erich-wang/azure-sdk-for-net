@@ -37,7 +37,6 @@ namespace Azure.ResourceManager.Network.Tests.Tests
         }
 
         [Test]
-        [Ignore("Track2: The NetworkWathcer is involved, so disable the test")]
         public async Task TroubleshootApiTest()
         {
             string resourceGroupName = Recording.GenerateAssetName("azsmnet");

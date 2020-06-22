@@ -79,13 +79,13 @@ namespace Azure.ResourceManager.Storage.Tests.Tests
             //Delete share
             await FileSharesClient.DeleteAsync(rgName, accountName, shareName);
             AsyncPageable<FileShareItem> fileShares = FileSharesClient.ListAsync(rgName, accountName);
-            Task<List<FileShareItem>> fileSharesList = fileShares.ToEnumerableAsync();
-            Assert.AreEqual(1, fileSharesList.Result.Count());
+            List<FileShareItem> fileSharesList = await fileShares.ToEnumerableAsync();
+            Assert.AreEqual(1, fileSharesList.Count());
 
             await FileSharesClient.DeleteAsync(rgName, accountName, shareName2);
             fileShares = FileSharesClient.ListAsync(rgName, accountName);
-            fileSharesList = fileShares.ToEnumerableAsync();
-            Assert.AreEqual(0, fileSharesList.Result.Count());
+            fileSharesList = await fileShares.ToEnumerableAsync();
+            Assert.AreEqual(0, fileSharesList.Count());
 
             //Delete not exist share, won't fail (return 204)
             await FileSharesClient.DeleteAsync(rgName, accountName, "notexistshare");
