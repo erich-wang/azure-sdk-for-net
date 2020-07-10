@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Azure.Core.TestFramework", "..\..\core\Azure.Core.TestFramework\src\Azure.Core.TestFramework.csproj", "{DBE8A141-33F2-489A-A228-B2C919E10C03}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsalExtensionTestSample", "MsalExtensionTestSample\MsalExtensionTestSample.csproj", "{D6DE1B6A-C0D8-4F7A-A780-9A7AA192C0AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{DBE8A141-33F2-489A-A228-B2C919E10C03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DBE8A141-33F2-489A-A228-B2C919E10C03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DBE8A141-33F2-489A-A228-B2C919E10C03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6DE1B6A-C0D8-4F7A-A780-9A7AA192C0AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6DE1B6A-C0D8-4F7A-A780-9A7AA192C0AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6DE1B6A-C0D8-4F7A-A780-9A7AA192C0AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6DE1B6A-C0D8-4F7A-A780-9A7AA192C0AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
