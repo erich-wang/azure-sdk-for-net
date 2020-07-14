@@ -34,8 +34,14 @@ Following parameter is available
 
 
 ### Next Step
-1. Inspect `src\autorest.md` to ensure the REST Api path is valid
-2. Run `dotnet build` to ensure empty project builds successfully.
-3. Run `dotnet build /t:GenerateCode` to generate C# code and ensure no fatal errors.
-4. Run `dotnet build` to ensure now generated project builds successfully.
-5. Viola!
+1. Change project name and other related names from `Template` to `Rp`.
+2. Add following settting to `Directory.Build.props`  
+    `<Import Condition="'$(IsMgmtClientLibrary)' == 'true'" Project="$(RepoRoot)/sdk/core/Azure.Core/src/Azure.Core.props" />`
+3. Inspect `src\autorest.md` to ensure the REST Api path is valid.
+4. Run `dotnet build` to ensure empty project builds successfully.
+5. Run `dotnet build /t:GenerateCode` to generate C# code and ensure no fatal errors.
+6. Run `dotnet build` to ensure now generated project builds successfully.
+7. If build failed for error `AZC0001` `AZC0008` `CS1591`, you may try to fix them or supress them by adding  
+`<NoWarn>$(NoWarn);AZC0001;AZC0008;CS1591;</NoWarn>`   
+to the csproj file.
+8. Viola!
