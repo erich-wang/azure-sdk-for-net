@@ -21,14 +21,14 @@ After you obtained the values, you need to set the following values as your envi
 
 For Track 1 Tests:
 
-* `TEST_CSM_ORGID_AUTHENTICATION` : SubscriptionId=<Subscription ID>;ServicePrincipal=<Client ID>;ServicePrincipalSecret=<Client Secret>;AADTenant=<Tenant ID>;Environment=Prod;HttpRecorderMode=<Record> or <Playback>;
+* `TEST_CSM_ORGID_AUTHENTICATION` : SubscriptionId=<-Subscription ID->;ServicePrincipal=<-Client ID->;ServicePrincipalSecret=<-Client Secret->;AADTenant=<-Tenant ID->;Environment=Prod;HttpRecorderMode=<-Record-> or <-Playback->;
 * `AZURE_TEST_MODE` : `Record` or `Playback`
 * `SUBSCRIPTION_ID`
 
 For Track 2 Tests:
 
-* `AZURE_TEST_MODE`
-* `AZURE_USER_NAME`
+* `AZURE_TEST_MODE` : `Record` or `Playback`
+* `AZURE_USER_NAME` : Your Azure Account
 * `CLIENT_ID`
 * `CLIENT_SECRET`
 * `TENANT_ID`
@@ -39,9 +39,12 @@ Here are some tips for the test case coding
 - Add Configuration in test.csproj if you want to use other services.
 `<TestHelperProjects>（Rbac1.6;Resources201705;Compute201912;Network202004;Storage201906）</TestHelperProjects>`
 - Create a test base class inherit `ManagementRecordedTestBase`.
-- Prepare the required management client in the base class.
-- Use `WaitForCompletionAsync` if the operation returns `Operation<xx>`.  
+- Create a `Initialize` method in base class which prepares the required management client.
+- Each test class constructor will have a `isAsync` parameter to run test under Async method or sync method.  
 - Use NUnit instead of XUnit.
+  - Create a `[Setup]` method in each test class, call `Initialize` method to setup test environment.
+  - Create a `[TearDown]` method in each test class, call `CleanupResourceGroupsAsync` method to cleanup test rsources.
+- Use `WaitForCompletionAsync` if the operation returns `Operation<xx>`.  
 - Make sure every async method get its `await`.
 - Some common methods may already placed in `Azure.Core.TestFramework.RecordedTestBase`, check it first.
 
