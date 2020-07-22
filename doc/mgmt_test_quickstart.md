@@ -21,7 +21,7 @@ After you obtained the values, you need to set the following values as your envi
 
 For Track 1 Tests:
 
-* `TEST_CSM_ORGID_AUTHENTICATION` : `SubscriptionId=<>;ServicePrincipal=<>;ServicePrincipalSecret=<>;AADTenant=<>;Environment=Prod;HttpRecorderMode=<Record or Playback>;`
+* `TEST_CSM_ORGID_AUTHENTICATION` : SubscriptionId=<Subscription ID>;ServicePrincipal=<Client ID>;ServicePrincipalSecret=<Client Secret>;AADTenant=<Tenant ID>;Environment=Prod;HttpRecorderMode=<Record> or <Playback>;
 * `AZURE_TEST_MODE` : `Record` or `Playback`
 * `SUBSCRIPTION_ID`
 
@@ -35,16 +35,17 @@ For Track 2 Tests:
 * `SUBSCRIPTION_ID`
 
 ### Start Coding Tests
-There are some tips for the test case coding  
+Here are some tips for the test case coding  
 - Add Configuration in test.csproj if you want to use other services.
 `<TestHelperProjects>（Rbac1.6;Resources201705;Compute201912;Network202004;Storage201906）</TestHelperProjects>`
-- Create a Test Base class inherit `ManagementRecordedTestBase`
+- Create a test base class inherit `ManagementRecordedTestBase`.
 - Prepare the required management client in the base class.
-- Use `WaitForCompletionAsync` if the operation returns `Operation<xx>`
+- Use `WaitForCompletionAsync` if the operation returns `Operation<xx>`.  
+- Use NUnit instead of XUnit.
 - Make sure every async method get its `await`.
-- Some common methods may already placed in `Azure.Core.TestFramework.RecordedTestBase`, check it first
+- Some common methods may already placed in `Azure.Core.TestFramework.RecordedTestBase`, check it first.
 
-### Start Runnig Tests
+### Test Mode
 - Record Tests  
 If you set the test mode to `Record`, the test framework will automaticly record the test result to testcase.json file and put them under  
 `<sdk repo>\artifacts\bin\Azure.ResourceManager.RP.Tests\Debug\<>\SessionRecords`. Copy the json file to test project for further use.
