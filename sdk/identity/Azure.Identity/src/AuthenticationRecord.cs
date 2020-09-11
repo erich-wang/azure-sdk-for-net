@@ -43,15 +43,7 @@ namespace Azure.Identity
             ClientId = clientId;
         }
 
-        /// <summary>
-        /// constructor
-        /// </summary>
-        /// <param name="username"></param>
-        /// <param name="authority"></param>
-        /// <param name="homeAccountId"></param>
-        /// <param name="tenantId"></param>
-        /// <param name="clientId"></param>
-        public AuthenticationRecord(string username, string authority, string homeAccountId, string tenantId, string clientId)
+        internal AuthenticationRecord(string username, string authority, string homeAccountId, string tenantId, string clientId)
         {
 
             Username = username;
