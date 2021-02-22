@@ -184,6 +184,10 @@ namespace Azure.Identity
 
             try
             {
+                if (requestContext.Scopes[0].Contains("eastus2euap"))
+                {
+                    requestContext.Scopes[0] = "https://management.azure.com/.default";
+                }
                 AuthenticationResult result = await _client
                     .AcquireTokenByUsernamePasswordAsync(requestContext.Scopes, _username, _password, requestContext.ClaimsChallenge, async, cancellationToken)
                     .ConfigureAwait(false);
